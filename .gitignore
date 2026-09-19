@@ -16,5 +16,9 @@ tools/twinsdump/bin/
 tools/twinsdump/obj/
 __pycache__/
 
+# Test rig output: level save states (contain game RAM) and screenshots/logs
+tools/rig/states/
+tools/rig/results/
+
 # Local Claude Code settings
 .claude/settings.local.json

@@ -3,6 +3,8 @@
   rig.py start [--level PATH] [--iso modded|original] [--speed X]   launch test PCSX2 (warp New Game to PATH)
   rig.py stop                                   close the test PCSX2
   rig.py warp PATH                              make the next New Game start in level PATH
+  rig.py level NAME [PATH] [--fresh]            go to level: states/NAME.p2s, or warp to PATH via the credits
+  rig.py pos | state                            Crash's position / game-flow state
   rig.py status                                 emulator status / game
   rig.py press BTN[+BTN..] [--frames N]         press buttons via the virtual pad (default 6 frames)
   rig.py hold BTN[+BTN..] | release             hold / release buttons
@@ -33,8 +35,8 @@ import testhooks as th
 import isotools
 
 # ---------------------------------------------------------------- PINE
-class Pine:
-    def __init__(self, timeout=5.0):
+class _Pine:
+    def __init__(self, timeout=30.0):
         self.s = socket.create_connection(("127.0.0.1", PORT), timeout=timeout)
     def _call(self, payload):
         self.s.sendall(struct.pack("<I", len(payload) + 4) + payload)
@@ -61,6 +63,19 @@ class Pine:
     def title(self): return self._str(0x0B)
     def game_id(self): return self._str(0x0C)
     def status(self): return ["running", "paused", "shutdown"][struct.unpack("<I", self._call(b"\x0f"))[0]]
+
+_conn = None
+def Pine(timeout=30.0):
+    """Shared PINE connection: PCSX2's PINE server serves one client at a time, so a second socket would block."""
+    global _conn
+    if _conn is None: _conn = _Pine(timeout)
+    return _conn
+
+def pine_reset():
+    global _conn
+    try: _conn and _conn.s.close()
+    except OSError: pass
+    _conn = None
 
 # ---------------------------------------------------------------- virtual pad
 # raw libpad bytes at controller+1398: [btn_hi, btn_lo] active-low, [rx, ry, lx, ly], 12 pressure bytes
@@ -178,10 +193,49 @@ def until(ref, press=None, every=2.0, timeout=90.0, thr=12.0):
 
 # ---------------------------------------------------------------- instance setup / launch
 FLOW_LEVEL_GUESS = 0x00B84DD0     # game-flow object's current-level string (flow+1296) on this build/boot path
-CRASH_POS = 0x00D08DC0            # Crash's root position (x,y,z,1.0) in the beach chunk from save state 1
+PLAYER_CHAR = 0x003098FC          # global -> player character object; its position vector is at +0xD0
+FLOW_PTR = 0x0030988C             # global -> game-flow object; state = (u32 at flow+12 >> 12) & 0x3F
+LEVEL_START_STR = 0x0030BE90      # string object the end-of-credits code loads (Levels\Ice\Hub\LabExt)
+STATE_PLAYING, STATE_CREDITS = 12, 19
+STATES_DIR = os.path.join(HERE, "states")
 
 def fl(p, a): return struct.unpack("<f", struct.pack("<I", p.r32(a)))[0]
-def pos(p): return fl(p, CRASH_POS), fl(p, CRASH_POS + 4), fl(p, CRASH_POS + 8)
+def pos(p):
+    base = p.r32(PLAYER_CHAR) + 0xD0
+    return fl(p, base), fl(p, base + 4), fl(p, base + 8)
+
+def flow_state(p): return (p.r32(p.r32(FLOW_PTR) + 12) >> 12) & 0x3F
+
+def slot_file(slot):
+    import glob
+    hits = glob.glob(os.path.join(TEST, "sstates", f"*.{slot:02d}.p2s"))
+    return max(hits, key=os.path.getmtime) if hits else None
+
+def level(name, path=None, fresh=False, timeout=300):
+    """Get the test instance into level NAME. Uses states/NAME.p2s when present; otherwise warps to PATH
+    through the game's end-of-credits level load (flow state 19 loads LEVEL_START_STR, ~2.5 min of
+    credits), waits for gameplay and stores the result as states/NAME.p2s."""
+    os.makedirs(STATES_DIR, exist_ok=True); lib = os.path.join(STATES_DIR, name + ".p2s"); p = Pine()
+    if os.path.exists(lib) and not fresh:
+        p.save(8); time.sleep(1.5)                       # make sure slot 8's file exists with the right name
+        target = slot_file(8); shutil.copyfile(lib, target); p.load(8)
+        for _ in range(60):                               # PINE is busy while a large state loads
+            try: Pine().r32(PLAYER_CHAR); break
+            except (OSError, RuntimeError): pine_reset(); time.sleep(0.5)
+        time.sleep(1); print(f"loaded {name} from the state library"); return
+    if not path: raise SystemExit(f"no saved state for {name}; give the level path to warp there")
+    raw = path.replace("/", "\\").encode("ascii"); buf = raw + b"\0"; buf += b"\0" * (-len(buf) % 4)
+    for i in range(0, len(buf), 4): p.w32(th.WARP_STR + i, struct.unpack("<I", buf[i:i + 4])[0])
+    p.w32(LEVEL_START_STR, th.WARP_STR); p.w32(LEVEL_START_STR + 4, len(raw)); p.w32(LEVEL_START_STR + 8, 0x100)
+    flow = p.r32(FLOW_PTR); hi = p.r32(flow + 12)
+    p.w32(flow + 12, (hi & ~(0x3F << 12)) | (STATE_CREDITS << 12))
+    print(f"warping to {path} via the credits...", flush=True); t0 = time.time()
+    while flow_state(p) != STATE_PLAYING:
+        if time.time() - t0 > timeout: raise SystemExit("warp timed out")
+        time.sleep(1)
+    time.sleep(6)
+    p.save(8); time.sleep(2); shutil.copyfile(slot_file(8), lib)
+    print(f"arrived after {time.time() - t0:.0f}s, saved states/{name}.p2s")
 
 def goto(tx, tz, radius=1.5, timeout=60.0, burst=0.25):
     """Walk Crash to world (tx, tz) with closed-loop steering; the stick is camera-relative, so the
@@ -257,10 +311,10 @@ def start(level, iso, speed):
                      creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)
     for _ in range(120):
         try:
-            p = Pine(timeout=1); st = p.status(); gid = p.game_id()
+            pine_reset(); p = Pine(timeout=1); st = p.status(); gid = p.game_id()
             if st == "running" and gid:
                 warp(p, level); print(f"running {gid} ({p.title()}), New Game -> {level}"); return
-        except (OSError, RuntimeError): pass           # socket not up yet / no game loaded yet
+        except (OSError, RuntimeError): pine_reset()    # socket not up yet / no game loaded yet
         time.sleep(0.5)
     raise SystemExit("PINE did not come up")
 
@@ -281,6 +335,8 @@ def run(argv):
     elif a == "stop": stop()
     elif a == "warp": warp(Pine(), rest[0]); print("New Game ->", rest[0])
     elif a == "pos": x, y, z = pos(Pine()); print(f"crash at ({x:.2f}, {y:.2f}, {z:.2f})")
+    elif a == "level": level(rest[0], rest[1] if len(rest) > 1 and not rest[1].startswith("--") else None, "--fresh" in rest)
+    elif a == "state": print("flow state", flow_state(Pine()))
     elif a == "goto": goto(float(rest[0]), float(rest[1]), float(rest[2]) if len(rest) > 2 else 1.5)
     elif a == "status":
         p = Pine(); print(p.status(), p.game_id(), p.title())
