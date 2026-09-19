@@ -3,7 +3,7 @@
 beach_training     beach     -62.40    0.00   -57.60   # COM_BEACH_TRAINING_CUTSCENE_DIRECTOR_ACTIVATED
 skunk              highpath  -10.18   -2.86   -49.62   # COM_ANGRY_SKUNK_CUTSCENE_DIRECTOR_ACTIVATED
 totem_falling      l03stock   34.34   37.90     9.90   # COM_TOTEM_FALLING_CUTSCENE_DIRECTOR_ACTIVATED
-walrus             gpa10      19.22   15.72  -287.83   # COM_WALRUS_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
+# walrus: plays on arrival in gpa10 (spawn inside the trigger) - test with arrival_test.py, not from a level state
 icelab             labext     33.00  -77.14    -7.49   # COM_ICELAB_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
 psychetron_h02j    psycho     30.45    0.07    -0.68   --progress 11   # H02J director (story progress 11-12)
 lab_psychetron     psycho     30.45    0.07    -0.68   --progress 18   # LAB_PSYCHETRON_ROOM director (progress 18-19)

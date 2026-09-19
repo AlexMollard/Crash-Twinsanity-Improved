@@ -1,6 +1,11 @@
 # Walrus chase (L06E); skip runs the developers' COM_WALRUS_CUTSCENE_SKIP
+# The scene plays the moment the level loads (the spawn is inside its trigger), and the chase starts as it ends.
 file Levels\Ice\HighSeas\gpa10.rm2
 copybody 6021 1 6 0 4 572 1 0   # COM_WALRUS_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 4
 clearbodies 6021 6                  # drop the unreachable original in state 6
+appendcmds 6021 4 0 6023 17 0       # the skip never starts the chase music; run the full scene's BeginMusic (its state 17) when it ends
 copybody 6025 0 3 0 1 51 244 0.2   # COM_CRASH_CUTSCENE_L06E: reconnect Crash's skip-message (244) handler, as COM_WALRUS_CS_L06E still has
 clearbodies 6025 3
+# COM_WALRUS_CS_L06E: its 244 handler warps the walrus to its current focus - Crash - so he died the moment the skip
+# ended. The full scene never moves the walrus (it stays at its start, well behind Crash), so drop the warp.
+delcmd 6033 0 1 1

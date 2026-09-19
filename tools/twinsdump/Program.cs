@@ -140,7 +140,7 @@ static class Program
             }
             case "edit":                                   // twinsdump <rm2> edit <ops.txt> <outdir>
             {
-                // ops (one per line): addbody, copybody, clearbodies, appendcmds, movebody, settarget, setarg, skipprompt (see each branch)
+                // ops (one per line): addbody, copybody, clearbodies, appendcmds, delcmd, movebody, settarget, setarg, skipprompt (see each branch)
                 // Writes <outdir>/<id>.bin (serialized script item) for every edited script.
                 var outDir = args[3]; System.IO.Directory.CreateDirectory(outDir);
                 var byId = scripts.ToDictionary(s => s.ID);
@@ -228,6 +228,20 @@ static class Program
                             using (var r = new System.IO.BinaryReader(ms)) copy = new ScriptCommand(r, s.Main.scriptGameVersion);
                         }
                         AppendCmd(body, copy);
+                    }
+                    else if (t[0] == "delcmd")
+                    {
+                        // delcmd SCRIPT STATE BODYIDX CMDIDX : remove one command from a body
+                        var body = BodyAt(st, int.Parse(t[3]));
+                        var cmds = new List<ScriptCommand>(); for (var c = body.command; c != null; c = c.nextCommand) cmds.Add(c);
+                        cmds.RemoveAt(int.Parse(t[4]));
+                        for (int k = 0; k < cmds.Count; k++)
+                        {
+                            cmds[k].nextCommand = k + 1 < cmds.Count ? cmds[k + 1] : null;
+                            cmds[k].internalIndex = k + 1 < cmds.Count ? cmds[k].internalIndex | 0x1000000 : cmds[k].internalIndex & ~0x1000000;
+                        }
+                        body.command = cmds.Count > 0 ? cmds[0] : null;
+                        body.bitfield = (body.bitfield & ~0xFF) | cmds.Count;
                     }
                     else if (t[0] == "movebody")
                     {
