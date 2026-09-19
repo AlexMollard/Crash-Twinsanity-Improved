@@ -32,8 +32,8 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 | 🛡️ | **Aku Aku invincibility that works** | ISO | With three masks Crash no longer dies to TNT, Nitro or bomb explosions. [Details ↓](#aku-aku-invincibility) |
 | 🌑 | **Shadows on crates** | ISO | Crash's shadow now falls on crates too, so you can see where you'll land. [Details ↓](#shadows-on-crates) |
 | 👻 | **No more invisible Crash** | ISO | Getting hurt just before a cutscene could leave Crash invisible through the scene and after it. [Details ↓](#invisible-crash-after-a-cutscene) |
-| ⏱️ | **Faster loading** | ISO + PCSX2 | Level loads take 25–30% less time from the ISO changes alone, and about 40% less with PCSX2's Fast CDVD (on in the preset). [Details ↓](#faster-loading) |
-| 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta). |
+| ⏱️ | **Faster loading** | ISO + PCSX2 | Level loads take 25–35% less time from the ISO changes alone, and 40–50% less with PCSX2's Fast CDVD (on in the preset). [Details ↓](#faster-loading) |
+| 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta), with the game's frame timing set to match so it runs a steady 60 fps. [Details ↓](#steady-60-fps) |
 | 🖥️ | **Widescreen 16:9 or 21:9 ultrawide** | PCSX2 | 21:9 is enabled by default. Use one or the other, never both. |
 | 🎨 | **HD textures** | PCSX2 | CRASHARKI's *ctwin-tp* pack (616 PNGs, English level cards). |
 | ⚙️ | **Graphics preset** | PCSX2 | 6× resolution, 16× anisotropic filtering, High blending, CAS sharpening, no dithering. |
@@ -123,6 +123,15 @@ Moving platforms were checked the same way. Every lift, bridge, ice floe, hoveri
 game already has the flag on, so they already receive the shadow. Apart from crates, the only objects without it are
 characters, enemies, doors and walls.
 
+### Steady 60 fps
+
+The 480p / 60 Hz patch switches the video output to 60 Hz, but the game still set its internal frame rate to PAL's
+50 from the start-up region flag. That number is used for one thing: how much of each frame the background loader
+may use. Believing a frame lasts 20 ms instead of 16.7 ms, the loader overran the frame wherever it stays busy
+(the hubs), and roughly every fifth frame was shown twice - about 50 fps with visible judder. One word in
+`mod/elf_patches.txt` sets it to 60. Rig: in the Earth hub 57-61 of 300 frames were doubled before, 1 of 360 after,
+and level loads got a little faster too (Classroom Chaos 9 s → 8 s with Fast CDVD), since no frames are wasted.
+
 ### Invisible Crash after a cutscene
 
 After a hit, Crash flickers for two seconds: the grace-period code hides him for the last fifth of every 0.2 s while
@@ -155,8 +164,8 @@ remaining time is the drive itself. Load times measured with the rig, from its l
 
 | Level | Before | Modded ISO | Modded ISO + Fast CDVD |
 |---|:-:|:-:|:-:|
-| Earth hub (`huba`) | 9.5 s | 7.0 s | 6.0 s |
-| Classroom Chaos (`crgpa08`) | 16.0 s | 11.0 s | 9.0 s |
+| Earth hub (`huba`) | 9.5 s | 7.0 s | 5.5 s |
+| Classroom Chaos (`crgpa08`) | 16.0 s | 10.5 s | 8.0 s |
 
 ## Known side effects of 480p / 60 Hz
 
@@ -257,6 +266,7 @@ python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cort
 - [x] Make three-mask invincibility protect from explosions
 - [x] Show Crash's shadow on crates
 - [x] Faster level loading
+- [x] Steady 60 fps (game frame timing matched to the 60 Hz output)
 - [x] Fix Crash staying invisible after being hurt just before a cutscene
 - [ ] Evil Crash running in circles in Bandicoot Pursuit (PAL). Reproduced in the rig: his run heading sits about 20° off
       the route and he orbits the node instead of reaching it. The cause is in his steering, not the level's path data

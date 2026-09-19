@@ -73,3 +73,11 @@
 00116F20 24A5DE48 03E00008   # done: jr ra
 00116F24 10000019 FE020070   # sd    v0,112(s0)      (delay) the original store
 00131844 FE020070 0C045BB8   # sd v0,112(s0) -> jal 0x116EE0
+
+[Game clock set to 60 Hz to match the 480p / 60 Hz output]
+# The game sizes its per-frame work budget (0x192360: time left in the frame, used by the background loader) from a
+# frame rate it picks at start-up from the PAL flag: 50. With the output switched to 60 Hz, a frame is 16.7 ms, not
+# 20 ms, so wherever the loader stays busy (the hubs) it worked past the end of the frame and every fifth frame or so
+# was shown twice - about 50 fps with judder. Rig: 57-61 of 300 hub frames doubled at 50, 1 of 360 at 60; level loads
+# also got slightly faster (Classroom Chaos 9.0 s -> 8.0 s with Fast CDVD). The value has no other use.
+0017D6F0 24050032 2405003C   # addiu a1,zero,50 -> addiu a1,zero,60   (frame rate passed to the game clock)
