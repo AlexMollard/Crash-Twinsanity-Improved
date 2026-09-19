@@ -2,8 +2,8 @@
 
 # Crash Twinsanity Improved
 
-**A fix-and-polish mod for the PAL release of *Crash Twinsanity* (PS2), built for PCSX2.**<br>
-Restores the cutscene skipping the developers cut, adds 480p/60 Hz output, and ships widescreen,<br>
+**A fix-and-polish mod for the PAL release of *Crash Twinsanity* (PS2), built for PCSX2.**
+Restores the cutscene skipping the developers cut, adds 480p/60 Hz output, and ships widescreen,
 HD texture and graphics presets. One script turns your own disc image into a patched ISO.
 
 [![Platform](https://img.shields.io/badge/platform-PlayStation%202-003791?logo=playstation&logoColor=white)](#requirements)
