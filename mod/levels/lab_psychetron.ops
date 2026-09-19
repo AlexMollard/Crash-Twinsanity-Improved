@@ -1,0 +1,44 @@
+# Lab psychetron room (H02M) - story progress 18-19 (set before the level loads; rig state psycho_p19).
+# The scene's last step messages its linked objects, which starts the next scene, so a director-only skip broke the
+# story chain. The skip lives inside the scene script (COM_LAB_PSYCHETRON_ROOM_CUTSCENE_H02M) and ends with the
+# scene's own last steps.
+file Levels\Ice\Hub\psycho.rm2
+# Triangle rule (cond 572, player 1) in the scene's waiting states (camera moves) -> 11
+addbody 6079 7 572 1 11
+addbody 6079 9 572 1 11
+# 11 (unused): the scene's last message pair (state 1's two sends, without its fade and camera) with 244 "skipped" -> 12
+addbody 6079 11 5 0 12 0 0.01       # TimeInUnit: next frame
+appendcmds 6079 11 0 6079 1 0
+delcmd 6079 11 0 3                  # ToggleCutsceneCamera
+delcmd 6079 11 0 2                  # FadeoutScreen
+setarg 6079 11 0 0 0 66781428       # SendUserMessage 207 -> 244 (same packing, only the message byte changes)
+setarg 6079 11 0 1 0 66584820
+# 12 (unused): give the actors 0.3s to run their 244 handlers, then send the scene's last message pair (state 1's two
+# sends, 207: input back) -> 3, the scene's last step (the message to its linked objects that plays the FMV and the
+# next scene). State 1 itself is a slow camera hand-over, which made the skip barely shorter.
+addbody 6079 12 5 0 3 0 0.3
+appendcmds 6079 12 0 6079 1 0
+delcmd 6079 12 0 3                  # ToggleCutsceneCamera
+delcmd 6079 12 0 2                  # FadeoutScreen
+# COM_CORTEX_CUTSCENE_H02M / COM_NINA_CUTSCENE_H02M: on 244, clear it and take their final object state and pose
+# -> 2, which waits for the scene's last message (input back)
+copybody 6081 1 2 0 2 51 244 0.2
+delcmd 6081 1 1 1
+appendcmds 6081 1 1 6081 4 0
+appendcmds 6081 1 1 6081 5 0
+copybody 6081 4 2 0 2 51 244 0.2
+delcmd 6081 4 1 1
+appendcmds 6081 4 1 6081 4 0
+appendcmds 6081 4 1 6081 5 0
+copybody 6083 1 2 0 2 51 244 0.2
+delcmd 6083 1 1 1
+appendcmds 6083 1 1 6083 6 0
+appendcmds 6083 1 1 6083 5 0
+copybody 6083 4 2 0 2 51 244 0.2
+delcmd 6083 4 1 1
+appendcmds 6083 4 1 6083 6 0
+appendcmds 6083 4 1 6083 5 0
+copybody 6083 6 2 0 2 51 244 0.2
+delcmd 6083 6 1 1
+appendcmds 6083 6 1 6083 6 0
+appendcmds 6083 6 1 6083 5 0

@@ -343,7 +343,8 @@ def write_test_config(level, iso):
     open(os.path.join(TEST, "patches", f"SLES-52568_{crc}.pnach"), "w", encoding="utf-8").write(base + "\n\n" + rig + "\n")
     renderer = os.environ.get("RIG_RENDERER")          # e.g. 13 = software, 12 = OpenGL, 14 = Vulkan (default: auto)
     open(os.path.join(TEST, "gamesettings", f"SLES-52568_{crc}.ini"), "w", encoding="utf-8").write(
-        "[Patches]\nEnable = Cutscene Skip (Triangle)\nEnable = Test Rig\n\n[EmuCore/GS]\nupscale_multiplier = 1\n"
+        "[Patches]\nEnable = Cutscene Skip (Triangle)\nEnable = Test Rig\n\n[EmuCore/GS]\n"
+        + f"upscale_multiplier = {os.environ.get('RIG_UPSCALE', '1')}\n"                                   # e.g. 6, the mod's preset
         + (f"Renderer = {renderer}\n" if renderer else "")
         + ("\n[EmuCore/Speedhacks]\n" if os.environ.get("RIG_EE_RATE") or os.environ.get("RIG_FASTCDVD") else "")
         + (f"EECycleRate = {os.environ['RIG_EE_RATE']}\n" if os.environ.get("RIG_EE_RATE") else "")      # -3..3 (3 = 300%)

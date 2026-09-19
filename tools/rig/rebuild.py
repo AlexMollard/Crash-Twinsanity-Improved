@@ -2,7 +2,8 @@
 table, so states made from an older build must not be used once file sizes change).
 
   python rebuild.py [--include DIR ...] [--levels NAME ...]
-levels.txt lines: NAME LEVELPATH [cortex]  ('cortex': arrive as Cortex, via make_cortex_state.py)"""
+levels.txt lines: NAME LEVELPATH [cortex] [progress=N]  ('cortex': arrive as Cortex, via make_cortex_state.py;
+progress=N: set the story progress first - level scripts check it as the level loads)"""
 import os, subprocess, sys, time, glob
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, HERE); import rig
@@ -33,7 +34,11 @@ for line in open(os.path.join(HERE, "levels.txt"), encoding="utf-8"):
     if s[2:3] == ["cortex"]: cortex.append(s); continue      # Cortex levels: made last, they reboot the emulator
     t0 = time.time()
     try:
-        rig.level("base"); rig.level(s[0], s[1], fresh=True); print(f"{s[0]}: ok ({time.time() - t0:.0f}s)", flush=True)
+        rig.level("base")
+        for opt in s[2:]:                                    # progress=N: story progress before the level loads
+            if opt.startswith("progress="):
+                p = rig.Pine(); f = p.r32(rig.FLOW_PTR) + 1284; p.w32(f, (p.r32(f) & ~(0x1F << 21)) | (int(opt[9:]) << 21))
+        rig.level(s[0], s[1], fresh=True); print(f"{s[0]}: ok ({time.time() - t0:.0f}s)", flush=True)
     except SystemExit as e:
         print(f"{s[0]}: FAILED {e}", flush=True); rig.pine_reset()
 for s in cortex:

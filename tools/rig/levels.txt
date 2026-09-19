@@ -31,3 +31,5 @@ coreent    Levels\AltEarth\Hub\coreent
 l10start   Levels\AltEarth\RockSlid\l10start
 altdoc     Levels\AltEarth\Hub\altdoc
 amberly_cortex Levels\school\Madame\amberly cortex
+psycho_p12 Levels\Ice\Hub\psycho progress=12
+psycho_p19 Levels\Ice\Hub\psycho progress=19

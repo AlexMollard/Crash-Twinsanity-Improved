@@ -5,8 +5,8 @@ skunk              highpath  -10.18   -2.86   -49.62   # COM_ANGRY_SKUNK_CUTSCEN
 totem_falling      l03stock   34.34   37.90     9.90   # COM_TOTEM_FALLING_CUTSCENE_DIRECTOR_ACTIVATED
 # walrus: plays on arrival in gpa10 (spawn inside the trigger) - test with arrival_test.py, not from a level state
 icelab             labext     33.00  -77.14    -7.49   # COM_ICELAB_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
-psychetron_h02j    psycho     30.45    0.07    -0.68   --progress 11   # H02J director (story progress 11-12)
-lab_psychetron     psycho     30.45    0.07    -0.68   --progress 18   # LAB_PSYCHETRON_ROOM director (progress 18-19)
+psychetron_h02j    psycho_p12 30.45    0.07    -0.68   # H02J director (story progress 11-12, set before the level loads)
+lab_psychetron     psycho_p19 30.45    0.07    -0.68   # LAB_PSYCHETRON_ROOM director (progress 18-19, set before the level loads)
 slipslide          l05start  -82.31  106.25  -162.96   # COM_SLIPSLIDE_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
 # dorm_room: plays on arrival in cogpa08 (Cortex spawns inside the trigger) - test with arrival_test.py
 classroom          crgpa08     6.60    2.08   -20.58   # COM_CLASSROOM_CHAOS_CUTSCENE_DIRECTOR_ACTIVATED
