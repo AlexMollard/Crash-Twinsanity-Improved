@@ -52,10 +52,10 @@ file Levels\AltEarth\Core\treasure.rm2
 skipprompt auto
 file Levels\AltEarth\Hub\coreent.rm2
 skipprompt 6435 7                   # the skip lives inside the scene: prompt while the director plays it (state 7)
+file Levels\AltEarth\RockSlid\l10start.rm2
+skipprompt 5975 1                   # the skip lives inside the scene: prompt while the director plays it (state 1)
 
 # levels with recipes in mod/levels-wip (their own skips are only built with --include)
-file Levels\AltEarth\RockSlid\l10start.rm2
-skipprompt auto
 file Levels\Earth\Hub\bossarea.rm2
 skipprompt auto
 file Levels\Ice\HighSeas\gpa10.rm2

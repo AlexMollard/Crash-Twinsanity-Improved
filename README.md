@@ -9,7 +9,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 [![Platform](https://img.shields.io/badge/platform-PlayStation%202-003791?logo=playstation&logoColor=white)](#requirements)
 [![Emulator](https://img.shields.io/badge/emulator-PCSX2%202.x-1f6feb)](https://pcsx2.net)
 [![Region](https://img.shields.io/badge/region-PAL%20%C2%B7%20SLES--52568%20v1.01-555)](#requirements)
-[![Cutscene skips](https://img.shields.io/badge/cutscene%20skips%20restored-10-2ea44f)](#cutscene-skip-status)
+[![Cutscene skips](https://img.shields.io/badge/cutscene%20skips%20restored-11-2ea44f)](#cutscene-skip-status)
 [![Python](https://img.shields.io/badge/python-3-3776AB?logo=python&logoColor=white)](https://www.python.org)
 [![.NET](https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com)
 [![Last commit](https://img.shields.io/github/last-commit/AlexMollard/Crash-Twinsanity-Improved)](https://github.com/AlexMollard/Crash-Twinsanity-Improved/commits/main)
@@ -86,8 +86,9 @@ Hold **△** during a cutscene to skip it. Every skippable scene shows *HOLD △
 | ✅ | Iceberg Lab | 34.5 s → 4.5 s | |
 | ✅ | Classroom Chaos | 10.8 s → 4.2 s | Switches you to Cortex, as the scene does |
 | ✅ | Core intro | 21.0 s → 4.1 s | Cortex and Nina leave, as they do in the full scene |
+| ✅ | Rockslide Rumble | 25.3 s → 4.0 s | Crash and Cortex go to the top of the slide, the music starts and Crash mounts the Humiliskate |
 | ⛔ | Totem falling | — | **Left unskippable.** Skipping drops Crash into the totem chase before it's set up, and he dies. |
-| 🚧 | Rockslide Rumble, Walrus, Psychetron room (×2), dorm room, bell tower, party arena, lab interior | — | Work in progress (`mod/levels-wip`) |
+| 🚧 | Walrus, Psychetron room (×2), dorm room, bell tower, party arena, lab interior | — | Work in progress (`mod/levels-wip`) |
 
 <sub>¹ Time from the start of the scene until the player has control again. The skipped times include about 2.5 s of the rig's own wait and button hold.</sub>
 
@@ -244,7 +245,7 @@ RIG_FASTCDVD=true python load_bench.py fast                   # level load times
 
 ### Roadmap
 
-- [x] Restore the cutscene skip (executable patch plus 10 level edits)
+- [x] Restore the cutscene skip (executable patch plus 11 level edits)
 - [x] One-step ISO build with room for level edits
 - [x] An on-screen "hold △ to skip" prompt, using the game's own hint text
 - [x] Make three-mask invincibility protect from explosions
