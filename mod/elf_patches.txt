@@ -81,3 +81,31 @@
 # was shown twice - about 50 fps with judder. Rig: 57-61 of 300 hub frames doubled at 50, 1 of 360 at 60; level loads
 # also got slightly faster (Classroom Chaos 9.0 s -> 8.0 s with Fast CDVD). The value has no other use.
 0017D6F0 24050032 2405003C   # addiu a1,zero,50 -> addiu a1,zero,60   (frame rate passed to the game clock)
+
+[Movies play at their real speed (25 fps) at 60 Hz]
+# The movie player shows a new frame on every second vsync (vsync callback 0x2AFDE8): 25 fps at 50 Hz, but 30 fps -
+# 20% fast - with the 480p / 60 Hz output. The callback now jumps to a stub (in the free space after the grace-period
+# stub) that counts in fifths: +5 per vsync and a frame whenever 12 have built up, i.e. every 2.4 vsyncs = 25 fps.
+# It keeps counting while the movie loop is still decoding, as the original flag did. Rig: boot movies 30.1 -> 25.0
+# and 29.7 -> 24.8 fps (the original disc at 50 Hz: 25.1 and 24.8).
+00116F28 8F828098 93838B52   # lbu   v1,acc               (0x30A3C2, the old every-other-vsync flag)
+00116F2C 3C05002F 24630005   # addiu v1,v1,5              5 per vsync, 12 per frame: 60 Hz x 5/12 = 25 fps
+00116F30 0220202D 2C620011   # sltiu v0,v1,17
+00116F34 0C0811C6 14400002   # bne   v0,zero,+2           at most 16: no clamp
+00116F38 24A5DE58 93828B53   # lbu   v0,enable            (delay; 0x30A3C3: the movie loop is waiting for a frame)
+00116F3C 10000013 2403000C   # addiu v1,zero,12           clamp: never more than one frame due at once
+00116F40 8F828098 10400009   # beq   v0,zero,store        loop still decoding: keep counting
+00116F44 3C05002F 2C62000C   # sltiu v0,v1,12             (delay)
+00116F48 0220202D 14400007   # bne   v0,zero,store        not due yet
+00116F4C 0C0811C6 24020001   # addiu v0,zero,1            (delay)
+00116F50 24A5DE68 2463FFF4   # addiu v1,v1,-12
+00116F54 1000000D A3838B52   # sb    v1,acc
+00116F58 8F828098 0C068112   # jal   0x1A0448             present the frame, as before
+00116F5C 3C05002F A3828B51   # sb    v0,flag              (delay; 0x30A3C1: frame shown)
+00116F60 0220202D 080ABF8A   # j     0x2AFE28             the callback's own exit
+00116F64 0C0811C6 00000000   # nop
+00116F68 24A5DE80 A3838B52   # store: sb v1,acc
+00116F6C 10000007 080ABF8A   # j     0x2AFE28
+00116F70 8F828098 00000000   # nop
+002AFDEC 93828B53 08045BCA   # j 0x116F28 (the stub)
+002AFDF0 1040000B FFBF0000   # sd ra,0(sp) (the callback's own, now in the delay slot)

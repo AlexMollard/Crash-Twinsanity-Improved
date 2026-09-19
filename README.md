@@ -33,7 +33,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 | 🌑 | **Shadows on crates** | ISO | Crash's shadow now falls on crates too, so you can see where you'll land. [Details ↓](#shadows-on-crates) |
 | 👻 | **No more invisible Crash** | ISO | Getting hurt just before a cutscene could leave Crash invisible through the scene and after it. [Details ↓](#invisible-crash-after-a-cutscene) |
 | ⏱️ | **Faster loading** | ISO + PCSX2 | Level loads take 25–35% less time from the ISO changes alone, and 40–50% less with PCSX2's Fast CDVD (on in the preset). [Details ↓](#faster-loading) |
-| 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta), with the game's frame timing set to match so it runs a steady 60 fps. [Details ↓](#steady-60-fps) |
+| 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta), with the game's frame timing set to match: a steady 60 fps, and movies at their real speed. [Details ↓](#steady-60-fps) |
 | 🖥️ | **Widescreen 16:9 or 21:9 ultrawide** | PCSX2 | 21:9 is enabled by default. Use one or the other, never both. |
 | 🎨 | **HD textures** | PCSX2 | CRASHARKI's *ctwin-tp* pack (616 PNGs, English level cards). |
 | ⚙️ | **Graphics preset** | PCSX2 | 6× resolution, 16× anisotropic filtering, High blending, CAS sharpening, no dithering. |
@@ -132,6 +132,14 @@ may use. Believing a frame lasts 20 ms instead of 16.7 ms, the loader overran th
 `mod/elf_patches.txt` sets it to 60. Rig: in the Earth hub 57-61 of 300 frames were doubled before, 1 of 360 after,
 and level loads got a little faster too (Classroom Chaos 9 s → 8 s with Fast CDVD), since no frames are wasted.
 
+### Movies at their real speed
+
+The movie player shows a new frame on every second vsync: 25 fps at PAL's 50 Hz, but 30 fps - 20% fast - once the
+output runs at 60 Hz. The vsync callback now counts in fifths (a frame every 2.4
+vsyncs), which is exactly 25 fps at 60 Hz, and keeps counting while the player is still decoding, as the original
+flag did. Rig, reading the player's own frame counter: the boot movies went from 30.1 and 29.7 fps to 25.0 and
+24.7 fps; the original disc at 50 Hz plays them at 25.1 and 24.8.
+
 ### Invisible Crash after a cutscene
 
 After a hit, Crash flickers for two seconds: the grace-period code hides him for the last fifth of every 0.2 s while
@@ -169,7 +177,6 @@ remaining time is the drive itself. Load times measured with the rig, from its l
 
 ## Known side effects of 480p / 60 Hz
 
-- FMVs play about 10% fast. Gameplay speed is unaffected.
 - On a real PS2 this needs a 480p-capable connection, such as component cables or an HDMI adapter. Over SCART or composite to a PAL TV you get no picture, so use the original disc there.
 
 ## How it works
@@ -267,6 +274,7 @@ python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cort
 - [x] Show Crash's shadow on crates
 - [x] Faster level loading
 - [x] Steady 60 fps (game frame timing matched to the 60 Hz output)
+- [x] Movies at their real speed at 60 Hz
 - [x] Fix Crash staying invisible after being hurt just before a cutscene
 - [ ] Evil Crash running in circles in Bandicoot Pursuit (PAL). Reproduced in the rig: his run heading sits about 20° off
       the route and he orbits the node instead of reaching it. The cause is in his steering, not the level's path data
