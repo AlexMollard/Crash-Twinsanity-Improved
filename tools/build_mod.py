@@ -6,6 +6,8 @@ Put the original ISO in the project folder (any file name - it is recognised by 
 It applies, in order:
   1. mod/elf_patches.txt   executable patches (480p/60Hz, cutscene skip, ...)
   2. mod/levels/*.ops      level script edits (plus any --include DIR/*.ops, e.g. experimental recipes)
+  3. mod/skip_prompt.ops   the "hold triangle to skip" hint on every skippable cutscene
+  4. mod/text.txt          game text lines (the hint's text)
 then writes "PCSX2 patches/SLES-52568_<CRC>.pnach" for the new build from mod/pcsx2/modded.pnach.
 The source ISO is only read. The output is written to a temporary file and swapped in at the end."""
 import argparse, glob, os, re, shutil, subprocess, sys, tempfile
@@ -63,12 +65,16 @@ def read_elf_patches(path):
 
 def level_edits(src_iso, recipe_files, work):
     """{archive name: new bytes} from twinsdump edit recipes applied to the original files."""
-    by_file = {}
+    by_file = {}                                          # a recipe may cover several levels: each "file" line starts a section
     for r in recipe_files:
-        lines = open(r, encoding="utf-8").read().splitlines()
-        target = next((l.split(None, 1)[1].strip() for l in lines if l.startswith("file ")), None)
-        if not target: raise SystemExit(f"{r}: missing 'file <archive path>' line")
-        by_file.setdefault(target, []).append((r, [l for l in lines if not l.startswith("file ")]))
+        target = None
+        for l in open(r, encoding="utf-8").read().splitlines():
+            if l.startswith("file "):                     # grouped case-insensitively, as the archive names are
+                name = l.split(None, 1)[1].strip()
+                target = next((k for k in by_file if k.lower() == name.lower()), name); by_file.setdefault(target, []).append((r, [])); continue
+            if not l.split("#", 1)[0].strip(): continue
+            if target is None: raise SystemExit(f"{r}: ops before the first 'file <archive path>' line")
+            by_file[target][-1][1].append(l)
     reps = {}
     with open(src_iso, "rb") as f:
         files = it.iso_files(f)
@@ -86,6 +92,26 @@ def level_edits(src_iso, recipe_files, work):
                 data, delta = rm2splice.splice(data, [10, 1, sid], open(binf, "rb").read())
             print(f"  {target}: {', '.join(os.path.basename(r) for r, _ in recipes)} ({len(data) - len(orig):+d} bytes)")
             reps[target] = data
+    return reps
+
+def text_edits(src_iso, path):
+    """{archive name: new bytes} from mod/text.txt: ARCHIVE_FILE <tab> LINE_INDEX <tab> EXPECTED <tab> NEW (Latin-1 in the game)."""
+    edits = {}
+    for l in open(path, encoding="utf-8").read().splitlines():
+        if not l.strip() or l.startswith("#"): continue
+        name, idx, expected, new = l.split("\t")
+        edits.setdefault(name, []).append((int(idx), expected, new))
+    reps = {}
+    with open(src_iso, "rb") as f:
+        files = it.iso_files(f)
+        for name, changes in edits.items():
+            lines = it.archive_file(f, files, name).split(b"\r\n")
+            for idx, expected, new in changes:
+                if lines[idx] != expected.encode("latin-1"):
+                    raise SystemExit(f"{name} line {idx}: expected {expected!r}, found {lines[idx]!r} - wrong source disc?")
+                lines[idx] = new.encode("latin-1")
+            reps[name] = b"\r\n".join(lines)
+            print(f"  {name}: {len(changes)} line(s)")
     return reps
 
 def write_pcsx2_files(crc):
@@ -111,10 +137,12 @@ def main():
     step("Tools"); ensure_tools(); print("  ok")
     recipes = sorted(glob.glob(os.path.join(ROOT, "mod", "levels", "*.ops")))
     for d in o.include: recipes += sorted(glob.glob(os.path.join(d, "*.ops")))
+    recipes.append(os.path.join(ROOT, "mod", "skip_prompt.ops"))   # last: it prompts on the skips the recipes above restore
 
     tmp = out + ".building"
     with tempfile.TemporaryDirectory() as work:
         step("Level edits"); reps = level_edits(src, recipes, work)
+        step("Text"); reps.update(text_edits(src, os.path.join(ROOT, "mod", "text.txt")))
         step("Copying source ISO"); shutil.copyfile(src, tmp); print("  ok")
         with open(src, "rb") as s, open(tmp, "r+b") as d:
             files = it.iso_files(d)

@@ -223,16 +223,18 @@ def teleport(x, y, z, tol=2e-3):
         for k, v in enumerate((f[i] + x - x0, f[i + 1] + y - y0, f[i + 2] + z - z0)): p.w32(i * 4 + 4 * k, f2u(v))
     return len(hits)
 
-def _band(w, h, b, y0, y1):
-    tot = n = 0
+def _band(w, h, b, y0, y1, x0=0, x1=None):
+    tot = n = 0; x1 = w if x1 is None else x1
     for y in range(max(0, y0), min(h, y1), 2):
-        row = b[y * w * 4:(y + 1) * w * 4]; tot += sum(row[0::16]) + sum(row[1::16]) + sum(row[2::16]); n += 3 * len(row[0::16])
+        row = b[(y * w + x0) * 4:(y * w + x1) * 4]; tot += sum(row[0::16]) + sum(row[1::16]) + sum(row[2::16]); n += 3 * len(row[0::16])
     return tot / max(n, 1)
 
 def in_cutscene(img=None):
-    """Cutscenes letterbox the picture: the top and bottom bands are pure black while the middle is lit."""
+    """Cutscenes letterbox the picture: the top and bottom bands are pure black while the middle is lit.
+    The middle of the bottom band is ignored - the skip prompt is drawn there."""
     w, h, b = img or grab()
-    return _band(w, h, b, 0, 60) < 2 and _band(w, h, b, h - 30, h) < 2 and _band(w, h, b, h // 2 - 40, h // 2 + 40) > 8
+    bottom = max(_band(w, h, b, h - 30, h, 0, w // 5), _band(w, h, b, h - 30, h, 4 * w // 5, w))
+    return _band(w, h, b, 0, 60) < 2 and bottom < 2 and _band(w, h, b, h // 2 - 40, h // 2 + 40) > 8
 
 def slot_file(slot):
     import glob

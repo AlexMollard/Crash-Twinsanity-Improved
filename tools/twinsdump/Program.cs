@@ -86,7 +86,7 @@ static class Program
             }
             case "edit":                                   // twinsdump <rm2> edit <ops.txt> <outdir>
             {
-                // ops (one per line): addbody, copybody, clearbodies, appendcmds, movebody, settarget, setarg (see each branch)
+                // ops (one per line): addbody, copybody, clearbodies, appendcmds, movebody, settarget, setarg, skipprompt (see each branch)
                 // Writes <outdir>/<id>.bin (serialized script item) for every edited script.
                 var outDir = args[3]; System.IO.Directory.CreateDirectory(outDir);
                 var byId = scripts.ToDictionary(s => s.ID);
@@ -95,6 +95,24 @@ static class Program
                 {
                     var line = raw.Split('#')[0].Trim(); if (line == "") continue;
                     var t = line.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+                    if (t[0] == "skipprompt")
+                    {
+                        // skipprompt auto [TEXT]              every reachable state that plays a cutscene (runs a script) with a live Triangle rule (cond 572)
+                        // skipprompt SCRIPT STATE[,STATE] [TEXT]
+                        // Shows hint TEXT (Language\AgentLab line index, default 24) on the bottom text bar while those states run.
+                        bool auto = t[1] == "auto"; int ti = auto ? 2 : 3;
+                        uint text = t.Length > ti ? uint.Parse(t[ti]) : 24;
+                        var targets = auto
+                            ? scripts.Where(x => x.Main != null).Select(x => (x, SkipStates(x.Main))).Where(x => x.Item2.Count > 0).ToList()
+                            : new List<(Script, HashSet<int>)> { (byId[uint.Parse(t[1])], new HashSet<int>(t[2].Split(',').Select(int.Parse))) };
+                        foreach (var (ps, states) in targets)
+                        {
+                            AddSkipPrompt(ps.Main, states, text);
+                            edited.Add(ps.ID);
+                            Console.Error.WriteLine($"skip prompt: {ps.ID} {ps.Main.name} states {string.Join(",", states)}");
+                        }
+                        continue;
+                    }
                     var s = byId[uint.Parse(t[1])]; var st = StateAt(s.Main, int.Parse(t[2]));
                     if (t[0] == "addbody")
                     {
@@ -155,14 +173,7 @@ static class Program
                             ms.Position = 0;
                             using (var r = new System.IO.BinaryReader(ms)) copy = new ScriptCommand(r, s.Main.scriptGameVersion);
                         }
-                        if (body.command == null) body.command = copy;
-                        else
-                        {
-                            var last = body.command; while (last.nextCommand != null) last = last.nextCommand;
-                            last.nextCommand = copy; last.internalIndex |= 0x1000000;
-                        }
-                        int n = 0; for (var c = body.command; c != null; c = c.nextCommand) n++;
-                        body.bitfield = (body.bitfield & ~0xFF) | n;
+                        AppendCmd(body, copy);
                     }
                     else if (t[0] == "movebody")
                     {
@@ -309,6 +320,77 @@ static class Program
         return st ?? throw new Exception($"state {index} not found in {m.name}");
     }
     static int CountBodies(ScriptState st) { int n = 0; for (var b = st.scriptStateBody; b != null; b = b.nextScriptStateBody) n++; return n; }
+    static uint F(float f) => BitConverter.ToUInt32(BitConverter.GetBytes(f), 0);
+
+    static ScriptCommand Cmd(int ver, ushort vtable, params uint[] args)
+    {
+        var c = new ScriptCommand(ver) { VTableIndex = vtable };   // sizes the argument list for this command
+        for (int k = 0; k < args.Length; k++) c.arguments[k] = args[k];
+        return c;
+    }
+
+    static void AppendCmd(ScriptStateBody b, ScriptCommand c)
+    {
+        if (b.command == null) b.command = c;
+        else
+        {
+            var last = b.command; while (last.nextCommand != null) last = last.nextCommand;
+            last.nextCommand = c; last.internalIndex |= 0x1000000;
+        }
+        int n = 0; for (var x = b.command; x != null; x = x.nextCommand) n++;
+        b.bitfield = (b.bitfield & ~0xFF) | n;
+    }
+
+    // States that play a cutscene (run a script) and can be skipped with Triangle (a condition-572 body), reachable from the start.
+    static HashSet<int> SkipStates(Script.MainScript m)
+    {
+        var reach = Reachable(m); var result = new HashSet<int>(); int i = 0;
+        for (var st = m.scriptState1; st != null; st = st.nextState, i++)
+        {
+            if (!reach.Contains(i) || st.scriptIndexOrSlot < 0 || st.IsSlot) continue;
+            for (var b = st.scriptStateBody; b != null; b = b.nextScriptStateBody)
+                if (b.condition != null && b.condition.VTableIndex == 572) { result.Add(i); break; }
+        }
+        return result;
+    }
+
+    // Hint text while STATES run: BottomTextDisplay(text) on every transition into the set, BottomTextClear on every transition out of it
+    // (moving between two of its states keeps it up). A start state inside the set gets a new entry state.
+    // Only the text is set: BottomTextShow would switch the bottom bar from the cutscene letterbox to the translucent hint strip, and
+    // the letterbox would disappear. Without it the text is drawn inside the letterbox bar.
+    static void AddSkipPrompt(Script.MainScript m, HashSet<int> states, uint text)
+    {
+        int ver = m.scriptGameVersion;
+        Func<ScriptCommand> display = () => Cmd(ver, 603, text, F(0.5f), F(0.92f), F(1f), F(1f), F(1f), 0);   // BottomTextDisplay(line, x, y, scale, ...)
+        Func<ScriptCommand> clear = () => Cmd(ver, 608);                                          // BottomTextClear()
+        int i = 0; ScriptState lastState = null;
+        for (var st = m.scriptState1; st != null; st = st.nextState, i++)
+        {
+            lastState = st;
+            for (var b = st.scriptStateBody; b != null; b = b.nextScriptStateBody)
+            {
+                if ((b.bitfield & 0x400) == 0) continue;                                          // no transition
+                bool from = states.Contains(i), to = states.Contains(b.scriptStateListIndex);
+                if (!from && to) AppendCmd(b, display());
+                else if (from && !to) AppendCmd(b, clear());
+            }
+        }
+        if (states.Contains(m.StartUnit))
+        {
+            var entry = new ScriptState(ver) { bitfield = 0x0421, scriptIndexOrSlot = -1 };   // one "Next" body, like the game's pass-through states
+            var body = new ScriptStateBody(ver)
+            {
+                bitfield = 0x600, scriptStateListIndex = m.StartUnit,
+                condition = new ScriptCondition { Interval = 0f, Threshold = 0.5f, ThresholdInverse = 2.0f }
+            };
+            body.condition.VTableIndex = 0;                                                        // Next
+            AppendCmd(body, display());
+            entry.scriptStateBody = body;
+            lastState.bitfield = (short)(lastState.bitfield | unchecked((short)0x8000)); lastState.nextState = entry;
+            m.StartUnit = i;
+        }
+    }
+
     static ScriptStateBody BodyAt(ScriptState st, int index)
     {
         var b = st.scriptStateBody; for (int k = 0; k < index && b != null; k++) b = b.nextScriptStateBody;

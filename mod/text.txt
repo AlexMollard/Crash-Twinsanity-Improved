@@ -1,0 +1,8 @@
+# Game text changes, applied by tools/build_mod.py. Tab-separated: archive file, line index, original text, new text.
+# Line 24 of each AgentLab table is an unused 'zzz' slot; it holds the cutscene skip hint (^ is the triangle glyph).
+# Wording follows each language's existing 'press and hold' hints.
+Language\AgentLab\English.txt	24	zzz	hold ^ to skip
+Language\AgentLab\French.txt	24	zzz	maintiens la touche ^ pour passer
+Language\AgentLab\German.txt	24	zzz	halte die ^-taste, um zu überspringen
+Language\AgentLab\Italian.txt	24	zzz	tieni premuto il tasto ^ per saltare
+Language\AgentLab\Spanish.txt	24	zzz	mantén pulsado el botón ^ para saltar

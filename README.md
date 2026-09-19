@@ -28,6 +28,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 | | Feature | Where | Notes |
 |:-:|---|---|---|
 | ⏭️ | **Cutscene skip: hold △** | ISO | Brings back the skip the developers disabled, and wires it back into scenes where the skip was removed from the level data. [Status ↓](#cutscene-skip-status) |
+| 💬 | **"Hold △ to skip" prompt** | ISO | Appears in the letterbox's bottom bar during every skippable cutscene, in all five languages. |
 | 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta). |
 | 🖥️ | **Widescreen 16:9 or 21:9 ultrawide** | PCSX2 | 21:9 is enabled by default. Use one or the other, never both. |
 | 🎨 | **HD textures** | PCSX2 | CRASHARKI's *ctwin-tp* pack (616 PNGs, English level cards). |
@@ -66,7 +67,7 @@ python tools/verify_iso.py original.iso "original [Modded].iso"   # sanity-check
 
 ## Cutscene skip status
 
-Hold **△** during a cutscene to skip it. Every level edit below is tested on the automated rig: the scene is played in full and then skipped from the same save state. The rig checks that gameplay comes back sooner and that the player ends in the same situation.
+Hold **△** during a cutscene to skip it. Every skippable scene shows *HOLD △ TO SKIP* in the bottom letterbox bar. Every level edit below is tested on the automated rig: the scene is played in full and then skipped from the same save state. The rig checks that gameplay comes back sooner and that the player ends in the same situation.
 
 | Status | Cutscene | Full → skipped¹ | What the skip also does |
 |:-:|---|:-:|---|
@@ -112,6 +113,10 @@ sometimes the actors' 244 handlers) moved into unreachable states in the level d
   Triangle check. That alone restores every scene whose skip branch was still wired in.
 - **Level edits** (`mod/levels/*.ops`): reconnect the cut branches with `twinsdump edit`. Where a scene sets up the
   next section, the edit also runs the scene's own last step: character switches, actors leaving, and so on.
+- **Skip prompt** (`mod/skip_prompt.ops`, `mod/text.txt`): the text goes into an unused slot of the game's hint table
+  (`Language/AgentLab`, with `^` as the △ glyph). Each skippable scene's director sets it with `BottomTextDisplay`
+  when the scene starts and clears it when the scene ends or is skipped. It skips `BottomTextShow`, which would
+  swap the letterbox for the translucent hint strip, so the text is drawn inside the letterbox instead.
 
 </details>
 
@@ -164,6 +169,7 @@ a cutscene in full and skipped from the same state and compare the results.
 cd tools/rig
 python rebuild.py --include mod/levels-wip --levels crgpa08   # test ISO + fresh save states
 python run_cutscenes.py cutscenes_orphan.txt classroom        # full vs skipped, verdict in results/summary.txt
+python prompt_test.py classroom crgpa08 6.60 2.08 -20.58 10.8  # skip prompt shown during the scene, gone after
 ```
 
 </details>
@@ -172,7 +178,7 @@ python run_cutscenes.py cutscenes_orphan.txt classroom        # full vs skipped,
 
 - [x] Restore the cutscene skip (executable patch plus 10 level edits)
 - [x] One-step ISO build with room for level edits
-- [ ] An on-screen "hold △ to skip" prompt, using the game's own hint bar
+- [x] An on-screen "hold △ to skip" prompt, using the game's own hint text
 - [ ] The remaining cutscenes in `mod/levels-wip`
 
 ### Not included
