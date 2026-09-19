@@ -189,14 +189,15 @@ static class Program
                     }
                     else if (t[0] == "copybody")
                     {
-                        // copybody SCRIPT TOSTATE FROMSTATE BODYIDX TARGET COND PARAM INTERVAL
+                        // copybody SCRIPT TOSTATE FROMSTATE BODYIDX TARGET COND PARAM INTERVAL [THRESHOLD]
                         // appends a copy of body BODYIDX of FROMSTATE (its commands) to TOSTATE with a new condition/target
                         var src = StateAt(s.Main, int.Parse(t[3])).scriptStateBody; for (int k = 0; k < int.Parse(t[4]); k++) src = src.nextScriptStateBody;
+                        float thrC = t.Length > 9 ? float.Parse(t[9], System.Globalization.CultureInfo.InvariantCulture) : (src.condition?.Threshold ?? 0.5f);
                         var body = new ScriptStateBody(s.Main.scriptGameVersion)
                         {
                             bitfield = (src.bitfield & 0xFF) | 0x600, scriptStateListIndex = int.Parse(t[5]),
                             condition = new ScriptCondition { Interval = float.Parse(t[8], System.Globalization.CultureInfo.InvariantCulture),
-                                                              Threshold = src.condition?.Threshold ?? 0.5f, ThresholdInverse = src.condition?.ThresholdInverse ?? 2.0f }
+                                                              Threshold = thrC, ThresholdInverse = 1f / thrC }
                         };
                         body.condition.VTableIndex = ushort.Parse(t[6]); body.condition.Parameter = ushort.Parse(t[7]);
                         if (src.command != null)

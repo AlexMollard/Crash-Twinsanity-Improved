@@ -28,6 +28,7 @@ skipprompt auto
 file Levels\Ice\Hub\psycho.rm2
 skipprompt auto
 skipprompt 6077 1                   # lab psychetron room: the skip lives inside the scene, prompt while the director plays it
+skipprompt 6347 3                   # psychetron room with Coco: same, its director plays the scene in state 3
 file Levels\Ice\IceClimb\bergext.rm2
 skipprompt auto
 file Levels\Ice\IceClimb\ukafight.rm2

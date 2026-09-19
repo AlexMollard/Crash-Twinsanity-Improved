@@ -1,0 +1,55 @@
+# Psychetron room with Coco (H02J) - story progress 11-12 (set before the level loads; rig state psycho_p12).
+# The scene hands Cortex and Coco between several senders, so instead of routing a "skipped" message, each actor
+# watches for the Triangle itself (cond 572, the same rule the scene uses) and jumps to its own last step. The scene
+# then runs its ending, whose last messages give the player control back.
+file Levels\Ice\Hub\psycho.rm2
+# COM_PSYCHETRON_ROOM_CUTSCENE_H02J: Triangle rule in every state the scene waits in (camera moves and dialogue
+# waits) -> 2. Not in its instant states: a polled rule there stops the state from stepping on.
+addbody 6353 8 572 1 2
+addbody 6353 9 572 1 2
+addbody 6353 11 572 1 2
+addbody 6353 13 572 1 2
+addbody 6353 15 572 1 2
+addbody 6353 18 572 1 2
+addbody 6353 19 572 1 2
+addbody 6353 20 572 1 2
+addbody 6353 21 572 1 2
+addbody 6353 23 572 1 2
+addbody 6353 25 572 1 2
+addbody 6353 26 572 1 2
+addbody 6353 28 572 1 2
+addbody 6353 30 572 1 2
+addbody 6353 32 572 1 2
+addbody 6353 34 572 1 2
+addbody 6353 36 572 1 2
+addbody 6353 37 572 1 2
+# 2 (unused): give the actors 0.3s to reach their last step -> 4, the scene's ending (cleanup, then the messages
+# that hand control back)
+addbody 6353 2 5 0 4 0 0.3
+# COM_CORTEX_CUTSCENE_H02J: on Triangle, take his last step (state 10's: final mark and pose) -> 3, which waits for
+# the scene's last message
+copybody 6349 4 10 0 3 572 1 0.2 0.5
+copybody 6349 5 10 0 3 572 1 0.2 0.5
+copybody 6349 8 10 0 3 572 1 0.2 0.5
+copybody 6349 10 10 0 3 572 1 0.2 0.5
+# COM_COCO_CUTSCENE_H02J: on Triangle, run her step that messages the machine (state 9's) and then her last step
+# (state 13's: final mark and pose) -> 2, which waits for the scene's last message
+copybody 6351 6 9 0 2 572 1 0.2 0.5
+appendcmds 6351 6 1 6351 13 0
+copybody 6351 7 9 0 2 572 1 0.2 0.5
+appendcmds 6351 7 1 6351 13 0
+copybody 6351 8 9 0 2 572 1 0.2 0.5
+appendcmds 6351 8 1 6351 13 0
+copybody 6351 9 9 0 2 572 1 0.2 0.5
+appendcmds 6351 9 1 6351 13 0
+copybody 6351 12 9 0 2 572 1 0.2 0.5
+appendcmds 6351 12 1 6351 13 0
+copybody 6351 13 9 0 2 572 1 0.2 0.5
+appendcmds 6351 13 1 6351 13 0
+copybody 6351 17 9 0 2 572 1 0.2 0.5
+appendcmds 6351 17 1 6351 13 0
+copybody 6351 18 9 0 2 572 1 0.2 0.5
+appendcmds 6351 18 1 6351 13 0
+# COM_CRASH_CUTSCENE_H02J: on Triangle, take the step the scene's message would have run (state 3's: warp to his mark
+# by the console, turn and pose) -> 4, which runs his last pose and then waits for the scene's last message
+copybody 6463 3 3 0 4 572 1 0.2 0.5
