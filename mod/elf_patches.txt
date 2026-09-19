@@ -14,3 +14,15 @@
 0012C580 00000000 14400031   # bne  v0,zero,0x12C648  player given -> tail-call condition 575 (player N holds Triangle)
                              # 0x12C584-0x12C594 already hold: nop / mtc1 zero,f0 / jr ra / nop  (no player -> 0.0)
 002F0ACC 0012C588 0012C578   # condition 572 check -> new function at 0x12C578
+
+[Aku Aku invincibility (3 masks) also protects from explosions]
+# Crash's damage handler (0x137510) ignores hits while the invincible bit is set - unless damage >= 50, and TNT/Nitro/bomb
+# explosions deal 100 (damage flag 2), so an invincible Crash still died to them. The handler converts the damage byte to a
+# float and back (a no-op); that is replaced by a move, and the 4 freed slots compute "small hit OR explosion" into t9,
+# which the invincibility test then uses instead of "damage < 50". Other big hits (instant deaths) still go through.
+00137590 44820000 0040A02D   # mtc1 v0,f0      -> move  s4,v0        damage amount (was (int)(float)byte, same value)
+00137594 00000000 8E590010   # nop             -> lw    t9,16(s2)    damage flags
+00137598 46800020 33390002   # cvt.s.w         -> andi  t9,t9,2      explosion
+0013759C 46000064 2E980032   # cvt.w.s         -> sltiu t8,s4,50     small hit
+001375A0 44140800 0338C825   # mfc1 s4,f1      -> or    t9,t9,t8     invincibility blocks this hit
+00137604 2E820032 0320102D   # sltiu v0,s4,50  -> move  v0,t9        (delay slot of the invincible check)

@@ -22,3 +22,6 @@ tools/rig/results/
 
 # Local Claude Code settings
 .claude/settings.local.json
+
+# Ghidra install + restored project (see tools/re)
+tools/ghidra/

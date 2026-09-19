@@ -14,7 +14,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 [![.NET](https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com)
 [![Last commit](https://img.shields.io/github/last-commit/AlexMollard/Crash-Twinsanity-Improved)](https://github.com/AlexMollard/Crash-Twinsanity-Improved/commits/main)
 
-[Features](#features) · [Quick start](#quick-start) · [Cutscene skips](#cutscene-skip-status) · [How it works](#how-it-works) · [Development](#development) · [Credits](#credits)
+[Features](#features) · [Quick start](#quick-start) · [Cutscene skips](#cutscene-skip-status) · [Gameplay fixes](#gameplay-fixes) · [How it works](#how-it-works) · [Development](#development) · [Credits](#credits)
 
 </div>
 
@@ -29,6 +29,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 |:-:|---|---|---|
 | ⏭️ | **Cutscene skip: hold △** | ISO | Brings back the skip the developers disabled, and wires it back into scenes where the skip was removed from the level data. [Status ↓](#cutscene-skip-status) |
 | 💬 | **"Hold △ to skip" prompt** | ISO | Appears in the letterbox's bottom bar during every skippable cutscene, in all five languages. |
+| 🛡️ | **Aku Aku invincibility that works** | ISO | With three masks Crash no longer dies to TNT, Nitro or bomb explosions. [Details ↓](#aku-aku-invincibility) |
 | 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta). |
 | 🖥️ | **Widescreen 16:9 or 21:9 ultrawide** | PCSX2 | 21:9 is enabled by default. Use one or the other, never both. |
 | 🎨 | **HD textures** | PCSX2 | CRASHARKI's *ctwin-tp* pack (616 PNGs, English level cards). |
@@ -90,7 +91,17 @@ Hold **△** during a cutscene to skip it. Every skippable scene shows *HOLD △
 > [!NOTE]
 > **Known differences after a skip.** A few level hints don't appear: "Clear a path for Cortex!", "Use ◯ to crouch", "Tap □ to rapid fire". In Iceberg Lab and Classroom Chaos the character stands a few steps from where the full scene would leave them.
 
-### Known side effects of 480p / 60 Hz
+## Gameplay fixes
+
+### Aku Aku invincibility
+
+Collecting a third mask sets Crash's invincible flag for 8 seconds, but the damage handler lets any hit of 50 or more
+through, and every explosion (TNT, Nitro, bombs) deals 100. So an invincible Crash still died to TNT. The fix
+(`mod/elf_patches.txt`) makes invincibility also block damage flagged as an explosion; other instant deaths still go
+through. The same flag covers the two-second grace period after a hit, so explosions no longer kill you during it either.
+Rig-tested: TNT while invincible leaves Crash at full health, and without invincibility it still kills. Enemy hits are unchanged.
+
+## Known side effects of 480p / 60 Hz
 
 - FMVs play about 10% fast. Gameplay speed is unaffected.
 - On a real PS2 this needs a 480p-capable connection, such as component cables or an HDMI adapter. Over SCART or composite to a PAL TV you get no picture, so use the original disc there.
@@ -151,6 +162,7 @@ tools/
 ├── isotools.py          ISO9660 + UDF, CRASH.BD/BH archive and executable helpers
 ├── verify_iso.py        checks a build against the original
 ├── twinsdump/           level inspection and editing CLI (uses the Twinsanity Editor library)
+├── re/                  headless Ghidra scripts for the twinsanity-reversed project (ghidra.py xref/decomp/callers)
 ├── rig/                 automated test rig driving an isolated PCSX2 over PINE
 ├── twinsanity-editor/   submodule
 └── twinsanity-reversed/ submodule
@@ -179,6 +191,8 @@ python prompt_test.py classroom crgpa08 6.60 2.08 -20.58 10.8  # skip prompt sho
 - [x] Restore the cutscene skip (executable patch plus 10 level edits)
 - [x] One-step ISO build with room for level edits
 - [x] An on-screen "hold △ to skip" prompt, using the game's own hint text
+- [x] Make three-mask invincibility protect from explosions
+- [ ] Show Crash's shadow on crates
 - [ ] The remaining cutscenes in `mod/levels-wip`
 
 ### Not included
