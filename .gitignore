@@ -23,6 +23,7 @@ tools/rig/results/
 
 # Local Claude Code settings
 .claude/settings.local.json
+.claude/scheduled_tasks.lock
 
 # Ghidra install + restored project (see tools/re)
 tools/ghidra/
