@@ -70,6 +70,43 @@ static class Program
                 }
                 break;
             }
+            case "objgfx":                                 // twinsdump <rm2> objgfx [regex] : object -> OGI (collision?) -> materials (layer, FBA)
+            {
+                var reo = new Regex(args.Length > 2 ? args[2] : ".", RegexOptions.IgnoreCase);
+                T Find<T>(uint id) where T : TwinsItem => items.Select(i => i.item).OfType<T>().FirstOrDefault(i => i.ID == id);
+                string Mat(uint id)
+                {
+                    var m = Find<Material>(id); if (m == null) return $"?{id}";
+                    return $"{m.Name.TrimEnd('\0')}[L{m.Unknown} FBA {string.Join("", m.Shaders.Select(s => s.AlphaCorrectionValue ? "1" : "0"))}]";
+                }
+                bool idsOnly = args.Length > 3 && args[3] == "ids";   // objgfx REGEX ids : "objectname<TAB>materialID<TAB>name" per material
+                foreach (var (item, path) in items.Where(i => i.item is GameObject))
+                {
+                    var o = (GameObject)item;
+                    if (!reo.IsMatch(o.Name)) continue;
+                    if (idsOnly)
+                    {
+                        foreach (var ogiId in o.OGIs.Concat(o.cOGIs).Distinct())
+                        {
+                            var gi = Find<GraphicsInfo>(ogiId); if (gi == null) continue;
+                            var mids = gi.ModelIDs.Values.Select(l => Find<RigidModel>(l.ModelID)).Where(r => r != null).SelectMany(r => r.MaterialIDs).ToList();
+                            var sk = gi.SkinID != 0 ? Find<Skin>(gi.SkinID) : null;
+                            if (sk != null) mids.AddRange(sk.SubModels.Select(s => s.MaterialID));
+                            foreach (var mid in mids.Distinct()) { var m = Find<Material>(mid); Console.WriteLine($"{o.Name}\t{mid}\t{m?.Name.TrimEnd('\0')}"); }
+                        }
+                        continue;
+                    }
+                    Console.WriteLine($"object {o.ID} {o.Name}");
+                    foreach (var ogiId in o.OGIs.Concat(o.cOGIs).Distinct())
+                    {
+                        var gi = Find<GraphicsInfo>(ogiId); if (gi == null) { Console.WriteLine($"   ogi {ogiId}: ?"); continue; }
+                        var mats = gi.ModelIDs.Values.Select(l => Find<RigidModel>(l.ModelID)).Where(r => r != null).SelectMany(r => r.MaterialIDs).Distinct().Select(Mat);
+                        var skin = gi.SkinID != 0 && Find<Skin>(gi.SkinID) != null ? Find<Skin>(gi.SkinID).SubModels.Select(s => s.MaterialID).Distinct().Select(Mat) : Enumerable.Empty<string>();
+                        Console.WriteLine($"   ogi {ogiId}: collision {gi.CollisionData.Length}, rigid {string.Join(" ", mats)}{(skin.Any() ? "  skin " + string.Join(" ", skin) : "")}{(gi.BlendSkinID != 0 ? "  blendskin" : "")}");
+                    }
+                }
+                break;
+            }
             case "instances":
             {
                 var objNames = items.Where(i => i.item is GameObject).ToDictionary(i => i.item.ID, i => ((GameObject)i.item).Name);

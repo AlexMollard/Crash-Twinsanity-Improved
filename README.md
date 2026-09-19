@@ -108,9 +108,13 @@ Characters cast a real silhouette shadow: one small volume per bone, drawn strai
 The mask is applied only to pixels whose material sets the GS *alpha correction* flag (FBA), which marks them as
 shadow receivers. Level scenery has the flag on. Characters have it off, so they don't shadow themselves. Most crate
 materials were given the character settings, so Crash's shadow never showed on a crate. The build
-(`tools/materials.py`) switches the flag on for every opaque crate material in all levels: 569 shaders in 89 level
-files, one byte each, with no size changes. Rig-tested with an A/B comparison on the Rooftop iron crates, in both the
-software and hardware renderers.
+(`tools/materials.py`) switches the flag on for every opaque crate material in all levels, the extra-life crate
+included: 580 shaders in 89 level files, one byte each, with no size changes. Rig-tested with an A/B comparison on the
+Rooftop iron crates, in both the software and hardware renderers.
+
+Moving platforms were checked the same way. Every lift, bridge, ice floe, hovering platform, boat and holo-platform in the
+game already has the flag on, so they already receive the shadow. Apart from crates, the only objects without it are
+characters, enemies, doors and walls.
 
 ## Known side effects of 480p / 60 Hz
 
