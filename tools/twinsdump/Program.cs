@@ -55,6 +55,21 @@ static class Program
                 }
                 break;
             }
+            case "materials":                              // twinsdump <rm2> materials [regex] : material id, draw layer (DMA chain slot), name
+            {
+                var rem = new Regex(args.Length > 2 ? args[2] : ".", RegexOptions.IgnoreCase);
+                foreach (var (item, path) in items.Where(i => i.item is Material))
+                {
+                    var m = (Material)item;
+                    if (!rem.IsMatch(m.Name)) continue;
+                    Console.WriteLine($"{m.ID,10}  layer {m.Unknown,3}  header 0x{m.Header:X}  {m.Name.TrimEnd('\0')}");
+                    if (args.Length > 3 && args[3] == "shaders")          // materials REGEX shaders : every shader field
+                        foreach (var shd in m.Shaders)
+                            Console.WriteLine("      " + string.Join(" ", typeof(TwinsShader).GetFields().Where(fi => fi.FieldType.IsEnum || fi.FieldType == typeof(bool) || fi.FieldType == typeof(byte))
+                                .Select(fi => $"{fi.Name}={fi.GetValue(shd)}")) + $" ShaderType={shd.ShaderType}");
+                }
+                break;
+            }
             case "instances":
             {
                 var objNames = items.Where(i => i.item is GameObject).ToDictionary(i => i.item.ID, i => ((GameObject)i.item).Name);

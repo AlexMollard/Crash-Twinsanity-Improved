@@ -30,6 +30,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 | ⏭️ | **Cutscene skip: hold △** | ISO | Brings back the skip the developers disabled, and wires it back into scenes where the skip was removed from the level data. [Status ↓](#cutscene-skip-status) |
 | 💬 | **"Hold △ to skip" prompt** | ISO | Appears in the letterbox's bottom bar during every skippable cutscene, in all five languages. |
 | 🛡️ | **Aku Aku invincibility that works** | ISO | With three masks Crash no longer dies to TNT, Nitro or bomb explosions. [Details ↓](#aku-aku-invincibility) |
+| 🌑 | **Shadows on crates** | ISO | Crash's shadow now falls on crates too, so you can see where you'll land. [Details ↓](#shadows-on-crates) |
 | 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta). |
 | 🖥️ | **Widescreen 16:9 or 21:9 ultrawide** | PCSX2 | 21:9 is enabled by default. Use one or the other, never both. |
 | 🎨 | **HD textures** | PCSX2 | CRASHARKI's *ctwin-tp* pack (616 PNGs, English level cards). |
@@ -101,6 +102,16 @@ through, and every explosion (TNT, Nitro, bombs) deals 100. So an invincible Cra
 through. The same flag covers the two-second grace period after a hit, so explosions no longer kill you during it either.
 Rig-tested: TNT while invincible leaves Crash at full health, and without invincibility it still kills. Enemy hits are unchanged.
 
+### Shadows on crates
+
+Characters cast a real silhouette shadow: one small volume per bone, drawn straight down into a screen-space mask.
+The mask is applied only to pixels whose material sets the GS *alpha correction* flag (FBA), which marks them as
+shadow receivers. Level scenery has the flag on. Characters have it off, so they don't shadow themselves. Most crate
+materials were given the character settings, so Crash's shadow never showed on a crate. The build
+(`tools/materials.py`) switches the flag on for every opaque crate material in all levels: 569 shaders in 89 level
+files, one byte each, with no size changes. Rig-tested with an A/B comparison on the Rooftop iron crates, in both the
+software and hardware renderers.
+
 ## Known side effects of 480p / 60 Hz
 
 - FMVs play about 10% fast. Gameplay speed is unaffected.
@@ -140,6 +151,7 @@ sometimes the actors' 244 handlers) moved into unreachable states in the level d
 
 1. Patches `SLES_525.68` from `mod/elf_patches.txt`. Every word is checked against its original value before anything is written.
 2. Applies each level recipe to the original `.rm2` from `CRASH.BD`, then splices the edited script items back in.
+   It also switches on the shadow-receiver flag for crate materials in every level (`tools/materials.py`).
 3. Moves the English speech bank (`ENGLISH.MB/MH`, about 13 MB) to the end of the image so `CRASH.BD` can grow. The game
    finds its files by name, and both the ISO9660 and UDF directories are updated.
 4. Rebuilds `CRASH.BD/BH` and writes the matching `.pnach` for the new executable CRC.
@@ -161,6 +173,7 @@ tools/
 ├── build_mod.py         builds the [Modded] ISO
 ├── isotools.py          ISO9660 + UDF, CRASH.BD/BH archive and executable helpers
 ├── verify_iso.py        checks a build against the original
+├── materials.py         material fixes (crates receive shadows)
 ├── twinsdump/           level inspection and editing CLI (uses the Twinsanity Editor library)
 ├── re/                  headless Ghidra scripts for the twinsanity-reversed project (ghidra.py xref/decomp/callers)
 ├── rig/                 automated test rig driving an isolated PCSX2 over PINE
@@ -192,7 +205,7 @@ python prompt_test.py classroom crgpa08 6.60 2.08 -20.58 10.8  # skip prompt sho
 - [x] One-step ISO build with room for level edits
 - [x] An on-screen "hold △ to skip" prompt, using the game's own hint text
 - [x] Make three-mask invincibility protect from explosions
-- [ ] Show Crash's shadow on crates
+- [x] Show Crash's shadow on crates
 - [ ] The remaining cutscenes in `mod/levels-wip`
 
 ### Not included

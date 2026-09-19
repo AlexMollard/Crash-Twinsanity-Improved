@@ -61,6 +61,16 @@ def patch_elf(f, files, patches):
     for va, orig, new, note in patches:
         f.seek(base + va - ELF_BASE + ELF_FILE_OFF); f.write(struct.pack("<I", new))
 
+def patch_archive_bytes(f, patches):
+    """patches: {archive name: {offset in file: byte}} applied in place in the image's CRASH.BD (sizes unchanged)."""
+    files = iso_files(f); bd_lba = files["/CRASH6/CRASH.BD"][0]
+    where = {n.lower(): (off, size) for n, off, size, _ in parse_bh(read_file(f, files, "/CRASH6/CRASH.BH"))}
+    for name, changes in patches.items():
+        off, size = where[name.lower()]
+        for o, b in changes.items():
+            if o >= size: raise SystemExit(f"{name}: patch offset {o} outside the file")
+            f.seek(bd_lba * SECTOR + off + o); f.write(bytes([b]))
+
 def _udf_crc(data):
     """CRC-16/CCITT (poly 0x1021, init 0) as used by UDF descriptor tags."""
     crc = 0

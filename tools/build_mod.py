@@ -8,6 +8,7 @@ It applies, in order:
   2. mod/levels/*.ops      level script edits (plus any --include DIR/*.ops, e.g. experimental recipes)
   3. mod/skip_prompt.ops   the "hold triangle to skip" hint on every skippable cutscene
   4. mod/text.txt          game text lines (the hint's text)
+  5. tools/materials.py    crate materials receive Crash's shadow
 then writes "PCSX2 patches/SLES-52568_<CRC>.pnach" for the new build from mod/pcsx2/modded.pnach.
 The source ISO is only read. The output is written to a temporary file and swapped in at the end."""
 import argparse, glob, os, re, shutil, subprocess, sys, tempfile
@@ -18,6 +19,7 @@ sys.path.insert(0, HERE)
 import isotools as it
 sys.path.insert(0, os.path.join(HERE, "rig"))
 import rm2splice
+import materials
 
 TWINSDUMP = os.path.join(HERE, "twinsdump", "bin", "Release", "net48", "twinsdump.exe")
 EDITOR = os.path.join(HERE, "twinsanity-editor")
@@ -114,6 +116,29 @@ def text_edits(src_iso, path):
             print(f"  {name}: {len(changes)} line(s)")
     return reps
 
+def material_fixes(src_iso, reps):
+    """Crate materials receive Crash's shadow (see tools/materials.py). Edits to files already in REPS are made there;
+    the rest are returned as {archive name: {offset: byte}} for patch_archive_bytes after the archive is rebuilt."""
+    later, total, count = {}, 0, 0
+    if os.environ.get("CRASHMOD_NO_CRATE_SHADOWS"):     # A/B testing only: build without this fix
+        print("  skipped (CRASHMOD_NO_CRATE_SHADOWS)"); return later
+    with open(src_iso, "rb") as f:
+        files = it.iso_files(f)
+        bh = it.read_file(f, files, "/CRASH6/CRASH.BH"); bd_lba = files["/CRASH6/CRASH.BD"][0]
+        for name, off, size, _ in it.parse_bh(bh):
+            if not name.lower().endswith(".rm2"): continue
+            key = next((k for k in reps if k.lower() == name.lower()), None)
+            if key is not None:
+                data = bytearray(reps[key]); offs = materials.crate_shadow_offsets(data)
+                for o in offs: data[o] = 1
+                reps[key] = bytes(data)
+            else:
+                f.seek(bd_lba * it.SECTOR + off); offs = materials.crate_shadow_offsets(f.read(size))
+                if offs: later[name] = {o: 1 for o in offs}
+            if offs: count += 1; total += len(offs)
+    print(f"  crate materials receive shadows: {total} shaders in {count} level files")
+    return later
+
 def write_pcsx2_files(crc):
     pdir = os.path.join(ROOT, "PCSX2 patches")
     template = open(os.path.join(ROOT, "mod", "pcsx2", "modded.pnach"), encoding="utf-8").read()
@@ -143,6 +168,7 @@ def main():
     with tempfile.TemporaryDirectory() as work:
         step("Level edits"); reps = level_edits(src, recipes, work)
         step("Text"); reps.update(text_edits(src, os.path.join(ROOT, "mod", "text.txt")))
+        step("Materials"); mat_patches = material_fixes(src, reps)
         step("Copying source ISO"); shutil.copyfile(src, tmp); print("  ok")
         with open(src, "rb") as s, open(tmp, "r+b") as d:
             files = it.iso_files(d)
@@ -152,6 +178,7 @@ def main():
             step("Making room for the archive")        # the English speech bank sits right after CRASH.BD
             it.relocate_to_end(d, RELOCATE, log=print)
             step("Archive"); it.rebuild_archive(s, d, reps, log=print)
+            it.patch_archive_bytes(d, mat_patches)
     crc = it.iso_crc(tmp)
     try: os.replace(tmp, out)
     except PermissionError:

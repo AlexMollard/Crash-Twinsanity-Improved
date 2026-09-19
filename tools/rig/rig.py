@@ -84,19 +84,19 @@ LO = {"l2": 0, "r2": 1, "l1": 2, "r1": 3, "triangle": 4, "circle": 5, "cross": 6
 PRESSURE = ["right", "left", "up", "down", "triangle", "circle", "cross", "square", "l1", "r1", "l2", "r2"]
 STICK_ADDR = th.VPAD_RAW + 2
 
-def pad_bytes(buttons, lx=0.0, ly=0.0):
+def pad_bytes(buttons, lx=0.0, ly=0.0, rx=0.0, ry=0.0):
     hi = lo = 0xFF
     for b in buttons:
         if b in HI: hi &= ~(1 << HI[b])
         elif b in LO: lo &= ~(1 << LO[b])
         else: raise SystemExit(f"unknown button {b}")
     stick = lambda v: max(0, min(255, int(round(128 + v * 127))))
-    raw = bytes([hi & 0xFF, lo & 0xFF, 128, 128, stick(lx), stick(ly)])
+    raw = bytes([hi & 0xFF, lo & 0xFF, stick(rx), stick(ry), stick(lx), stick(ly)])
     raw += bytes(255 if name in buttons else 0 for name in PRESSURE)
     return raw
 
-def set_pad(p, buttons=(), lx=0.0, ly=0.0):
-    raw = pad_bytes(buttons, lx, ly)
+def set_pad(p, buttons=(), lx=0.0, ly=0.0, rx=0.0, ry=0.0):
+    raw = pad_bytes(buttons, lx, ly, rx, ry)
     for i in range(0, 18, 4):
         chunk = raw[i:i + 4].ljust(4, b"\0")
         p.w32(th.VPAD_RAW + i, struct.unpack("<I", chunk)[0])
@@ -339,8 +339,10 @@ def write_test_config(level, iso):
     base = open(src, encoding="utf-8").read().replace("{CRC}", crc).rstrip()
     rig = th.pnach_section()
     open(os.path.join(TEST, "patches", f"SLES-52568_{crc}.pnach"), "w", encoding="utf-8").write(base + "\n\n" + rig + "\n")
+    renderer = os.environ.get("RIG_RENDERER")          # e.g. 13 = software, 12 = OpenGL, 14 = Vulkan (default: auto)
     open(os.path.join(TEST, "gamesettings", f"SLES-52568_{crc}.ini"), "w", encoding="utf-8").write(
-        "[Patches]\nEnable = Cutscene Skip (Triangle)\nEnable = Test Rig\n\n[EmuCore/GS]\nupscale_multiplier = 1\n")
+        "[Patches]\nEnable = Cutscene Skip (Triangle)\nEnable = Test Rig\n\n[EmuCore/GS]\nupscale_multiplier = 1\n"
+        + (f"Renderer = {renderer}\n" if renderer else ""))
 
 def start(level, iso, speed):
     if test_pid(): raise SystemExit("test PCSX2 already running (rig.py stop)")
