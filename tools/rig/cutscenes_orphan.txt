@@ -10,7 +10,7 @@ lab_psychetron     psycho     30.45    0.07    -0.68   --progress 18   # LAB_PSY
 slipslide          l05start  -82.31  106.25  -162.96   # COM_SLIPSLIDE_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
 # dorm_room: plays on arrival in cogpa08 (Cortex spawns inside the trigger) - test with arrival_test.py
 classroom          crgpa08     6.60    2.08   -20.58   # COM_CLASSROOM_CHAOS_CUTSCENE_DIRECTOR_ACTIVATED
-bell_tower         amberly     1.30   -3.62    -3.34   # COM_BELL_TOWER_CUTSCENE_DIRECTOR_ACTIVATED
+bell_tower         amberly_cortex 1.30 -3.62  -3.34   # COM_BELL_TOWER_CUTSCENE_DIRECTOR_ACTIVATED (Cortex level: state from make_cortex_state.py)
 rooftop            roof01    102.09   34.44   126.83   # COM_ROOFTOP_CUTSCENE_DIRECTOR_ACTIVATED
 school_hub         sch_hub    14.10  -28.66   -39.62   # COM_SCHOOL_HUB_CUTSCENE_DIRECTOR_ACTIVATED
 treasure           treasure  -12.66    3.77   -94.72   # COM_TREASUREROOM_CUTSCENE_DIRECTOR_ACTIVATED

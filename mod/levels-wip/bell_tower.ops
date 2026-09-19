@@ -1,4 +1,0 @@
-# Bell tower, Madame Amberly (B03A)
-file Levels\school\Madame\amberly.rm2
-copybody 6185 1 5 0 6 572 1 0   # COM_BELL_TOWER_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 6
-clearbodies 6185 5                  # drop the unreachable original in state 5

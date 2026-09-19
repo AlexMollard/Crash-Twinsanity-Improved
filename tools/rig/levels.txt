@@ -30,3 +30,4 @@ treasure   Levels\AltEarth\Core\treasure
 coreent    Levels\AltEarth\Hub\coreent
 l10start   Levels\AltEarth\RockSlid\l10start
 altdoc     Levels\AltEarth\Hub\altdoc
+amberly_cortex Levels\school\Madame\amberly cortex
