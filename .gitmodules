@@ -1,6 +1,8 @@
 [submodule "tools/twinsanity-editor"]
 	path = tools/twinsanity-editor
 	url = https://github.com/Smartkin/twinsanity-editor.git
+	ignore = untracked
 [submodule "tools/twinsanity-reversed"]
 	path = tools/twinsanity-reversed
 	url = https://github.com/Smartkin/twinsanity-reversed.git
+	ignore = untracked
