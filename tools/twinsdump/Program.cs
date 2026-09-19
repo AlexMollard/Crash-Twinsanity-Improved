@@ -117,6 +117,8 @@ static class Program
                     objNames.TryGetValue(inst.ObjectID, out var on);
                     if (!re2.IsMatch(on ?? "")) continue;
                     Console.WriteLine($"inst {inst.ID,4} {path.Split('/')[1]}  pos=({inst.Pos.X:0.##}, {inst.Pos.Y:0.##}, {inst.Pos.Z:0.##})  obj {inst.ObjectID} {on}");
+                    if (args.Contains("-v"))
+                        Console.WriteLine($"      instances [{string.Join(",", inst.InstanceIDs)}]  positions [{string.Join(",", inst.PositionIDs)}]  paths [{string.Join(",", inst.PathIDs)}]  i321 [{string.Join(",", inst.UnkI321)}]  f [{string.Join(",", inst.UnkI322)}]  i323 [{string.Join(",", inst.UnkI323)}]");
                 }
                 break;
             }
