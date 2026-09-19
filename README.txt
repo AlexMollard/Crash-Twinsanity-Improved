@@ -20,10 +20,17 @@ Built into the [Modded] ISO (tools\build_mod.py)
 2. Cutscene skip - hold Triangle                   mod\elf_patches.txt + mod\levels\*.ops
    The developers left the skip logic in the level scripts but stubbed script condition 572
    ("CutsceneSkipped") to always say no. The executable patch re-implements it as "player holds
-   Triangle" (reusing the game's own Triangle check). About 13 cutscenes work from that alone; the
-   Aku Aku crate cutscene on the beach also needed its skip path reconnected in the level data
-   (mod\levels\beach.ops). The remaining cutscenes had their skip path cut in the data and still play
-   in full - more .ops recipes will follow.
+   Triangle" (reusing the game's own Triangle check), which brings back every cutscene whose skip
+   rule was still wired in (Aku Aku training, Totem Hokum, Dingodile, Uka Uka, Henchmania, ...).
+   For others the developers had also moved the skip rule to an unreachable state; mod\levels\*.ops
+   puts it back, each tested with the rig (full vs skipped: same end state, gameplay back sooner):
+     beach (Aku Aku crate), beach training, angry skunk, Iceberg Lab, Slip Slide Icecapades,
+     Academy hub, Rooftop Rampage, treasure room.
+   Small differences after skipping: a few level hints ("Clear a path for Cortex!", "Use (O) to
+   crouch") are not shown, and in Iceberg Lab Crash stands a few steps from where the scene ends.
+   Deliberately left unskippable: totem falling (skipping it gets Crash killed by the totem chase).
+   Still in progress (mod\levels-wip): Classroom Chaos, core intro, Rockslide Rumble, Walrus,
+   Psychetron room, dorm room, bell tower, party arena, lab interior.
 
 PCSX2 only (installed by "Apply CrashMod Settings.bat", safe to run any time with PCSX2 closed)
 ------------------------------------------------------------------------------------------------

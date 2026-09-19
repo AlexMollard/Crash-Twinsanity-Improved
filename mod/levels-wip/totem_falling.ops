@@ -1,3 +1,5 @@
+# DO NOT SHIP: tested 2026-09-19 - after the skip Crash is placed before the totem chase is set up and dies
+# (respawns at the level start with a life lost). The developers' skip was cut for this reason; leave it unskippable.
 # Totem falling (L03F); the developers' skip rule also messages four objects
 file Levels\Earth\Totem\l03stock.rm2
 copybody 5913 1 6 0 5 572 1 0   # COM_TOTEM_FALLING_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 5
