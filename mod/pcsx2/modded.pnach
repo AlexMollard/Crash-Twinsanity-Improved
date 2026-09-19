@@ -1,4 +1,4 @@
-gametitle=Crash Twinsanity (PAL) (SLES-52568) 31046581 - [Modded] ISO (480p/60Hz already built in)
+gametitle=Crash Twinsanity (PAL) (SLES-52568) {CRC} - [Modded] ISO (480p/60Hz and cutscene skip built in)
 
 [Widescreen 16:9]
 gsaspectratio=16:9
@@ -19,17 +19,3 @@ patch=1,EE,201A07E0,short,5554
 patch=1,EE,201A0DA0,short,4015
 patch=1,EE,201A0DA4,short,5554
 patch=1,EE,202AF408,word,00000000
-
-[Cutscene Skip (Triangle)]
-author=CrashModded
-description=Restores the cut cutscene-skip feature: hold Triangle during a skippable cutscene. Re-implements script condition 572 (CutsceneSkipped), which the retail game stubbed to always return 0. Condition 571 is pointed at the identical stub for 570 to free the space.
-patch=1,EE,202F0B1C,word,0012C568
-patch=1,EE,2012C578,word,8C820000
-patch=1,EE,2012C57C,word,00021442
-patch=1,EE,2012C580,word,14400031
-patch=1,EE,2012C584,word,00000000
-patch=1,EE,2012C588,word,44800000
-patch=1,EE,2012C58C,word,03E00008
-patch=1,EE,2012C590,word,00000000
-patch=1,EE,2012C594,word,00000000
-patch=1,EE,202F0ACC,word,0012C578

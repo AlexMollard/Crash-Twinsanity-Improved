@@ -1,0 +1,16 @@
+# Executable patches baked into SLES_525.68 by tools/build_mod.py.
+# ADDR = EE virtual address (file offset = ADDR - 0x100000 + 0x1000). ORIGINAL is checked before writing.
+# ADDR     ORIGINAL PATCHED
+
+[480p / 60Hz progressive output (PeterDelta)]
+002C24A4 00058C03 24110001   # sceGsResetGraph: sra s1,a1,16 -> li s1,1      (interlace flag)
+002C24A8 00069403 24120050   # sceGsResetGraph: sra s2,a2,16 -> li s2,0x50   (DTV 480p mode)
+002C24B4 00079C03 24130002   # sceGsResetGraph: sra s3,a3,16 -> li s3,2      (field/frame mode)
+
+[Cutscene skip - hold Triangle (restores script condition 572 "CutsceneSkipped", stubbed to 0 in retail)]
+002F0B1C 0012C578 0012C568   # condition 571 check -> condition 570's identical "return 0.0" stub, frees 0x12C578
+0012C578 44800000 8C820000   # lw   v0,0(a0)          condition word
+0012C57C 03E00008 00021442   # srl  v0,v0,17          parameter = player index
+0012C580 00000000 14400031   # bne  v0,zero,0x12C648  player given -> tail-call condition 575 (player N holds Triangle)
+                             # 0x12C584-0x12C594 already hold: nop / mtc1 zero,f0 / jr ra / nop  (no player -> 0.0)
+002F0ACC 0012C588 0012C578   # condition 572 check -> new function at 0x12C578

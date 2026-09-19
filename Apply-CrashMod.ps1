@@ -2,7 +2,7 @@
   Re-applies the Crash Twinsanity (PAL, SLES-52568) mod setup to PCSX2:
     1. patch files       PCSX2 patches\*.pnach            -> <PCSX2>\patches
     2. per-game settings PCSX2 settings\...game settings  -> <PCSX2>\gamesettings\SLES-52568_<CRC>.ini
-                         (for both the [Modded] ISO 31046581 and the original ISO 1510E1D1)
+                         (for every CRC that has a patch file: the original ISO and the current [Modded] build)
     3. HD texture pack   downloads\ctwin-tp-main.zip      -> <PCSX2>\textures\SLES-52568\replacements
                          (reinstalled only if missing or incomplete)
     4. BIOS language     <PCSX2>\bios\*.NVM set to English (only initialised v1.70+ configs,
@@ -21,7 +21,8 @@ param(
 $ErrorActionPreference = 'Stop'
 $ModDir   = $PSScriptRoot
 $Serial   = 'SLES-52568'
-$Crcs     = @('31046581', '1510E1D1')          # [Modded] ISO, original ISO
+$Crcs     = @(Get-ChildItem (Join-Path $PSScriptRoot 'PCSX2 patches') -Filter "$Serial`_*.pnach" |
+              ForEach-Object { $_.BaseName.Substring($Serial.Length + 1) })   # original ISO + current [Modded] build
 $TexSkip  = @('Level Cards Japanese_Fixed', 'Level Cards Japanese_NonFixed', 'Level Cards Spanish')
 $TexAlt   = 'PlayStation Save Icon'             # alternative icon, kept outside replacements
 $NvmOff   = 0x2C0                               # OSD config block (15 bytes + checksum), v1.70+ layout
@@ -35,7 +36,8 @@ try {
     if (-not (Test-Path $DataDir)) { throw "PCSX2 data folder not found: $DataDir (run PCSX2 once first)" }
 
     if (-not $SkipProcessCheck) {
-        while (Get-Process -Name 'pcsx2-qt', 'pcsx2' -ErrorAction SilentlyContinue) {
+        $testRig = Join-Path $ModDir 'tools\pcsx2-test'          # the test rig's own PCSX2 never touches these files
+        while (Get-Process -Name 'pcsx2-qt', 'pcsx2' -ErrorAction SilentlyContinue | Where-Object { $_.Path -notlike "$testRig\*" }) {
             if ([Console]::IsInputRedirected) { throw 'PCSX2 is running - close it and run this again.' }
             Note 'PCSX2 is running. Close it completely (it overwrites these files), then press Enter.'
             Read-Host | Out-Null

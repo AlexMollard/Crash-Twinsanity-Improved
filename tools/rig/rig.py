@@ -25,11 +25,12 @@ TEST = os.path.join(MOD, "tools", "pcsx2-test")
 EXE = os.path.join(TEST, "pcsx2-qt.exe")
 ISOS = {"modded": os.path.join(MOD, "Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It) [Modded].iso"),
         "original": os.path.join(MOD, "Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It).iso"),
-        "test": os.path.join(HERE, "test.iso")}             # [Modded] + edited archive files (build_test_iso.py)
-CRCS = {"modded": "31046581", "original": "1510E1D1", "test": "31046581"}
+        "test": os.path.join(HERE, "test.iso")}             # build_mod.py --out tools/rig/test.iso [--include ...]
 PORT = 28012
 sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.dirname(HERE))
 import testhooks as th
+import isotools
 
 # ---------------------------------------------------------------- PINE
 class Pine:
@@ -234,8 +235,11 @@ def warp(p, level):
     print("repointed level strings at", ", ".join(hex(o) for o in objs))
 
 def write_test_config(level, iso):
-    crc = CRCS[iso]
-    base = open(os.path.join(MOD, "PCSX2 patches", f"SLES-52568_{crc}.pnach"), encoding="utf-8").read().rstrip()
+    crc = isotools.iso_crc(ISOS[iso])
+    src = os.path.join(MOD, "PCSX2 patches", f"SLES-52568_{crc}.pnach")
+    if not os.path.exists(src):                        # test builds: same patch set as the current [Modded] build
+        src = os.path.join(MOD, "mod", "pcsx2", "modded.pnach")
+    base = open(src, encoding="utf-8").read().replace("{CRC}", crc).rstrip()
     rig = th.pnach_section()
     open(os.path.join(TEST, "patches", f"SLES-52568_{crc}.pnach"), "w", encoding="utf-8").write(base + "\n\n" + rig + "\n")
     open(os.path.join(TEST, "gamesettings", f"SLES-52568_{crc}.ini"), "w", encoding="utf-8").write(

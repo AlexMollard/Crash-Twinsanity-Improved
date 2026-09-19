@@ -1,4 +1,5 @@
-# Mask cutscene (Aku Aku, L01B) skip
+# Aku Aku crate cutscene (L01B) on N. Sanity Beach: skippable with Triangle
+file Levels\Earth\Hub\beach.rm2
 addbody 6367 7 572 1 8               # COM_CUTSCENE_L01B: while the camera sequence plays, Triangle (cond 572, player 1) -> state 8 = normal ending path
 clearbodies 6365 5                   # director: drop the dead skip rule in orphan state 5
 copybody 6371 1 1 0 2 51 207 0.2     # COM_AKU_CS_L01B: in state 1 also accept message 207 (sent by the ending) -> run SetObject(2,0) and go to state 2,
