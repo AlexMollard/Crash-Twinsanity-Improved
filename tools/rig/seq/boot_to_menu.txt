@@ -1,0 +1,10 @@
+# after 'rig.py start': skip logo videos and the attract scene, end on the main menu
+wait 5
+press start --frames 8
+wait 2
+press start --frames 8
+wait 2
+press start --frames 8
+wait 14
+press start --frames 8
+wait 3

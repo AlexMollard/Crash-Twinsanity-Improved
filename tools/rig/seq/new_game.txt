@@ -1,0 +1,9 @@
+# from the main menu (cursor on NEW GAME): start a new game without saving, skip the opening video
+press cross --frames 6
+wait 3
+press up --frames 6
+wait 1
+press cross --frames 6
+wait 8
+press cross --frames 10
+wait 12

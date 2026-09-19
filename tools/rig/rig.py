@@ -1,0 +1,326 @@
+"""Crash Twinsanity test rig: drives an isolated, portable PCSX2 (tools/pcsx2-test) over PINE.
+
+  rig.py start [--level PATH] [--iso modded|original] [--speed X]   launch test PCSX2 (warp New Game to PATH)
+  rig.py stop                                   close the test PCSX2
+  rig.py warp PATH                              make the next New Game start in level PATH
+  rig.py status                                 emulator status / game
+  rig.py press BTN[+BTN..] [--frames N]         press buttons via the virtual pad (default 6 frames)
+  rig.py hold BTN[+BTN..] | release             hold / release buttons
+  rig.py stick LX LY                            left stick, -1..1 (release resets it)
+  rig.py shot FILE.png                          screenshot of the test game window
+  rig.py until REF.png [--press BTN]          press BTN until the screen matches ref/REF.png
+  rig.py diff REF.png                           how far the screen is from ref/REF.png
+  rig.py read ADDR [COUNT] | write ADDR VALUE   EE memory (hex), 32-bit words
+  rig.py save SLOT | load SLOT                  PCSX2 save states (test instance only)
+  rig.py seq FILE                               run commands from a file (one per line, 'wait S' allowed)
+
+Buttons: cross circle square triangle start select up down left right l1 r1 l2 r2 l3 r3
+Only the test instance is touched; the user's PCSX2 and settings are never modified."""
+import argparse, ctypes, os, shutil, socket, struct, subprocess, sys, time, zlib
+from ctypes import wintypes
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+MOD = os.path.abspath(os.path.join(HERE, "..", ".."))
+TEST = os.path.join(MOD, "tools", "pcsx2-test")
+EXE = os.path.join(TEST, "pcsx2-qt.exe")
+ISOS = {"modded": os.path.join(MOD, "Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It) [Modded].iso"),
+        "original": os.path.join(MOD, "Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It).iso"),
+        "test": os.path.join(HERE, "test.iso")}             # [Modded] + edited archive files (build_test_iso.py)
+CRCS = {"modded": "31046581", "original": "1510E1D1", "test": "31046581"}
+PORT = 28012
+sys.path.insert(0, HERE)
+import testhooks as th
+
+# ---------------------------------------------------------------- PINE
+class Pine:
+    def __init__(self, timeout=5.0):
+        self.s = socket.create_connection(("127.0.0.1", PORT), timeout=timeout)
+    def _call(self, payload):
+        self.s.sendall(struct.pack("<I", len(payload) + 4) + payload)
+        hdr = self._recv(4); size = struct.unpack("<I", hdr)[0]
+        body = self._recv(size - 4)
+        if body[0] != 0: raise RuntimeError("PINE call failed")
+        return body[1:]
+    def _recv(self, n):
+        b = b""
+        while len(b) < n:
+            chunk = self.s.recv(n - len(b))
+            if not chunk: raise ConnectionError("PINE closed")
+            b += chunk
+        return b
+    def r8(self, a):  return self._call(struct.pack("<BI", 0, a))[0]
+    def r32(self, a): return struct.unpack("<I", self._call(struct.pack("<BI", 2, a)))[0]
+    def w8(self, a, v):  self._call(struct.pack("<BIB", 4, a, v & 0xFF))
+    def w32(self, a, v): self._call(struct.pack("<BII", 6, a, v & 0xFFFFFFFF))
+    def save(self, slot): self._call(struct.pack("<BB", 9, slot))
+    def load(self, slot): self._call(struct.pack("<BB", 10, slot))
+    def _str(self, op):
+        d = self._call(struct.pack("<B", op)); n = struct.unpack("<I", d[:4])[0]
+        return d[4:4 + n].rstrip(b"\0").decode(errors="replace")
+    def title(self): return self._str(0x0B)
+    def game_id(self): return self._str(0x0C)
+    def status(self): return ["running", "paused", "shutdown"][struct.unpack("<I", self._call(b"\x0f"))[0]]
+
+# ---------------------------------------------------------------- virtual pad
+# raw libpad bytes at controller+1398: [btn_hi, btn_lo] active-low, [rx, ry, lx, ly], 12 pressure bytes
+HI = {"select": 0, "l3": 1, "r3": 2, "start": 3, "up": 4, "right": 5, "down": 6, "left": 7}
+LO = {"l2": 0, "r2": 1, "l1": 2, "r1": 3, "triangle": 4, "circle": 5, "cross": 6, "square": 7}
+PRESSURE = ["right", "left", "up", "down", "triangle", "circle", "cross", "square", "l1", "r1", "l2", "r2"]
+STICK_ADDR = th.VPAD_RAW + 2
+
+def pad_bytes(buttons, lx=0.0, ly=0.0):
+    hi = lo = 0xFF
+    for b in buttons:
+        if b in HI: hi &= ~(1 << HI[b])
+        elif b in LO: lo &= ~(1 << LO[b])
+        else: raise SystemExit(f"unknown button {b}")
+    stick = lambda v: max(0, min(255, int(round(128 + v * 127))))
+    raw = bytes([hi & 0xFF, lo & 0xFF, 128, 128, stick(lx), stick(ly)])
+    raw += bytes(255 if name in buttons else 0 for name in PRESSURE)
+    return raw
+
+def set_pad(p, buttons=(), lx=0.0, ly=0.0):
+    raw = pad_bytes(buttons, lx, ly)
+    for i in range(0, 18, 4):
+        chunk = raw[i:i + 4].ljust(4, b"\0")
+        p.w32(th.VPAD_RAW + i, struct.unpack("<I", chunk)[0])
+    p.w32(th.VPAD_EN, 1)
+
+# ---------------------------------------------------------------- screenshots (GDI, no extra packages)
+user32, gdi32 = ctypes.windll.user32, ctypes.windll.gdi32
+user32.SetProcessDPIAware()
+
+def test_pid():
+    out = subprocess.run(["powershell", "-NoProfile", "-Command",
+        f"(Get-Process pcsx2-qt -ErrorAction SilentlyContinue | Where-Object {{ $_.Path -eq '{EXE}' }}).Id"],
+        capture_output=True, text=True).stdout.split()
+    return int(out[0]) if out else None
+
+def game_hwnd(pid):
+    found = []
+    @ctypes.WINFUNCTYPE(wintypes.BOOL, wintypes.HWND, wintypes.LPARAM)
+    def cb(h, _):
+        p = wintypes.DWORD(); user32.GetWindowThreadProcessId(h, ctypes.byref(p))
+        if p.value == pid and user32.IsWindowVisible(h):
+            n = ctypes.create_unicode_buffer(256); user32.GetWindowTextW(h, n, 256)
+            r = wintypes.RECT(); user32.GetClientRect(h, ctypes.byref(r))
+            if r.right * r.bottom > 0 and not n.value.startswith("PCSX2 v"): found.append((r.right * r.bottom, h, n.value))
+        return True
+    user32.EnumWindows(cb, 0)
+    return max(found)[1] if found else None
+
+def png(path, w, h, bgra):
+    raw = bytearray()                                  # BGRA rows -> filtered RGB rows
+    for y in range(h):
+        line = bgra[y*w*4:(y+1)*w*4]
+        rgb = bytearray(w * 3); rgb[0::3] = line[2::4]; rgb[1::3] = line[1::4]; rgb[2::3] = line[0::4]
+        raw += b"\0" + rgb
+    chunk = lambda t, d: struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xFFFFFFFF)
+    with open(path, "wb") as f:
+        f.write(b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+                + chunk(b"IDAT", zlib.compress(bytes(raw), 6)) + chunk(b"IEND", b""))
+
+def load_png(path):
+    d = open(path, "rb").read(); pos = 8; idat = b""; w = h = 0
+    while pos < len(d):
+        n = struct.unpack(">I", d[pos:pos+4])[0]; t = d[pos+4:pos+8]; body = d[pos+8:pos+8+n]; pos += 12 + n
+        if t == b"IHDR": w, h = struct.unpack(">II", body[:8])
+        if t == b"IDAT": idat += body
+    raw = zlib.decompress(idat); bgra = bytearray(w * h * 4)
+    for y in range(h):
+        row = raw[y*(w*3+1)+1:(y+1)*(w*3+1)]          # rig PNGs use filter 0 only
+        bgra[y*w*4+2:(y+1)*w*4:4] = row[0::3]; bgra[y*w*4+1:(y+1)*w*4:4] = row[1::3]; bgra[y*w*4:(y+1)*w*4:4] = row[2::3]
+    return w, h, bytes(bgra)
+
+def thumb(w, h, bgra, tw=40, th_=30):
+    out = []
+    for ty in range(th_):
+        for tx in range(tw):
+            x, y = tx * w // tw + w // (2 * tw), ty * h // th_ + h // (2 * th_)
+            i = (y * w + x) * 4; out.append((bgra[i] + 2 * bgra[i+1] + bgra[i+2]) // 4)
+    return out
+
+def diff(a, b): return sum(abs(x - y) for x, y in zip(a, b)) / len(a)
+
+def screenshot(path):
+    w, h, buf = grab()
+    png(path, w, h, buf)
+    print(f"saved {path} ({w}x{h})")
+
+def grab():
+    pid = test_pid(); hwnd = pid and game_hwnd(pid)
+    if not hwnd: raise SystemExit("test game window not found")
+    r = wintypes.RECT(); user32.GetClientRect(hwnd, ctypes.byref(r)); w, h = r.right, r.bottom
+    hdc = user32.GetDC(hwnd); mdc = gdi32.CreateCompatibleDC(hdc); bmp = gdi32.CreateCompatibleBitmap(hdc, w, h)
+    gdi32.SelectObject(mdc, bmp)
+    ok = user32.PrintWindow(hwnd, mdc, 3)            # PW_CLIENTONLY | PW_RENDERFULLCONTENT
+    class BMI(ctypes.Structure):
+        _fields_ = [("biSize", wintypes.DWORD), ("biWidth", wintypes.LONG), ("biHeight", wintypes.LONG), ("biPlanes", wintypes.WORD),
+                    ("biBitCount", wintypes.WORD), ("biCompression", wintypes.DWORD), ("biSizeImage", wintypes.DWORD),
+                    ("x", wintypes.LONG), ("y", wintypes.LONG), ("c1", wintypes.DWORD), ("c2", wintypes.DWORD)]
+    bmi = BMI(ctypes.sizeof(BMI), w, -h, 1, 32, 0, 0, 0, 0, 0, 0)
+    buf = (ctypes.c_ubyte * (w * h * 4))()
+    gdi32.GetDIBits(mdc, bmp, 0, h, buf, ctypes.byref(bmi), 0)
+    gdi32.DeleteObject(bmp); gdi32.DeleteDC(mdc); user32.ReleaseDC(hwnd, hdc)
+    if not ok: raise SystemExit("PrintWindow failed")
+    return w, h, bytes(buf)
+
+def until(ref, press=None, every=2.0, timeout=90.0, thr=12.0):
+    """Press PRESS every EVERY seconds until the screen matches reference image REF (mean grey diff < THR)."""
+    target = thumb(*load_png(ref)); t0 = time.time(); best = 999
+    while time.time() - t0 < timeout:
+        d = diff(thumb(*grab()), target); best = min(best, d)
+        if d < thr: print(f"matched {os.path.basename(ref)} (diff {d:.1f}) after {time.time()-t0:.0f}s"); return True
+        if press: run(["press", press, "--frames", "8"])
+        time.sleep(every)
+    raise SystemExit(f"timed out waiting for {os.path.basename(ref)} (best diff {best:.1f})")
+
+# ---------------------------------------------------------------- instance setup / launch
+FLOW_LEVEL_GUESS = 0x00B84DD0     # game-flow object's current-level string (flow+1296) on this build/boot path
+CRASH_POS = 0x00D08DC0            # Crash's root position (x,y,z,1.0) in the beach chunk from save state 1
+
+def fl(p, a): return struct.unpack("<f", struct.pack("<I", p.r32(a)))[0]
+def pos(p): return fl(p, CRASH_POS), fl(p, CRASH_POS + 4), fl(p, CRASH_POS + 8)
+
+def goto(tx, tz, radius=1.5, timeout=60.0, burst=0.25):
+    """Walk Crash to world (tx, tz) with closed-loop steering; the stick is camera-relative, so the
+    world direction of 'stick up' and 'stick right' is re-measured every few steps."""
+    import math
+    p = Pine(); t0 = time.time()
+    def step(lx, ly, dur):
+        a = pos(p); set_pad(p, (), lx, ly); time.sleep(dur); set_pad(p); time.sleep(0.1); b = pos(p)
+        return (b[0] - a[0], b[2] - a[2])
+    calib = None; n = 0; still = 0
+    while time.time() - t0 < timeout:
+        x, _, z = pos(p); dx, dz = tx - x, tz - z; dist = math.hypot(dx, dz)
+        if dist < radius: set_pad(p); print(f"arrived ({x:.1f}, {z:.1f})"); return True
+        if calib is None or n % 6 == 0:
+            up = step(0, -1, 0.2); right = step(1, 0, 0.2); calib = (up, right)
+            if math.hypot(*up) < 0.05 and math.hypot(*right) < 0.05:
+                still += 1
+                if still >= 2:                        # stick does nothing: cutscene / dialog / pause
+                    set_pad(p); print(f"blocked at ({x:.1f}, {z:.1f}) - Crash is not responding (cutscene?)"); return False
+                calib = None; time.sleep(0.3); continue
+            still = 0
+        (ux, uz), (rx, rz) = calib
+        det = ux * rz - uz * rx
+        if abs(det) < 1e-4: calib = None; continue
+        sy = (dx * rz - dz * rx) / det            # amount of 'up'
+        sx = (ux * dz - uz * dx) / det            # amount of 'right'
+        m = max(abs(sx), abs(sy), 1e-6)
+        moved = step(sx / m, -sy / m, burst if dist > 4 else burst / 2); n += 1
+        if math.hypot(*moved) < 0.02: calib = None      # re-measure; next pass decides if we're blocked
+    set_pad(p); x, _, z = pos(p)
+    raise SystemExit(f"goto timed out at ({x:.1f}, {z:.1f}), target ({tx}, {tz})")
+
+def warp(p, level):
+    """Point New Game at LEVEL (e.g. Levels\\Earth\\DocAmok\\DocAmok1). Takes effect on the next New Game.
+    The start-level global and the game-flow object's level string share one heap buffer; both are repointed at
+    WARP_STR with a 256-byte capacity so the game's string assign copies in place and never frees our buffer."""
+    raw = level.replace("/", "\\").encode("ascii")
+    path = raw + b"\0"; path += b"\0" * (-len(path) % 4)
+    for i in range(0, len(path), 4): p.w32(th.WARP_STR + i, struct.unpack("<I", path[i:i+4])[0])
+    shared = p.r32(th.START_LEVEL)
+    objs = [th.START_LEVEL]
+    if shared != th.WARP_STR:
+        if p.r32(FLOW_LEVEL_GUESS) == shared: objs.append(FLOW_LEVEL_GUESS)
+        else:
+            dump = os.path.join(TEST, "warp_ram.bin"); run(["ram", dump]); import array
+            words = array.array("I"); words.frombytes(open(dump, "rb").read())
+            objs += [i * 4 for i, v in enumerate(words) if v == shared and i * 4 != th.START_LEVEL]
+    elif p.r32(FLOW_LEVEL_GUESS) == th.WARP_STR: objs.append(FLOW_LEVEL_GUESS)
+    for o in objs:
+        p.w32(o, th.WARP_STR); p.w32(o + 4, len(raw)); p.w32(o + 8, 0x100)
+    print("repointed level strings at", ", ".join(hex(o) for o in objs))
+
+def write_test_config(level, iso):
+    crc = CRCS[iso]
+    base = open(os.path.join(MOD, "PCSX2 patches", f"SLES-52568_{crc}.pnach"), encoding="utf-8").read().rstrip()
+    rig = th.pnach_section()
+    open(os.path.join(TEST, "patches", f"SLES-52568_{crc}.pnach"), "w", encoding="utf-8").write(base + "\n\n" + rig + "\n")
+    open(os.path.join(TEST, "gamesettings", f"SLES-52568_{crc}.ini"), "w", encoding="utf-8").write(
+        "[Patches]\nEnable = Cutscene Skip (Triangle)\nEnable = Test Rig\n\n[EmuCore/GS]\nupscale_multiplier = 1\n")
+
+def start(level, iso, speed):
+    if test_pid(): raise SystemExit("test PCSX2 already running (rig.py stop)")
+    write_test_config(level, iso)
+    ini = os.path.join(TEST, "inis", "PCSX2.ini")
+    txt = open(ini, encoding="utf-8").read()
+    import re
+    txt = re.sub(r"(?m)^NominalScalar = .*$", f"NominalScalar = {speed}", txt)
+    open(ini, "w", encoding="utf-8").write(txt)
+    subprocess.Popen([EXE, "-nofullscreen", "-fastboot", "--", ISOS[iso]], cwd=TEST,
+                     creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)
+    for _ in range(120):
+        try:
+            p = Pine(timeout=1); st = p.status(); gid = p.game_id()
+            if st == "running" and gid:
+                warp(p, level); print(f"running {gid} ({p.title()}), New Game -> {level}"); return
+        except (OSError, RuntimeError): pass           # socket not up yet / no game loaded yet
+        time.sleep(0.5)
+    raise SystemExit("PINE did not come up")
+
+def stop():
+    pid = test_pid()
+    if pid: subprocess.run(["taskkill", "/PID", str(pid), "/F"], capture_output=True); print("stopped")
+    else: print("not running")
+
+# ---------------------------------------------------------------- CLI
+STATE = {"lx": 0.0, "ly": 0.0}
+
+def run(argv):
+    a = argv[0]; rest = argv[1:]
+    if a == "start":
+        ap = argparse.ArgumentParser(); ap.add_argument("--level", default="Levels\\Earth\\Hub\\Beach")
+        ap.add_argument("--iso", default="modded", choices=ISOS); ap.add_argument("--speed", default="1")
+        o = ap.parse_args(rest); start(o.level, o.iso, o.speed)
+    elif a == "stop": stop()
+    elif a == "warp": warp(Pine(), rest[0]); print("New Game ->", rest[0])
+    elif a == "pos": x, y, z = pos(Pine()); print(f"crash at ({x:.2f}, {y:.2f}, {z:.2f})")
+    elif a == "goto": goto(float(rest[0]), float(rest[1]), float(rest[2]) if len(rest) > 2 else 1.5)
+    elif a == "status":
+        p = Pine(); print(p.status(), p.game_id(), p.title())
+    elif a in ("press", "hold"):
+        frames = int(rest[rest.index("--frames") + 1]) if "--frames" in rest else 6
+        btns = rest[0].lower().split("+"); p = Pine(); set_pad(p, btns, STATE["lx"], STATE["ly"])
+        if a == "press": time.sleep(frames / 60); set_pad(p, (), STATE["lx"], STATE["ly"])
+    elif a == "release":
+        STATE.update(lx=0.0, ly=0.0); p = Pine(); set_pad(p); p.w32(th.VPAD_EN, 0)
+    elif a == "stick":
+        STATE.update(lx=float(rest[0]), ly=float(rest[1])); set_pad(Pine(), (), STATE["lx"], STATE["ly"])
+    elif a == "shot": screenshot(rest[0])
+    elif a == "until":
+        ap = argparse.ArgumentParser(); ap.add_argument("ref"); ap.add_argument("--press"); ap.add_argument("--every", type=float, default=2.0)
+        ap.add_argument("--timeout", type=float, default=90.0); ap.add_argument("--thr", type=float, default=12.0)
+        o = ap.parse_args(rest); ref = o.ref if os.path.isabs(o.ref) else os.path.join(HERE, "ref", o.ref)
+        until(ref, o.press, o.every, o.timeout, o.thr)
+    elif a == "diff":
+        print(f"{diff(thumb(*grab()), thumb(*load_png(os.path.join(HERE, 'ref', rest[0])))):.1f}")
+    elif a == "read":
+        p = Pine(); addr = int(rest[0], 16); n = int(rest[1]) if len(rest) > 1 else 1
+        for i in range(n): print(f"{addr + 4*i:08X}: {p.r32(addr + 4*i):08X}")
+    elif a == "write": Pine().w32(int(rest[0], 16), int(rest[1], 16))
+    elif a == "ram":                                  # full 32MB EE RAM dump via a scratch save state (slot 9)
+        import glob, zipfile
+        pat = os.path.join(TEST, "sstates", "*.09.p2s"); old = {f: os.path.getmtime(f) for f in glob.glob(pat)}
+        Pine().save(9)
+        for _ in range(100):
+            new = [f for f in glob.glob(pat) if os.path.getmtime(f) != old.get(f)]
+            if new:
+                time.sleep(0.5)
+                try:
+                    open(rest[0], "wb").write(zipfile.ZipFile(new[0]).read("eeMemory.bin")); print("RAM ->", rest[0]); break
+                except (zipfile.BadZipFile, PermissionError): pass
+            time.sleep(0.3)
+        else: raise SystemExit("save state did not appear")
+    elif a == "save": Pine().save(int(rest[0])); print("saved slot", rest[0])
+    elif a == "load": Pine().load(int(rest[0])); print("loaded slot", rest[0])
+    elif a == "wait": time.sleep(float(rest[0]))
+    elif a == "seq":
+        for line in open(rest[0], encoding="utf-8"):
+            line = line.split("#", 1)[0].strip()
+            if line: print(">", line); run(line.split())
+    else: raise SystemExit(__doc__)
+
+if __name__ == "__main__":
+    run(sys.argv[1:] or ["help"])
