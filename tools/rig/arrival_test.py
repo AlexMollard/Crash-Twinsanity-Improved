@@ -22,7 +22,7 @@ p = rig.Pine()
 def controllable():
     a = rig.pos(p); rig.set_pad(p, (), 0, -1); time.sleep(0.2); rig.set_pad(p); b = rig.pos(p)
     return math.dist(a, b) > 0.05
-for mode in ([m for m in sys.argv[4:] if m in ("full", "skip")] or ["full", "skip"]):
+for mode in ([m for m in sys.argv[4:] if m in ("full", "skip")] or ["full", "skip"]):  # --moveto x,y,z
     raw = path.encode(); buf = raw + b"\0"; buf += b"\0" * (-len(buf) % 4)
     for i in range(0, len(buf), 4): p.w32(th.WARP_STR + i, struct.unpack("<I", buf[i:i + 4])[0])
     p.w32(rig.LEVEL_START_STR, th.WARP_STR); p.w32(rig.LEVEL_START_STR + 4, len(raw)); p.w32(rig.LEVEL_START_STR + 8, 0x100)
@@ -37,6 +37,8 @@ for mode in ([m for m in sys.argv[4:] if m in ("full", "skip")] or ["full", "ski
     while not rig.in_cutscene() and time.time() - t0 < 10: time.sleep(0.05)
     if not rig.in_cutscene(): print(mode, "NOT TRIGGERED"); continue
     ts = time.time(); rig.screenshot(os.path.join(out, f"{name}_{mode}_start.png"))
+    first = p.r32(rig.PLAYER_CHAR)                         # the character in control when the scene starts
+    fpos = lambda: [round(rig.fl(p, first + 0xD0 + 4 * k), 1) for k in range(3)]
     if mode == "skip":
         time.sleep(1.0); rig.set_pad(p, ("triangle",)); time.sleep(1.5); rig.set_pad(p)
     while time.time() - ts < 90:
@@ -47,5 +49,9 @@ for mode in ([m for m in sys.argv[4:] if m in ("full", "skip")] or ["full", "ski
     secs = round(time.time() - ts, 1); pos = [round(v, 1) for v in rig.pos(p)]
     for k in range(6):
         rig.screenshot(os.path.join(out, f"{name}_{mode}_after{k}.png")); print("  after", k, "flow", rig.flow_state(p), [round(v, 1) for v in rig.pos(p)], flush=True); time.sleep(0.25)
-    rig.set_pad(p); rig.screenshot(os.path.join(out, f"{name}_{mode}_end.png"))
-    print(f"{mode}: control after {secs}s at {pos}, flow {rig.flow_state(p)}", flush=True)
+    rig.set_pad(p)
+    if "--moveto" in sys.argv:                             # put the player on a given spot to compare the view
+        x, y, z = (float(v) for v in sys.argv[sys.argv.index("--moveto") + 1].split(",")); rig.teleport(x, y + 0.5, z); time.sleep(1.5)
+    rig.screenshot(os.path.join(out, f"{name}_{mode}_end.png"))
+    other = f", first character at {fpos()}" if p.r32(rig.PLAYER_CHAR) != first else ""
+    print(f"{mode}: control after {secs}s at {pos}, flow {rig.flow_state(p)}{other}", flush=True)

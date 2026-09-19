@@ -8,7 +8,7 @@ icelab             labext     33.00  -77.14    -7.49   # COM_ICELAB_CUTSCENE_DIR
 psychetron_h02j    psycho     30.45    0.07    -0.68   --progress 11   # H02J director (story progress 11-12)
 lab_psychetron     psycho     30.45    0.07    -0.68   --progress 18   # LAB_PSYCHETRON_ROOM director (progress 18-19)
 slipslide          l05start  -82.31  106.25  -162.96   # COM_SLIPSLIDE_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
-dorm_room          cogpa08    -3.23   -5.88   -12.06   # COM_DORM_ROOM_CUTSCENE_DIRECTOR_ACTIVATED
+# dorm_room: plays on arrival in cogpa08 (Cortex spawns inside the trigger) - test with arrival_test.py
 classroom          crgpa08     6.60    2.08   -20.58   # COM_CLASSROOM_CHAOS_CUTSCENE_DIRECTOR_ACTIVATED
 bell_tower         amberly     1.30   -3.62    -3.34   # COM_BELL_TOWER_CUTSCENE_DIRECTOR_ACTIVATED
 rooftop            roof01    102.09   34.44   126.83   # COM_ROOFTOP_CUTSCENE_DIRECTOR_ACTIVATED

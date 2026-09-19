@@ -1,0 +1,47 @@
+# Dorm room (H03B) - plays as the level loads (Cortex spawns inside its trigger; test with tools/rig/arrival_test.py).
+# The scene ends with Cortex asleep in bed and control switched to Nina, so the skip has to run that ending too. Like
+# the core intro, it lives inside the scene script (COM_DORM_ROOM_CUTSCENE_H03B) so the actors' marks resolve.
+file Levels\school\Cortex\cogpa08.rm2
+# Triangle rule (cond 572, player 1) in every state the scene waits in (camera moves) -> 16. Not in its instant
+# states: a polled rule there stops the state from stepping on.
+addbody 5657 4 572 1 16
+addbody 5657 6 572 1 16
+addbody 5657 7 572 1 16
+addbody 5657 9 572 1 16
+addbody 5657 11 572 1 16
+addbody 5657 12 572 1 16
+addbody 5657 13 572 1 16
+addbody 5657 15 572 1 16
+addbody 5657 19 572 1 16
+addbody 5657 21 572 1 16
+# 16 (unused): the scene's last message steps (states 21 and 5: all four actors) with 244 "skipped" -> 17
+addbody 5657 16 5 0 17 0 0.01       # TimeInUnit: next frame
+appendcmds 5657 16 0 5657 21 0
+appendcmds 5657 16 0 5657 5 0
+setarg 5657 16 0 1 0 66781428       # SendUserMessage 207 -> 244 (same packing as the game's own *_CUTSCENE_SKIP scripts)
+setarg 5657 16 0 3 0 66781428
+setarg 5657 16 0 5 0 66781428
+setarg 5657 16 0 7 0 66781428
+# 17 (unused): give the actors 0.3s to run their 244 handlers -> 5, the scene's own ending (last messages, then
+# state 1: fade, Nina takes over)
+addbody 5657 17 5 0 5 0 0.3
+# COM_CORTEX_CUTSCENE_H03B: on 244, warp to his bed mark (state 3's step) and take his final step at once (state 2's:
+# sleep pose, attached, input) -> 1. The scene switches control to Nina right after its last message, which ends his
+# cutscene script, so he can't be left to finish his climb-into-bed animations.
+copybody 5659 3 3 0 1 51 244 0.2
+appendcmds 5659 3 1 5659 2 0
+copybody 5659 5 2 0 1 51 244 0.2
+copybody 5659 8 2 0 1 51 244 0.2
+# COM_NINA_CUTSCENE_H03B: on 244, state 3's step (agent, first mark) then state 6's warp to her last mark -> 2, which
+# waits for the last message and hands her the controls
+copybody 5661 3 3 0 2 51 244 0.2
+appendcmds 5661 3 1 5661 6 0
+copybody 5661 4 3 0 2 51 244 0.2
+appendcmds 5661 4 1 5661 6 0
+copybody 5661 5 3 0 2 51 244 0.2
+appendcmds 5661 5 1 5661 6 0
+copybody 5661 6 3 0 2 51 244 0.2
+appendcmds 5661 6 1 5661 6 0
+# COM_NINA_HEAD_CUTSCENE_H03B: on 244, its final object state (state 1's step) -> 3 (done)
+copybody 5823 0 1 0 3 51 244 0.2
+copybody 5823 1 1 0 3 51 244 0.2
