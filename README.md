@@ -3,7 +3,7 @@
 # Crash Twinsanity Improved
 
 **A fix-and-polish mod for the PAL release of *Crash Twinsanity* (PS2), built for PCSX2.**
-Restores the cutscene skipping the developers cut, adds 480p/60 Hz output, and ships widescreen,
+Restores the cutscene skipping the developers cut, loads levels faster, adds 480p/60 Hz output, and ships widescreen,
 HD texture and graphics presets. One script turns your own disc image into a patched ISO.
 
 [![Platform](https://img.shields.io/badge/platform-PlayStation%202-003791?logo=playstation&logoColor=white)](#requirements)
@@ -31,6 +31,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 | 💬 | **"Hold △ to skip" prompt** | ISO | Appears in the letterbox's bottom bar during every skippable cutscene, in all five languages. |
 | 🛡️ | **Aku Aku invincibility that works** | ISO | With three masks Crash no longer dies to TNT, Nitro or bomb explosions. [Details ↓](#aku-aku-invincibility) |
 | 🌑 | **Shadows on crates** | ISO | Crash's shadow now falls on crates too, so you can see where you'll land. [Details ↓](#shadows-on-crates) |
+| ⏱️ | **Faster loading** | ISO + PCSX2 | Level loads take 25–30% less time from the ISO changes alone, and about 40% less with PCSX2's Fast CDVD (on in the preset). [Details ↓](#faster-loading) |
 | 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta). |
 | 🖥️ | **Widescreen 16:9 or 21:9 ultrawide** | PCSX2 | 21:9 is enabled by default. Use one or the other, never both. |
 | 🎨 | **HD textures** | PCSX2 | CRASHARKI's *ctwin-tp* pack (616 PNGs, English level cards). |
@@ -54,7 +55,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 
 > [!TIP]
 > If PCSX2 resets its settings, run `Apply CrashMod Settings.bat` with PCSX2 closed. It restores the patches, the
-> graphics preset, the texture pack and the English BIOS language, and it's safe to run any time.
+> graphics preset with Fast CDVD, the texture pack and the English BIOS language, and it's safe to run any time.
 
 <details>
 <summary><b>Command-line build</b></summary>
@@ -116,6 +117,30 @@ Moving platforms were checked the same way. Every lift, bridge, ice floe, hoveri
 game already has the flag on, so they already receive the shadow. Apart from crates, the only objects without it are
 characters, enemies, doors and walls.
 
+### Faster loading
+
+Entering a level streams 15 to 25 MB from `CRASH.BD`: the level plus the neighbouring areas it keeps loaded. Three
+things made that slow:
+
+- **Each disc read waited for the next frame.** The loader queues reads and sent the queue to the IOP only once per
+  frame, so every read cost at least a frame, even when the drive was idle. A 14-instruction stub
+  (`mod/elf_patches.txt`) now sends the queue before each loader step. It sits in an unused debug function.
+- **The level data sat on the slow inner part of the disc.** A PS2 drive spins a DVD at constant speed (CAV), so the
+  outer edge reads up to 2.5× faster than the inner edge. PCSX2 models this too. `CRASH.BD` started 225 MB into the
+  disc. The build now puts it at the end, and moves the movies and speech banks that followed it into its old place,
+  so the image doesn't grow.
+- **Emulated disc speed.** The PCSX2 preset turns on *Fast CDVD*, which halves emulated read times. The movies, which
+  stream from the disc, play at their normal pace with it on. It's a per-game setting, so you can switch it off in the
+  game's properties.
+
+The first two are changes to the ISO, so they should help on a real PS2 as well (only tested in PCSX2). Most of the
+remaining time is the drive itself. Load times measured with the rig, from its level warp until Crash can move, on a fresh boot:
+
+| Level | Before | Modded ISO | Modded ISO + Fast CDVD |
+|---|:-:|:-:|:-:|
+| Earth hub (`huba`) | 9.5 s | 7.0 s | 6.0 s |
+| Classroom Chaos (`crgpa08`) | 16.0 s | 11.0 s | 9.0 s |
+
 ## Known side effects of 480p / 60 Hz
 
 - FMVs play about 10% fast. Gameplay speed is unaffected.
@@ -156,12 +181,13 @@ sometimes the actors' 244 handlers) moved into unreachable states in the level d
 1. Patches `SLES_525.68` from `mod/elf_patches.txt`. Every word is checked against its original value before anything is written.
 2. Applies each level recipe to the original `.rm2` from `CRASH.BD`, then splices the edited script items back in.
    It also switches on the shadow-receiver flag for crate materials in every level (`tools/materials.py`).
-3. Moves the English speech bank (`ENGLISH.MB/MH`, about 13 MB) to the end of the image so `CRASH.BD` can grow. The game
-   finds its files by name, and both the ISO9660 and UDF directories are updated.
+3. Moves `CRASH.BD` (all level data, about 930 MB) to the end of the image, the fast outer edge of the disc, and moves
+   the files that followed it (speech banks, IOP modules, movies) down into its place. The image stays the same size and
+   `CRASH.BD` can grow freely. The game finds its files by name, and both the ISO9660 and UDF directories are updated.
 4. Rebuilds `CRASH.BD/BH` and writes the matching `.pnach` for the new executable CRC.
 
-`tools/verify_iso.py` checks the result: the ISO9660 and UDF directories agree, the descriptor tags are valid, and every untouched file is
-byte-identical to the original.
+`tools/verify_iso.py` checks the result: the ISO9660 and UDF directories agree, the descriptor tags are valid, no files
+overlap, and every untouched file is byte-identical to the original.
 
 </details>
 
@@ -199,6 +225,7 @@ cd tools/rig
 python rebuild.py --include mod/levels-wip --levels crgpa08   # test ISO + fresh save states
 python run_cutscenes.py cutscenes_orphan.txt classroom        # full vs skipped, verdict in results/summary.txt
 python prompt_test.py classroom crgpa08 6.60 2.08 -20.58 10.8  # skip prompt shown during the scene, gone after
+RIG_FASTCDVD=true python load_bench.py fast                   # level load times from a fresh boot
 ```
 
 </details>
@@ -210,6 +237,7 @@ python prompt_test.py classroom crgpa08 6.60 2.08 -20.58 10.8  # skip prompt sho
 - [x] An on-screen "hold △ to skip" prompt, using the game's own hint text
 - [x] Make three-mask invincibility protect from explosions
 - [x] Show Crash's shadow on crates
+- [x] Faster level loading
 - [ ] The remaining cutscenes in `mod/levels-wip`
 
 ### Not included

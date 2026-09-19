@@ -29,6 +29,10 @@ def main(orig, mod):
             if not tag_ok(it._read_sector(m, s)): bad.append(f"UDF tag bad at sector {s}")
         if struct.unpack_from("<H", it._read_sector(m, sectors - 1), 0)[0] != 2: bad.append("no UDF anchor in the last sector")
         plen = struct.unpack_from("<I", it._read_sector(m, pds[0]), 192)[0]
+        spans = sorted((lba, lba + -(-size // it.SECTOR), p) for p, (lba, size, _) in mf.items() if size)
+        for (a0, a1, pa), (b0, b1, pb) in zip(spans, spans[1:]):
+            if b0 < a1: bad.append(f"{pa} and {pb} overlap")
+        if spans[-1][1] > sectors - 1: bad.append(f"{spans[-1][2]} runs into the UDF anchor / past the image end")
         for p, (lba, size, _) in sorted(mf.items()):
             fe = fes.get(lba - start)
             if fe is None: bad.append(f"{p}: no UDF entry at sector {lba}"); continue

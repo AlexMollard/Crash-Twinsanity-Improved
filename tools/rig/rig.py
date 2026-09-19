@@ -338,11 +338,16 @@ def write_test_config(level, iso):
         src = os.path.join(MOD, "mod", "pcsx2", "modded.pnach")
     base = open(src, encoding="utf-8").read().replace("{CRC}", crc).rstrip()
     rig = th.pnach_section()
+    for item in filter(None, os.environ.get("RIG_PATCH", "").split(",")):   # experiments: RIG_PATCH=ADDR=WORD,ADDR=WORD (hex)
+        a, v = item.split("="); rig += f"\npatch=1,EE,2{int(a, 16):07X},word,{int(v, 16):08X}"
     open(os.path.join(TEST, "patches", f"SLES-52568_{crc}.pnach"), "w", encoding="utf-8").write(base + "\n\n" + rig + "\n")
     renderer = os.environ.get("RIG_RENDERER")          # e.g. 13 = software, 12 = OpenGL, 14 = Vulkan (default: auto)
     open(os.path.join(TEST, "gamesettings", f"SLES-52568_{crc}.ini"), "w", encoding="utf-8").write(
         "[Patches]\nEnable = Cutscene Skip (Triangle)\nEnable = Test Rig\n\n[EmuCore/GS]\nupscale_multiplier = 1\n"
-        + (f"Renderer = {renderer}\n" if renderer else ""))
+        + (f"Renderer = {renderer}\n" if renderer else "")
+        + ("\n[EmuCore/Speedhacks]\n" if os.environ.get("RIG_EE_RATE") or os.environ.get("RIG_FASTCDVD") else "")
+        + (f"EECycleRate = {os.environ['RIG_EE_RATE']}\n" if os.environ.get("RIG_EE_RATE") else "")      # -3..3 (3 = 300%)
+        + (f"fastCDVD = {os.environ['RIG_FASTCDVD']}\n" if os.environ.get("RIG_FASTCDVD") else ""))    # true / false
 
 def start(level, iso, speed):
     if test_pid(): raise SystemExit("test PCSX2 already running (rig.py stop)")

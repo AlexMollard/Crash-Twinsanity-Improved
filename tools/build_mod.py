@@ -9,6 +9,7 @@ It applies, in order:
   3. mod/skip_prompt.ops   the "hold triangle to skip" hint on every skippable cutscene
   4. mod/text.txt          game text lines (the hint's text)
   5. tools/materials.py    crate materials receive Crash's shadow
+  6. disc layout           CRASH.BD (level data) moves to the end of the image, where the drive reads fastest
 then writes "PCSX2 patches/SLES-52568_<CRC>.pnach" for the new build from mod/pcsx2/modded.pnach.
 The source ISO is only read. The output is written to a temporary file and swapped in at the end."""
 import argparse, glob, os, re, shutil, subprocess, sys, tempfile
@@ -24,9 +25,6 @@ import materials
 TWINSDUMP = os.path.join(HERE, "twinsdump", "bin", "Release", "net48", "twinsdump.exe")
 EDITOR = os.path.join(HERE, "twinsanity-editor")
 LIB_DLL = os.path.join(EDITOR, "Twinsanity", "bin", "Release", "Twinsanity.dll")
-# Moved to the end of the image so CRASH.BD can grow (~13 MB instead of the original ~2 KB of slack). The game finds
-# its files by name (sceCdSearchFile), so only the directory records change.
-RELOCATE = ["/CRASH6/ENGLISH.MH", "/CRASH6/ENGLISH.MB"]
 
 def step(msg): print(f"\n== {msg}", flush=True)
 
@@ -175,8 +173,8 @@ def main():
             step("Executable patches")
             patches = read_elf_patches(os.path.join(ROOT, "mod", "elf_patches.txt")); it.patch_elf(d, files, patches)
             for g in dict.fromkeys(p[3] for p in patches): print(f"  {g}: {sum(1 for p in patches if p[3] == g)} words")
-            step("Making room for the archive")        # the English speech bank sits right after CRASH.BD
-            it.relocate_to_end(d, RELOCATE, log=print)
+            step("Disc layout")                        # level data to the fast outer edge of the disc (and room to grow)
+            it.archive_last(d, log=print)
             step("Archive"); it.rebuild_archive(s, d, reps, log=print)
             it.patch_archive_bytes(d, mat_patches)
     crc = it.iso_crc(tmp)

@@ -26,3 +26,24 @@
 0013759C 46000064 2E980032   # cvt.w.s         -> sltiu t8,s4,50     small hit
 001375A0 44140800 0338C825   # mfc1 s4,f1      -> or    t9,t9,t8     invincibility blocks this hit
 00137604 2E820032 0320102D   # sltiu v0,s4,50  -> move  v0,t9        (delay slot of the invincible check)
+
+[Faster loading - send disc reads as soon as they are queued]
+# The background loader (0x17DDC8, once per frame) flushes queued IOP commands (0x2ABB48) once per pass, then runs the
+# chunk loader (0x2AB150) in a loop while it makes progress. A read queued inside that loop was only sent to the IOP on
+# the next pass - usually the next frame - so every read cost at least a frame. A small stub now flushes before each
+# chunk-loader call. It lives in 0x116EA8, an unreferenced debug function (Aku Aku state name for an on-screen readout).
+00116EA8 27BDFFD0 27BDFFE0   # addiu sp,sp,-32
+00116EAC FFB10018 FFBF0000   # sd    ra,0(sp)
+00116EB0 FFB00010 FFA40008   # sd    a0,8(sp)
+00116EB4 FFBF0020 FFA50010   # sd    a1,16(sp)
+00116EB8 9083000C FFA60018   # sd    a2,24(sp)
+00116EBC 2C620006 3C040031   # lui   a0,0x31
+00116EC0 1040002C 0C0AAED2   # jal   0x2ABB48             flush / poll IOP commands
+00116EC4 00A0882D 8C84AAC8   # lw    a0,-21816(a0)       (its argument, *0x30AAC8)  
+00116EC8 3C02002F DFA40008   # ld    a0,8(sp)
+00116ECC 00031880 DFA50010   # ld    a1,16(sp)
+00116ED0 2442DEA0 DFA60018   # ld    a2,24(sp)
+00116ED4 00621821 DFBF0000   # ld    ra,0(sp)
+00116ED8 8C640000 080AAC54   # j     0x2AB150             the chunk loader, as before
+00116EDC 00800008 27BD0020   # addiu sp,sp,32
+0017DE40 0C0AAC54 0C045BAA   # jal 0x2AB150 -> jal 0x116EA8   (the loader's first-pass loop)
