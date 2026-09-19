@@ -80,7 +80,7 @@ static class Program
                     var targets = t.Instances.Select(id => instObj.TryGetValue((layer, id), out var oid) && objNames.TryGetValue(oid, out var n) ? $"{id}:{n}" : $"{id}:?").ToList();
                     if (!targets.Any(x => re3.IsMatch(x))) continue;
                     var c = t.Coords;
-                    Console.WriteLine($"trig {t.ID,4} {layer} c0=({c[0].X:0.##},{c[0].Y:0.##},{c[0].Z:0.##},{c[0].W:0.##}) c1=({c[1].X:0.##},{c[1].Y:0.##},{c[1].Z:0.##},{c[1].W:0.##}) c2=({c[2].X:0.##},{c[2].Y:0.##},{c[2].Z:0.##},{c[2].W:0.##}) en={t.Enabled} f={t.SomeFloat:0.##} args=({t.Arg1},{t.Arg2},{t.Arg3},{t.Arg4}) -> {string.Join(" ", targets)}");
+                    Console.WriteLine($"trig {t.ID,4} {layer} c0=({c[0].X:0.##},{c[0].Y:0.##},{c[0].Z:0.##},{c[0].W:0.##}) c1=({c[1].X:0.##},{c[1].Y:0.##},{c[1].Z:0.##},{c[1].W:0.##}) c2=({c[2].X:0.##},{c[2].Y:0.##},{c[2].Z:0.##},{c[2].W:0.##}) hdr=0x{t.Header:X} sh={t.SectionHead} en={t.Enabled} f={t.SomeFloat:0.##} args=({t.Arg1},{t.Arg2},{t.Arg3},{t.Arg4}) -> {string.Join(" ", targets)}");
                 }
                 break;
             }
@@ -106,7 +106,7 @@ static class Program
                         body.condition.VTableIndex = ushort.Parse(t[3]); body.condition.Parameter = ushort.Parse(t[4]);
                         var last = st.scriptStateBody; while (last.nextScriptStateBody != null) last = last.nextScriptStateBody;
                         last.nextScriptStateBody = body; last.bitfield |= 0x800;
-                        int n = CountBodies(st); st.bitfield = (short)((st.bitfield & ~0x3FF) | (n << 5) | n);
+                        int n = CountBodies(st); st.bitfield = (short)((st.bitfield & ~0x3FF) | (n << 5) | n | 0x800);   // 0x800: poll the conditions every frame, as the game's own skip-enabled states do
                     }
                     else if (t[0] == "copybody")
                     {
@@ -129,7 +129,7 @@ static class Program
                             }
                         var last = st.scriptStateBody; while (last.nextScriptStateBody != null) last = last.nextScriptStateBody;
                         last.nextScriptStateBody = body; last.bitfield |= 0x800;
-                        int n = CountBodies(st); st.bitfield = (short)((st.bitfield & ~0x3FF) | (n << 5) | n);
+                        int n = CountBodies(st); st.bitfield = (short)((st.bitfield & ~0x3FF) | (n << 5) | n | 0x800);   // 0x800: poll the conditions every frame, as the game's own skip-enabled states do
                     }
                     else if (t[0] == "clearbodies")
                     {
@@ -160,6 +160,19 @@ static class Program
                 var a = System.IO.File.ReadAllBytes(args[0]); var b = System.IO.File.ReadAllBytes(outPath);
                 int firstDiff = -1; for (int k = 0; k < Math.Min(a.Length, b.Length); k++) if (a[k] != b[k]) { firstDiff = k; break; }
                 Console.WriteLine($"original {a.Length} bytes, saved {b.Length} bytes, identical={a.Length == b.Length && firstDiff < 0}, firstDiff={firstDiff}");
+                break;
+            }
+            case "msg":                                    // twinsdump <rm2> msg <n> : every GotUserMessageEquals(n) handler, live or orphaned
+            {
+                var mid = ushort.Parse(args[2]);
+                foreach (var s in scripts.Where(s => s.Main != null))
+                {
+                    var reach = Reachable(s.Main); int i = 0;
+                    for (var st = s.Main.scriptState1; st != null; st = st.nextState, i++)
+                        for (var body = st.scriptStateBody; body != null; body = body.nextScriptStateBody)
+                            if (body.condition != null && body.condition.VTableIndex == 51 && body.condition.Parameter == mid)
+                                Console.WriteLine($"{s.ID}\t{s.Main.name}\t{(reach.Contains(i) ? "LIVE" : "orphan")}\tstate {i} -> state {body.scriptStateListIndex}\tcmds={body.bitfield & 0xFF}");
+                }
                 break;
             }
             case "cond":

@@ -1,49 +1,63 @@
-"""Cutscene skip test: plays one cutscene twice from the same saved state - untouched, then holding Triangle -
-and compares how long until Crash can move again, where he ends up, the game-flow state and screenshots.
+"""Cutscene skip test: plays one cutscene twice from the same level state - untouched, then holding Triangle -
+and compares the time until gameplay resumes, where Crash ends up, the game-flow state and screenshots.
 
-  python cutscene_test.py NAME STATE X Z [--walk-timeout S] [--out DIR]
+  python cutscene_test.py NAME STATE X Y Z [--out DIR]
 
-STATE is a states/<STATE>.p2s level state (see rig.py level); X Z is a point inside the cutscene's trigger."""
+STATE is a states/<STATE>.p2s level state (see rig.py level); X Y Z is the centre of the cutscene's trigger.
+Crash is teleported into the trigger; a cutscene counts as started when the letterbox bars appear and as over
+when they are gone and Crash responds to the stick again."""
 import argparse, math, os, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import rig
 
-def wait_control(p, timeout=180):
-    """Seconds until pushing the stick moves Crash again."""
-    t0 = time.time()
-    while time.time() - t0 < timeout:
-        a = rig.pos(p); rig.set_pad(p, (), 0, -1); time.sleep(0.25); rig.set_pad(p); b = rig.pos(p)
-        if math.dist(a, b) > 0.05: return time.time() - t0
-        time.sleep(0.25)
-    return None
+def controllable(p):
+    a = rig.pos(p); rig.set_pad(p, (), 0, -1); time.sleep(0.2); rig.set_pad(p); b = rig.pos(p)
+    return math.dist(a, b) > 0.05
 
-def run(name, state, x, z, skip, out, walk_timeout):
+def run(name, state, x, y, z, skip, out, start_timeout=12, end_timeout=240, progress=None):
+    tag = "skip" if skip else "full"
     rig.level(state); p = rig.Pine()
-    started = not rig.goto(x, z, 1.5, timeout=walk_timeout)
-    if not started: return {"started": False}
-    t0 = time.time()
-    rig.screenshot(os.path.join(out, f"{name}_{'skip' if skip else 'full'}_start.png"))
+    if progress is not None:                          # story-progress counter read by script condition 639
+        a = p.r32(rig.FLOW_PTR) + 1284; p.w32(a, (p.r32(a) & ~(0x1F << 21)) | (progress << 21))
+    rig.teleport(x, y + 1.0, z); t0 = time.time(); nudge = 0
+    while not rig.in_cutscene():
+        if time.time() - t0 > start_timeout:
+            rig.screenshot(os.path.join(out, f"{name}_{tag}_nostart.png")); return {"started": False}
+        if time.time() - t0 > 3 and nudge < 6:          # some triggers only react to movement
+            rig.set_pad(p, (), [0.6, -0.6, 0, 0, 0.4, -0.4][nudge], [0, 0, 0.6, -0.6, 0.4, -0.4][nudge]); time.sleep(0.25); rig.set_pad(p); nudge += 1
+        time.sleep(0.2)
+    t_start = time.time(); rig.screenshot(os.path.join(out, f"{name}_{tag}_start.png"))
     if skip:
-        rig.set_pad(p, ("triangle",)); time.sleep(1.0); rig.set_pad(p)
-    secs = wait_control(p)
-    time.sleep(1.5)
-    shot = os.path.join(out, f"{name}_{'skip' if skip else 'full'}_end.png"); rig.screenshot(shot)
-    return {"started": True, "seconds": None if secs is None else round(time.time() - t0 - 1.5, 1),
-            "pos": tuple(round(v, 2) for v in rig.pos(p)), "flow": rig.flow_state(p), "shot": shot}
+        time.sleep(1.0); rig.set_pad(p, ("triangle",)); time.sleep(1.5); rig.set_pad(p)
+    while True:
+        if time.time() - t_start > end_timeout:
+            rig.screenshot(os.path.join(out, f"{name}_{tag}_stuck.png"))
+            return {"started": True, "seconds": None, "stuck": True, "flow": rig.flow_state(p)}
+        if not rig.in_cutscene() and controllable(p): break
+        time.sleep(0.3)
+    secs = round(time.time() - t_start, 1)
+    time.sleep(2.0)
+    shot = os.path.join(out, f"{name}_{tag}_end.png"); rig.screenshot(shot)
+    return {"started": True, "seconds": secs, "pos": tuple(round(v, 2) for v in rig.pos(p)), "flow": rig.flow_state(p),
+            "cutscene_again": rig.in_cutscene(), "shot": shot}
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument("name"); ap.add_argument("state"); ap.add_argument("x", type=float); ap.add_argument("z", type=float)
-    ap.add_argument("--walk-timeout", type=float, default=60); ap.add_argument("--out", default=os.path.join(rig.HERE, "results"))
+    ap = argparse.ArgumentParser(); ap.add_argument("name"); ap.add_argument("state")
+    for c in "xyz": ap.add_argument(c, type=float)
+    ap.add_argument("--out", default=os.path.join(rig.HERE, "results")); ap.add_argument("--skip-only", action="store_true"); ap.add_argument("--full-only", action="store_true"); ap.add_argument("--progress", type=int)
     o = ap.parse_args(); os.makedirs(o.out, exist_ok=True)
-    full = run(o.name, o.state, o.x, o.z, False, o.out, o.walk_timeout)
-    skip = run(o.name, o.state, o.x, o.z, True, o.out, o.walk_timeout)
+    full = {"started": None} if o.skip_only else run(o.name, o.state, o.x, o.y, o.z, False, o.out, progress=o.progress)
+    skip = {"started": None} if o.full_only else run(o.name, o.state, o.x, o.y, o.z, True, o.out, progress=o.progress)
     print(f"\n{o.name}:\n  full : {full}\n  skip : {skip}")
-    if full.get("started") and skip.get("started"):
-        same_pos = math.dist(full["pos"], skip["pos"]) < 1.0
-        faster = skip["seconds"] is not None and full["seconds"] is not None and skip["seconds"] < full["seconds"] - 1
-        verdict = "PASS" if (faster and same_pos and skip["flow"] == full["flow"]) else "CHECK"
-        print(f"  => {verdict}: skip {'saved %.1fs' % (full['seconds'] - skip['seconds']) if faster else 'did not shorten it'}, "
-              f"end position {'matches' if same_pos else 'DIFFERS'}, flow state {skip['flow']} vs {full['flow']}")
+    if o.full_only:
+        print("  => " + ("NOT TRIGGERED" if not full.get("started") else "STUCK" if full.get("stuck") else f"PLAYS {full['seconds']}s")); return
+    if not skip.get("started"): print("  => NOT TRIGGERED"); return
+    if skip.get("stuck"): print("  => FAIL: still in the cutscene / no control after the skip"); return
+    if not full.get("started") or full.get("stuck"): print(f"  => SKIP ONLY: gameplay back after {skip['seconds']}s"); return
+    d = math.dist(full["pos"], skip["pos"])
+    ok = skip["seconds"] < full["seconds"] - 1 and d < 3.0 and skip["flow"] == full["flow"] and not skip["cutscene_again"]
+    print(f"  => {'PASS' if ok else 'CHECK'}: {full['seconds']}s -> {skip['seconds']}s, end position {d:.1f} apart, "
+          f"flow {skip['flow']} vs {full['flow']}{', CUTSCENE RESUMED' if skip['cutscene_again'] else ''}")
 
 if __name__ == "__main__":
     main()

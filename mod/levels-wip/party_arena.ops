@@ -1,0 +1,4 @@
+# Party arena after the Mechabandicoot fight (H01D) - no trigger volume, untested
+file Levels\Earth\Hub\bossarea.rm2
+copybody 6669 1 4 0 5 572 1 0   # COM_PARTY_ARENA_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 5
+clearbodies 6669 4                  # drop the unreachable original in state 4

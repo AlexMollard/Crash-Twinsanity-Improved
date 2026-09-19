@@ -1,0 +1,4 @@
+# Core intro (H04E)
+file Levels\AltEarth\Hub\coreent.rm2
+copybody 6435 7 4 0 3 572 1 0   # COM_COREINTRO_CS_ACTIVATED_: state 7 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 3
+clearbodies 6435 4                  # drop the unreachable original in state 4

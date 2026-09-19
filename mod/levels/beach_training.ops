@@ -1,0 +1,4 @@
+# N. Sanity Beach training
+file Levels\Earth\Hub\beach.rm2
+copybody 6821 1 5 0 4 572 1 0   # COM_BEACH_TRAINING_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 4
+clearbodies 6821 5                  # drop the unreachable original in state 5

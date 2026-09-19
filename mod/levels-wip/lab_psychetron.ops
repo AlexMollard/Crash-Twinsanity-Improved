@@ -1,0 +1,4 @@
+# Lab psychetron room (H02M)
+file Levels\Ice\Hub\psycho.rm2
+copybody 6077 1 4 0 5 572 1 0   # COM_LAB_PSYCHETRON_ROOM_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 5
+clearbodies 6077 4                  # drop the unreachable original in state 4

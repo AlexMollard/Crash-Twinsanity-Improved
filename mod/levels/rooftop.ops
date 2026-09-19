@@ -1,0 +1,5 @@
+# Rooftop Rampage (H03D / H03C)
+file Levels\school\RoofTop\roof01.rm2
+copybody 6375 1 5 0 4 572 1 0   # COM_ROOFTOP_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 4
+copybody 6375 7 5 0 4 572 1 0   # COM_ROOFTOP_CUTSCENE_DIRECTOR_ACTIVATED: state 7 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 4
+clearbodies 6375 5                  # drop the unreachable original in state 5

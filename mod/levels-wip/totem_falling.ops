@@ -1,0 +1,6 @@
+# Totem falling (L03F); the developers' skip rule also messages four objects
+file Levels\Earth\Totem\l03stock.rm2
+copybody 5913 1 6 0 5 572 1 0   # COM_TOTEM_FALLING_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 5
+clearbodies 5913 6                  # drop the unreachable original in state 6
+copybody 6489 0 3 0 1 51 244 0     # COM_CRASH_CUTSCENE_L03F_TOPLEVEL: reconnect Crash's skip-message (244) handler (Cortex's is still live)
+clearbodies 6489 3

@@ -4,7 +4,7 @@
   rig.py stop                                   close the test PCSX2
   rig.py warp PATH                              make the next New Game start in level PATH
   rig.py level NAME [PATH] [--fresh]            go to level: states/NAME.p2s, or warp to PATH (~20s)
-  rig.py pos | state                            Crash's position / game-flow state
+  rig.py pos | state | tp X Y Z                  Crash's position / game-flow state + cutscene check / teleport
   rig.py status                                 emulator status / game
   rig.py press BTN[+BTN..] [--frames N]         press buttons via the virtual pad (default 6 frames)
   rig.py hold BTN[+BTN..] | release             hold / release buttons
@@ -209,6 +209,31 @@ def pos(p):
 
 def flow_state(p): return (p.r32(p.r32(FLOW_PTR) + 12) >> 12) & 0x3F
 
+def teleport(x, y, z, tol=2e-3):
+    """Move Crash to (x, y, z). His position is held in several structures (object, physics body, camera
+    targets) whose layout varies by level, so every copy of his current x/z in RAM is shifted by the same
+    offset (found with a RAM dump; each copy keeps its own height offset)."""
+    import array
+    p = Pine(); f2u = lambda v: struct.unpack("<I", struct.pack("<f", v))[0]
+    obj = p.r32(PLAYER_CHAR); dump = os.path.join(TEST, "tp_ram.bin"); run(["ram", dump])
+    f = array.array("f"); f.frombytes(open(dump, "rb").read())
+    x0, y0, z0 = f[(obj + 0xD0) // 4:(obj + 0xD0) // 4 + 3]
+    hits = [i for i in range(len(f) - 2) if abs(f[i] - x0) < tol and abs(f[i + 2] - z0) < tol and abs(f[i + 1] - y0) < 3.0]
+    for i in hits:
+        for k, v in enumerate((f[i] + x - x0, f[i + 1] + y - y0, f[i + 2] + z - z0)): p.w32(i * 4 + 4 * k, f2u(v))
+    return len(hits)
+
+def _band(w, h, b, y0, y1):
+    tot = n = 0
+    for y in range(max(0, y0), min(h, y1), 2):
+        row = b[y * w * 4:(y + 1) * w * 4]; tot += sum(row[0::16]) + sum(row[1::16]) + sum(row[2::16]); n += 3 * len(row[0::16])
+    return tot / max(n, 1)
+
+def in_cutscene(img=None):
+    """Cutscenes letterbox the picture: the top and bottom bands are pure black while the middle is lit."""
+    w, h, b = img or grab()
+    return _band(w, h, b, 0, 60) < 2 and _band(w, h, b, h - 30, h) < 2 and _band(w, h, b, h // 2 - 40, h // 2 + 40) > 8
+
 def slot_file(slot):
     import glob
     hits = glob.glob(os.path.join(TEST, "sstates", f"*.{slot:02d}.p2s"))
@@ -352,7 +377,8 @@ def run(argv):
     elif a == "warp": warp(Pine(), rest[0]); print("New Game ->", rest[0])
     elif a == "pos": x, y, z = pos(Pine()); print(f"crash at ({x:.2f}, {y:.2f}, {z:.2f})")
     elif a == "level": level(rest[0], rest[1] if len(rest) > 1 and not rest[1].startswith("--") else None, "--fresh" in rest)
-    elif a == "state": print("flow state", flow_state(Pine()))
+    elif a == "state": print("flow state", flow_state(Pine()), "| cutscene" if in_cutscene() else "| gameplay")
+    elif a == "tp": teleport(float(rest[0]), float(rest[1]), float(rest[2])); time.sleep(0.5); print("crash at", tuple(round(c, 2) for c in pos(Pine())))
     elif a == "goto": goto(float(rest[0]), float(rest[1]), float(rest[2]) if len(rest) > 2 else 1.5)
     elif a == "status":
         p = Pine(); print(p.status(), p.game_id(), p.title())
@@ -385,7 +411,9 @@ def run(argv):
             if new:
                 time.sleep(0.5)
                 try:
-                    open(rest[0], "wb").write(zipfile.ZipFile(new[0]).read("eeMemory.bin")); print("RAM ->", rest[0]); break
+                    open(rest[0], "wb").write(zipfile.ZipFile(new[0]).read("eeMemory.bin"))
+                    if not rest[0].endswith("tp_ram.bin"): print("RAM ->", rest[0])
+                    break
                 except (zipfile.BadZipFile, PermissionError): pass
             time.sleep(0.3)
         else: raise SystemExit("save state did not appear")

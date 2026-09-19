@@ -1,0 +1,21 @@
+# Cutscenes whose skip branch was cut from the level data (need a mod/levels/*.ops recipe).
+# NAME             STATE      X        Y        Z        director
+beach_training     beach     -62.40    0.00   -57.60   # COM_BEACH_TRAINING_CUTSCENE_DIRECTOR_ACTIVATED
+skunk              highpath  -10.18   -2.86   -49.62   # COM_ANGRY_SKUNK_CUTSCENE_DIRECTOR_ACTIVATED
+totem_falling      l03stock   34.34   37.90     9.90   # COM_TOTEM_FALLING_CUTSCENE_DIRECTOR_ACTIVATED
+walrus             gpa10      19.22   15.72  -287.83   # COM_WALRUS_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
+icelab             labext     33.00  -77.14    -7.49   # COM_ICELAB_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
+psychetron_h02j    psycho     30.45    0.07    -0.68   --progress 11   # H02J director (story progress 11-12)
+lab_psychetron     psycho     30.45    0.07    -0.68   --progress 18   # LAB_PSYCHETRON_ROOM director (progress 18-19)
+slipslide          l05start  -82.31  106.25  -162.96   # COM_SLIPSLIDE_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
+dorm_room          cogpa08    -3.23   -5.88   -12.06   # COM_DORM_ROOM_CUTSCENE_DIRECTOR_ACTIVATED
+classroom          crgpa08     6.60    2.08   -20.58   # COM_CLASSROOM_CHAOS_CUTSCENE_DIRECTOR_ACTIVATED
+bell_tower         amberly     1.30   -3.62    -3.34   # COM_BELL_TOWER_CUTSCENE_DIRECTOR_ACTIVATED
+rooftop            roof01    102.09   34.44   126.83   # COM_ROOFTOP_CUTSCENE_DIRECTOR_ACTIVATED
+school_hub         sch_hub    14.10  -28.66   -39.62   # COM_SCHOOL_HUB_CUTSCENE_DIRECTOR_ACTIVATED
+treasure           treasure  -12.66    3.77   -94.72   # COM_TREASUREROOM_CUTSCENE_DIRECTOR_ACTIVATED
+coreintro          coreent    -2.90    5.56   -56.59   # COM_COREINTRO_CS_ACTIVATED_
+rockslide          l10start  -69.69  106.13  -214.29   # COM_ALTEARTH_ROCKSLIDE_CUTSCENE_DIRECTOR_ACTIVATED
+# no trigger volume - started by other events:
+#   party_arena  bossarea  COM_PARTY_ARENA_DIRECTOR_ACTIVATED
+#   icelabint    labint    COM_ICELABINT_CUTSCENE_DIRECTOR_ACTIVATED (has skip script)
