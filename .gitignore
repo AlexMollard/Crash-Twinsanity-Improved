@@ -5,7 +5,7 @@ work/extracted/
 work/patched/**/*.bin
 work/patched/**/*.rm2
 
-# Third-party downloads (fetched separately, see README.txt)
+# Third-party downloads (fetched separately, see README.md)
 downloads/
 
 # Isolated PCSX2 used by the test rig (emulator copy + BIOS) - recreate with tools/rig/setup_test_pcsx2.py
