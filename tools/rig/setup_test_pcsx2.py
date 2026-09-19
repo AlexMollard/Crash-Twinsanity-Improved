@@ -4,7 +4,8 @@
 
 Copies the PCSX2 program folder, makes it portable, copies the SCPH-77004 BIOS (with its English .NVM) from the
 user's PCSX2 data folder, and derives inis/PCSX2.ini from the user's config with test-rig overrides (PINE on
-port 28012, separate game window, muted, uncompressed save states so rig.py can read RAM dumps).
+port 28012, separate game window, muted, uncompressed save states so rig.py can read RAM dumps,
+fast CDVD so warps and level loads don't wait on emulated disc reads).
 The user's own PCSX2 install and settings are only read, never modified."""
 import argparse, glob, os, re, shutil
 
@@ -15,6 +16,7 @@ OVERRIDES = {
     ("UI", "InhibitScreensaver"): "false", ("UI", "PauseOnFocusLoss"): "false", ("UI", "StartFullscreen"): "false",
     ("EmuCore", "EnablePINE"): "true", ("EmuCore", "PINESlot"): "28012", ("EmuCore", "EnableFastBoot"): "true",
     ("EmuCore", "InhibitScreensaver"): "false", ("EmuCore", "SavestateCompressionType"): "0",
+    ("EmuCore/Speedhacks", "fastCDVD"): "true",          # test instance only: level loads ~instant
     ("SPU2/Output", "StandardVolume"): "0", ("Achievements", "Enabled"): "false",
 }
 

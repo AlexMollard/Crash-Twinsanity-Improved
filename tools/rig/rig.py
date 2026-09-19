@@ -3,7 +3,7 @@
   rig.py start [--level PATH] [--iso modded|original] [--speed X]   launch test PCSX2 (warp New Game to PATH)
   rig.py stop                                   close the test PCSX2
   rig.py warp PATH                              make the next New Game start in level PATH
-  rig.py level NAME [PATH] [--fresh]            go to level: states/NAME.p2s, or warp to PATH via the credits
+  rig.py level NAME [PATH] [--fresh]            go to level: states/NAME.p2s, or warp to PATH (~20s)
   rig.py pos | state                            Crash's position / game-flow state
   rig.py status                                 emulator status / game
   rig.py press BTN[+BTN..] [--frames N]         press buttons via the virtual pad (default 6 frames)
@@ -197,6 +197,9 @@ PLAYER_CHAR = 0x003098FC          # global -> player character object; its posit
 FLOW_PTR = 0x0030988C             # global -> game-flow object; state = (u32 at flow+12 >> 12) & 0x3F
 LEVEL_START_STR = 0x0030BE90      # string object the end-of-credits code loads (Levels\Ice\Hub\LabExt)
 STATE_PLAYING, STATE_CREDITS = 12, 19
+# Credits handler (0x1751A0): "beq v0,zero,finished" after the per-frame credits update. Made unconditional
+# during a warp so the game takes its own credits-finished path (level load, state 11 -> 12) immediately.
+CREDITS_DONE_BRANCH, CREDITS_DONE_ORIG, CREDITS_DONE_ALWAYS = 0x001753A8, 0x10400036, 0x10000036
 STATES_DIR = os.path.join(HERE, "states")
 
 def fl(p, a): return struct.unpack("<f", struct.pack("<I", p.r32(a)))[0]
@@ -213,8 +216,8 @@ def slot_file(slot):
 
 def level(name, path=None, fresh=False, timeout=300):
     """Get the test instance into level NAME. Uses states/NAME.p2s when present; otherwise warps to PATH
-    through the game's end-of-credits level load (flow state 19 loads LEVEL_START_STR, ~2.5 min of
-    credits), waits for gameplay and stores the result as states/NAME.p2s."""
+    through the game's end-of-credits level load (flow state 19 loads LEVEL_START_STR; the credits are
+    cut to one frame), waits for gameplay and stores the result as states/NAME.p2s."""
     os.makedirs(STATES_DIR, exist_ok=True); lib = os.path.join(STATES_DIR, name + ".p2s"); p = Pine()
     if os.path.exists(lib) and not fresh:
         p.save(8); time.sleep(1.5)                       # make sure slot 8's file exists with the right name
@@ -227,15 +230,28 @@ def level(name, path=None, fresh=False, timeout=300):
     raw = path.replace("/", "\\").encode("ascii"); buf = raw + b"\0"; buf += b"\0" * (-len(buf) % 4)
     for i in range(0, len(buf), 4): p.w32(th.WARP_STR + i, struct.unpack("<I", buf[i:i + 4])[0])
     p.w32(LEVEL_START_STR, th.WARP_STR); p.w32(LEVEL_START_STR + 4, len(raw)); p.w32(LEVEL_START_STR + 8, 0x100)
-    flow = p.r32(FLOW_PTR); hi = p.r32(flow + 12)
-    p.w32(flow + 12, (hi & ~(0x3F << 12)) | (STATE_CREDITS << 12))
-    print(f"warping to {path} via the credits...", flush=True); t0 = time.time()
-    while flow_state(p) != STATE_PLAYING:
-        if time.time() - t0 > timeout: raise SystemExit("warp timed out")
-        time.sleep(1)
-    time.sleep(6)
+    if p.r32(CREDITS_DONE_BRANCH) != CREDITS_DONE_ORIG: raise SystemExit("unexpected code at the credits branch - wrong build?")
+    p.w32(CREDITS_DONE_BRANCH, CREDITS_DONE_ALWAYS)      # credits end on their first frame -> normal level-load path
+    try:
+        flow = p.r32(FLOW_PTR); hi = p.r32(flow + 12)
+        p.w32(flow + 12, (hi & ~(0x3F << 12)) | (STATE_CREDITS << 12))
+        print(f"warping to {path}...", flush=True); t0 = time.time()
+        while flow_state(p) != STATE_PLAYING:
+            if time.time() - t0 > timeout: raise SystemExit("warp timed out")
+            time.sleep(0.5)
+    finally:
+        p.w32(CREDITS_DONE_BRANCH, CREDITS_DONE_ORIG)
+    loaded = time.time() - t0
+    import math                                          # level intros hold the camera: wait for real control
+    t1 = time.time()
+    while time.time() - t1 < 60:
+        a = pos(p); set_pad(p, (), 0, -1); time.sleep(0.25); set_pad(p); b = pos(p)
+        if math.dist(a, b) > 0.05: break
+        time.sleep(0.5)
+    else: print("warning: Crash never became controllable", flush=True)
+    time.sleep(1.5)
     p.save(8); time.sleep(2); shutil.copyfile(slot_file(8), lib)
-    print(f"arrived after {time.time() - t0:.0f}s, saved states/{name}.p2s")
+    print(f"arrived after {time.time() - t0:.0f}s (level loaded in {loaded:.1f}s), saved states/{name}.p2s")
 
 def goto(tx, tz, radius=1.5, timeout=60.0, burst=0.25):
     """Walk Crash to world (tx, tz) with closed-loop steering; the stick is camera-relative, so the
