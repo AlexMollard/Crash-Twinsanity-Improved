@@ -61,12 +61,79 @@ def patch_elf(f, files, patches):
     for va, orig, new, note in patches:
         f.seek(base + va - ELF_BASE + ELF_FILE_OFF); f.write(struct.pack("<I", new))
 
+def _udf_crc(data):
+    """CRC-16/CCITT (poly 0x1021, init 0) as used by UDF descriptor tags."""
+    crc = 0
+    for b in data:
+        crc ^= b << 8
+        for _ in range(8): crc = ((crc << 1) ^ 0x1021) & 0xFFFF if crc & 0x8000 else (crc << 1) & 0xFFFF
+    return crc
+
+def _udf_write(f, sector, d):
+    """Recompute a UDF descriptor's tag CRC and checksum, then write it back."""
+    n = struct.unpack_from("<H", d, 10)[0]
+    struct.pack_into("<H", d, 8, _udf_crc(d[16:16 + n]))
+    d[4] = sum(d[i] for i in range(16) if i != 4) & 0xFF
+    f.seek(sector * SECTOR); f.write(d)
+
+def _read_sector(f, sector): f.seek(sector * SECTOR); return bytearray(f.read(SECTOR))
+
+def udf_layout(f):
+    """The disc's UDF bridge: (partition start, [partition descriptor sectors], {partition-relative lba: file entry sector})."""
+    avdp = _read_sector(f, 256)
+    if struct.unpack_from("<H", avdp, 0)[0] != 2: return None
+    pds, start = [], None
+    for ln, loc in (struct.unpack_from("<II", avdp, 16), struct.unpack_from("<II", avdp, 24)):   # main and reserve sequence
+        for s in range(loc, loc + ln // SECTOR):
+            d = _read_sector(f, s); tag = struct.unpack_from("<H", d, 0)[0]
+            if tag == 5: pds.append(s); start = struct.unpack_from("<I", d, 188)[0]
+            if tag == 8: break
+    first_file = min(l for l, _, _ in iso_files(f).values())
+    fes = {}
+    for s in range(start, first_file):
+        d = _read_sector(f, s)
+        if struct.unpack_from("<H", d, 0)[0] == 261 and (struct.unpack_from("<H", d, 34)[0] & 7) == 0:   # file entry, short_ad
+            l_ea, l_ad = struct.unpack_from("<II", d, 168)
+            if l_ad == 8: fes[struct.unpack_from("<I", d, 176 + l_ea + 4)[0]] = s
+    return start, pds, fes
+
+def udf_set_extent(f, udf, old_lba, lba, size):
+    """Point the UDF file entry of the file at OLD_LBA to LBA/SIZE (one extent)."""
+    start, _, fes = udf
+    fe = fes.pop(old_lba - start); d = _read_sector(f, fe); l_ea = struct.unpack_from("<I", d, 168)[0]
+    struct.pack_into("<QQ", d, 56, size, -(-size // SECTOR))
+    struct.pack_into("<II", d, 176 + l_ea, size, lba - start); _udf_write(f, fe, d)
+    fes[lba - start] = fe
+
+def relocate_to_end(f, paths, log=print):
+    """Move PATHS (in order) to the end of the image and update the ISO9660 records, the UDF file entries and
+    partition, the volume size, and the UDF anchor that has to sit in the last sector."""
+    files = iso_files(f); udf = udf_layout(f)
+    f.seek(0, 2); end = f.tell() // SECTOR
+    avdp = _read_sector(f, end - 1) if udf and struct.unpack_from("<H", _read_sector(f, end - 1), 0)[0] == 2 else None
+    lba = end
+    for p in paths:
+        old, size, rec = files[p.upper()]
+        f.seek(old * SECTOR); data = f.read(size)
+        f.seek(lba * SECTOR); f.write(data + b"\0" * (-size % SECTOR))
+        f.seek(rec + 2); f.write(struct.pack("<I", lba) + struct.pack(">I", lba))
+        if udf: udf_set_extent(f, udf, old, lba, size)
+        log(f"  {p}: sector {old} -> {lba}")
+        lba += -(-size // SECTOR)
+    if avdp is not None:                               # anchor in the new last sector; partition grows to just before it
+        struct.pack_into("<I", avdp, 12, lba); _udf_write(f, lba, avdp); lba += 1
+        for s in udf[1]:
+            d = _read_sector(f, s); struct.pack_into("<I", d, 192, lba - 1 - udf[0]); _udf_write(f, s, d)
+    f.seek(16 * SECTOR + 80); f.write(struct.pack("<I", lba) + struct.pack(">I", lba))
+    f.truncate(lba * SECTOR)
+
 def rebuild_archive(src, dst, reps, log=print):
     """Rewrite CRASH.BD/BH in DST from SRC's archive with REPS {archive name: bytes} (sizes may change).
-    Every file is streamed in original order; BH offsets and the ISO9660 size of CRASH.BD are updated."""
-    files = iso_files(src)
+    Every file is streamed in original order; BH offsets and the ISO9660 and UDF sizes of CRASH.BD are updated.
+    The room for CRASH.BD is measured on DST, so files moved out of its way (relocate_to_end) count."""
+    files = iso_files(src); dfiles = iso_files(dst)
     bh_lba, bh_size, _ = files["/CRASH6/CRASH.BH"]; bd_lba, bd_size, bd_rec = files["/CRASH6/CRASH.BD"]
-    room = (min(l for l, _, _ in files.values() if l > bd_lba) - bd_lba) * SECTOR
+    room = (min(l for l, _, _ in dfiles.values() if l > bd_lba) - bd_lba) * SECTOR
     src.seek(bh_lba * SECTOR); bh = bytearray(src.read(bh_size)); entries = parse_bh(bh)
     reps = {k.lower(): v for k, v in reps.items()}
     unknown = set(reps) - {e[0].lower() for e in entries}
@@ -82,7 +149,10 @@ def rebuild_archive(src, dst, reps, log=print):
             while left:
                 chunk = src.read(min(left, 16 << 20)); dst.write(chunk); left -= len(chunk)
         struct.pack_into("<II", bh, rec, pos, size); pos += size
-    dst.write(b"\0" * (room - pos))
+    left = room - pos
+    while left: n = min(left, 16 << 20); dst.write(b"\0" * n); left -= n
     dst.seek(bh_lba * SECTOR); dst.write(bh)
     dst.seek(bd_rec + 10); dst.write(struct.pack("<I", pos) + struct.pack(">I", pos))
+    udf = udf_layout(dst)
+    if udf: udf_set_extent(dst, udf, bd_lba, bd_lba, pos)
     log(f"  CRASH.BD {bd_size} -> {pos} bytes ({pos - bd_size:+d}), {room - pos} bytes of disc space left")

@@ -20,6 +20,9 @@ import rm2splice
 TWINSDUMP = os.path.join(HERE, "twinsdump", "bin", "Release", "net48", "twinsdump.exe")
 EDITOR = os.path.join(HERE, "twinsanity-editor")
 LIB_DLL = os.path.join(EDITOR, "Twinsanity", "bin", "Release", "Twinsanity.dll")
+# Moved to the end of the image so CRASH.BD can grow (~13 MB instead of the original ~2 KB of slack). The game finds
+# its files by name (sceCdSearchFile), so only the directory records change.
+RELOCATE = ["/CRASH6/ENGLISH.MH", "/CRASH6/ENGLISH.MB"]
 
 def step(msg): print(f"\n== {msg}", flush=True)
 
@@ -118,6 +121,8 @@ def main():
             step("Executable patches")
             patches = read_elf_patches(os.path.join(ROOT, "mod", "elf_patches.txt")); it.patch_elf(d, files, patches)
             for g in dict.fromkeys(p[3] for p in patches): print(f"  {g}: {sum(1 for p in patches if p[3] == g)} words")
+            step("Making room for the archive")        # the English speech bank sits right after CRASH.BD
+            it.relocate_to_end(d, RELOCATE, log=print)
             step("Archive"); it.rebuild_archive(s, d, reps, log=print)
     crc = it.iso_crc(tmp)
     try: os.replace(tmp, out)

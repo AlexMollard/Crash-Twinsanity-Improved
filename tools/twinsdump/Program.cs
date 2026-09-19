@@ -86,7 +86,7 @@ static class Program
             }
             case "edit":                                   // twinsdump <rm2> edit <ops.txt> <outdir>
             {
-                // ops (one per line):  addbody SCRIPT STATE COND PARAM TARGET   |   clearbodies SCRIPT STATE
+                // ops (one per line): addbody, copybody, clearbodies, appendcmds, movebody, settarget, setarg (see each branch)
                 // Writes <outdir>/<id>.bin (serialized script item) for every edited script.
                 var outDir = args[3]; System.IO.Directory.CreateDirectory(outDir);
                 var byId = scripts.ToDictionary(s => s.ID);
@@ -98,14 +98,21 @@ static class Program
                     var s = byId[uint.Parse(t[1])]; var st = StateAt(s.Main, int.Parse(t[2]));
                     if (t[0] == "addbody")
                     {
+                        // addbody SCRIPT STATE COND PARAM TARGET [INTERVAL [THRESHOLD]]  (no commands; add them with appendcmds)
+                        var inv = System.Globalization.CultureInfo.InvariantCulture;
+                        float thr = t.Length > 7 ? float.Parse(t[7], inv) : 0.5f;
                         var body = new ScriptStateBody(s.Main.scriptGameVersion)
                         {
                             bitfield = 0x600, scriptStateListIndex = int.Parse(t[5]),
-                            condition = new ScriptCondition { Interval = 0f, Threshold = 0.5f, ThresholdInverse = 2.0f }
+                            condition = new ScriptCondition { Interval = t.Length > 6 ? float.Parse(t[6], inv) : 0f, Threshold = thr, ThresholdInverse = 1f / thr }
                         };
                         body.condition.VTableIndex = ushort.Parse(t[3]); body.condition.Parameter = ushort.Parse(t[4]);
-                        var last = st.scriptStateBody; while (last.nextScriptStateBody != null) last = last.nextScriptStateBody;
-                        last.nextScriptStateBody = body; last.bitfield |= 0x800;
+                        if (st.scriptStateBody == null) st.scriptStateBody = body;
+                        else
+                        {
+                            var last = st.scriptStateBody; while (last.nextScriptStateBody != null) last = last.nextScriptStateBody;
+                            last.nextScriptStateBody = body; last.bitfield |= 0x800;
+                        }
                         int n = CountBodies(st); st.bitfield = (short)((st.bitfield & ~0x3FF) | (n << 5) | n | 0x800);   // 0x800: poll the conditions every frame, as the game's own skip-enabled states do
                     }
                     else if (t[0] == "copybody")
@@ -134,6 +141,51 @@ static class Program
                     else if (t[0] == "clearbodies")
                     {
                         st.scriptStateBody = null; st.bitfield = (short)(st.bitfield & ~0xFFF);
+                    }
+                    else if (t[0] == "appendcmds")
+                    {
+                        // appendcmds SCRIPT STATE BODYIDX FROMSCRIPT FROMSTATE FROMBODYIDX : append a copy of that body's commands
+                        var body = BodyAt(st, int.Parse(t[3]));
+                        var src = BodyAt(StateAt(byId[uint.Parse(t[4])].Main, int.Parse(t[5])), int.Parse(t[6]));
+                        if (src.command == null) throw new Exception("source body has no commands: " + line);
+                        ScriptCommand copy;
+                        using (var ms = new System.IO.MemoryStream())
+                        {
+                            using (var w = new System.IO.BinaryWriter(ms, System.Text.Encoding.ASCII, true)) src.command.Write(w);
+                            ms.Position = 0;
+                            using (var r = new System.IO.BinaryReader(ms)) copy = new ScriptCommand(r, s.Main.scriptGameVersion);
+                        }
+                        if (body.command == null) body.command = copy;
+                        else
+                        {
+                            var last = body.command; while (last.nextCommand != null) last = last.nextCommand;
+                            last.nextCommand = copy; last.internalIndex |= 0x1000000;
+                        }
+                        int n = 0; for (var c = body.command; c != null; c = c.nextCommand) n++;
+                        body.bitfield = (body.bitfield & ~0xFF) | n;
+                    }
+                    else if (t[0] == "movebody")
+                    {
+                        // movebody SCRIPT STATE FROMIDX TOIDX : reorder bodies (conditions are tried in order, so a new handler must precede an Else)
+                        var list = new List<ScriptStateBody>(); for (var b = st.scriptStateBody; b != null; b = b.nextScriptStateBody) list.Add(b);
+                        var moved = list[int.Parse(t[3])]; list.RemoveAt(int.Parse(t[3])); list.Insert(int.Parse(t[4]), moved);
+                        for (int k = 0; k < list.Count; k++)
+                        {
+                            list[k].nextScriptStateBody = k + 1 < list.Count ? list[k + 1] : null;
+                            list[k].bitfield = k + 1 < list.Count ? list[k].bitfield | 0x800 : list[k].bitfield & ~0x800;
+                        }
+                        st.scriptStateBody = list[0];
+                    }
+                    else if (t[0] == "settarget")
+                    {
+                        // settarget SCRIPT STATE BODYIDX TARGET
+                        var b = BodyAt(st, int.Parse(t[3])); b.scriptStateListIndex = int.Parse(t[4]); b.bitfield |= 0x400;
+                    }
+                    else if (t[0] == "setarg")
+                    {
+                        // setarg SCRIPT STATE BODYIDX CMDIDX ARGIDX VALUE
+                        var c = BodyAt(st, int.Parse(t[3])).command; for (int k = 0; k < int.Parse(t[4]); k++) c = c.nextCommand;
+                        c.arguments[int.Parse(t[5])] = uint.Parse(t[6]);
                     }
                     else throw new Exception("unknown op " + t[0]);
                     edited.Add(s.ID);
@@ -257,6 +309,11 @@ static class Program
         return st ?? throw new Exception($"state {index} not found in {m.name}");
     }
     static int CountBodies(ScriptState st) { int n = 0; for (var b = st.scriptStateBody; b != null; b = b.nextScriptStateBody) n++; return n; }
+    static ScriptStateBody BodyAt(ScriptState st, int index)
+    {
+        var b = st.scriptStateBody; for (int k = 0; k < index && b != null; k++) b = b.nextScriptStateBody;
+        return b ?? throw new Exception($"body {index} not found");
+    }
 
     // States reachable from the start state by following body transitions.
     static HashSet<int> Reachable(Script.MainScript m)

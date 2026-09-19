@@ -1,0 +1,39 @@
+# Core intro (H04E) - Cortex and Nina leave at the end of the scene, so the skip has to tell them to.
+# The skip lives inside the cutscene script (not the director) so the actors' end marks resolve through the running scene.
+file Levels\AltEarth\Hub\coreent.rm2
+# COM_COREINTRO_CS_DIR_H04E: Triangle rule (cond 572, player 1) in every state the scene waits in -> 11
+addbody 6445 4 572 1 11
+addbody 6445 2 572 1 11
+addbody 6445 5 572 1 11
+addbody 6445 7 572 1 11
+addbody 6445 6 572 1 11
+# 11 (unused): the scene's last two steps (state 7: reset counter, deactivate the linked object; state 6: message
+# all three actors) with 244 "skipped" instead of 207 -> 12
+addbody 6445 11 5 0 12 0 0.01       # TimeInUnit: next frame
+appendcmds 6445 11 0 6445 7 0
+appendcmds 6445 11 0 6445 6 0
+setarg 6445 11 0 4 0 66191604       # SendUserMessage 207 -> 244 (same packing as the game's own *_CUTSCENE_SKIP scripts)
+setarg 6445 11 0 5 0 66781428
+setarg 6445 11 0 6 0 66584820
+# 12 (unused): give the actors 0.3s to run their 244 handlers -> 9 (level music) -> 10 (end)
+addbody 6445 12 5 0 9 0 0.3
+# COM_CRASH_CS_H04E: on 244, warp to his end mark and get input back (states 2, 3 and 5 of the full scene)
+copybody 6437 1 2 0 6 51 244 0
+appendcmds 6437 1 1 6437 3 0
+appendcmds 6437 1 1 6437 5 0
+copybody 6437 2 2 0 6 51 244 0
+appendcmds 6437 2 1 6437 3 0
+appendcmds 6437 2 1 6437 5 0
+copybody 6437 5 5 0 6 51 244 0
+# COM_CORTEX_CS_H04E: on 244, go to his last step (state 8: warp away, hide); in state 7 it must precede the Else loop
+addbody 6441 1 51 244 8
+addbody 6441 2 51 244 8
+addbody 6441 5 51 244 8
+addbody 6441 7 51 244 8
+movebody 6441 7 2 0
+# COM_NINA_CS_H04E: same, her last step is state 6
+addbody 6443 1 51 244 6
+addbody 6443 2 51 244 6
+addbody 6443 3 51 244 6
+addbody 6443 7 51 244 6
+movebody 6443 7 2 0

@@ -25,12 +25,20 @@ Built into the [Modded] ISO (tools\build_mod.py)
    For others the developers had also moved the skip rule to an unreachable state; mod\levels\*.ops
    puts it back, each tested with the rig (full vs skipped: same end state, gameplay back sooner):
      beach (Aku Aku crate), beach training, angry skunk, Iceberg Lab, Slip Slide Icecapades,
-     Academy hub, Rooftop Rampage, treasure room.
+     Academy hub, Rooftop Rampage, treasure room, Classroom Chaos, core intro.
+   Where a scene hands over to the next section, the skip does that hand-over too: Classroom Chaos
+   switches you to Cortex, and in the core intro Cortex and Nina leave as they do at the end.
    Small differences after skipping: a few level hints ("Clear a path for Cortex!", "Use (O) to
-   crouch") are not shown, and in Iceberg Lab Crash stands a few steps from where the scene ends.
+   crouch", "Tap [] to rapid fire") are not shown, and in Iceberg Lab and Classroom Chaos the
+   character stands a few steps from where the scene ends.
    Deliberately left unskippable: totem falling (skipping it gets Crash killed by the totem chase).
-   Still in progress (mod\levels-wip): Classroom Chaos, core intro, Rockslide Rumble, Walrus,
-   Psychetron room, dorm room, bell tower, party arena, lab interior.
+   Still in progress (mod\levels-wip): Rockslide Rumble, Walrus, Psychetron room, dorm room,
+   bell tower, party arena, lab interior.
+
+   To make room for these level edits the build moves the English speech bank (ENGLISH.MB/MH) to
+   the end of the disc image (+6 MB); the game finds its files by name, so nothing else changes.
+   tools\verify_iso.py checks a build against the original (ISO9660 + UDF directories agree,
+   untouched files byte-identical).
 
 PCSX2 only (installed by "Apply CrashMod Settings.bat", safe to run any time with PCSX2 closed)
 ------------------------------------------------------------------------------------------------
@@ -52,7 +60,8 @@ Repository layout
 -----------------
 mod\                   what the mod changes: executable patches, level script recipes, PCSX2 patch template
 tools\build_mod.py     builds the [Modded] ISO from the original
-tools\isotools.py      ISO9660 / CRASH.BD+BH archive / executable helpers
+tools\isotools.py      ISO9660 + UDF / CRASH.BD+BH archive / executable helpers
+tools\verify_iso.py    checks a built ISO against the original
 tools\twinsdump\       level inspection and editing CLI (uses the Twinsanity Editor library)
 tools\rig\             automated test rig: drives an isolated PCSX2 over PINE (setup_test_pcsx2.py creates it)
 tools\twinsanity-editor, tools\twinsanity-reversed   upstream projects (git submodules)

@@ -1,0 +1,24 @@
+# Classroom Chaos (L08C) - the scene ends by handing control to Cortex, so the skip must do that too
+file Levels\school\Crash\crgpa08.rm2
+# COM_CLASSROOM_CHAOS_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 5 -> 3 -> 2 (END)
+copybody 6107 1 4 0 5 572 1 0
+clearbodies 6107 4                  # drop the unreachable original
+# state 5 = the skip: run the ending of COM_CLASSROOM_CHAOS_CUTSCENE_L08C (its states 2 and 3) with message 244 "skipped" instead of 207
+appendcmds 6107 5 0 6109 2 0        # focus Cortex, message; focus Crash, message
+appendcmds 6107 5 0 6109 3 0        # SwitchCharacter to Cortex
+setarg 6107 5 0 1 0 66781428        # SendUserMessage 207 -> 244 (same packing as the game's own *_CUTSCENE_SKIP scripts)
+setarg 6107 5 0 3 0 66781428
+# COM_CRASH_CUTSCENE_L08C: on 244 from any waiting state, finish like the full scene (idle anim, dismissed, input handed over)
+copybody 6111 3 5 0 1 51 244 0.2
+appendcmds 6111 3 1 6111 2 0
+copybody 6111 4 4 0 1 51 244 0.2    # mid-animation: also undo state 3's SetObject
+appendcmds 6111 4 1 6111 5 0
+appendcmds 6111 4 1 6111 2 0
+copybody 6111 5 5 0 1 51 244 0.2
+appendcmds 6111 5 1 6111 2 0
+copybody 6111 2 2 0 1 51 244 0.2
+# COM_CORTEX_CUTSCENE_L08C: on 244, give him input and draw the multitool (state 2). No warp to his end mark: once the
+# scene is cut short the mark resolves outside the level, so after a skip he stays on his start mark (~6 units ahead).
+copybody 6113 3 1 0 2 51 244 0.2
+copybody 6113 4 1 0 2 51 244 0.2
+copybody 6113 1 1 0 2 51 244 0.2
