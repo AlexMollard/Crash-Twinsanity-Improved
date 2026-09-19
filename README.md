@@ -31,6 +31,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 | 💬 | **"Hold △ to skip" prompt** | ISO | Appears in the letterbox's bottom bar during every skippable cutscene, in all five languages. |
 | 🛡️ | **Aku Aku invincibility that works** | ISO | With three masks Crash no longer dies to TNT, Nitro or bomb explosions. [Details ↓](#aku-aku-invincibility) |
 | 🌑 | **Shadows on crates** | ISO | Crash's shadow now falls on crates too, so you can see where you'll land. [Details ↓](#shadows-on-crates) |
+| 👻 | **No more invisible Crash** | ISO | Getting hurt just before a cutscene could leave Crash invisible through the scene and after it. [Details ↓](#invisible-crash-after-a-cutscene) |
 | ⏱️ | **Faster loading** | ISO + PCSX2 | Level loads take 25–30% less time from the ISO changes alone, and about 40% less with PCSX2's Fast CDVD (on in the preset). [Details ↓](#faster-loading) |
 | 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta). |
 | 🖥️ | **Widescreen 16:9 or 21:9 ultrawide** | PCSX2 | 21:9 is enabled by default. Use one or the other, never both. |
@@ -116,6 +117,17 @@ Rooftop iron crates, in both the software and hardware renderers.
 Moving platforms were checked the same way. Every lift, bridge, ice floe, hovering platform, boat and holo-platform in the
 game already has the flag on, so they already receive the shadow. Apart from crates, the only objects without it are
 characters, enemies, doors and walls.
+
+### Invisible Crash after a cutscene
+
+After a hit, Crash flickers for two seconds: the grace-period code hides him for the last fifth of every 0.2 s while
+he can't be hurt again. When a cutscene takes control of the player (and again when it hands control back), the game
+resets that state machine without ending it, so whatever the flicker last set sticks. One time in five that is
+"hidden": Crash is missing from the whole cutscene, and stays invisible in gameplay afterwards until something else
+shows him. The reset now goes through a small stub (`mod/elf_patches.txt`) that ends a running grace period properly,
+making the character visible again and clearing the grace invincibility. Rig-tested with a worm hit followed by the
+Aku Aku crate tutorial: without the fix Crash is gone from the scene and from gameplay after it, with it he is visible
+in both, and a normal hit still flickers for exactly two seconds.
 
 ### Faster loading
 
@@ -238,6 +250,9 @@ RIG_FASTCDVD=true python load_bench.py fast                   # level load times
 - [x] Make three-mask invincibility protect from explosions
 - [x] Show Crash's shadow on crates
 - [x] Faster level loading
+- [x] Fix Crash staying invisible after being hurt just before a cutscene
+- [ ] Evil Crash running in circles in Bandicoot Pursuit (PAL). Reproduced in the rig: his run heading sits about 20° off
+      the route and he orbits the node instead of reaching it. The cause is in his steering, not the level's path data
 - [ ] The remaining cutscenes in `mod/levels-wip`
 
 ### Not included

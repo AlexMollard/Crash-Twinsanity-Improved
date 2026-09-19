@@ -47,3 +47,29 @@
 00116ED8 8C640000 080AAC54   # j     0x2AB150             the chunk loader, as before
 00116EDC 00800008 27BD0020   # addiu sp,sp,32
 0017DE40 0C0AAC54 0C045BAA   # jal 0x2AB150 -> jal 0x116EA8   (the loader's first-pass loop)
+
+[Hurt flicker no longer leaves Crash invisible through and after a cutscene]
+# After a hit, the grace period (0x1315E0) hides the character for the last fifth of every 0.2 s. When a cutscene takes
+# or returns control, the player reset (0x1317F8) clears that state machine without ending it, so the visibility and
+# grace-invincibility bits stay as they were: 1 time in 5 Crash vanishes for the whole scene and the gameplay after it.
+# The reset's store now goes through a stub (after the loading stub in 0x116EA8's free space) that, if a grace period
+# was running or requested, makes the character visible and clears the grace invincibility first.
+00116EE0 00000000 DE080070   # ld    t0,112(s0)      state byte before the reset
+00116EE4 3C05002F 310A000F   # andi  t2,t0,0x0f      running state
+00116EE8 0220202D 240B0001   # addiu t3,zero,1       1 = grace (hurt flicker)
+00116EEC 0C0811C6 114B0004   # beq   t2,t3,active
+00116EF0 24A5DE28 310A00F0   # andi  t2,t0,0xf0      (delay) requested state
+00116EF4 10000025 240B0010   # addiu t3,zero,0x10
+00116EF8 8F828098 154B0009   # bne   t2,t3,done
+00116EFC 3C05002F 00000000   # nop
+00116F00 0220202D 8C6C0004   # active: lw t4,4(v1)  render flags
+00116F04 0C0811C6 358C0400   # ori   t4,t4,0x400     visible
+00116F08 24A5DE38 AC6C0004   # sw    t4,4(v1)
+00116F0C 1000001F 8E0D0010   # lw    t5,16(s0)       creation helper
+00116F10 8F828098 8DAE0010   # lw    t6,16(t5)
+00116F14 3C05002F 240FFBFF   # addiu t7,zero,~0x400
+00116F18 0220202D 01CF7024   # and   t6,t6,t7        grace invincibility off
+00116F1C 0C0811C6 ADAE0010   # sw    t6,16(t5)
+00116F20 24A5DE48 03E00008   # done: jr ra
+00116F24 10000019 FE020070   # sd    v0,112(s0)      (delay) the original store
+00131844 FE020070 0C045BB8   # sd v0,112(s0) -> jal 0x116EE0
