@@ -1,0 +1,43 @@
+gametitle=Crash Twinsanity (PAL) (SLES-52568) 1510E1D1 - original ISO
+
+[480p Mode (60Hz)]
+gsinterlacemode=1
+author=PeterDelta
+description=Runs the game in 480p progressive at 60Hz instead of 50Hz PAL. FMVs play ~10% fast, gameplay OK.
+patch=1,EE,002C24A4,word,24110001
+patch=1,EE,002C24A8,word,24120050
+patch=1,EE,002C24B4,word,24130002
+
+[Widescreen 16:9]
+gsaspectratio=16:9
+author=CRASHARKI
+description=Run the game at 16:9 Widescreen Aspect Ratio from the start.
+patch=1,EE,2030AAC4,word,00000001
+
+[Widescreen 21:9 Ultrawide]
+author=CRASHARKI + TechieSaru
+description=Forces the built-in widescreen on (CRASHARKI) and widens it from 16:9 to 21:9 (TechieSaru 21:9 Widescreen Fix). Set Graphics > Aspect Ratio to Stretch and play fullscreen on a 21:9 display. Do not combine with Widescreen 16:9.
+patch=1,EE,2030AAC4,word,00000001
+patch=1,EE,2019BB48,short,4015
+patch=1,EE,2019BB4C,short,5554
+patch=1,EE,201A074C,short,4015
+patch=1,EE,201A0750,short,5554
+patch=1,EE,201A07DC,short,4015
+patch=1,EE,201A07E0,short,5554
+patch=1,EE,201A0DA0,short,4015
+patch=1,EE,201A0DA4,short,5554
+patch=1,EE,202AF408,word,00000000
+
+[Cutscene Skip (Triangle)]
+author=CrashModded
+description=Restores the cut cutscene-skip feature: hold Triangle during a skippable cutscene. Re-implements script condition 572 (CutsceneSkipped), which the retail game stubbed to always return 0. Condition 571 is pointed at the identical stub for 570 to free the space.
+patch=1,EE,202F0B1C,word,0012C568
+patch=1,EE,2012C578,word,8C820000
+patch=1,EE,2012C57C,word,00021442
+patch=1,EE,2012C580,word,14400031
+patch=1,EE,2012C584,word,00000000
+patch=1,EE,2012C588,word,44800000
+patch=1,EE,2012C58C,word,03E00008
+patch=1,EE,2012C590,word,00000000
+patch=1,EE,2012C594,word,00000000
+patch=1,EE,202F0ACC,word,0012C578
