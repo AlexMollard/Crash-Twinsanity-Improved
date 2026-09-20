@@ -105,7 +105,9 @@ along.
 That is a game shipped exactly to the edge of its hardware, by a team that had already built it once and started
 again. It is also why this mod's own changes have to be paid for rather than simply added - the working code cave is
 funded by shrinking the streaming buffer by precisely the cave's size, so total memory use matches retail to the
-byte. The details are on [The executable](../engine/executable).
+byte. The regression suite bears that out in practice as well as on paper: with the cave in place, every shipped
+cutscene skip behaves unchanged and load times are identical. The details are on
+[The executable](../engine/executable).
 
 ### The Haven Rosetta stone
 
