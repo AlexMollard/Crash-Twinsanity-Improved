@@ -111,6 +111,26 @@ RIG_FASTCDVD=true python load_bench.py fast
 Environment switches: `RIG_PATCH=ADDR=WORD,...` applies executable patches from boot, plus `RIG_FASTCDVD`,
 `RIG_RENDERER` (13 = software), `RIG_EE_RATE` and `RIG_UPSCALE`.
 
+## The baseline
+
+First run of all 25 shipped skips together, from a state library built entirely from the current source:
+
+| | Count | |
+|---|:-:|---|
+| **PASS** | 15 | gameplay returns sooner, player ends up in the same situation |
+| **CHECK** | 7 | a difference a human has to judge - all of them explained |
+| **NOT TRIGGERED** | 3 | `sentry`, `dingodile_hut`, `ngin_switch` - the scene never started |
+
+The CHECKs are not failures. `totem_falling` reports 21.5 s against 21.2 s, which looks like a skip that does
+nothing and **is exactly right**: that scene is [deliberately left unskippable](what-changed) because skipping drops
+Crash into the totem chase before it is set up. `henchmania` reports the skip taking *longer* than the full scene,
+which is the follow-on Brio/Tropy scene chaining on - the measurement stops when gameplay resumes, and a second
+scene delays that. The rest are end-position differences already documented as legitimate.
+
+The three NOT TRIGGERED are real work. Their heights were recovered correctly from the level data, but the scene
+does not start from the recorded X/Z, so those coordinates need re-deriving from the trigger centres the same way
+the heights were.
+
 ## What a verdict looks like
 
 ```text
