@@ -74,6 +74,11 @@ Two of the ten-dimension islands were also dropped.
 
 ## Cut characters
 
+![A design sheet: an unfinished line drawing of a tall laboratory apparatus with flasks and tubing, beside a fully coloured robed figure with an exposed purple brain, tall antennae, gloved hands and clawed feet](/img/shots/unseen-character-design.png)
+
+*From `Extras\Unseen\` on the retail disc — the developers' own gallery art, not a capture of the game. The folder is
+named exactly what it sounds like: 48 images of work that did not make it to the screen.*
+
 | Character | How far it got |
 |---|---|
 | **Coco as a playable character** | Planned as a full member of the party, with "Cyberspace" hacking levels in a *Tron* / *Matrix* style. |
@@ -137,9 +142,14 @@ them. If you want to *see* the cut content, these are the places:
 | **Unused scripts brought back** | [Beyond Twinsanity's retail unused-content pages](https://beyondtwinsanity.com/evolution/category/retail-game), where community members have got some of them running |
 
 :::note Why there are no beta screenshots on this page
-Everything visual here would be someone else's scan, capture or artwork. Linking costs you one click and credits the
-people who preserved it; copying it into this repository would not. The screenshots this wiki *does* host are all
-captures of the modded build from the project's own disc.
+Everything in those links is someone else's scan or capture, so linking costs you one click and credits the people who
+preserved it. The images this wiki *does* host come from only two places: captures of the modded build on the
+project's own disc, and a handful of pieces from the disc's own **Extras gallery** - the developers' artwork, shipped
+as content.
+
+There are **302 images** in that gallery: 161 storyboards, 32 concept pieces, 32 enemies, 16 bosses, 48 under
+`Unseen`, and a stray group photo of the bosses named `McDonalds01`. Three of them are reproduced across these pages,
+which is illustration rather than a mirror of the disc.
 :::
 
 ## Sources

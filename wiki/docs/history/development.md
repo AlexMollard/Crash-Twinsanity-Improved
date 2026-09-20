@@ -170,6 +170,11 @@ Because scripts, objects and instances kept the names the developers typed into 
 readable than a stripped binary has any right to be. Nearly everything on this wiki was found by reading those names.
 :::
 
+![A storyboard page drawn inside a film-strip frame with sprocket holes down both edges: an upper panel of Cortex in his N hat mid-action with motion lines and arrows marking the movement, and a lower close-up of the same figure, in greyscale marker over pencil](/img/shots/storyboard-nsanity.png)
+
+*A storyboard from the N. Sanity set - the opening of the game being planned - as it ships in the disc's Extras
+gallery. Developers' artwork, not a capture of the game.*
+
 ## Who did what
 
 | Role | Person |
@@ -190,6 +195,11 @@ John McCann's own account is worth reading if you work on enemies: hired as a le
 is to say, most of the scripts this wiki decodes.
 
 Before professional voice acting was cast, lead artist Dan Tonkin voiced Cortex in the early demos.
+
+![A pencil character design sheet on grey: a snarling, heavily muscled canine beast in a spiked collar, studded wristbands and a shoulder guard, drawn as two full-body poses with a large head study and a row of smaller head and expression sketches](/img/shots/concept-character-sheet.png)
+
+*A character being worked out rather than a finished design - two poses, a head study, and a row of expressions.
+Also from the disc's Extras gallery.*
 
 ### Cortex changed voice
 
