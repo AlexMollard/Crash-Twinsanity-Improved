@@ -178,11 +178,29 @@ It is not a general assembler, and the reasons are worth knowing, because each o
 - **Branch targets from the symbol resolver land one instruction too far.** Keystone measures them from the branch
   rather than from the delay slot after it. Absolute `j`/`jal` are fine. `mipsasm` subtracts 4 for anything whose
   mnemonic starts with `b` (every MIPS `b*` is a branch except `break`).
+- **A number without `0x` is read as hexadecimal.** `lw $t1, 12($t0)` loads from offset **18**, and
+  `sw $a2, 16($sp)` stores at 22 - which is not even 4-byte aligned. Nothing warns. Single digits are the same
+  in both bases, which is exactly why this survives casual testing: the small offsets in a driver are all fine
+  and only the two-digit ones are wrong.
+- **`$t4`-`$t7` are not separate registers.** In the MIPS64 register naming Keystone uses here they are r12-r15,
+  the same four as `$t0`-`$t3`. A driver keeping a pointer in `$t0` and a scratch in `$t4` is using one register
+  for both. Keystone prints a warning to stderr and assembles it anyway. Use `$t0`-`$t3`, `$t8`, `$t9`, `$v0`,
+  `$v1`, `$at`, or numbers like `$12`.
 - **The R5900's 128-bit instructions are not supported** - `lq`, `sq`, `pextlw`, `mflo1` and friends. Write them as
   `.word`. Capstone cannot disassemble them either, which is why the bss clear at `0x100018` reads as nonsense.
 
 Because macro expansion is invisible, the assembler measures every source line on a first pass and checks it comes
-out the same size on the second, and errors naming the line if it does not.
+out the same size on the second, and errors naming the line if it does not. It also refuses bare numbers of two digits or
+more, and refuses `$t4`-`$t7`, rather than guess at what was meant - both of those produce code that assembles,
+runs, and is wrong.
+
+Those last two were found by disassembling a freshly assembled driver and reading it back, which is the only
+reason they were found at all. The first driver written for the activation tracer used `$t0` for a pointer and
+`$t4` for a scratch, so it corrupted its own base address at the first bitmap write; and every offset of two
+digits in it was wrong. It would have run, logged plausible-looking rubbish, and produced a confident answer.
+The collision driver had the same offset bug all along and got away with it because its saves and restores were
+symmetric and its misaligned addresses stayed inside its own scratch area - its 150/150 result stands, but on
+luck rather than on care. **Assemble, disassemble, and read it back before it ever reaches the rig.**
 
 ### Doing it by hand
 

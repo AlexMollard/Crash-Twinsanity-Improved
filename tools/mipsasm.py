@@ -30,6 +30,33 @@ BRANCH_FUDGE = 4            # see the note above: PC-relative branch targets com
 _LABEL = re.compile(r"^([A-Za-z_.$][\w.$]*):\s*(.*)$")
 _WORD = re.compile(r"^\.word\s+(.+)$", re.I)
 
+# Two ways to write code that assembles cleanly and means something else. Both are rejected rather than
+# guessed at, because both produce a driver that runs and quietly does the wrong thing.
+_BARE_NUMBER = re.compile(r"(?<![\w$.])(\d{2,})(?![\w])")   # see _check
+_ALIASED_REG = re.compile(r"\$t[4-7]\b")
+
+
+def _check(text, where):
+    """Reject the two literals that silently change meaning.
+
+    Keystone reads an unprefixed number as *hexadecimal*, so `lw $t1, 12($t0)` loads from offset 18 and
+    `sw $a2, 16($sp)` stores at 22 - which is not even 4-byte aligned. Single digits are the same in both
+    bases, so only two digits and up are worth refusing.
+
+    And in the MIPS64 register naming Keystone uses here, $t4-$t7 are not separate registers: they are
+    r12-r15, the same four as $t0-$t3. Keystone warns on stderr and assembles them anyway, so a driver that
+    keeps a pointer in $t0 and a scratch in $t4 is using one register for both."""
+    bad = _BARE_NUMBER.search(text)
+    if bad:
+        raise AsmError(f"{where}: `{bad.group(1)}` has no 0x and Keystone reads bare numbers as hex, so this "
+                       f"would assemble as {int(bad.group(1), 16)}. Write it as "
+                       f"0x{int(bad.group(1)):x} if you meant {int(bad.group(1))}.\n    {text}")
+    bad = _ALIASED_REG.search(text)
+    if bad:
+        alias = "$t%d" % (int(bad.group(0)[2]) - 4)
+        raise AsmError(f"{where}: {bad.group(0)} is the same register as {alias} here (MIPS64 names r12-r15 "
+                       f"as $t0-$t3). Use {alias}, or $t8/$t9, or a number like $12.\n    {text}")
+
 
 def _is_branch(text):
     """True for the PC-relative branches. Every MIPS mnemonic starting with 'b' is one except `break`."""
@@ -57,6 +84,7 @@ class Assembler:
 
     def _one(self, text, addr, where):
         """Assemble a single instruction line at ADDR."""
+        _check(text, where)
         m = _WORD.match(text)
         if m:
             try:

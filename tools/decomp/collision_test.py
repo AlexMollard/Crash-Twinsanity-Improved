@@ -43,8 +43,8 @@ DRIVER = """
     sw    $ra, 0($t2)
     sw    $a0, 4($t2)
     sw    $a1, 8($t2)
-    sw    $a2, 12($t2)
-    sw    $a3, 16($t2)
+    sw    $a2, 0xc($t2)
+    sw    $a3, 0x10($t2)
 
     lui   $a0, 0x3d                 # SegmentTriangleDistances(p1, p2, tri, distances)
     ori   $a0, $a0, 0xb300
@@ -67,8 +67,8 @@ DRIVER = """
     lw    $ra, 0($t2)
     lw    $a0, 4($t2)
     lw    $a1, 8($t2)
-    lw    $a2, 12($t2)
-    lw    $a3, 16($t2)
+    lw    $a2, 0xc($t2)
+    lw    $a3, 0x10($t2)
 
     lui   $t0, 0x3d
     ori   $t0, $t0, 0xb3f4
