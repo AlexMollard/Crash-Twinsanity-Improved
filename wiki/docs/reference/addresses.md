@@ -19,10 +19,11 @@ gp          = 0x311870        (so a gp-relative -32740 is *(0x30988C))
 |---|---|
 | `0x30988C` | game-flow / game-controller object. Flow state = `(*(obj+12) >> 12) & 0x3F`; `+0x3C` is player 1's pad; `+1284` bits 21-25 are story progress |
 | `0x3098FC` | player context (used by the hurt-flicker code) |
-| `0x309908` | player character object. `+16` bit 10 = invincible, `+20` bits 6-13 = health (masks + 1) |
+| `0x309908` | player character object. `+16` bit 10 = invincible, `+20` bits 6-13 = health (masks + 1). For anything airborne, `+0x284` is height above ground and `+0x064` vertical velocity - the position at `+0xD0` is ground-projected and its `y` does not move at all during a jump |
 | `0x309AC0` | `G_GameMovieController`. `+0x1E4` = decoded-frame counter |
 | `0x309AC8` | game clock controller. `+0x68` fps, `+0x70` tick rate (576000/s) |
 | `0x309AD8` | chunk loading manager. Word 0: bits 0-11 wanted, bits 12-23 done |
+| `0x30A0C8` | `G_ChunkManager` - **the script counters live here**, at `+0x1018 + index*4`. A different object from the chunk *loading* manager above, which holds structured data at the same offset and will read back as plausible nonsense if you use it by mistake. `GetCounterValue` is `0x269130`; the conditions take their index as `arg >> 17` |
 | `0x30A3C1` | movie: a frame was shown |
 | `0x30A3C2` | movie: vsync accumulator |
 | `0x30A3C3` | movie: the loop is waiting for a frame |
