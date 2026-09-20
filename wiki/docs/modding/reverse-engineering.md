@@ -88,18 +88,44 @@ squared.
 A generated name is only emitted when it is unambiguous. An id whose builder is shared with another id is the
 "not implemented" stub and is skipped; so is a methods-table slot whose function is shared between commands.
 
+## Script command arguments
+
+A command's arguments each carry a **3-bit tag** in their first word, and once all three readers are named the
+encoding is plain:
+
+| Bit | Meaning |
+|---|---|
+| 0 | the value is an *instance property index*, not a literal |
+| 1-2 | the type: **0** int, **1** angle, **2** float |
+
+```text
+GetScriptIntArg    0x209A68    (arg & 6) == 0   value is arg >> 3, or property arg >> 3
+GetScriptAngleArg  0x209AB0    (arg & 6) == 2   converted through AngleToFixed
+GetScriptFloatArg  0x209A00    (arg & 6) == 4
+```
+
+Which is why `NowTurn`'s rate arrives as a **fixed-point angle** rather than a float, and why
+`Command_NowTurn_Run` feeds it to `AngleToQuaternion` (`0x18DDB0`), whose constant is 2π/65536 halved for the
+half-angle. Turn rates in scripts are in 65536ths of a revolution per second, not radians.
+
 ## What is named, and what is not
 
 | | Functions |
 |---|---|
-| Named | 1,704 |
-| Still `FUN_xxxxxxxx` | ~5,200 |
+| Named | **1,851** |
+| Still `FUN_xxxxxxxx` | ~5,050 |
 | Total | 6,902 |
 
-It was 962 before any of this. Of the unnamed remainder, roughly 275 are trivial (eight lines or fewer), 4,100
-are small or mid-sized helpers, and 1,900 are substantial.
+It was 962 before any of this. Of the unnamed remainder, roughly 590 are short enough to read off their machine
+code, 3,500 are small or mid-sized helpers, and 1,900 are substantial.
 
-Two shortcuts that people usually reach for do not work on this binary, so they are worth not trying twice.
+Three shortcuts that people usually reach for do not work on this binary, so they are worth not trying twice.
+
+:::note Instruction shapes give almost nothing
+`tools/re/shapes.py` classifies every function short enough to read off its machine code - about 590 of them.
+The result is **one** thunk worth naming, 99 that return a constant and 27 that return nothing. Not a single
+nameable field accessor, because an unnamed function has no parameter types to work an offset against.
+:::
 
 :::note There are no debug symbols to mine
 Naming functions after the assert or printf strings they reference does not work here. The retail executable
@@ -208,6 +234,34 @@ Whole-file authoring. Anything the library models - collision, scenery, models, 
 terrain, particles, AI paths, scripts, instances - can now be changed and written back with the confidence that
 nothing else in the file moved. Splicing with `rm2splice.py` remains the safer path for a one-field change, but
 it is no longer the *only* safe path.
+:::
+
+## Naming what is left
+
+Nothing mechanical remains, so the rest is read one function at a time. `tools/re/batch.py` pulls them out of
+the decompile with the two things the decompile does not put beside a body - **who calls this** and **what it
+calls** - and two switches decide which ones are worth your attention:
+
+```bash
+python tools/re/batch.py --min 19 --max 60 --count 8 --by-callers --named-callers
+```
+
+- `--by-callers` puts the most-called first. Naming a function used at two hundred call sites improves two
+  hundred call sites; naming a leaf improves one.
+- `--named-callers` keeps only functions with at least one already-named caller. Measured over a dozen
+  batches, that roughly triples the hit rate: about 18% of leaf functions can be named confidently from their
+  body alone, against 40-50% when the caller says what the thing is for.
+
+It compounds. Every name makes its callees eligible, so the frontier refills as you work it - 210 to 289
+in a single pass. Names learned since the last decompile count too, so you do not have to spend forty minutes
+regenerating it to keep moving.
+
+:::tip Write down what you refuse
+`tools/re/db/declined.txt` records the functions that were read and deliberately *not* named, one reason each:
+a two-level lookup through a global nobody has identified, a generic `return field == 0`, a destructor for a
+class with no name. It keeps them out of the next batch without pretending they are understood, and stops the
+next person re-reading them hoping for better luck. A blank is a fact; a guess is a liability, especially in a
+database other people are building on.
 :::
 
 ## How a name gets worked out

@@ -124,7 +124,7 @@
 001a0dd0	F	AppendGifTag	writes a GIF tag reference into the chain for mode 1 or 2
 001a2750	F	FindGraphicsResourceById	binary search of a graphics resource table
 00195e98	F	FindContextRefIndex	index of a context in node 6's list, or -1
-00132dc0	F	ClearPlayableCharacterMode	drops the character's mode object for both partners and sends each event 0x42
+00132dc0	F	UnlinkPlayableCharacters	drops the link object for both partners and sends each event 0x42 - the counterpart to LinkPlayableCharacters and its event 0x41
 001a2810	F	FindGameMaterialById	binary search of a material table - the material sibling of FindGraphicsResourceById
 0011d4a0	F	InitRequestFocusCommand	ScriptCommand_0x22D constructor: identity rotation, five undefined ids, packed defaults
 002d8eb8	F	UnpackDouble	IEEE-754 double into class, sign, unbiased exponent and shifted mantissa
@@ -152,3 +152,21 @@
 0024c3f0	F	ApplyImpulseToBody	routes an impulse to whichever physics representation the object has, by the 4-bit type at +0x8c
 0018ee40	F	TransposeQuadwords	out-of-place 4x4 quadword transpose, the same shuffle TransposeMatrix uses
 0020a5a0	F	InitScriptEventCaller	takes its references and sets up an event call
+0018b6d0	F	SetTransformMatrix	copies a matrix into a transformed point and marks it dirty
+0015fe08	F	GetPartnerCharacterContext	the other playable character's object context, through node 0xc
+002409b0	F	DetachWobbleCollider	unhooks the wobble block's collider and frees its buffer
+0023e560	F	ClearContactResponse	drops the contact-response block and clears the instance's response flags
+002402b8	F	InstanceParticles_Destroy	releases every live particle handle, then itself on bit 0
+00240350	F	AddParticleCommandArg	appends an argument to the block's list of up to eight, flagging type 5
+002631f0	F	InitObjectInstanceContextBase	binds instance, object id, props and helper, and clears the ignore-events tag bit at +0x1C
+002aded0	F	CreateFileLoadRequest	allocates a load request with placeholder paths and registers it with the readers storage
+002c79e8	F	RegisterAtExit	pushes a callback onto the C library's exit chain, growing it in blocks of 32
+00132ca8	F	LinkPlayableCharacters	builds a link object each way between two characters and sends each event 0x41
+0017a898	F	FindInstanceByChunkAndIndex	resolves a saved chunk name plus index back to a live instance context
+00195658	F	TakeDefaultAttachment	finds the attachment in slot -1, returns its id and detaches it
+001956d8	F	TakeAttachmentBySlot	the same for an explicit slot
+001c21a0	F	SelectLodMesh	picks the LOD mesh for a draw distance, or none when outside the model's range
+001eb468	F	RebuildCollisionMatrices	reallocates the per-collision-model matrix array from the OGI
+00298ca8	F	SetJointAnimation	installs an animation on a joint's chain, creating the chain on first use
+001f0a78	F	SetCollisionWorldMatrix	replaces the cached world matrix and recomputes the bounding box
+002943c8	F	UpdateExitPointMatrix	instance transform times exit-point matrix times joint transform, orthonormalised, dirty bits cleared
