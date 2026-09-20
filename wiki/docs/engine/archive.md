@@ -48,9 +48,13 @@ Inside the archive each level is `<path>.rm2` - scripts, objects, instances, tri
 sections.
 
 :::warning Never re-save a whole level
-The Twinsanity Editor library's full save drops about 134 bytes of not-yet-understood data per level. The build
-instead splices **individual items** back into the original bytes (`tools/rig/rm2splice.py`), so everything it does
-not touch stays exactly as it shipped.
+Two independent reasons. The Twinsanity Editor library's full save drops about 134 bytes of not-yet-understood data
+per level, and its `CollisionSurface` writer is asymmetric - it reads a `ushort` and writes a 4-byte `int` into a
+114-byte slot, so every surface overruns the next by two and the file comes out the same size with scrambled tails
+(452 bytes of damage across 161 surfaces in `labext` alone).
+
+The build instead splices **individual items** back into the original bytes (`tools/rig/rm2splice.py`), so everything
+it does not touch stays exactly as it shipped. That is why none of this has ever affected the mod.
 :::
 
 ## Save states and the file table
