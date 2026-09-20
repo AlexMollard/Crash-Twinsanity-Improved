@@ -162,6 +162,36 @@ switch is simply lost.
 
 The two numbers this mod uses constantly: **207** ("carry on") and **244** ("the scene was skipped").
 
+## Focus: how a character knows what to look at
+
+Most of the interesting AI conditions - `CanSeeFocus`, `MeFacingFocus`, `HeadLookingAtFocus`, `PlayerToMyFocusSqrDist`
+- are not about the player directly. They are about the agent's **focus**, a single slot that a script points at
+something and then asks questions about. Chases, head-tracking and most "notice the player" behaviour go through it.
+
+The agent structure holds it in three places:
+
+| Field | Meaning |
+|---|---|
+| `agent + 0x30` | the focus **object** pointer |
+| `agent + 0x88` bit 0 | has a focus object - this is what `GotFocusObject` reads |
+| `agent + 0x88` bit 1 | has a focus **position** rather than an object |
+| `agent + 0x118`, `+0x11c` | the same value written through two alternative modes |
+
+Assignment goes through one function, `0x121480(command, value, agent)`, which picks a mode from
+`command + 0x30 & 3`. Mode 0 is the ordinary one: it writes the value to `agent + 0x30` and sets the
+has-object bit **only if the value is non-zero**. So a focus assignment that resolves to nothing leaves the
+gate closed without anything upstream looking like it failed.
+
+Acquisition is `0x113A18`, a nearest-candidate search by squared distance. If it finds nothing it calls
+`0x1214E8` to clear instead, which is the branch that distinguishes "never tried to focus" from "tried and
+found nothing" - a distinction that matters for the [Evil Crash chase](../roadmap), whose summoner only sends
+its start message once it has a focus object.
+
+:::caution Read from the decompile, not yet measured
+Everything in this section comes from reading the decompiled code. The `+0x88` bit-0 meaning is corroborated by a
+live hook, but the mode selector and the acquisition branch are not yet confirmed on hardware.
+:::
+
 ## Reading and editing
 
 - `twinsdump <level>.rm2 scripts` dumps every script the way it is quoted above.
