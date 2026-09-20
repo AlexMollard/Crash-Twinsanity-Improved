@@ -31,6 +31,8 @@ disappear** into one glitch, which is why the leaderboard splits on it.
 
 The big one. It takes you **from Iceberg Lab straight to the 10th dimension lab, skipping six levels**.
 
+![Diagram: an arc leaps from Iceberg Lab over six levels straight to the 10th dimension lab, with the two speedrun categories compared as bars, 24:17 without the skip against 9:30 with it](/img/dimension-skip.svg)
+
 The mechanism is a cutscene flag. Entering the 10th dimension normally sets a flag via the "hug" cutscene, and that
 cutscene is what stops you ending up underground. Reach the 10th dimension by an unintended route and the game never
 checks whether the flag should be set - so the trick is to set the flag early, out of bounds, and then walk in through

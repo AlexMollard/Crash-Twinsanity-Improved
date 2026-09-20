@@ -79,6 +79,8 @@ names left in, and its executable is built from libraries called `nucore`, `nu3d
 named for the engine, postfixed with the target platform, which is how the same code reached PS2, Xbox, GameCube and
 PSP.
 
+![Diagram of the Nu2 framework as a stack: the game's own code on top, then the Nu2 libraries nucore, nu3d, numath, nusound2, coblib, mp2play, edtools and gamelib, then the nups2 platform layer](/img/nu2-libraries.svg)
+
 Two of those names are worth pausing on, because Twinsanity clearly has both: `mp2play` is MPEG-2 playback, which is
 what the [`.PSS` movies](../engine/movies) are, and `edtools` is editor tooling living inside the framework itself -
 the family AgentLab belongs to.

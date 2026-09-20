@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" width="900" height="330" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" role="img" aria-label="Diagram of the Nu2 framework as a stack: the game's own code on top, then the Nu2 libraries nucore, nu3d, numath, nusound2, mp2play, gamelib, edtools and coblib, then the nups2 platform layer, then the PlayStation 2 hardware.">
+  <rect width="900" height="330" rx="10" fill="#171a21"/>
+
+  <text x="28" y="34" fill="#e8ebf1" font-size="17" font-weight="600">Nu2 is a set of libraries, not one engine</text>
+  <text x="28" y="54" fill="#98a2b3" font-size="12.5">Read off Haven: Call of the King, which shipped with its symbol names intact.</text>
+
+  <!-- game layer -->
+  <rect x="60" y="76" width="794" height="40" rx="6" fill="#f2a33c"/>
+  <text x="80" y="101" fill="#171a21" font-size="13" font-weight="700">the game itself</text>
+  <text x="834" y="101" fill="#4a3813" font-size="11" text-anchor="end">Twinsanity's own code — "mostly C++, renderer in assembler"</text>
+
+  <!-- nu2 libraries -->
+  <rect x="60" y="128" width="794" height="118" rx="6" fill="#20242d" stroke="#2c323d"/>
+  <text x="80" y="149" fill="#5b96e0" font-size="11.5" font-weight="700">nu2.ps2 — written in C</text>
+
+  <g font-size="11.5">
+    <g>
+      <rect x="80" y="160" width="140" height="32" rx="5" fill="#34608f"/>
+      <text x="150" y="176" fill="#dbe7f5" text-anchor="middle" font-weight="600">nucore</text>
+      <text x="150" y="188" fill="#9dbad6" font-size="9.5" text-anchor="middle">core runtime</text>
+    </g>
+    <g>
+      <rect x="230" y="160" width="140" height="32" rx="5" fill="#34608f"/>
+      <text x="300" y="176" fill="#dbe7f5" text-anchor="middle" font-weight="600">nu3d</text>
+      <text x="300" y="188" fill="#9dbad6" font-size="9.5" text-anchor="middle">scene and rendering</text>
+    </g>
+    <g>
+      <rect x="380" y="160" width="140" height="32" rx="5" fill="#34608f"/>
+      <text x="450" y="176" fill="#dbe7f5" text-anchor="middle" font-weight="600">numath</text>
+      <text x="450" y="188" fill="#9dbad6" font-size="9.5" text-anchor="middle">maths</text>
+    </g>
+    <g>
+      <rect x="530" y="160" width="140" height="32" rx="5" fill="#34608f"/>
+      <text x="600" y="176" fill="#dbe7f5" text-anchor="middle" font-weight="600">nusound2</text>
+      <text x="600" y="188" fill="#9dbad6" font-size="9.5" text-anchor="middle">audio</text>
+    </g>
+    <g>
+      <rect x="680" y="160" width="154" height="32" rx="5" fill="#34608f"/>
+      <text x="757" y="176" fill="#dbe7f5" text-anchor="middle" font-weight="600">coblib</text>
+      <text x="757" y="188" fill="#9dbad6" font-size="9.5" text-anchor="middle">objects</text>
+    </g>
+
+    <g>
+      <rect x="80" y="200" width="212" height="34" rx="5" fill="#4a7d3f"/>
+      <text x="186" y="217" fill="#e2f0dc" text-anchor="middle" font-weight="600">mp2play</text>
+      <text x="186" y="229" fill="#b6d4aa" font-size="9.5" text-anchor="middle">MPEG-2 — our .PSS movies</text>
+    </g>
+    <g>
+      <rect x="302" y="200" width="212" height="34" rx="5" fill="#4a7d3f"/>
+      <text x="408" y="217" fill="#e2f0dc" text-anchor="middle" font-weight="600">edtools</text>
+      <text x="408" y="229" fill="#b6d4aa" font-size="9.5" text-anchor="middle">editor tooling — AgentLab's family</text>
+    </g>
+    <g>
+      <rect x="524" y="200" width="310" height="34" rx="5" fill="#34608f"/>
+      <text x="679" y="217" fill="#dbe7f5" text-anchor="middle" font-weight="600">gamelib</text>
+      <text x="679" y="229" fill="#9dbad6" font-size="9.5" text-anchor="middle">shared gameplay scaffolding</text>
+    </g>
+  </g>
+
+  <!-- platform layer -->
+  <rect x="60" y="258" width="794" height="34" rx="6" fill="#3a4250"/>
+  <text x="80" y="279" fill="#c2c9d6" font-size="12.5" font-weight="700">nups2</text>
+  <text x="834" y="279" fill="#7d8798" font-size="11" text-anchor="end">the platform layer — swap it and the same code runs on Xbox, GameCube or PSP</text>
+
+  <text x="28" y="316" fill="#6b7484" font-size="11">Green: the two we can see evidence of in Twinsanity itself. The rest is inference from the shared lineage — our executable is stripped.</text>
+</svg>

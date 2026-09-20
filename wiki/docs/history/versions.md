@@ -24,6 +24,8 @@ already have - and a couple of things you do not.
 | **PAL PS2** | **3 Sep 2004** | **8 Oct 2004, Europe** |
 | NTSC-J PS2 | 3 Sep 2004 | 9 Dec 2004, Japan |
 
+![Family tree: NTSC PS2 1.0 and NTSC Xbox come first, the PAL builds add the crash fixes, and those fixes are then back-ported into NTSC PS2 2.0 and the Japanese release](/img/version-tree.svg)
+
 A Russian release also exists: NTSC-U 1.0 with a localised font and text. The PAL Platinum re-release is identical to
 the original PAL version.
 
