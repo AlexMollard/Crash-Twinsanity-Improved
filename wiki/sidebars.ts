@@ -3,6 +3,7 @@ import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
 const sidebars: SidebarsConfig = {
   wiki: [
     'intro',
+    'roadmap',
     {
       type: 'category',
       label: 'The engine',
