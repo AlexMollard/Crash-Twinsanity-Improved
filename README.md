@@ -324,12 +324,13 @@ python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cort
 
 <div align="center">
 
-| ✅ Shipped | 🔭 Next up | 🔬 Investigating | ✔️ Checked, not a bug here | ⛔ Not doing |
-|:-:|:-:|:-:|:-:|:-:|
-| **11** | **4** | **5** | **1** | **2** |
+| ✅ Shipped | 🔭 Next up | 🧱 Bigger projects | 🔬 Investigating | ✔️ Checked, fine here | ⛔ Not doing |
+|:-:|:-:|:-:|:-:|:-:|:-:|
+| **11** | **4** | **3** | **5** | **2** | **2** |
 
 *Nothing ships until the automated rig has played it. Most of the open list comes from bugs the community has
-documented for the PAL release; each line says where it stands and what is in the way.*
+documented for the PAL release, or from surveys of the level data; each line says where it stands and what is in the
+way. The [wiki](https://alexmollard.github.io/Crash-Twinsanity-Improved/) explains the machinery behind all of it.*
 
 </div>
 
@@ -354,32 +355,43 @@ documented for the PAL release; each line says where it stands and what is in th
 | | Item | Where it stands |
 |:-:|---|---|
 | 🧭 | **Evil Crash runs in circles (Bandicoot Pursuit)** | The famous PAL one. Reproduced on the rig: his run heading sits about 20° off the route and he orbits the node instead of reaching it. It is his steering code, not the level's path data. |
-| 🦭 | **Rusty Walrus runs in circles** | [Reported for PAL](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity) and almost certainly the same steering bug as Evil Crash - two chases, one cause. Worth attacking together. |
-| 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` can now name whatever hit you, so the remaining reports get checked one at a time rather than by sweeping the whole game. |
-| 🚧 | **Party arena cutscene skip** | The recipe is written (`mod/levels-wip/party_arena.ops`) but the scene is switched on by beating the Mechabandicoot, and the rig can't fight a boss yet - so it can't be tested, and untested skips don't ship. |
+| 🦭 | **Rusty Walrus runs in circles** | [Reported for PAL](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity), and the walrus uses the same route-node steering as Evil Crash - very likely one bug behind two chases. It did not reproduce standing still (the walrus arrived and killed Crash 220 times in 32 s), so the repro needs the player actually running the route. |
+| 🔒 | **Softlock after the Rusty Walrus chase** | Mashing jump through the cutscene skips the Brio/Tropy scene and strands Crash on the boss iceberg with no music. Squarely this mod's territory - the same family as the invisible-Crash fix. |
+| 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` names whatever hit you, so the remaining reports get checked one at a time. |
+
+### 🧱 Bigger projects
+
+These are features rather than fixes, and each needs new tooling before it can even be attempted.
+
+| | Item | What it would take |
+|:-:|---|---|
+| 🚩 | **Checkpoints in the long stretches** | A survey of every level file found 22 of the 93 substantial ones with no checkpoint crate placed at all, among them the biggest in the game - the Earth hub, the 10th-dimension lab exterior, the Rockslide start, the Academy hub. Some of those respawn you another way, so each needs checking by playing it. Adding one means adding an *instance* to a level, which `twinsdump` cannot do yet; that tooling is the actual work, and placements have to be chosen in-game rather than guessed from coordinates. |
+| 🎥 | **Scenes that never play** | Ten cutscene directors are placed in levels with nothing pointing at them - among them `UKAUKA_DEFEATED`, `BR_CORTEX_PIPE`, `CAVERN`, `EARTH_HUB` and `HUB2_TO_HUB3`. Some are started another way (the Iceberg Lab's turned out to be a movie), so each has to be checked before claiming anything. Any that genuinely never run are scenes sitting unused on the retail disc, and restoring one is the same kind of edit as restoring a skip. |
+| 🎨 | **Graphics polish that keeps the look** | Not new art - the aim is the game as it was meant to look. Candidates: turn hardware mipmapping on (it is off in the preset, which is why distant textures shimmer), trilinear filtering for the mip seams, full texture preloading, the fog line below, and extending the shadow-receiver flag past crates. Each needs an A/B on the rig in both renderers, because this is exactly the area where "improvements" quietly break a PS2 game. |
 
 ### 🔬 Investigating
 
 | | Item | Where it stands |
 |:-:|---|---|
+| 🌫️ | **The fog line** | A visible seam where the fog starts. Needs a level and a spot to reproduce before anything can be measured. |
 | 🐌 | **Slow menus** | [Documented as a PAL trait](https://beyondtwinsanity.com/evolution/versions/). Needs measuring on the rig before it can be called a bug or a fix. |
 | 🧷 | **Cortex detaches from Crash at Farmer Ernest's fence** | [Reported for PAL](https://beyondtwinsanity.com/evolution/versions/). Not yet reproduced. |
-| 🔒 | **Softlock after the Rusty Walrus chase** | Mashing jump through the cutscene skips the Brio/Tropy scene and strands Crash on the boss iceberg with no music. Squarely in this mod's territory - the fix is probably the same class as the invisible-Crash one. |
-| 🎭 | **Leftovers after being hurt into a cutscene** | The floating mask and Cortex's floating ray gun are the same family as the invisible-Crash bug, which is already fixed; these are separate objects whose state is not reset. |
-| 🌫️ | **The fog line** | A visible seam where the fog starts. Needs a level and a spot to reproduce before anything can be measured. |
+| 🎭 | **Leftovers after being hurt into a cutscene** | The floating mask and Cortex's floating ray gun are the same family as the invisible-Crash bug, which is fixed; these are separate objects whose state is not reset. |
+| 🐜 | **Enemies that freeze solid** | The "undefeatable ant" in Cavern Catastrophe stays frozen until you lose a life. Sounds like a script state machine that stops stepping - the same shape as several things already fixed. |
 
-### ✔️ Checked, not a bug here
+### ✔️ Checked, fine here
 
 | | Item | Finding |
 |:-:|---|---|
 | ✔️ | **Touching the stunned Coco** | Kills Crash on NTSC-U and Xbox, and it is the case people ask about most. It does not happen on PAL: two sources say so, and a rig sweep of the Psychetron room after the scene landed no hits at all. |
+| ✔️ | **Skipping movies** | They were never unskippable - ✕ has always stopped them, about a second in. The mod adds △ for consistency; measured 54.3 s untouched, 7.0 s with ✕ on the original disc. |
 
 ### ⛔ Not doing
 
 | | Item | Why |
 |:-:|---|---|
 | ⛔ | **Skipping the falling-totem scene** | The skip drops Crash into the totem chase before it is set up and he dies. The developers cut that one for the same reason; it stays unskippable. |
-| ⛔ | **New levels and new content** | This is a fix-and-polish mod. The *Beyond Twinsanity* mods (AnTime Agony, Lava Caves) add content - install them with [CrateModLoader](https://github.com/TheBetaM/CrateModLoader). |
+| ⛔ | **New levels and new art** | This is a fix-and-polish mod: restoring what is on the disc, not adding to it. The *Beyond Twinsanity* mods (AnTime Agony, Lava Caves) add content - install them with [CrateModLoader](https://github.com/TheBetaM/CrateModLoader). |
 
 ## Credits
 
