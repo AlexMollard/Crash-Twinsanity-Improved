@@ -140,10 +140,53 @@ These are features rather than fixes, and each needs new tooling before it can e
 | | Item | What it would take |
 |:-:|---|---|
 | 🚩 | **Checkpoints in the long stretches** | A survey of every level file found 22 of the 93 substantial ones with no checkpoint crate placed at all, among them the biggest in the game - the Earth hub, the 10th-dimension lab exterior, the Rockslide start, the Academy hub. Some of those respawn you another way, so each needs checking by playing it. Adding one means adding an *instance* to a level, which `twinsdump` cannot do yet; that tooling is the actual work, and placements have to be chosen in-game rather than guessed from coordinates. |
-| 🎥 | **Scenes that never play** | Redone with a validated method (`tools/scene_survey.py`) after the old one was found to give false positives, and the list drops from ten to **five**. Across all 141 level files, 58 cutscene directors are placed and **48 have a trigger targeting them**. Of the ten without, three are simply untriggered *copies* of directors triggered elsewhere - `CAVERN` is triggered in four other levels and `HUB2_TO_HUB3` in nine - which leaves five with no trigger anywhere in the game: `BR_CORTEX_PIPE` (boiler_1), `EARTH_HUB` (hubd), `ICELABINT` (labint), `UKAFIGHT` and `UKAUKA_DEFEATED` (both ukafight). Even those are not yet "unused": `gpa11`'s untriggered HUB2_TO_HUB3 copy proves directors also start by **scene chaining**, and `ICELABINT` is already noted as started by other events. So the five are a rig checklist, not a finding. **An earlier mechanism claim here was wrong and is retracted:** the empty DEFAULT script (`state 0 [start] bits=0x0000`) that the `ukafight` directors have is *also* what the working Henchmania director has, so it distinguishes nothing. What separates them is only the trigger. And the trigger does not start its director with an activation event - tracing every dispatch shows the director receiving event 0 at load and nothing afterwards - so how a trigger actually starts a scene is still unknown. **Note also that "warp in and idle" cannot answer it** - that test returns "no cutscene" even in `gpa11`, whose scene is confirmed playing, because Crash spawns short of the trigger and never reaches it. Answering it needs tooling that does not exist yet: triggers target instances by index (`-> 38:` is instance 38), but nothing dumps an instance's *incoming* links, and `twinsdump`'s `refs` and `msg` answer different questions - `msg <n>` lists `GotUserMessageEquals(n)` receivers, marking each LIVE or orphan, which is useful for message chains but not for activation. The two routes are a dumper command for instance links, or a runtime hook on `ExecuteEvent` (0x2616C0) logging which instance receives which event index. **The hook works and its identification is sound** - an earlier claim here that it failed validation was wrong and is retracted. Reading the director's events requires arming *before* the level loads, because the dispatch happens during the load: `RunObjectSpawnScript+0x6c` delivers **event 0** to `|GPA11|Cutscene1|act_HENCHMANIA_CUTSCENE_DIRECTOR`, with both id routes returning 972 and the object's name read as text out of memory. The `740` record that looked wrong was also correct - there are **two** Henchmania directors, `act_HENCHMANIA_CUTSCENE_DIRECTOR` (972, gpa11) and `act_HENCHMANIA_BOSSFIGHT_DIRECTOR` (740, gpa12), and its absence from gpa11's own table is just the 98% base rate. Only the +0x16 instance-index candidate genuinely failed, and it has been removed. |
+| 🎥 | **Scenes that never play** | A survey said ten cutscene directors had nothing pointing at them. Redone with a method that validates itself, it is **five** - and none of them can be called unused yet, because how a trigger starts a scene turns out not to be understood. [Full account below](#scenes-that-never-play). |
 | 💡 | **Lighting** | The levels have a real runtime lighting rig, and it is in the `.sm2` scenery files this mod has never opened: 140 ambient, 432 directional, 103 point and 11 negative lights across the game, evaluated per vertex. The Earth hub alone has a grey ambient, a warm key, a cool fill and four wide point lights. All of it is editable data that costs nothing at runtime, which makes it the one real lever for "better lit" - unlike Phong, which the PS2's hardware cannot do at all ([why](engine/lighting)). |
 | 🎨 | **The rest of the rendering** | A survey of all 10,464 material shaders says the easy levers are already pulled: every one is gouraud-shaded with linear magnification and a slight sharpening LOD bias. Two findings came out of it - **no material in the game enables GS fog at all**, so the fog line is draw distance or vertex shading rather than a fog register; and the shadow-receiver set is finished, since a test build making all 3,218 remaining opaque materials receivers was indistinguishable from the shipped 580. What is left is code: draw distance and the shadow pass. The rig can A/B a rendering change with the framing locked (`RIG_GS`, plus a save state so only the rendering differs). |
 
+
+### Scenes that never play
+
+The original survey used `twinsdump refs`, which returns nothing for objects that plainly exist - including the
+Henchmania director whose scene was later watched playing. `tools/scene_survey.py` replaces it by reading the
+**trigger list**, and refuses to report at all unless it first finds that same director correctly marked as
+triggered.
+
+Across all **135** level files: 58 cutscene directors placed, **48 with a trigger targeting them**.
+
+Of the ten without, three are untriggered *copies* of directors triggered elsewhere - `CAVERN` in four other
+levels, `HUB2_TO_HUB3` in nine, `TOTEM_CUTSCENE_DIRECTOR1` in `docamok1`. A director sitting in a level that does
+not trigger it is not an unused scene. **That leaves five with no trigger anywhere in the game:**
+
+| Director | Level |
+|---|---|
+| `act_BR_CORTEX_PIPE_CUTSCENE_DIRECTOR` | `boiler_1` |
+| `act_EARTH_HUB_CUTSCENE_DIRECTOR` | `hubd` |
+| `act_ICELABINT_CUTSCENE_DIRECTOR` | `labint` |
+| `act_UKAFIGHT_CUTSCENE_DIRECTOR` | `ukafight` |
+| `act_UKAUKA_DEFEATED_CUTSCENE_DIRECTOR` | `ukafight` |
+
+:::caution Five is a checklist, not a finding
+A director without a trigger may still be started another way. `gpa11` holds an untriggered `HUB2_TO_HUB3` copy
+whose scene plays anyway, 2.5 s after the Henchmania scene ends, so **scene chaining is real**; and `ICELABINT` was
+already recorded as started by other events.
+
+Two attempts to narrow this further both failed, and are recorded so they are not repeated:
+
+- *"Their DEFAULT script is empty, so they are inert."* The working Henchmania director has the same empty
+  `state 0 [start] bits=0x0000`. It distinguishes nothing.
+- *"Warp in and idle, and see whether a scene plays."* That returns "no cutscene" in `gpa11` too, whose scene is
+  confirmed playing, because Crash spawns short of the trigger and never reaches it.
+:::
+
+**And the mechanism is not what it looked like.** A hook on `ExecuteEvent` recording every dispatch shows the
+Henchmania director receiving **event 0 at level load** from `RunObjectSpawnScript+0x6c` - identified by two id
+routes agreeing and its name read as text out of memory - and **nothing at all afterwards**, including when the
+trigger fires and its scene starts. So a trigger does not start its director with an activation event, and how it
+does start one is now an open question rather than an assumption.
+
+Anyone repeating this: **arm the tracer before the level loads**. The only dispatch a director gets happens during
+the load, so arming after a state load records nothing and looks like a negative result.
 
 ## 🔬 Investigating
 
