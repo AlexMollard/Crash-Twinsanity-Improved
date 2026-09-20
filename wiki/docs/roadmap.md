@@ -12,9 +12,9 @@ What is shipped, what is next, and what has been ruled out. Nothing ships until 
 Most of the open list comes from bugs the community has documented for the PAL release, or from surveys of the level
 data. Each line says where it stands and what is in the way.
 
-| ✅ Shipped | 🔭 Next up | 🧱 Bigger projects | 🔬 Investigating | ✔️ Checked, fine here | ⛔ Not doing |
-|:-:|:-:|:-:|:-:|:-:|:-:|
-| **11** | **4** | **4** | **5** | **3** | **2** |
+| ✅ Shipped | 🔭 Next up | 🧱 Bigger projects | 🔬 Investigating | 📋 Reported | ✔️ Checked, fine here | ⛔ Not doing |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| **11** | **4** | **4** | **5** | **5** | **3** | **2** |
 
 ## ✅ Shipped
 
@@ -39,18 +39,25 @@ data. Each line says where it stands and what is in the way.
 |:-:|---|---|
 | 🧭 | **Evil Crash runs in circles (Bandicoot Pursuit)** | The famous PAL one. Four candidate causes have been eliminated by measurement and one premise reversed, but **the chase has never been reproduced on the rig** - and the method everyone assumed was reproducing it turned out to put Crash in a void. [The full account is below](#evil-crash-what-has-actually-been-measured). |
 | 🦭 | **Rusty Walrus runs in circles** | [Reported for PAL](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity), and the walrus uses the same route-node steering as Evil Crash - very likely one bug behind two chases. It did not reproduce standing still (the walrus arrived and killed Crash 220 times in 32 s), so the repro needs the player actually running the route. |
-| 🔒 | **Softlock after the Rusty Walrus chase** | Mashing jump through the cutscene skips the Brio/Tropy scene and strands Crash on the boss iceberg with no music. **Not a bug this mod introduced, confirmed twice over.** The Brio/Tropy scene is `act_HUB2_TO_HUB3_CUTSCENE_DIRECTOR1` (object 890) in **`gpa12`** - the level that actually holds `act_N_BRIO_MAN`, `act_N_BRIO_MONSTER` and `act_N_TROPY`, alongside the boss-fight director. No recipe in `mod/levels/` touches `gpa11` or `gpa12`; `walrus.ops` is a different scene, gpa10's chase-start, whose own music loss is already fixed.
+| 🔒 | **Softlock after the Rusty Walrus chase** | Mashing jump through the N. Gin cutscene stops the Brio/Tropy scene playing and strands Crash on the boss iceberg. **Not introduced by this mod**, and this mod's own skip of that scene is verified to leave the follow-on intact - but the vanilla bug has not been reproduced here. [Full account below](#the-softlock-after-the-walrus-chase). |
+| 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` names whatever hit you, so the remaining reports get checked one at a time. |
 
-**And the scene has no skip path at all.** `gpa12` contains **no** condition 572 and **no** message-244 handler anywhere in its 208 scripts - the apparent `572` matches are digits inside argument lists like `1572924`. The director's script in `gpa11` (5265) is likewise driven entirely by message 207 with no skip branch. So this scene cannot be skipped by this mod's hold-△, which only works where a cut branch exists or was rebuilt, and the theory that "the developers' unfinished skip omits the transition" - the shape of the walrus fix - does not apply here.
 
-**The report describes a different mechanism than assumed.** [Its exact words](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity): the jumping happens *during the N. Gin TNT cutscene*, and the effect is that the **following** Brio/Tropy scene never plays. Nothing is being skipped that has no skip path - scene A is disrupted and then fails to start scene B. That is the same family as the fixes already shipped, where an actor's 207/244 handler is left disconnected.
+### The softlock after the walrus chase
 
-:::caution An unverified safety gap in a shipped feature
-Scene A is the Henchmania intro in `gpa11`, and it **does** have a developer skip: `COM_HENCHMANIA_CUTSCENE_DIRECTOR_ACTIVATED` state 1 branches on condition 572 to `COM_HENCHMANIA_CUTSCENE_SKIP` (script 6813). This mod's executable patch re-enables condition 572 game-wide, so **hold-△ skips this scene in our build** - it is listed among the wired-in skips on [What the mod changes](modding/what-changed).
+[The report](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity) says the jumping happens
+*during the N. Gin TNT cutscene*, and that the effect is that the **following** Brio/Tropy scene never plays.
+Nothing is skipped that lacks a skip path - scene A is disrupted and then fails to start scene B.
 
-It was verified to *skip*. It was never verified that **the Brio/Tropy scene still plays afterwards** - which is precisely what the community reports going wrong when the same scene is disrupted by other means.
+**Whose bug it is.** The Brio/Tropy scene is `act_HUB2_TO_HUB3_CUTSCENE_DIRECTOR1` in `gpa12`, the level that holds
+`act_N_BRIO_MAN`, `act_N_BRIO_MONSTER` and `act_N_TROPY`. No recipe in `mod/levels/` touches `gpa11` or `gpa12`,
+and `gpa12` contains no condition 572 and no message-244 handler anywhere in its 208 scripts - so this mod's
+hold-△ cannot reach that scene at all.
 
-**Tested, with a result that is reassuring but not yet trustworthy.** Running the scene three ways from a warped `gpa11`, and watching for 45 s afterwards for a second cutscene:
+**But scene A is a scene this mod does skip.** The Henchmania intro in `gpa11` has a developer skip:
+`COM_HENCHMANIA_CUTSCENE_DIRECTOR_ACTIVATED` branches on condition 572 to `COM_HENCHMANIA_CUTSCENE_SKIP`, and this
+mod's executable patch re-enables condition 572 game-wide. It was verified to skip; it had never been verified that
+the next scene still plays.
 
 | Run | First scene | Second scene starts | Ends at | Flow |
 |---|---|---|---|---|
@@ -58,16 +65,17 @@ It was verified to *skip*. It was never verified that **the Brio/Tropy scene sti
 | Hold △ (this mod's skip) | 1.5 s | after 2.5 s | `(-0.1, 0.0, -5.3)` | 13 |
 | Mashing ✕ (the reported repro) | 14.9 s | after 2.5 s | `(-0.1, 0.0, -5.3)` | 13 |
 
-The follow-on scene plays in all three, identically.
+**Both scenes were then identified from screenshots rather than assumed** - scene 1 shows Crash among exploding TNT
+crates with this mod's *HOLD △ TO SKIP* prompt on it, scene 2 shows N. Tropy. The whole test rested on those two
+identities and both had been taken from a name in a list. So for the case that matters, **this mod's skip leaves
+the Brio/Tropy scene playing**, on direct evidence.
 
-**Both scenes have since been identified from screenshots rather than assumed.** Scene 1 shows Crash among exploding TNT crates - the N. Gin scene the report names - with this mod's *HOLD △ TO SKIP* prompt visible on it. Scene 2 shows **N. Tropy**, so the follow-on really is the Brio/Tropy scene and not some other scene that happened to start. That was worth checking: the whole test rested on those two identities, and both had been inferred from a name in a list.
-
-So for the case that matters - **this mod's hold-△ skip leaves the Brio/Tropy scene playing** - there is now direct evidence rather than inference.
-
-What is still missing is a demonstrated repro of the original bug: mashing ✕ did not shorten the first scene or break the hand-off, so the test has never been *observed* distinguishing a working hand-off from a broken one. The likely gap is context - a plain warp into `gpa11` sets no story progress and skips the Rusty Walrus chase the report says precedes the scene. Until that repro exists, the vanilla bug stays unconfirmed here, even though this mod's own behaviour on the same scene pair is now verified.
+:::caution What this still does not show
+Mashing ✕ did not shorten the first scene or break the hand-off, so **the original bug was never reproduced** and
+this test has never been observed distinguishing a working hand-off from a broken one. The likely gap is context: a
+plain warp into `gpa11` sets no story progress and skips the Rusty Walrus chase that precedes the scene in play.
+The vanilla bug stays unconfirmed here.
 :::
-| 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` names whatever hit you, so the remaining reports get checked one at a time. |
-
 
 ### Evil Crash: what has actually been measured
 
@@ -147,6 +155,28 @@ These are features rather than fixes, and each needs new tooling before it can e
 | 🎭 | **Leftovers after being hurt into a cutscene** | The floating mask and Cortex's floating ray gun are the same family as the invisible-Crash bug, which is fixed; these are separate objects whose state is not reset. **Did not reproduce** on the rig: taking the mask from the Aku Aku crate, losing it to a worm and running straight into the beach training scene left nothing floating, at 0.15 s and 0.2 s between the hit and the scene. Either the window is tighter than that or the teleport-driven repro is not close enough to how it happens in play. |
 | 🐜 | **Enemies that freeze solid** | The "undefeatable ant" in Cavern Catastrophe stays frozen until you lose a life. Sounds like a script state machine that stops stepping - the same shape as several things already fixed. |
 
+
+## 📋 Reported but not yet examined
+
+The community's [glitch catalogue](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity)
+documents 37 bugs. Three of them are already on this page - the Evil Crash chase, the Rusty Walrus chase and the
+undefeatable ant. These are the rest that look like this mod's territory, triaged but not investigated. They are
+listed so the backlog comes from what players actually report rather than from what is convenient to find.
+
+**Most promising: state left wrong when a cutscene ends.** This mod has already fixed one of these - Crash staying
+invisible after being hurt into a scene - so the shape is familiar and the tooling exists.
+
+| | Report | Why it looks tractable |
+|:-:|---|---|
+| 🕳️ | **Stuck in a pit** (Cavern Catastrophe) - double-jump over a pit and trigger the "We're friends right?" scene; when it ends Crash is far below and can only spin and turn | The scene does not reposition him, so wherever he was when it started is where he is left. Softlock-adjacent, and the same class of fix as the skips already shipped |
+| 👤 | **Invisible Cortex** (Totem Hokum) - spin while entering the scene and Cortex stays invisible until Crash spins or slams | Directly the same family as the invisible-Crash fix already shipped, which was a visibility flag not being restored |
+| 🏃 | **Non-animated walking Crash** (Cavern Catastrophe) - keep moving during the scene where Cortex warps out of Crash's hand, and Crash runs without his run animation afterwards | Animation state not reset on scene exit. Cosmetic, but the same mechanism and a cheap thing to confirm |
+| ☠️ | **Instant dead Cortex at the Iceberg Lab** - on entry Cortex sometimes simply dies, in one of two poses | Reported as random, which usually means a race at level load. Worth a rig sweep because "random" is exactly what a rig is good at |
+| 🐜 | **Frozen ant** (Cavern Catastrophe) - slide a lancer ant on the platform and it freezes in its slid animation | Sibling of the undefeatable ant already under investigation; likely one cause behind both |
+
+Not this mod's territory, recorded so nobody re-triages them: out-of-bounds and geometry exploits (secret beaches,
+getting inside Crash's house, out of Totem Hokum), deliberate glitch setups that need another glitch first, and
+cosmetic oddities with no gameplay cost (bouncing chicken, frozen monkey, the extra Nina hand).
 
 ## ✔️ Checked, fine here
 
