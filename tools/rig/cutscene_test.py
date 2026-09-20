@@ -31,21 +31,26 @@ def run(name, state, x, y, z, skip, out, start_timeout=12, end_timeout=240, prog
             rig.set_pad(p, (), [0.6, -0.6, 0, 0, 0.4, -0.4][nudge], [0, 0, 0.6, -0.6, 0.4, -0.4][nudge]); time.sleep(0.25); rig.set_pad(p); nudge += 1
         time.sleep(0.2)
     t_start = time.time(); rig.screenshot(os.path.join(out, f"{name}_{tag}_start.png"))
-    kind = "movie" if rig.movie_playing(p) else "scene"   # both letterbox; only one of them a recipe can change
+    movie_secs = 0.0; last = t_start                     # a trigger can play a movie and an in-engine scene in
+    kind = "movie" if rig.movie_playing(p) else "scene"   # one go; only the second half is a recipe's to change
     if skip:
         time.sleep(1.0); rig.set_pad(p, ("triangle",)); time.sleep(1.5); rig.set_pad(p)
     while True:
-        if time.time() - t_start > end_timeout:
+        now = time.time()
+        if rig.movie_playing(p): movie_secs += now - last; kind = "movie"
+        last = now
+        if now - t_start > end_timeout:
             rig.screenshot(os.path.join(out, f"{name}_{tag}_stuck.png"))
             return {"started": True, "kind": kind, "seconds": None, "stuck": True, "flow": rig.flow_state(p)}
-        if rig.movie_playing(p): kind = "movie"           # a movie can start a little after the letterbox does
         if not rig.in_cutscene() and controllable(p): break
         time.sleep(0.3)
     secs = round(time.time() - t_start, 1)
     time.sleep(2.0)
     shot = os.path.join(out, f"{name}_{tag}_end.png"); rig.screenshot(shot)
-    return {"started": True, "kind": kind, "seconds": secs, "pos": tuple(round(v, 2) for v in rig.pos(p)), "flow": rig.flow_state(p),
-            "cutscene_again": rig.in_cutscene(), "shot": shot}
+    r = {"started": True, "kind": kind, "seconds": secs, "pos": tuple(round(v, 2) for v in rig.pos(p)), "flow": rig.flow_state(p),
+         "cutscene_again": rig.in_cutscene(), "shot": shot}
+    if kind == "movie": r["movie_s"], r["scene_s"] = round(movie_secs, 1), round(secs - movie_secs, 1)
+    return r
 
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("name"); ap.add_argument("state")
@@ -65,8 +70,10 @@ def main():
     print(f"  => {'PASS' if ok else 'CHECK'}: {full['seconds']}s -> {skip['seconds']}s, end position {d:.1f} apart, "
           f"flow {skip['flow']} vs {full['flow']}{', CUTSCENE RESUMED' if skip['cutscene_again'] else ''}")
     if "movie" in (full.get("kind"), skip.get("kind")):
-        print("     MOVIE: these coordinates play a pre-rendered movie, which the executable's hold-Triangle "
-              "already skips.\n     The result says nothing about a level recipe - only a 'scene' does.")
+        print("     MOVIE: a pre-rendered movie played here, and the executable's hold-Triangle already skips "
+              "movies everywhere.\n     Only the in-engine remainder is a level recipe's to change: "
+              f"movie {full.get('movie_s')}s -> {skip.get('movie_s')}s, "
+              f"scene {full.get('scene_s')}s -> {skip.get('scene_s')}s.")
 
 if __name__ == "__main__":
     main()

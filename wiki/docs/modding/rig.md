@@ -90,7 +90,18 @@ finished". About 1.5 s of that path is included in every load-time measurement.
   gave **55.7 s → 4.0 s with its recipe built in and 55.7 s → 4.0 s without it**, and the `icelabint_*`
   screenshots left in `results/` are that movie rather than the scene anyone thought had been tested. The movie
   player's decoding flag `0x30A3C3` separates them cleanly - 1 throughout the Iceberg Lab FMV, 0 throughout
-  Classroom Chaos - so `cutscene_test` now labels every run `movie` or `scene` and says so in the verdict.
+  Classroom Chaos - so `cutscene_test` now labels every run `movie` or `scene`.
+
+  One trigger can play **both**, so the label alone is not enough and the run is timed in two parts. That split
+  is what actually answers the question, and it answers it without a control build:
+
+  | | Movie | In-engine scene | |
+  |---|:-:|:-:|---|
+  | `icelabint` (levels-wip) | 51.0 s → **0.0 s** | 4.6 s → 4.0 s | the saving is entirely the movie; the recipe does nothing |
+  | `lab_psychetron` (shipped) | 7.8 s → 9.8 s | 16.7 s → **1.8 s** | the movie is not shortened at all; the recipe does all of it |
+
+  So a movie in the run is not by itself a reason to distrust a verdict - `lab_psychetron` is sound - but a
+  verdict whose whole saving sits in the movie column is evidence about the executable patch and nothing else.
 
 - **Re-read object pointers before writing to them.** See the warning in [Executable patches](elf-patches).
 - **Reference screenshots are build-specific.** The menu images used for waits were captured on the modded build and
