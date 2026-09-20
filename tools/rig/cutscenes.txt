@@ -1,13 +1,13 @@
 # Cutscenes whose skip works from the executable patch alone (live Cond572 branch in the level data).
-# NAME            STATE      X        Z        notes
-training_huba_1   huba      -6.3    -11.9     # Aku Aku spin tutorial (TRAINING_CUTSCENE_DIRECTOR_HUBA)
-training_huba_2   huba     -16.6     35.2     # second training trigger in HubA
-totem             docamok1   48.0     44.0     # Totem Hokum intro (COM_TOTEM_CUTSCENE_DIRECTOR)
-totem_tied        l03stock   72.3    -58.6     # village totem tied cutscene
-sentry            l03beach -148.2    -31.4     # sentry tribesman zoom-to
-ice_penguin       bergext    27.2     84.7     # Ice Climb penguin cutscene
-psychotron        psycho     46.8      0.2     # Psychotron cutscene (Iceberg Lab)
-dingodile_hut     gpa01     -10.2     81.8     # Slip Slide Dingodile hut
-ngin_switch       gpa04     -34.0      0.3     # battleship N. Gin switch thrower
-henchmania        gpa11      26.6     -7.3     # Henchmania boss intro
-dingodile         boiler6    11.5      3.3     # Dingodile boss intro (Boiler Room)
+# NAME            STATE      X        Y        Z        notes
+training_huba_1   huba           -6.3     2.81     -11.9   # Aku Aku spin tutorial (TRAINING_CUTSCENE_DIRECTOR_HUBA)
+training_huba_2   huba          -16.6     2.19      35.2   # second training trigger in HubA
+totem             docamok1       48.0   -20.70      44.0   # Totem Hokum intro (COM_TOTEM_CUTSCENE_DIRECTOR)
+totem_tied        l03stock       72.3    16.56     -58.6   # village totem tied cutscene
+sentry            l03beach     -148.2    -2.28     -31.4   # sentry tribesman zoom-to
+ice_penguin       bergext        27.2   -18.26      84.7   # Ice Climb penguin cutscene
+psychotron        psycho         46.8     2.39       0.2   # Psychotron cutscene (Iceberg Lab)
+dingodile_hut     gpa01         -10.2   -32.53      81.8   # Slip Slide Dingodile hut
+ngin_switch       gpa04         -34.0    -7.70       0.3   # battleship N. Gin switch thrower
+henchmania        gpa11          26.6   -64.86      -7.3   # Henchmania boss intro
+dingodile         boiler6        11.5    -0.37       3.3   # Dingodile boss intro (Boiler Room)

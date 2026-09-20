@@ -83,8 +83,11 @@ finished". About 1.5 s of that path is included in every load-time measurement.
   `NAME STATE X Y Z`, and `cutscenes.txt` is written `NAME STATE X Z` with no height - so all **11** scenes in it,
   the ones whose skip comes from the executable patch alone, were skipped by the same silent `continue` that
   filters out unwanted names. The runner now reports every line it cannot parse and ends with a count, because a
-  run that reports nothing is not a run that passed. **Those 11 still need their Y values before they are actually
-  covered**; `cutscenes_orphan.txt` has always been in the right format and does run.
+  run that reports nothing is not a run that passed. The heights have since been recovered from the level data -
+  every trigger carries its own centre, so each entry was matched on X and Z and its Y read out - and all 11 now
+  parse and run, taking coverage of the shipped skips from 14 to **25**. One entry matched its trigger 1.2 units
+  out rather than the usual 0.05; that turned out to be a director with two triggers, both at the same height, so
+  the value was safe either way.
 
 ## A typical session
 
