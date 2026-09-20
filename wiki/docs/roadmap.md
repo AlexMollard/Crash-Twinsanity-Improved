@@ -221,6 +221,17 @@ Not this mod's territory, recorded so nobody re-triages them: out-of-bounds and 
 getting inside Crash's house, out of Totem Hokum), deliberate glitch setups that need another glitch first, and
 cosmetic oddities with no gameplay cost (bouncing chicken, frozen monkey, the extra Nina hand).
 
+**The cutscene glitch list is swept and effectively closed.** Its eleven entries break down as: one already fixed
+here (Invisible Crash), one already tracked above (Cortex's floating ray gun), three needing the Take Cortex
+Everywhere glitch as a setup, and four cosmetic - a haystack Cortex walks through, a half-second T-stance, a
+tribesman glancing sideways, a second Aku Aku from a spun ball. Nothing there is worth a recipe.
+
+The one entry with any generality is **"Crash pays no attention"**: start a scene facing any direction and the
+character is still facing that way during it, which the source notes holds for *most* cutscenes in the game. That
+is engine behaviour rather than a bug - scenes do not orient their actors - so it is a polish ceiling worth knowing
+about rather than a fix. Changing it would mean adding orientation to scenes one at a time, which is a great deal
+of risk spread across a great many files for a cosmetic return.
+
 ## ✔️ Checked, fine here
 
 | | Item | Finding |
