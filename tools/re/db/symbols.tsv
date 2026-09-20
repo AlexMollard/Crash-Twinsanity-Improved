@@ -598,6 +598,7 @@
 0013fe60	F	CharacterIdToIndex	undefined4 CharacterIdToIndex(uint param_1)
 0013ffa0	F	InitHolderType0	InstancePropsHolderPlayableCharacter * InitHolderType0(InstancePropsHolderPlayableCharacter * param_1, InstanceProperties * param_2)
 00140070	F	InitInstanceCreationHelperPlayableCharacter	InstanceCreationHelperPlayableCharacter * InitInstanceCreationHelperPlayableCharacter(InstanceCreationHelperPlayableCharacter * param_1)
+001401a0	F	ResetInstanceCreationHelperPlayableCharacter	undefined ResetInstanceCreationHelperPlayableCharacter(InstanceCreationHelperPlayableCharacter * param_1)
 00140338	F	InitObjectInstanceContextType5	ObjectInstanceContextType5 * InitObjectInstanceContextType5(ObjectInstanceContextType5 * param_1, InstanceConstructor? * param_2, InstancePropsHolderType5 * param_3, InstanceCreationHelperType5 * param_4)
 00140378	F	InitHolderType5	InstancePropsHolderType5 * InitHolderType5(InstancePropsHolderType5 * param_1, InstanceProperties * param_2)
 001405a0	F	InitObjectInstanceContextType2	ObjectInstanceContextType2 * InitObjectInstanceContextType2(ObjectInstanceContextType2 * param_1, InstanceConstructor? * param_2, InstancePropsHolderType2 * param_3, InstanceCreationHelperType2 * param_4)
@@ -614,7 +615,11 @@
 00141318	F	InitObjectInstanceContextType8	ObjectInstanceContextType8 * InitObjectInstanceContextType8(ObjectInstanceContextType8 * param_1, InstanceConstructor? * param_2, InstancePropsHolderType8 * param_3, InstanceCreationHelperType8 * param_4)
 00141648	F	InitInstanceCreationHelperType8	InstanceCreationHelperType8 * InitInstanceCreationHelperType8(InstanceCreationHelperType8 * param_1)
 001417a8	F	ResetInstanceCreationHelperType8	undefined ResetInstanceCreationHelperType8(InstanceCreationHelperType8 * this)
+00141800	F	InitObjectInstanceContextType6	ObjectInstanceContextType6 * InitObjectInstanceContextType6(ObjectInstanceContextType6 * param_1, InstanceConstructor? * param_2, InstancePropsHolderType6 * param_3, InstanceCreationHelperType6 * param_4)
 00141838	F	InitHolderType6	InstancePropsHolderType6 * InitHolderType6(InstancePropsHolderType6 * param_1, InstanceProperties * param_2)
+001418b0	F	InitInstanceCreationHelperType6	InstanceCreationHelperType6 * InitInstanceCreationHelperType6(InstanceCreationHelperType6 * param_1)
+00141938	F	ResetInstanceCreationHelperType6	undefined ResetInstanceCreationHelperType6(InstanceCreationHelperType6 * param_1)
+001419b8	F	InitObjectInstanceContextType1	ObjectInstanceContextType1 * InitObjectInstanceContextType1(ObjectInstanceContextType1 * param_1, InstanceConstructor? * param_2, InstancePropsHolderType1 * param_3, InstanceCreationHelperType1 * param_4)
 00141a38	F	InitHolderType1	InstancePropsHolderType1 * InitHolderType1(InstancePropsHolderType1 * param_1, InstanceProperties * param_2)
 0014d7f8	F	InitPlayableCharacterRelated	PlayableCharacterRelated * InitPlayableCharacterRelated(PlayableCharacterRelated * param_1, PlayableCharacterObjectInstanceContext * param_2, PlayableCharacterObjectInstanceContext * param_3, ulong param_4)
 00152a60	F	InitRollerbrawlVehicle	RollerbrawlVehicle * InitRollerbrawlVehicle(RollerbrawlVehicle * param_1, PlayableCharacterObjectInstanceContext * param_2, ObjectInstanceContextBase * param_3)
@@ -866,6 +871,7 @@
 001bf5e8	F	ReadLOD	undefined ReadLOD(GameLOD * lod, BinaryReader * binReader)
 001bfe90	F	InitGraphicsResourceTables	undefined InitGraphicsResourceTables(long param_1, long param_2)
 001c0738	F	ReadSkydome	undefined ReadSkydome(GameSkydome * skydome, BinaryReader * binReader)
+001c0838	F	InitPrecompShaderRelated	PrecompShaderRelated * InitPrecompShaderRelated(PrecompShaderRelated * param_1)
 001c0b98	F	InitShadersRenderedAmt	undefined InitShadersRenderedAmt(void)
 001c0dc8	F	InitGameMaterial	GameMaterial * InitGameMaterial(GameMaterial * param_1, uint id)
 001c0e00	F	ReadMaterial	undefined ReadMaterial(GameMaterial * param_1, BinaryReader * param_2)
@@ -2504,6 +2510,7 @@
 002f20d0	L	UnkNode_0x14_Methods	undefined
 002f2130	L	ObjectInstanceContextType8_Methods	undefined
 002f2210	L	InstancePropsHolderType8_Methods	undefined
+002f2280	L	ObjectInstanceContextType1_Methods	undefined
 002f2340	L	InstanceCreationHelperType1_Methods	undefined
 002f2360	L	InstancePropsHolderType1_Methods	undefined
 002f23d0	L	InstanceCreationHelperType6_Methods	undefined
@@ -2522,6 +2529,7 @@
 002f2930	L	InstancePropsHolderType5_Methods	undefined
 002f29a0	L	GameResourceManager_Methods	undefined
 002f29f8	L	PlayableCharacterObjectInstanceContext_Methods	undefined
+002f2ba8	L	ObjectInstanceContextType8_Methods	undefined
 002f2c68	L	InstanceCreationHelperPlayableCharacter_Methods	undefined
 002f2c88	L	InstanceCreationHelperType3_Methods	undefined
 002f2ca8	L	InstanceCreationHelperType8_Methods	undefined
@@ -2529,6 +2537,7 @@
 002f2d38	L	InstancePropsHolderType3_Methods	undefined
 002f2e50	L	switchdataD_002f2e50	undefined *32
 002f2e80	L	ObjectEventCaller_Methods	undefined
+002f2eb0	L	ObjectInstanceContextType6_Methods	undefined
 002f3000	L	switchdataD_002f3000	pointer
 002f3020	L	switchdataD_002f3020	pointer
 002f3060	L	switchdataD_002f3060	pointer

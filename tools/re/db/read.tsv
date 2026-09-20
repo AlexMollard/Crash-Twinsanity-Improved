@@ -315,3 +315,12 @@
 002a79d0	F	InitUnkStruct_0x5C0Base	middle of the three-deep chain, chained to by InitUnkStruct_0x5C0 and chaining to the root
 00169028	F	InitUnkStruct_0x5C0	most derived of the three-deep chain, installing the vtable at 0x2f5120 last
 00179ba0	F	InitBanksHeader	derived constructor: chains to InitBanksHeaderBase then installs BanksHeader_methods
+00141800	F	InitObjectInstanceContextType6	chains straight to InitObjectInstanceContextBase, not through Type8, then installs the type 6 vtable at 0x2f2eb0
+001419b8	F	InitObjectInstanceContextType1	chains straight to InitObjectInstanceContextBase, not through Type8, then installs the type 1 vtable at 0x2f2280
+001418b0	F	InitInstanceCreationHelperType6	installs InstanceCreationHelperType8_Methods, runs ResetInstanceCreationHelperType8, then overwrites the vtable with its own and runs its own reset - so it builds itself as a Type8 first and then becomes a Type6
+00141938	F	ResetInstanceCreationHelperType6	sets the low byte of the bitfield to 3 and bits 13-19, chains to ResetInstanceCreationHelperBase, clears +0x14
+001401a0	F	ResetInstanceCreationHelperPlayableCharacter	chains to ResetInstanceCreationHelperType3, then defaults both Vector4s at +0x40 and +0x50 to G_DefaultBbox_.bboxMin with w = 1
+001c0838	F	InitPrecompShaderRelated	constructor: zeroes the stored-shader count, runs InitMaterialShader on the sub-object at +0x28, sets +0x60 to 1 and clears three bytes after it
+002f2eb0	L	ObjectInstanceContextType6_Methods	vtable: null, 0013de20, 00141bf8, 0013e8b0, 0013e8b8 - the last two shared with types 1, 4 and 5
+002f2280	L	ObjectInstanceContextType1_Methods	vtable: null, 00141998, 0013ef10, 0013e8b0, 0013e8b8
+002f2ba8	L	ObjectInstanceContextType8_Methods	vtable: null, 0013de20, 00141350, 0013e8b0, 0013e8b8. Type8 is the middle of the hierarchy - InitObjectInstanceContextType8 chains to InitObjectInstanceContextBase at 0x2631f0 and installs this over the base vtable
