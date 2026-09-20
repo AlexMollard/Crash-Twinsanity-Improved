@@ -10,6 +10,9 @@ Known rough edges, so read the numbers with care:
   - the two builds boot at different speeds (62 s retail, 44 s modded to the title), so a fixed wait can land in the
     attract demo on one of them and on the title on the other
   - PINE is not up until the game is running; pressing anything before that resets the connection
+  - check what you are actually booting. The modded runs here produced no response at all and two PINE resets
+    because tools/rig/test.iso had been rebuilt by another session with a different executable, against save
+    states made for the old one. Compare isotools.iso_crc(test.iso) with the pnach in "PCSX2 patches" first.
 
 Measured so far: retail PAL, menu navigation takes about 0.82 s from press to any visible response.
 """
