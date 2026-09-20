@@ -48,9 +48,19 @@ data. Each line says where it stands and what is in the way.
 :::caution An unverified safety gap in a shipped feature
 Scene A is the Henchmania intro in `gpa11`, and it **does** have a developer skip: `COM_HENCHMANIA_CUTSCENE_DIRECTOR_ACTIVATED` state 1 branches on condition 572 to `COM_HENCHMANIA_CUTSCENE_SKIP` (script 6813). This mod's executable patch re-enables condition 572 game-wide, so **hold-△ skips this scene in our build** - it is listed among the wired-in skips on [What the mod changes](modding/what-changed).
 
-It was verified to *skip*. It was never verified that **the Brio/Tropy scene still plays afterwards** - which is precisely what the community reports going wrong when the same scene is disrupted by other means. The skip script sends three messages (`Cmd195`, two `MessageLinkedObject`, one `SendUserMessage`); whether those match the hand-off the full scene performs at its end is unchecked.
+It was verified to *skip*. It was never verified that **the Brio/Tropy scene still plays afterwards** - which is precisely what the community reports going wrong when the same scene is disrupted by other means.
 
-This needs a rig test before it can be called safe, and it is the highest-priority item here because it concerns a feature already in players' hands.
+**Tested, with a result that is reassuring but not yet trustworthy.** Running the scene three ways from a warped `gpa11`, and watching for 45 s afterwards for a second cutscene:
+
+| Run | First scene | Second scene starts | Ends at | Flow |
+|---|---|---|---|---|
+| Untouched | 15.0 s | after 2.5 s | `(-0.1, 0.0, -5.3)` | 13 |
+| Hold △ (this mod's skip) | 1.5 s | after 2.5 s | `(-0.1, 0.0, -5.3)` | 13 |
+| Mashing ✕ (the reported repro) | 14.9 s | after 2.5 s | `(-0.1, 0.0, -5.3)` | 13 |
+
+The follow-on scene plays in all three, identically. But **the reported bug did not reproduce either** - mashing ✕ did not even shorten the first scene - so this test has never been observed distinguishing a working hand-off from a broken one. A negative result from an instrument that has not been shown able to go positive is not evidence of safety; it is the same mistake as counting intact marker words in a game that had already crashed.
+
+What is needed before this can be called safe is a demonstrated repro. The likely gap is context: a plain warp into `gpa11` does not set story progress and skips the Rusty Walrus chase that the report says precedes the scene, so the level state under test is probably not the state the bug needs.
 :::
 | 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` names whatever hit you, so the remaining reports get checked one at a time. |
 
