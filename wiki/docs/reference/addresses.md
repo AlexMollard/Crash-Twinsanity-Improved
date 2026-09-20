@@ -30,6 +30,28 @@ gp          = 0x311870        (so a gp-relative -32740 is *(0x30988C))
 | `0x2EC530` | script command factory table, indexed by command id |
 | `0x2F0AB8` | script condition check table |
 
+## Memory
+
+The game uses essentially all of the console's 32 MB and leaves **8 KB spare**. Two allocations account for almost
+all of it, and anything added to the executable has to be paid for out of one of them.
+
+| Address | What |
+|---|---|
+| `0x309B18` | General pool pointer |
+| `0x309B1C` | Streaming buffer pointer |
+| `0x2EABE4` | The `sbrk` break |
+
+| Allocation | Site | Size |
+|---|---|---|
+| General pool | `GetHeapManager_` `0x181DB0` | `0x00B7E890` (11.5 MB) |
+| Streaming buffer | `GetDiskManager_` `0x181E58` | `0x010A3D70` (16.6 MB) |
+
+On the retail disc at the title screen the pool sits at `0x3DB210`, the streaming buffer ends at `0x01FFD820`, the
+break is at `0x01FFE000` and RAM ends at `0x02000000`. Growing the executable without shrinking one of those two
+makes the *second* allocation overrun the end of the heap: `sbrk` returns -1, `malloc` returns null, and the graphics
+init at `0x1AF150` writes its structure through the null pointer - which shows up in PCSX2's log as TLB misses
+storing to `0x0`, `0x4`, `0x8` … immediately after the 480p mode change, and a black screen.
+
 ## Functions
 
 | Address | What |
