@@ -24,8 +24,10 @@ P1, P2, TRI = 0x3DB300, 0x3DB310, 0x3DB320
 DIST, EDGES = 0x3DB360, 0x3DB370
 SAVED, TRIGGER, DONE, CODE = 0x3DB3D0, 0x3DB3F0, 0x3DB3F4, 0x3DB400
 
-HOOK = 0x17DDCC                  # the loader's `sd $s0, 0x10($sp)`, after the stack pointer is set up
-HOOK_ORIGINAL = 0xFFB00010
+# MainRender's second instruction. The background loader looked like the obvious per-frame hook and is not:
+# it only runs while something is streaming, so at the title screen it is never called at all.
+HOOK = 0x17DC6C                  # MainRender's `sd $s0, ($sp)`, after the prologue has moved the stack pointer
+HOOK_ORIGINAL = 0xFFB00000
 RESUME = HOOK + 8                # the instruction after it already ran, as our jump's delay slot
 
 DRIVER = """
@@ -73,15 +75,20 @@ DRIVER = """
     li    $t1, 1
     sw    $t1, 0($t0)
 skip:
-    sd    $s0, 0x10($sp)            # the instruction the hook replaced
-    j     0x17ddd4
+    sd    $s0, 0($sp)               # the instruction the hook replaced
+    j     0x17dc74
     nop
 """
 
 
 def connect(tries=20):
+    """PCSX2's PINE server serves one client at a time, so the old socket has to be closed before a retry -
+    leaking them wedges the server for everything, including later runs."""
     for _ in range(tries):
         try:
+            if rig._conn is not None:
+                try: rig._conn.s.close()
+                except Exception: pass
             rig._conn = None
             p = rig.Pine(timeout=20)
             p.status()
@@ -89,6 +96,28 @@ def connect(tries=20):
         except Exception:
             time.sleep(2)
     raise SystemExit("PINE never answered - is the rig running? (rig.py start --iso re)")
+
+
+class Link:
+    """PINE over a long run drops the odd call, so every access retries and reconnects if it has to."""
+
+    def __init__(self):
+        self.p = connect()
+
+    def _retry(self, fn):
+        for attempt in range(6):
+            try:
+                return fn(self.p)
+            except Exception:
+                time.sleep(0.5 + attempt)
+                self.p = connect(5)
+        raise SystemExit("PINE stopped answering")
+
+    def r32(self, a):
+        return self._retry(lambda p: p.r32(a))
+
+    def w32(self, a, v):
+        return self._retry(lambda p: p.w32(a, v))
 
 
 def write_words(p, addr, words):
@@ -130,7 +159,7 @@ def main():
     if not os.path.exists(exe):
         raise SystemExit("build the C first: clang -O2 -ffp-contract=off -o collision.exe collision.c")
 
-    p = connect()
+    p = Link()
     sig = p.r32(0x3DB210)
     if sig != 0x53415243:
         raise SystemExit(f"cave signature at 0x3DB210 is {sig:08x}, not 'CRAS' - boot work/re/test_re.iso")
@@ -158,8 +187,11 @@ def main():
             write_words(p, P1, words)
             p.w32(DONE, 0)
             p.w32(TRIGGER, 1)
-            for _ in range(200):
+            # The driver only runs when MainRender next does, so the poll has to span at least a frame.
+            # Without the sleep, two hundred PINE reads finish inside one, and the trigger looks ignored.
+            for _ in range(120):
                 if p.r32(DONE): break
+                time.sleep(0.02)
             else:
                 raise SystemExit("the driver never ran - is the game actually running?")
             out = read_words(p, DIST, 2) + read_words(p, EDGES, 6)

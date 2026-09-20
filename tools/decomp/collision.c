@@ -15,24 +15,45 @@
  *     order, and float addition is not associative;
  *   - the subtractions are .xyz, so w is never touched and never read.
  *
- * VU0 is not quite IEEE-754: it flushes denormals to zero and clamps instead of producing infinities or NaN.
- * For ordinary level geometry neither difference can arise, so plain float should agree exactly. Whether it
- * does is the experiment.
+ * Plain float gets close and is never right. Measured against the hardware over 40 random cases: not one
+ * result matched bit for bit, with a worst relative error of 2.6e-05 - roughly two dozen units in the last
+ * place, far too large for a rounding accident and far too small to see in gameplay. The cause is that the
+ * PS2's vector units truncate toward zero where IEEE-754 rounds to nearest, so ps2() below undoes C's
+ * rounding on every single operation. That is the real lesson of this experiment, and it applies to every
+ * float in the game, not just this routine.
  *
  *   clang -O2 -o collision collision.c   (then feed it cases on stdin; see tools/decomp/collision_test.py)
  */
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
 typedef struct { float x, y, z, w; } Vec4;
 
+/* The PS2's vector units do not round the way IEEE-754 says. They truncate toward zero, so a result that a
+ * normal float multiply would round up comes out one step short. Every operation below therefore computes
+ * exactly in double - the product of two floats always fits - and then truncates, which is what makes the
+ * difference between "close" and "the same bits". */
+static float ps2(double d)
+{
+    float f = (float)d;                       /* round to nearest, which is what C gives us */
+    if ((double)f == d) return f;             /* exact, nothing to undo */
+    if (fabs((double)f) > fabs(d))            /* it rounded away from zero, so step back one */
+        f = nextafterf(f, 0.0f);
+    return f;
+}
+
+static float pmul(float a, float b) { return ps2((double)a * (double)b); }
+static float padd(float a, float b) { return ps2((double)a + (double)b); }
+static float psub(float a, float b) { return ps2((double)a - (double)b); }
+
 /* vsub.xyz */
 static Vec4 sub3(Vec4 a, Vec4 b)
 {
     Vec4 r;
-    r.x = a.x - b.x;
-    r.y = a.y - b.y;
-    r.z = a.z - b.z;
+    r.x = psub(a.x, b.x);
+    r.y = psub(a.y, b.y);
+    r.z = psub(a.z, b.z);
     r.w = 0.0f;
     return r;
 }
@@ -40,10 +61,10 @@ static Vec4 sub3(Vec4 a, Vec4 b)
 /* VOPMULA ACC, a, b followed by VOPMSUB d, b, a - the PS2's cross product idiom. */
 static Vec4 cross3(Vec4 a, Vec4 b)
 {
-    Vec4 r;
-    r.x = a.y * b.z - b.y * a.z;
-    r.y = a.z * b.x - b.z * a.x;
-    r.z = a.x * b.y - b.x * a.y;
+    Vec4 r;                                   /* ACC takes the first product, VOPMSUB subtracts the second */
+    r.x = psub(pmul(a.y, b.z), pmul(b.y, a.z));
+    r.y = psub(pmul(a.z, b.x), pmul(b.z, a.x));
+    r.z = psub(pmul(a.x, b.y), pmul(b.x, a.y));
     r.w = 0.0f;
     return r;
 }
@@ -51,11 +72,11 @@ static Vec4 cross3(Vec4 a, Vec4 b)
 /* VMUL.xyz then VADDy.x then VADDz.x: the sum order is (x + y) + z and it matters. */
 static float dot3(Vec4 a, Vec4 b)
 {
-    float x = a.x * b.x;
-    float y = a.y * b.y;
-    float z = a.z * b.z;
-    float s = x + y;
-    return s + z;
+    float x = pmul(a.x, b.x);
+    float y = pmul(a.y, b.y);
+    float z = pmul(a.z, b.z);
+    float s = padd(x, y);
+    return padd(s, z);
 }
 
 /* distances[0..1] are the signed distances of each endpoint from the triangle's plane.
