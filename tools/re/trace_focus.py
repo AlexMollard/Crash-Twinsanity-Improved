@@ -127,24 +127,42 @@ haveids:
     sh    $at, 0x10($v1)
     sw    $a3, 0x1c($v1)
 
-    ori   $t9, $zero, 0xffff            # objInstCxt->objectId, the authoritative id
+    ori   $t9, $zero, 0xffff            # route A: objInstCxt->objectId, straight off the agent
     beq   $a3, $zero, haveobj
     nop
     lhu   $t9, 0x6($a3)
 haveobj:
     sh    $t9, 0x12($v1)
 
+    ori   $t2, $zero, 0xffff            # route B: agent -> instContext -> node 1 -> objInstCxt -> objectId,
+    beq   $t1, $zero, haveb             # which is what FUN_00114048 does to identify a candidate. Reaching
+    nop                                 # the same id two ways is the only thing that can settle whether the
+    lw    $a3, 0x0($t1)                 # agent really is node index 1.
+    beq   $a3, $zero, haveb
+    nop
+    lw    $a3, 0xdc($a3)                # nodesList_ at ctx+0xd4, nodes[] at +4, index 1 -> ctx+0xdc
+    beq   $a3, $zero, haveb
+    nop
+    lw    $a3, 0x84($a3)
+    beq   $a3, $zero, haveb
+    nop
+    lhu   $t2, 0x6($a3)
+haveb:
+    sh    $t2, 0x16($v1)
+
     daddu $a3, $zero, $zero
     beq   $t1, $zero, nogate
     nop
     lw    $a3, 0x88($t1)                # the gate bits as they were on entry
 nogate:
-    sw    $a3, 0x14($v1)
+    sh    $a3, 0x14($v1)
 
-    lw    $a3, 0x4($t8)                 # the filter matches either id, so it works whichever is meaningful
-    beq   $a3, $zero, commit
+    lw    $a3, 0x4($t8)                 # the filter matches any of the three, so it works whichever turns
+    beq   $a3, $zero, commit            # out to be the meaningful one
     nop
     beq   $a3, $t9, commit
+    nop
+    beq   $a3, $t2, commit
     nop
     bne   $a3, $at, out
     nop
@@ -235,8 +253,33 @@ def cmd_arm(p, o):
     print(f"tracing on, filter = {o.filter if o.filter else 'none (all agents)'}")
 
 
+def still_armed(p):
+    """Is the driver still in the cave and are both sites still hooked?
+
+    Loading a save state restores RAM over the whole cave, driver and counters alike, and puts the original
+    instructions back at both sites - so everything reads zero and the run looks like "neither hook fired",
+    which is a real answer to a different question. Fresh warps are fine, because those load a level in
+    place. Arm after the last state load, never before."""
+    code, labels = mipsasm.assemble(DRIVER, CODE, {}, "driver")
+    first = struct.unpack("<I", code[:4])[0]
+    problems = []
+    if p.r32(CODE) != first:
+        problems.append(f"the driver is gone from {CODE:08x}")
+    for site, target in ((HOOK_A, CODE), (HOOK_B, labels["entryB"])):
+        jump, _ = mipsasm.assemble(f"j {target:#x}", site, {}, "hook")
+        if p.r32(site) != struct.unpack("<I", jump[:4])[0]:
+            problems.append(f"{site:08x} is not hooked")
+    return problems
+
+
 def cmd_dump(p, o):
     p.check_cave()
+    problems = still_armed(p)
+    if problems:
+        print("NOT ARMED: " + "; ".join(problems))
+        print("A save state was almost certainly loaded after arming - that restores RAM over the cave and")
+        print("puts the original instructions back, so the counters below mean nothing. Re-arm and re-run.")
+        print("Fresh warps do not do this; only state loads.\n")
     count = p.r32(COUNT)
     assign, none, null = p.r32(SEEN_ASSIGN), p.r32(SEEN_NONE), p.r32(SEEN_NULL)
     filt = p.r32(FILTER)
@@ -263,27 +306,37 @@ def cmd_dump(p, o):
     names = addrname.Names()
     shown = min(count, CAP)
     print(f"\nlast {shown} entries, oldest first:")
-    print(f"  {'seq':>5} {'hook':<7} {'caller':<34} {'agent':>9} {'value':>9} "
-          f"{'objCxt':>9} {'objId':>6} {'own':>5} {'mode':>4} {'gate':>4}")
+    print(f"  {'seq':>5} {'hook':<7} {'caller':<32} {'agent':>9} {'value':>9} "
+          f"{'objCxt':>9} {'idA':>5} {'idB':>5} {'own':>5} {'mode':>4} {'gate':>4}")
+    disagree = 0
     for n in range(count - shown, count):
         b = RING + (n % CAP) * RECORD
         ra, agent, value, cmd = p.r32(b), p.r32(b + 4), p.r32(b + 8), p.r32(b + 12)
-        ids, gate, whoseq, objcxt = p.r32(b + 16), p.r32(b + 20), p.r32(b + 24), p.r32(b + 28)
-        own, objid = ids & 0xFFFF, ids >> 16
-        which, seq = whoseq & 0xFF, whoseq >> 16
-        mode = (whoseq >> 8) & 0xFF
+        ids, gb, whoseq, objcxt = p.r32(b + 16), p.r32(b + 20), p.r32(b + 24), p.r32(b + 28)
+        own, ida = ids & 0xFFFF, ids >> 16
+        gate, idb = gb & 0xFFFF, gb >> 16
+        which, mode, seq = whoseq & 0xFF, (whoseq >> 8) & 0xFF, whoseq >> 16
         if seq != (n & 0xFFFF):
             print(f"  {n:>5} <slot overwritten while reading>")
             continue
+        if ida != idb:
+            disagree += 1
         tag = "assign" if which == 0 else "none"
         fmt = lambda v: "undef" if v == 0xFFFF else str(v)
-        print(f"  {n:>5} {tag:<7} {names.describe(ra):<34} {agent:>9x} {value:>9x} "
-              f"{objcxt:>9x} {fmt(objid):>6} {fmt(own):>5} {mode:>4} {gate & 3:>4}")
+        print(f"  {n:>5} {tag:<7} {names.describe(ra):<32} {agent:>9x} {value:>9x} "
+              f"{objcxt:>9x} {fmt(ida):>5} {fmt(idb):>5} {fmt(own):>5} {mode:>4} {gate & 3:>4}")
     if shown:
-        print("\nobjId comes from agent + 0x84 -> objInstCxt -> +0x6, which is the route engine code itself")
-        print("uses; 'own' is the node's own objId_ at agent + 0x7c. `undef` in either is a real value, not")
-        print("a failed read - the engine writes -1 there to mean 'no object id'. If the two disagree, or")
-        print("objCxt is not a plausible pointer, the struct assumption is wrong and both are suspect.")
+        print("\nidA is agent + 0x84 -> objInstCxt -> +0x6. idB goes the long way the engine's own candidate")
+        print("filter goes: agent + 0 -> instContext -> node 1 -> +0x84 -> +0x6. Both offsets are read from")
+        print("machine code, not from a struct listing. 'own' is the node's objId_ at +0x7c, where `undef`")
+        print("is a real value - the engine writes -1 to mean 'no object id'.")
+        if disagree:
+            print(f"\n  *** idA and idB disagree on {disagree} of {shown} entries. The agent is then not node")
+            print("      index 1, and idB is the one to believe - it is the route FUN_00114048 uses.")
+        else:
+            print("\n  idA and idB agree on every entry, by two different routes through memory. The id is")
+            print("  what the engine thinks it is; if it is absent from the level files, it came from")
+            print("  somewhere else rather than from a bad read.")
 
 
 def cmd_disarm(p, o):

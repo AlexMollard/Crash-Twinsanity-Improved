@@ -330,6 +330,17 @@ Four things decide whether it works, and three of them have bitten us:
   the actual answer in something that cannot - a bitmap with one bit per id, or a set of counters - and let the
   ring carry detail only.
 
+### A save state wipes the hooks
+
+The driver lives in RAM, so loading a save state restores the whole cave over it - driver, counters and all -
+and puts the original instructions back at every hook site. Everything then reads zero and the run reports
+"neither hook fired", which is a real answer to a different question. Fresh *warps* are fine, because those
+load a level in place.
+
+Arm after the last state load, never before. `trace_focus.py dump` checks that the driver and both jumps are
+still present and says so loudly if they are not, because this failure is silent and looks exactly like a
+finding.
+
 ### Run the control first
 
 A tracer that reports "never fired" and a tracer that is not working produce identical output, and no amount of
