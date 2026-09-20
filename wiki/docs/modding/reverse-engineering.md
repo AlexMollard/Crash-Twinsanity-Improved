@@ -385,12 +385,26 @@ Every script printed the position, confirmed it, and moved on. On that basis "ne
 trigger box nor moving inside it starts the chase" was quoted as evidence for weeks. It was never a test of
 the chase; it was a test of a void.
 
-The same error, in a different costume, sank an early code-cave test: 511 marker words were still intact after
-"a session of play", which proved nothing, because the build had black-screened and a dead game does not
-write to memory. In both cases the check was one the failure mode could not disturb.
-
 So: sample over time, and pick a check that the failure would actually break. If a state is supposed to
 persist, watch it persist.
+
+### "Could this check have failed?"
+
+There is a stronger form of that error, and it is worth a separate question because it is harder to see.
+
+An early code-cave test reported 511 marker words still intact after a session of play, and took that as
+evidence the cave was safe. The build had black-screened. A dead game writes to nothing, so all 511 markers
+were guaranteed to survive whether the cave was safe or not. The evidence was not merely thin - it was
+structurally incapable of coming out any other way.
+
+A position read taken immediately after a teleport is insufficient. A marker count taken from a crashed game
+is *empty*, and it reads exactly like a pass. The difference matters because thin evidence invites more of the
+same evidence, while empty evidence has to be thrown away and replaced.
+
+So the question to ask of any check is not "did I check" but **"could this check have failed?"** If no
+plausible version of the bug would have changed the output, the check is decoration. That test is also what
+makes a control run worth the time: a control is precisely a demonstration that the instrument *can* come out
+the other way.
 
 And be as suspicious of the explanation that rescues you as of the result that worries you. Twice tonight a
 tidy account of an anomaly arrived exactly when someone was already doubting their own measurement, and was
