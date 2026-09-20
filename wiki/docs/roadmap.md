@@ -68,6 +68,21 @@ resets.
 So "neither teleporting into the trigger box nor moving inside it starts the chase" was never a test of the chase.
 It was a test of a void, and it was quoted as evidence for weeks.
 
+**The coordinates were not invented, and the obstacle is now located exactly.** `twinsdump altdoc.rm2 triggers`
+shows only two triggers in the level, and the first is the chase: centre `(84.49, 3.18, -99.35)`, extents
+`(10.1, 6.01, 4.3)`, targeting `act_ALTEARTH_DOCAMOK_SUMMONER` through `act_MAP_ANY_MESSAGE_TO_TRIGGERED`. So that
+coordinate is the trigger's own position, taken from the data rather than guessed.
+
+What is missing is the **floor**. Walking north from the level's spawn at `(91.1, 0.0, -155.0)`, Crash covers about
+33 units and then, at **z = -122**, his height drops to -3.5 and the game-flow state goes to 21 and then 18 -
+death and respawn, not a cutscene - and he is returned to the spawn. The ground ends roughly **23 units short of
+the trigger**. Teleporting straight to the trigger centre drops him through the same absence.
+
+That is consistent with the pursuit's geometry streaming in during real play as Crash progresses through
+`altdoc` / `altdoc_b` / `altdoc_c`, where a warp brings in only one file's chunk set. Which means the repro needs
+either the missing chunk loaded deliberately or a save from a real playthrough - and no amount of instrumentation
+aimed at the trigger will substitute, because the player cannot stand anywhere near it.
+
 It went unnoticed because the position reads back *correct* immediately after the teleport - the rig's `teleport`
 shifts every copy of Crash's x/z including respawn points, so he reappears at the same unreachable spot and a check
 made once, or twice and slowly, agrees with itself. **A verification that only checks the moment after the action is
