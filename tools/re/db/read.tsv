@@ -60,7 +60,7 @@
 001a0098	F	InitMaterialShader	zeroes a freshly read shader
 0020f5b0	F	AdvanceKeyIndex	next key, wrapping to the first and flagging when it passes the last
 00263148	F	TouchEventWithin	true when the agent's last touch was of this kind and within the given number of seconds
-00269130	F	GetCounterValue	the script counter array, at flow + 0x1018 + index * 4
+00269130	F	GetCounterValue	script counters at G_ChunkManager + 0x1018 + index * 4, with G_ChunkManager the pointer at 0x30A0C8. NOT the game-flow object: read from there counter 26 returns 1053609165, which is 0.5 as a float and looks entirely plausible
 00297f98	F	InitOgiAnimationSettings	binds the animation and works its length out from frame count, rate and speed
 00298010	F	OgiAnimationSettings_Destroy	frees on bit 0 of the flag
 002ad678	F	ChunkLinkCollisionDataList_Destroy	walks the list, releasing each link's collision data
