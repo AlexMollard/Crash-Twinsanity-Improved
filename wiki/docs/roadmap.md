@@ -14,7 +14,7 @@ data. Each line says where it stands and what is in the way.
 
 | ✅ Shipped | 🔭 Next up | 🧱 Bigger projects | 🔬 Investigating | ✔️ Checked, fine here | ⛔ Not doing |
 |:-:|:-:|:-:|:-:|:-:|:-:|
-| **11** | **4** | **4** | **5** | **2** | **2** |
+| **11** | **4** | **4** | **5** | **3** | **2** |
 
 ## ✅ Shipped
 
@@ -72,6 +72,7 @@ These are features rather than fixes, and each needs new tooling before it can e
 |:-:|---|---|
 | ✔️ | **Touching the stunned Coco** | Kills Crash on NTSC-U and Xbox, and it is the case people ask about most. It does not happen on PAL: two sources say so, and a rig sweep of the Psychetron room after the scene landed no hits at all. |
 | ✔️ | **Skipping movies** | They were never unskippable - ✕ has always stopped them, about a second in. The mod adds △ for consistency; measured 54.3 s untouched, 7.0 s with ✕ on the original disc. |
+| ✔️ | **60 Hz and the slide deviation bug** | This mod runs the 50 Hz game at 60 Hz, which is the combination the community blames for slides throwing Crash off his heading - so it was the one regression this mod could plausibly have introduced. Measured frame-exactly, two cold boots per build: slide jumps are **about 1% shorter** at 60 Hz (9.848 → 9.746) and **no directional deviation appears** (+0.65° against +1.02°). The caveat is on the [page](history/versions#measured-on-the-rig): the bug is intermittent and a deterministic replay cannot sample intermittency, so this shows 60 Hz does not force the deviation, not that it cannot happen. |
 
 
 ## ⛔ Not doing

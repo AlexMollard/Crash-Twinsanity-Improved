@@ -80,14 +80,41 @@ The community's explanation is that it is tied to the **60 Hz refresh rate**, no
 does not show it because PAL runs at 50 Hz, and the same sources note that slide jumps at 60 Hz are shorter, and
 possibly slower, than at 50 Hz.
 
-:::warning Worth testing on this mod
-This mod deliberately runs the PAL game at [480p / 60 Hz with matching frame timing](../modding/elf-patches). If the
-deviation really is a function of the 60 Hz update rather than the region, that combination is exactly the one that
-could reintroduce it - along with shorter slide jumps.
+This mod deliberately runs the PAL game at [480p / 60 Hz with matching frame timing](../modding/elf-patches), which
+is exactly the combination that would reintroduce the bug if the community's explanation is right. So it was worth
+measuring rather than assuming.
 
-This has **not been tested here**, and it is a community explanation rather than a confirmed engine finding. It is a
-good candidate for a [rig](../modding/rig) test: repeat a fixed slide jump from a save state and measure the landing
-position at 50 Hz and at 60 Hz.
+### Measured on the rig
+
+One fixed slide jump in the Earth hub, driven frame-by-frame off the game's own frame counter at `0x309B68` so both
+builds receive an identical number of updates of identical input. Each build was measured from two clean cold boots,
+four trials each; every trial in a boot replayed to the same three decimals.
+
+| | original disc, 49.99 Hz | this mod, 59.97 Hz |
+|---|---:|---:|
+| Slide-jump distance | **9.848** | **9.746** |
+| Deviation from the run-up heading | +0.65° | +1.02° |
+| Peak height | 1.841 | 1.862 |
+| Airtime | 0.820 s | 0.818 s |
+
+**Slide jumps at 60 Hz are about 1% shorter.** That is real and it reproduces exactly, so the community is right
+about the direction of the effect - but a tenth of a unit on a ten-unit jump is not what runners are describing when
+they talk about praying not to be thrown into wonky directions.
+
+**The deviation did not reproduce.** About one degree at both rates, which is the jump's own fixed bias rather than
+anything random, and the difference between the two is well under what a player could perceive.
+
+:::note What this test cannot show
+The bug is reported as *intermittent* - "sometimes". Every run here is deterministic: the same save state and the
+same frame-exact input give bit-identical results, which is what makes the 1% figure trustworthy and is also exactly
+why this cannot rule the deviation out. A replay that never varies cannot sample variation. What this shows is that
+60 Hz alone does not *force* the deviation, not that the deviation cannot happen.
+
+Two measurement traps worth recording for anyone repeating it. The player object's position at `+0xD0` is
+ground-projected and its `y` does not move at all while Crash is airborne, so the height has to come from `+0x284`
+(height above ground) or `+0x064` (vertical velocity). And Crash clips scenery around frames 32-56 of a straight run
+in the hub, deflecting his heading by 17°; a run-up that ends inside that window measures the collision rather than
+the jump.
 :::
 
 ## NTSC-U 1.0 quirks worth knowing

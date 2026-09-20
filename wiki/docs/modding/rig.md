@@ -46,6 +46,28 @@ finished". About 1.5 s of that path is included in every load-time measurement.
 - **Story progress is read as a level loads**, so it has to be set *before* the warp: `progress=N` in `levels.txt`
   writes it to game-flow + 1284, bits 21-25.
 - **A single warp timeout is usually a flake.** One level timed out once in fourteen rebuilds and passed on a retry.
+- **But a *run* of warp timeouts means the game is wedged in the credits, and retrying can never fix it.** The warp
+  works by forcing flow state 19 and making the credits finish on their first frame. If it times out, the branch is
+  restored but the game is left sitting *in* state 19 - the real credits, forever - so every later attempt starts
+  from there and fails. The tell is `flow_state == 19` with PINE perfectly healthy, which looks like a dead
+  emulator but is not. Only a restart clears it. Check for it before warping.
+- **Warp only once the game has reached the menu.** Warping at flow 5, while it is still settling, times out;
+  waiting for flow 6-7 works. Flow 7 is the attract demo and warps fine.
+- **There is one emulator, and `rig.py start` kills whatever is in it.** Two sessions driving the rig at once will
+  silently corrupt each other's measurements - the symptoms are PINE timeouts, zeroed reads, and numbers that will
+  not reproduce. The `re` ISO key gives separate *discs*, not separate *emulators*. If parallel work is needed, the
+  real fix is a second PCSX2 instance on its own PINE port.
+- **`rig.pos()` is ground-projected: its `y` does not move while Crash is airborne.** Reading it during a jump gives
+  a flat line and makes a perfectly good jump look like it never happened. For anything off the ground use the
+  player object's `+0x284` (height above ground) or `+0x064` (vertical velocity); the authoritative world position
+  is the instance context's transform matrix `wColumn`, made current by `RotateAndTranslate`.
+- **`0x309B68` is a frame counter,** +1 per game frame. Drive input off it rather than off wall-clock sleeps: a
+  press measured in seconds is a different number of frames on the 50 Hz and 60 Hz builds, and wall-clock presses
+  are not even repeatable at one rate. It also doubles as a check that the 60 Hz patch is live - it reads 50.00 Hz
+  on the retail disc and 59.97 Hz on the modded build.
+- **Crash clips scenery mid-run in the Earth hub,** deflecting his heading by 17° around frames 32-56 of a straight
+  run from the warp spawn. It is deterministic, so it is easy to mistake for a physics result. Measure a heading
+  over several windows and check it has settled before trusting it.
 - **Re-read object pointers before writing to them.** See the warning in [Executable patches](elf-patches).
 - **Reference screenshots are build-specific.** The menu images used for waits were captured on the modded build and
   do not match the retail one closely enough; use fixed timings when booting the original ISO.

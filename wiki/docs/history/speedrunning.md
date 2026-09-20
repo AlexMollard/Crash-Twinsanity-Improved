@@ -75,9 +75,13 @@ Routing is built almost entirely on two things:
 
 Both are faster than walking, which is why runs look like a continuous chain of slides rather than a platformer.
 
-Note the frame rate interaction documented on the [versions page](versions): at 60 Hz, slide jumps are **shorter and
-possibly slower** than at 50 Hz, and on NTSC builds a slide can throw Crash in a random direction entirely. The PAL
-builds, running at 50 Hz, therefore have the longest and most reliable slide jumps.
+Note the frame rate interaction documented on the [versions page](versions): at 60 Hz, slide jumps are shorter than
+at 50 Hz, and on NTSC builds a slide can throw Crash in a random direction entirely. The PAL builds, running at
+50 Hz, therefore have the longest and most reliable slide jumps.
+
+The "shorter" part is now [measured](versions#measured-on-the-rig) rather than inherited from the community: the
+same slide jump covers 9.848 units at 50 Hz and 9.746 at 60 Hz, **about 1% less**. Airtime is unchanged at 0.82 s.
+That is a real effect and a small one.
 
 ## Bugs that are not skips
 
@@ -96,7 +100,8 @@ are the kind of thing runners would notice:
 
 - **Restored cutscene skipping** removes a large amount of forced waiting that runs currently sit through or skip with
   glitches.
-- **Faster loading** and **60 Hz output** change the timing of everything, including the slide-jump behaviour above.
+- **Faster loading** and **60 Hz output** change the timing of everything. The slide jump is measurably affected:
+  about 1% shorter, with no directional deviation - see the [measurements](versions#measured-on-the-rig).
 
 If you are comparing this mod's behaviour against a video, check which version the video is: an NTSC run will have
 different checkpoints, different plasma sizes, a tree next to the farm, and enemies in a corridor that your PAL disc
