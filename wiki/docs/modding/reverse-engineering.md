@@ -115,6 +115,38 @@ the Function ID analyzer (`tools/re/ApplyFid.java`) names **zero** additional fu
 signatures match.
 :::
 
+## How close is the toolchain to authoring new content?
+
+Closer than the executable's 25%-named figure suggests, because the executable is not where level content
+lives. The Twinsanity Editor library already has matched `Load`/`Save` pairs for **46 item types** - collision,
+scenery, dynamic scenery, models, skins, blend skins, materials, textures, skydome, terrain, particles, AI
+paths, and the whole script and instance layer - and `build_mod.py` can rebuild the disc around a CRASH.BD of
+any size. What has been missing is confidence that a level survives a round trip.
+
+It very nearly does. Loading `beach.rm2` through the library and saving it again gives a file of **exactly the
+same size** that differs in **134 bytes**, and every one of them is the same field:
+
+```text
+section 11 (graphics), subsection 0 (textures), offset +88 in each item
+94 textures affected, each losing 1-2 bytes, always non-zero -> zero
+```
+
+`Texture.cs` reads three fields it does not keep:
+
+```csharp
+reader.ReadInt32(); // Reserved, in game's code refers to an index of vifCodeBlock
+reader.ReadInt32(); // Reserved, in game's code refers to an unknown pointer
+reader.ReadBytes(2); // Reserved, unknown
+```
+
+and `Save` writes zeros back in their place. Only the first is ever non-zero in shipped data, which is why the
+damage is 134 bytes and not thousands. So the round trip is lossless to within one discarded integer per
+texture - a three-line fix in the editor, upstream in
+[twinsanity-editor](https://github.com/Smartkin/twinsanity-editor).
+
+Until then the mod avoids the library's full re-save entirely and splices single items in place with
+`tools/rig/rm2splice.py`, which preserves every byte it does not deliberately change.
+
 ## How a name gets worked out
 
 `tools/re/ghidra.py query` answers three things against the database:
