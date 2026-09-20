@@ -49,7 +49,10 @@ A **rule** has:
 
 When a rule's condition passes, its commands run and the machine moves to the target state. That is the whole model.
 
-Here is a real one, as [`twinsdump`](../modding/recipes) prints it:
+Here is a real one - the Iceberg Lab cutscene director - drawn out, and then as
+[`twinsdump`](../modding/recipes) prints it:
+
+![The Iceberg Lab cutscene director as a state machine: states 0, 1 and 2 run in sequence to the end state 4, a command hangs off the transition into 4, and state 5 holds the skip rule leading to the skip path in state 3 - but nothing reaches state 5](/img/script-state-machine.svg)
 
 ```text
 === script 6237 COM_ICELABINT_CUTSCENE_DIRECTOR_ACTIVATED

@@ -25,6 +25,8 @@ The build now moves it to the end of the image and packs the 39 files that follo
 movies) down into the space it used to occupy. The image stays exactly the same size, `CRASH.BD` can grow as much as
 it likes, and both directories are rewritten to match.
 
+![Disc layout before and after: CRASH.BD starts 225 MB in, on the slow half; the build moves it to the outer edge and packs the files that followed it into the gap, without changing the image size](/img/disc-layout.svg)
+
 This is `isotools.archive_last()`, run as the "Disc layout" step of `tools/build_mod.py`.
 
 ## Keeping ISO 9660 and UDF honest
