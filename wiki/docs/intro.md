@@ -13,10 +13,12 @@ and testing changes on a real emulator, so it is written the way it was found ra
 
 It covers three things:
 
-- **How the game works.** What is on the disc, how levels are stored, how the scripting that drives every cutscene,
-  enemy and door is laid out, and where the interesting parts of the executable live.
-- **How to change it.** The build turns an untouched disc image into a patched one from text recipes; this explains
-  how to write those recipes and how the automated test rig proves a change before it ships.
+- **How the game works.** [What is on the disc](engine/overview), how levels are stored, how the
+  [scripting](engine/scripts) that drives every cutscene, enemy and door is laid out, and where the interesting parts
+  of [the executable](engine/executable) live.
+- **How to change it.** [The build](modding/build) turns an untouched disc image into a patched one from
+  [text recipes](modding/recipes); this explains how to write those recipes and how the
+  [automated test rig](modding/rig) proves a change before it ships.
 - **Where it came from.** [Who built Twinsanity](history/development) and under what conditions - a studio founded to
   make this one game, a project cancelled and restarted with the deadline intact, an engine inherited from *The Wrath
   of Cortex*, and an in-house scripting tool called AgentLab whose name is still sitting in the archive on your disc.
@@ -40,6 +42,10 @@ level archive, and once you can read one, most of the game opens up.
 | **Cutscenes** | A *director* script plays a *scene* script; the actors have their own scripts and talk to each other with numbered user messages. |
 | **Executable** | `SLES_525.68`, a 2 MB PS2 ELF loaded at `0x100000`. Patched word by word from a text file, with every original value checked first. |
 | **Testing** | An isolated portable PCSX2 driven over the PINE protocol: virtual pad, RAM read/write, save states, screenshots, level warp. |
+
+Three lookup pages sit behind all of it: every address quoted anywhere in this wiki is listed in
+[Addresses](reference/addresses), every numbered condition and command in [Script ids](reference/script-ids), and the
+vocabulary - *agent*, *body*, *instant state*, *orphan skip* - in the [Glossary](reference/glossary).
 
 :::note What this is not
 This is not a decompilation and not a complete map of the engine. It is the part that had to be understood to fix

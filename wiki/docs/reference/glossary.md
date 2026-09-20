@@ -48,6 +48,10 @@ that scene is running.
 **Orphan skip** — a cutscene whose skip branch was moved into a state nothing can reach, so the executable patch alone
 is not enough to bring it back.
 
+**`.rm2` / `.sm2`** — the two files every level is made of. The `.rm2` holds scripts, objects, instances, triggers,
+characters and collision; the `.sm2` holds the **scenery** - its models, materials, textures, the skydome and the
+level's lights. It is not a sound bank. See [Lighting](../engine/lighting).
+
 **PINE** — the protocol PCSX2 exposes for external tools: read and write RAM, save and load states. The rig speaks it
 on port 28012.
 

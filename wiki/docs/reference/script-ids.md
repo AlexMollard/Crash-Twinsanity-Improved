@@ -69,3 +69,5 @@ Messages are packed with their target into a single argument word - for example 
 The command factory jump table is at `0x2EC530`, indexed by command id; each entry allocates the command object and
 points it at a vtable whose slots are "read arguments", "execute" and so on. Conditions are built by
 `BuildScriptCondition` at `0x106C40`, and the condition check functions live in a table around `0x2F0AB8`.
+
+All three, and every other address this wiki quotes, are collected on [Addresses](addresses).

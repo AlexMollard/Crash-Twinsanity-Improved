@@ -6,9 +6,9 @@ sidebar_position: 3
 
 # Versions and regional differences
 
-Twinsanity shipped six times, and the versions are not cosmetic variants of each other. They differ in resolution, in
-frame timing, in which bugs are present, in checkpoint placement, in enemy population, and in at least one case in
-level geometry. The community has catalogued this in unusual detail.
+Twinsanity shipped six times, plus a Russian localisation, and the versions are not cosmetic variants of each other.
+They differ in resolution, in frame timing, in which bugs are present, in checkpoint placement, in enemy population,
+and in at least one case in level geometry. The community has catalogued this in unusual detail.
 
 This mod targets **PAL PS2 (SLES-52568 v1.01)**, so this page is partly context and partly a list of things you
 already have - and a couple of things you do not.
@@ -19,7 +19,7 @@ already have - and a couple of things you do not.
 |---|---|---|
 | NTSC PS2 1.0 | 5 Aug 2004 | 28 Sep 2004, North America |
 | NTSC Xbox | 13 Aug 2004 | Sep 2004, North America |
-| NTSC PS2 2.0 | 20 Aug 2004 | later; the *Crash Bandicoot Action Pack* build, 12 Jun 2007 |
+| NTSC PS2 2.0 | 20 Aug 2004 | 12 Jun 2007, in the *Crash Bandicoot Action Pack* |
 | PAL Xbox | 28 Aug 2004 | Oct 2004, Europe |
 | **PAL PS2** | **3 Sep 2004** | **8 Oct 2004, Europe** |
 | NTSC-J PS2 | 3 Sep 2004 | 9 Dec 2004, Japan |
@@ -49,8 +49,8 @@ The PAL disc is, by a clear margin, the most fixed version - which is a large pa
 - **Evil Crash has pathing problems in Bandicoot Pursuit**, running in circles in some places.
 - Walking near the fence at Farmer Ernest's farm **detaches Cortex from Crash**.
 - The room before the last classroom has no enemies.
-- The **Spyro trailer is missing from the disc entirely** - it is present but unreachable on the Japanese disc, and
-  reachable nowhere.
+- The **Spyro trailer is missing from the disc entirely**. It is the only version of which that is true: the Japanese
+  disc still carries the file, it just cannot be reached from any menu.
 - The font is smaller, because it has to carry five languages' worth of letters in one texture.
 
 The 100% completion reward also differs by region: NTSC-U gets the therapy session FMV, PAL and NTSC-J get a short
@@ -78,7 +78,7 @@ The community's explanation is that it is tied to the **60 Hz refresh rate**, no
 does not show it because PAL runs at 50 Hz, and the same sources note that slide jumps at 60 Hz are shorter, and
 possibly slower, than at 50 Hz.
 
-:::caution Worth testing on this mod
+:::warning Worth testing on this mod
 This mod deliberately runs the PAL game at [480p / 60 Hz with matching frame timing](../modding/elf-patches). If the
 deviation really is a function of the 60 Hz update rather than the region, that combination is exactly the one that
 could reintroduce it - along with shorter slide jumps.
