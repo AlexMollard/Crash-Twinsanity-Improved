@@ -33,6 +33,10 @@ Switching the output to 60 Hz on its own leaves two things out of step, both of 
 - the game clock still said 50, which broke the loader's frame budget - see [Loading](loading),
 - the movie player still showed a frame every second vsync, which ran movies 20% fast - see [Movies](movies).
 
+## Lighting
+
+The lights themselves live in the `.sm2` scenery file, not the `.rm2` - see [Lighting](lighting).
+
 ## The GS side, in brief
 
 Materials carry the DMA chain slot they draw in (`Material.Unknown` in the editor library) and a shader with the GS

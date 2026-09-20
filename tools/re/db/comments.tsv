@@ -1,0 +1,702 @@
+# address	kind	text        kind 3 = plate, 1 = pre, 0 = end of line, 2 = post; newlines escaped
+0011c088	3	Decrements and then checks for 0, deallocates when sees -1?
+00179358	3	Potentially a lost static debug function of SectionReaderInterface class
+0017cee8	3	Library Function - Single Match\n GetRomName\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017cf58	3	Library Function - Single Match\n IsT10K\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017d008	3	Library Function - Single Match\nName: sceScfGetTimeZone\nLibrary: ps2_sdk 3.0.3 libscf
+0017d060	3	Library Function - Single Match\nName: sceScfGetSummerTime\nLibrary: ps2_sdk 3.0.3 libscf
+0017d0c8	3	Library Function - Single Match\n tobcd\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017d0f8	3	Library Function - Single Match\n frombcd\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017d118	3	Library Function - Single Match\n convertfrombcd\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017d180	3	Library Function - Single Match\n converttobcd\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017d2a0	3	Library Function - Single Match\n subdate\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017d348	3	Library Function - Single Match\n addhour\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017d378	3	Library Function - Single Match\n subhour\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017d3a0	3	Library Function - Single Match\nName: AdjustTime\nLibrary: ps2_sdk 3.0.3 libscf
+0017d430	3	Library Function - Single Match\n sceScfGetLocalTimefromRTC\n\nLibrary: ps2_sdk 3.0.3 libscf
+0017e308	3	Wait for all 10 DMA channels
+0018c7a8	3	Generates a random integer number from 0 to endRange
+001b6358	3	VCALLMS at address 0xb90
+001b6364	3	VCALLMS at address 0xa08
+001b7920	3	Send Skin vertecies to GS
+001d2964	3	VCALLMS at address 0xf0
+001f07a8	3	Related to OGI Type 3 struct
+001fe2f4	3	VCALLMS at address 0x790
+002b68e8	3	This function is only used on packaged resources such as RM2/SM2 pairs, Frontend.bin, Models/Shadow.dir and Materials/Shadow.dir
+002b7870	3	Library Function - Single Match\n gcc2_compiled.\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b7940	3	Library Function - Single Match\nName: sceMpegCreate\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b7b78	3	Library Function - Single Match\n _clearEach\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b7c40	3	Library Function - Single Match\nName: _getpic\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b7df8	3	Library Function - Single Match\nName: _updateRefImage\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b80b0	3	Library Function - Single Match\nName: _decodeOrSkipFrame\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b8220	3	Library Function - Single Match\nName: _decodeOrSkipField\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b83e8	3	Library Function - Single Match\n sceMpegInit\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b84a8	3	Library Function - Single Match\n sceMpegGetPicture\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b84f0	3	Library Function - Single Match\n sceMpegGetPictureRAW8\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b8548	3	Library Function - Single Match\n sceMpegReset\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b85e0	3	Library Function - Single Match\n sceMpegAddCallback\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b8628	3	Library Function - Single Match\n _sceMpegDispatchMpegCallback\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b86a0	3	Library Function - Single Match\n _sceMpegDispatchMpegCbNodata\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b8718	3	Library Function - Single Match\nName: _decodeOrSkip\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b8760	3	Library Function - Single Match\n sceMpegClearRefBuff\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b87e0	3	Library Function - Single Match\nName: _decPicture\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b88e8	3	Library Function - Single Match\nName: _sceMpegAlalcAlloc\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b89a8	3	Library Function - Single Match\nName: gcc2_compiled.\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b8c38	3	Library Function - Single Match\nName: _dispRefImage\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b8ef8	3	Library Function - Single Match\nName: _dispRefImageField\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b9318	3	Library Function - Single Match\nName: _sceMpegFlush\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b93d8	3	Library Function - Single Match\nName: _sceMpegOutputFrame\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b9468	3	Library Function - Single Match\n gcc2_compiled.\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b9628	3	Library Function - Single Match\nName: _sceMpegCscStoreRefImage\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b9d28	3	Library Function - Single Match\nName: _system_header\nLibrary: ps2_sdk 3.0.3 libmpeg
+002b9ef8	3	Library Function - Single Match\nName: _pack_header\nLibrary: ps2_sdk 3.0.3 libmpeg
+002ba5a0	3	Library Function - Single Match\nName: _PES_packet\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bc348	3	Library Function - Single Match\nName: sceMpegDemuxPssRing\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bc728	3	Library Function - Single Match\nName: sceMpegDemuxPss\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bc748	3	Library Function - Single Match\nName: sceMpegAddStrCallback\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bc878	3	Library Function - Single Match\nName: gcc2_compiled.\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bc888	3	Library Function - Single Match\n _sceMpegStopIpuDma\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bc928	3	Library Function - Single Match\n _sceMpegErrorBdec\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bc9f0	3	Library Function - Single Match\nName: _sceMpegError\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bca48	3	Library Function - Single Match\n _sceMpegError1\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bca90	3	Library Function - Single Match\nName: gcc2_compiled.\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bcc18	3	Library Function - Single Match\nName: _getAllRefs\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bd320	3	Library Function - Single Match\nName: _motionComp0\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bd570	3	Library Function - Single Match\nName: _getRef0\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bdc18	3	Library Function - Single Match\nName: _sceMpegPictureData0\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bde58	3	Library Function - Single Match\nName: _slice0\nLibrary: ps2_sdk 3.0.3 libmpeg
+002be188	3	Library Function - Single Match\nName: _motionVector\nLibrary: ps2_sdk 3.0.3 libmpeg
+002be5b0	3	Library Function - Single Match\nName: _motionVectors\nLibrary: ps2_sdk 3.0.3 libmpeg
+002be750	3	Library Function - Single Match\nName: _decMB0\nLibrary: ps2_sdk 3.0.3 libmpeg
+002beca8	3	Library Function - Single Match\nName: _sceMpegMbAddressIncrement\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bee20	3	Library Function - Single Match\nName: _sceMpegWaitIpuIdle\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bef88	3	Library Function - Single Match\nName: _sceMpegWaitIpuIdle64\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bf108	3	Library Function - Single Match\nName: _sceMpegNextBit\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bf1f0	3	Library Function - Single Match\n _sceMpegPeepBit\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bf280	3	Library Function - Single Match\nName: _sceMpegFlushBuf\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bf318	3	Library Function - Single Match\n _waitIpuIdle\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bf358	3	Library Function - Single Match\nName: _skipMB0\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bf418	3	Library Function - Single Match\n _copyAddRefImage\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002bf5c8	3	Library Function - Single Match\nName: dmaRefImage\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c0438	3	Library Function - Single Match\nName: receiveDataFromIPU\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c04d8	3	Library Function - Single Match\nName: gcc2_compiled.\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c0678	3	Library Function - Single Match\nName: _initSeq\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c0990	3	Library Function - Single Match\nName: _sequenceHeader\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c0c40	3	Library Function - Single Match\n _groupOfPicturesHeader\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c0ce0	3	Library Function - Single Match\nName: _pictureHeader\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c0e28	3	Library Function - Single Match\n _sequenceExtension\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c0f68	3	Library Function - Single Match\n _quantMatrixExtension\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c1278	3	Library Function - Single Match\nName: _extensionAndUserData\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c1448	3	Library Function - Single Match\n _waitIpuIdle\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c1488	3	Library Function - Single Match\nName: _sceMpegNextHeader\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c15e8	3	Library Function - Single Match\n flushByteBoundary\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c1638	3	Library Function - Single Match\n _sequenceDisplayExtension\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c16c8	3	Library Function - Single Match\n _copyrightExtension\n\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c1760	3	Library Function - Single Match\nName: _pictureDisplayExtension\nLibrary: ps2_sdk 3.0.3 libmpeg
+002c1858	3	Library Function - Single Match\n setD3_CHCR\n\nLibrary: ps2_sdk 3.0.3 libipu
+002c18d0	3	Library Function - Single Match\n setD4_CHCR\n\nLibrary: ps2_sdk 3.0.3 libipu
+002c1948	3	Library Function - Single Match\n sceIpuStopDMA\n\nLibrary: ps2_sdk 3.0.3 libipu
+002c1a30	3	Library Function - Single Match\n sceIpuRestartDMA\n\nLibrary: ps2_sdk 3.0.3 libipu
+002c1b80	3	Library Function - Single Match\nName: sceIpuSync\nLibrary: ps2_sdk 3.0.3 libipu
+002c1be8	3	Library Function - Single Match\n setD4_CHCR\n\nLibrary: ps2_sdk 3.0.3 libipu
+002c26b0	3	Library Function - Single Match\nName: sceGsSyncVCallback\nLibrary: ps2_sdk 3.0.3 libgraph
+002c2758	3	Library Function - Single Match\n memclr\n\nLibrary: ps2_sdk 3.0.3 libdma
+002c27b8	3	Library Function - Single Match\n sceDmaReset\n\nLibrary: ps2_sdk 3.0.3 libdma
+002c2898	3	Library Function - Single Match\nName: sceDmaPutEnv\nLibrary: ps2_sdk 3.0.3 libdma
+002c2ac0	3	Library Function - Single Match\nName: sceDevVu0Pause\nLibrary: ps2_sdk 3.0.3 libdev
+002c2b20	3	Library Function - Single Match\nName: sceDevVu0Sync\nLibrary: ps2_sdk 3.0.3 libdev
+002c2ba0	3	Library Function - Single Match\nName: sceDevVu1Pause\nLibrary: ps2_sdk 3.0.3 libdev
+002c2c00	3	Library Function - Single Match\nName: sceDevVu1Sync\nLibrary: ps2_sdk 3.0.3 libdev
+002c2e08	3	Library Function - Single Match\n _pad_intr_hdr\n\nLibrary: ps2_sdk 3.0.3 libpad
+002c2e50	3	Library Function - Single Match\nName: scePadInit2\nLibrary: ps2_sdk 3.0.3 libpad
+002c2f48	3	Library Function - Single Match\nName: _send_to_iop\nLibrary: ps2_sdk 3.0.3 libpad
+002c3060	3	Library Function - Single Match\nName: scePadPortOpen\nLibrary: ps2_sdk 3.0.3 libpad
+002c3248	3	Library Function - Single Match\nName: scePadPortClose\nLibrary: ps2_sdk 3.0.3 libpad
+002c3300	3	Library Function - Single Match\nName: scePadGetDmaStr\nLibrary: ps2_sdk 3.0.3 libpad
+002c3458	3	Library Function - Single Match\nName: scePadRead\nLibrary: ps2_sdk 3.0.3 libpad
+002c34d0	3	Library Function - Single Match\nName: scePadGetState\nLibrary: ps2_sdk 3.0.3 libpad
+002c3550	3	Library Function - Single Match\nName: scePadSetReqState\nLibrary: ps2_sdk 3.0.3 libpad
+002c3608	3	Library Function - Single Match\nName: scePadGetReqState\nLibrary: ps2_sdk 3.0.3 libpad
+002c3668	3	Library Function - Single Match\nName: scePadInfoAct\nLibrary: ps2_sdk 3.0.3 libpad
+002c3788	3	Library Function - Single Match\nName: scePadInfoMode\nLibrary: ps2_sdk 3.0.3 libpad
+002c38c0	3	Library Function - Single Match\nName: scePadSetMainMode\nLibrary: ps2_sdk 3.0.3 libpad
+002c3978	3	Library Function - Single Match\n scePadSetActDirect\n\nLibrary: ps2_sdk 3.0.3 libpad
+002c3a40	3	Library Function - Single Match\nName: scePadSetActAlign\nLibrary: ps2_sdk 3.0.3 libpad
+002c3b18	3	Library Function - Single Match\nName: scePadGetButtonMask\nLibrary: ps2_sdk 3.0.3 libpad
+002c3bc8	3	Library Function - Single Match\nName: scePadSetButtonInfo\nLibrary: ps2_sdk 3.0.3 libpad
+002c3cd8	3	Library Function - Single Match\nName: scePadEnterPressMode\nLibrary: ps2_sdk 3.0.3 libpad
+002c3dc0	3	Library Function - Single Match\nName: cmd_sem_init\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c3ea8	3	Library Function - Single Match\nName: cdvd_exit\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c3f48	3	Library Function - Single Match\n _sceCd_Poff_Intr\n\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c3fa0	3	Library Function - Single Match\n PowerOffCB\n\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4018	3	Library Function - Single Match\nName: sceCdLayerSearchFile\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4318	3	Library Function - Single Match\nName: sceCdSearchFile\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4338	3	Library Function - Single Match\nName: _sceCd_ncmd_prechk\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4490	3	Library Function - Single Match\nName: sceCdSync\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4530	3	Library Function - Single Match\nName: sceCdSyncS\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c45a0	3	Library Function - Single Match\nName: _sceCd_scmd_prechk\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c46f8	3	Library Function - Single Match\nName: sceCdInit\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c49e0	3	Library Function - Single Match\nName: sceCdDiskReady_old\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4bf8	3	Library Function - Single Match\nName: sceCdDiskReady\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4e18	3	Library Function - Multiple Matches With Different Base Names\nName: sceCdGetDiskType2, sceCdGetError\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4eb0	3	Library Function - Single Match\nName: sceCdBreak\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c4f68	3	Library Function - Single Match\nName: sceCdMmode\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c5040	3	Library Function - Single Match\nName: sceCdReadClock\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c5100	3	Library Function - Single Match\nName: sceCdStInit\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c5130	3	Library Function - Multiple Matches With Different Base Names\nName: sceCdStStart, sceCddaStStart\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c5170	3	Library Function - Multiple Matches With Different Base Names\nName: sceCdStSeek, sceCdStSeekF, sceCddaStSeek, sceCddaStSeekF\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c51a0	3	Library Function - Multiple Matches With Different Base Names\nName: sceCdStStop, sceCddaStPause, sceCddaStStop\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c51d8	3	Library Function - Single Match\nName: sceCdStRead\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c5368	3	Library Function - Single Match\nName: sceCdStream\nLibrary: ps2_sdk 3.0.3 libcdvd
+002c54d0	3	Library Function - Single Match\nName: sceSdRemoteInit\nLibrary: ps2_sdk 3.0.3 libsdr
+002c5590	3	Library Function - Single Match\nName: sceSdRemote\nLibrary: ps2_sdk 3.0.3 libsdr
+002c5b60	3	Library Function - Single Match\nName: sceMcOpen\nLibrary: ps2_sdk 3.0.3 libmc
+002c5c88	3	Library Function - Single Match\nName: sceMcMkdir\nLibrary: ps2_sdk 3.0.3 libmc
+002c5cc0	3	Library Function - Multiple Matches With Different Base Names\nName: sceMcClose, sceMcFlush\nLibrary: ps2_sdk 3.0.3 libmc
+002c5e30	3	Library Function - Single Match\nName: sceMcRead\nLibrary: ps2_sdk 3.0.3 libmc
+002c5f48	3	Library Function - Single Match\nName: sceMcWrite\nLibrary: ps2_sdk 3.0.3 libmc
+002c60c0	3	Library Function - Single Match\nName: sceMcSync\nLibrary: ps2_sdk 3.0.3 libmc
+002c61e0	3	Library Function - Single Match\nName: sceMcGetInfo\nLibrary: ps2_sdk 3.0.3 libmc
+002c6360	3	Library Function - Single Match\nName: sceMcGetDir\nLibrary: ps2_sdk 3.0.3 libmc
+002c64b0	3	Library Function - Single Match\n mceStorePwd\n\nLibrary: ps2_sdk 3.0.3 libmc
+002c6540	3	Library Function - Single Match\nName: sceMcChdir\nLibrary: ps2_sdk 3.0.3 libmc
+002c6680	3	Library Function - Multiple Matches With Different Base Names\nName: sceMcFormat, sceMcUnformat\nLibrary: ps2_sdk 3.0.3 libmc
+002c6750	3	Library Function - Single Match\nName: sceMcDelete\nLibrary: ps2_sdk 3.0.3 libmc
+002c7050	3	Potentially just a write to ram from disk param_3 amount of bytes, Idk
+002c7644	3	An absolutely GalaxyBrain way to use 128-bit PS2 operations to find string length
+002c94d8	3	Return 0 if strings are equal, non zero otherwise, case independant
+002cf350	3	Library Function - Single Match\nName: AddIntcHandler2\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf370	3	Library Function - Single Match\n AddDmacHandler\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf390	3	Library Function - Single Match\n RemoveDmacHandler\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf3a0	3	Library Function - Single Match\n _EnableIntc\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf3b0	3	Library Function - Single Match\n _DisableIntc\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf3c0	3	Library Function - Single Match\n _EnableDmac\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf3d0	3	Library Function - Single Match\n _DisableDmac\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf460	3	Library Function - Single Match\nName: CreateThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf480	3	Library Function - Single Match\nName: _StartThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf4f0	3	Library Function - Single Match\nName: ChangeThreadPriority\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf510	3	Library Function - Single Match\nName: RotateThreadReadyQueue\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf550	3	Library Function - Single Match\nName: GetThreadId\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf560	3	Library Function - Single Match\nName: ReferThreadStatus\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf580	3	Library Function - Single Match\nName: SleepThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf590	3	Library Function - Single Match\nName: WakeupThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf5a0	3	Library Function - Single Match\nName: _iWakeupThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf5d0	3	Library Function - Single Match\nName: SuspendThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf640	3	Library Function - Single Match\nName: EndOfHeap\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf660	3	Library Function - Single Match\n CreateSema\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf670	3	Library Function - Single Match\nName: DeleteSema\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf680	3	Library Function - Single Match\nName: SignalSema\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf690	3	Library Function - Single Match\nName: iSignalSema\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf6a0	3	Library Function - Single Match\nName: WaitSema\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf700	3	Library Function - Single Match\n SetOsdConfigParam\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf710	3	Library Function - Single Match\n GetOsdConfigParam\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf8e0	3	Library Function - Single Match\n FlushCache\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf930	3	Library Function - Single Match\nName: sceSifStopDma\nLibrary: ps2_sdk 3.0.3 libkernl
+002cf9d0	3	Library Function - Single Match\n SetVSyncFlag\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfa20	3	Library Function - Single Match\nName: sceSifSetDma\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfa30	3	Library Function - Single Match\nName: isceSifSetDma\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfa40	3	Library Function - Single Match\n sceSifSetDChain\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfa50	3	Library Function - Single Match\nName: isceSifSetDChain\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfa60	3	Library Function - Single Match\n sceSifSetReg\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfa70	3	Library Function - Single Match\n sceSifGetReg\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfa90	3	Library Function - Single Match\n Deci2Call\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfac0	3	Library Function - Single Match\nName: GetMemorySize\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfc28	3	Library Function - Single Match\nName: write\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfcb0	3	Library Function - Single Match\nName: sbrk\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfd68	3	Library Function - Multiple Matches With Different Base Names\n _sceIDC\n gcc2_compiled.\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfe10	3	Library Function - Multiple Matches With Different Base Names\n InvalidDCache\n SyncDCache\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cfe98	3	Library Function - Multiple Matches With Different Base Names\n _sceIDC\n gcc2_compiled.\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cff40	3	Library Function - Multiple Matches With Different Base Names\n InvalidDCache\n SyncDCache\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cffc0	3	Library Function - Multiple Matches With Different Base Names\n iInvalidDCache\n iSyncDCache\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002cffe8	3	Library Function - Multiple Matches With Different Base Names\nName: DisableDmac, DisableIntc, EnableDmac, EnableIntc\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0050	3	Library Function - Multiple Matches With Different Base Names\n DisableDmac\n DisableIntc\n EnableDmac\n EnableIntc\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d00b8	3	Library Function - Single Match\n DisableDmac\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0120	3	Library Function - Single Match\n EnableDmac\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0188	3	Library Function - Single Match\nName: topThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0260	3	Library Function - Single Match\nName: InitThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0350	3	Library Function - Single Match\nName: iWakeupThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002d03f0	3	Library Function - Single Match\nName: DelayThread\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0630	3	Library Function - Single Match\n _DelayThreadHandler\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0658	3	Library Function - Single Match\nName: QueueInit\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0680	3	Library Function - Single Match\n QueuePeekWriteDone\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d06c8	3	Library Function - Single Match\nName: sceTtyHandler\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0860	3	Library Function - Single Match\nName: sceTtyWrite\nLibrary: ps2_sdk 3.0.3 libkernl
+002d09d8	3	Library Function - Single Match\nName: sceTtyInit\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0a98	3	Library Function - Single Match\n kputchar\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0ad0	3	Library Function - Single Match\nName: deci2Putchar\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0b80	3	Library Function - Single Match\n serialPutchar\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0bb8	3	Library Function - Single Match\nName: ftoi\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0c48	3	Library Function - Single Match\nName: printfloat\nLibrary: ps2_sdk 3.0.3 libkernl
+002d0e20	3	Library Function - Single Match\nName: _sceSnprintf\nLibrary: ps2_sdk 3.0.3 libkernl
+002d1b90	3	Library Function - Single Match\nName: printf_char\nLibrary: ps2_sdk 3.0.3 libkernl
+002d1bb8	3	Library Function - Single Match\n kprintf_char\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d1be0	3	Library Function - Single Match\n _sceSnprintf_pf\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d1c30	3	Library Function - Single Match\n sceSnprintf\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d1cf8	3	Library Function - Single Match\n kprintf\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d1da8	3	Library Function - Single Match\n sceSifGetSreg\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d1dd0	3	Library Function - Single Match\n sceSifInitCmd\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2050	3	Library Function - Single Match\n sceSifExitCmd\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2088	3	Library Function - Single Match\nName: sceSifAddCmdHandler\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2100	3	Library Function - Single Match\n sceSifRemoveCmdHandler\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2150	3	Library Function - Single Match\nName: _sceSifSendCmd\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2288	3	Library Function - Single Match\n sceSifSendCmd\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d22c8	3	Library Function - Single Match\n isceSifSendCmd\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2450	3	Library Function - Single Match\n sceSifWriteBackDCache\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2500	3	Library Function - Single Match\n sceSifInitRpc\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d26a0	3	Library Function - Single Match\n sceSifExitRpc\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d26c8	3	Library Function - Single Match\nName: _sceRpcGetPacket\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2770	3	Library Function - Single Match\nName: _sceRpcFreePacket\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2790	3	Library Function - Single Match\n _sceRpcGetFPacket\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d27c0	3	Library Function - Single Match\nName: _sceRpcGetFPacket2\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2800	3	Library Function - Single Match\nName: _request_end\nLibrary: ps2_sdk 3.0.3 libkernl
+002d28d0	3	Library Function - Single Match\n _alarm_rdata\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2910	3	Library Function - Single Match\nName: _request_rdata\nLibrary: ps2_sdk 3.0.3 libkernl
+002d29e8	3	Library Function - Single Match\n _search_svdata\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2a38	3	Library Function - Single Match\n _alarm_bind\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2a78	3	Library Function - Single Match\nName: _request_bind\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2b48	3	Library Function - Single Match\nName: sceSifBindRpc\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2c98	3	Library Function - Single Match\nName: _request_call\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2d28	3	Library Function - Single Match\nName: sceSifCallRpc\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2f28	3	Library Function - Single Match\n sceSifCheckStatRpc\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d2f68	3	Library Function - Single Match\nName: sceSifSetRpcQueue\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3000	3	Library Function - Single Match\nName: sceSifRegisterRpc\nLibrary: ps2_sdk 3.0.3 libkernl
+002d30d8	3	Library Function - Single Match\nName: sceSifGetNextRequest\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3130	3	Library Function - Single Match\nName: sceSifExecRequest\nLibrary: ps2_sdk 3.0.3 libkernl
+002d32f8	3	Library Function - Single Match\nName: sceSifRpcLoop\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3338	3	Library Function - Single Match\n _sceFsIobSemaMK\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d33b0	3	Library Function - Single Match\nName: new_iob\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3438	3	Library Function - Single Match\n sceFsSifCallRpc\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3528	3	Library Function - Single Match\nName: get_iob\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3598	3	Library Function - Single Match\nName: _sceFs_Rcv_Intr\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3950	3	Library Function - Single Match\n _sceFsSemInit\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d39a8	3	Library Function - Single Match\n _sceFsWaitS\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3a30	3	Library Function - Single Match\nName: sceFsInit\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3c38	3	Library Function - Multiple Matches With Different Base Names\n _fs_version\n _lf_version\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3d00	3	Library Function - Single Match\nName: sceOpen\nLibrary: ps2_sdk 3.0.3 libkernl
+002d3f90	3	Library Function - Single Match\nName: sceClose\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4108	3	Library Function - Single Match\nName: sceLseek\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4348	3	Library Function - Single Match\nName: sceRead\nLibrary: ps2_sdk 3.0.3 libkernl
+002d45b8	3	Library Function - Single Match\nName: sceWrite\nLibrary: ps2_sdk 3.0.3 libkernl
+002d48d8	3	Library Function - Single Match\nName: sceSifInitIopHeap\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4960	3	Library Function - Single Match\n sceSifAllocIopHeap\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d49d0	3	Library Function - Single Match\nName: sceSifFreeSysMemory\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4a48	3	Library Function - Single Match\nName: sceSifFreeIopHeap\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4a78	3	Library Function - Single Match\nName: _lf_bind\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4b78	3	Library Function - Multiple Matches With Different Base Names\n _fs_version\n _lf_version\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4c18	3	Library Function - Single Match\nName: _sceSifLoadModule\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4e40	3	Library Function - Single Match\nName: sceSifLoadModule\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4e88	3	Library Function - Single Match\nName: sceSifResetIop\nLibrary: ps2_sdk 3.0.3 libkernl
+002d4fe0	3	Library Function - Single Match\n sceSifSyncIop\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5030	3	Library Function - Single Match\nName: sceSifRebootIop\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5210	3	Library Function - Single Match\n kCopy\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5248	3	Library Function - Single Match\nName: kFindAddress\nLibrary: ps2_sdk 3.0.3 libkernl
+002d52a0	3	Library Function - Single Match\nName: InitSystemCallTableAddress\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5408	3	Library Function - Single Match\n setup\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5418	3	Library Function - Single Match\n Copy\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5460	3	Library Function - Single Match\n GetEntryAddress\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5470	3	Library Function - Single Match\n PatchIsNeeded\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d54d8	3	Library Function - Single Match\n InitExecPS2\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d55f0	3	Library Function - Single Match\n setup\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5600	3	Library Function - Single Match\n Copy\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5610	3	Library Function - Single Match\n kCopy\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5658	3	Library Function - Single Match\n InitAlarm\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5730	3	Library Function - Single Match\n SetT2\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d57a0	3	Library Function - Single Match\n SetT2_COUNT\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d57b0	3	Library Function - Single Match\n SetT2_MODE\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d57c0	3	Library Function - Single Match\n SetT2_COMP\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d57d0	3	Library Function - Single Match\nName: InitTimer\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5930	3	Library Function - Single Match\nName: StartTimerSystemTime\nLibrary: ps2_sdk 3.0.3 libkernl
+002d59c8	3	Library Function - Single Match\nName: SetNextComp\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5b58	3	Library Function - Single Match\nName: InsertAlarm\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5be0	3	Library Function - Single Match\nName: UnlinkAlarm\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5c18	3	Library Function - Single Match\nName: cbTimerHandler\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5ec0	3	Library Function - Single Match\nName: iGetTimerSystemTime\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5f18	3	Library Function - Single Match\n iAllocTimerCounter\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5f88	3	Library Function - Single Match\n AllocTimerCounter\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d5fe0	3	Library Function - Single Match\nName: iStartTimerCounter\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6090	3	Library Function - Multiple Matches With Different Base Names\n FreeTimerCounter\n GetTimerBaseTime\n GetTimerCount\n StartTimerCounter\n  5 names - too many to list\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6110	3	Library Function - Single Match\nName: iSetTimerHandler\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6208	3	Library Function - Single Match\n SetTimerHandler\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6288	3	Library Function - Multiple Matches With Different Base Names\n TimerUSec2BusClock\n sceTimerUSec2BusClock\n\nLibraries: ps2_sdk 3.0.3 libkernl, ps2_sdk 3.0.3 libtimer
+002d6308	3	Library Function - Single Match\nName: _InitAlarm\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6358	3	Library Function - Single Match\n AlarmHandler\n\nLibraries: ps2_sdk 3.0.3 libkernl, ps2_sdk 3.0.3 libtimer
+002d63b8	3	Library Function - Single Match\nName: SetTimerAlarm\nLibrary: ps2_sdk 3.0.3 libkernl
+002d64e8	3	Library Function - Single Match\nName: iSetTimerAlarm\nLibrary: ps2_sdk 3.0.3 libkernl
+002d65d8	3	Library Function - Single Match\n sceSifInitRebootNotify\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6610	3	Library Function - Single Match\nName: sceSifExecNotifyHandler\nLibrary: ps2_sdk 3.0.3 libkernl
+002d66b8	3	Library Function - Single Match\n sceDeci2Open\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6708	3	Library Function - Single Match\n sceDeci2ReqSend\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6738	3	Library Function - Single Match\n sceDeci2Poll\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6768	3	Library Function - Single Match\n sceDeci2ExRecv\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d67a0	3	Library Function - Single Match\n sceDeci2ExSend\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d67e8	3	Library Function - Single Match\n kputs\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6818	3	Library Function - Single Match\n Copy\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6860	3	Library Function - Single Match\nName: GetEntryAddress\nLibrary: libkernl 3.0.3 PS2_SDK_3.0.3
+002d6870	3	Library Function - Single Match\nName: setup\nLibrary: libkernl 3.0.3 PS2_SDK_3.0.3
+002d6880	3	Library Function - Single Match\n InitTLBFunctions\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6958	3	Library Function - Single Match\nName: InitTLB\nLibrary: ps2_sdk 3.0.3 libkernl
+002d6998	3	Library Function - Single Match\n InitTLB32MB\n\nLibrary: ps2_sdk 3.0.3 libkernl
+002f036c	3	virtual float CheckCondition(InstanceNode* instNode) = 0;
+002f557c	3	virtual void GetSubItemsAmount() = 0;
+002f5594	3	virtual SectionReaderInterface* GetSectionReader(int resTableIndex, ItemHeader* itemHeader, int* itemSize);
+003d47b0	3	Default is use PRIM register for primitive attributes
+00100010	1	Clear entire RAM
+00100064	1	void* InitMainThread(uint32 gp, void* stack, int stack_size, char* args, int root)
+00100074	1	Init scratchpad memory with some garbage
+001000ac	1	void* InitHeap(void* heap, int heap_size)
+001015b4	1	Get the path of .BD .BH files
+00106c4c	1	If negative param is not equal to -11
+0010c180	1	Nice loop mate
+0012d5dc	1	Object type
+0012de30	1	Playable character node
+0012de3c	1	Inst type 2
+0012de48	1	Inst type 3
+0012de54	1	Inst Type 1
+0012de60	1	Inst Type 4
+0012de70	1	Inst Type 5
+0012de80	1	Inst Type 7
+0012de90	1	Inst Type 6
+0012dea0	1	Inst Type 8
+0012df68	1	Get the mask of high 2nd byte and low 3rd byte of the object header
+0012df6c	1	Check if resulted value is between 0x12 and 0xF (15 and 18)
+0012e270	1	Get the second integer property of the instance
+00134f98	1	Crash
+00134fd0	1	Cortex
+00135020	1	Crash, previously Coco?
+00135058	1	Nina
+00135090	1	Mecha Bandicoot
+001350f8	1	Deleted Evil Crash case? :(
+0013d748	1	Find the difference betweeen some Ys and some Zs, then half them and pass as arguments
+0017d76c	1	Game loop?
+0017d8d0	1	Looks for anything that breaks a word in a string
+0017d918	1	If came to string end but word flag isn't set, that means this is the last word, store it
+0017dd88	1	Render loop
+0017e964	1	By default all tags transfer in Tag ID (next) with QWC set to 1 and ADDR being 0
+00181814	1	Make characters upper case in the string
+00181f40	1	Loop while direction is to Memory
+00181f4c	1	Reset QWC REG of the chosen DMA channel
+00181f54	1	Check if we gonna use Scratchpad or RAM
+00181f84	1	Set TADR reg (Next Tag address)
+00181f90	1	Set CHCR to Direction from Memory, Mode Chain, No address pushed by call tag, Transfers DMA tag, Disable IRQ bit of DMAtag, Start DMA.
+0018208c	1	Set the transfer flag from its address
+00182090	1	Get address 0x00323618 and loop until iVar1 is gonna be 0
+001820a0	1	Reflect status of all DMA channels in CPCOND[0]\nand set channel 1(usually) to high priority
+001820b4	1	Wait for CPCOND[0]
+001820c4	1	Check that the DMA channel transfer is not finished
+00182130	1	Some STAT register related with fromSPR channel involved
+00182148	1	Set DMA GIF channel transfer data size to 0
+00182150	1	Set DMA GIF channel tag address
+00182160	1	Set DMA GIF channel to start transfering from memory in chain mode with no address pushed to ASP(Address stack pointer) and no DMA tag transfering
+00182234	1	Enable all DMA channels
+001920d0	1	Unreachable block :thinking:
+001920f8	1	Store 1 at byte 0x309B79
+00192674	1	node->~Destroy()
+001927dc	1	node->GetNodeIndex()
+001928b4	1	Get Node depending on its index, different index, different type
+0019794c	1	node->SetContextIfNone(instContext)
+001993d4	1	GetNodeIndex
+0019b7e8	1	Set settings for the PCRTC
+0019b7f0	1	Enable PCRTC VSYNC interlace mode, field mode, ON
+0019b878	1	Set display 1 position
+0019b880	1	Set display 2 position
+0019b8a0	1	Set frame buffer 1 output flags
+0019b8a4	1	Set frame buffer 2 output flags
+0019e4e8	1	Check if addresses are the same
+0019e4f8	1	If not replace the address with the given one
+0019fa40	1	XYOFFSET settings
+0019fa94	1	Frame buffer settings
+0019fad8	1	Frame buffer settings
+0019fb20	1	Z-Buffer settings
+0019fb6c	1	Z-Buffer settings
+0019fb7c	1	Color clamp control
+0019fb98	1	Alpha correction value
+0019fbbc	1	Texture alpha value setting
+0019fbd4	1	Scissor settings
+0019fbec	1	Pixel test control
+0019fc18	1	Vertex color setting
+0019fc44	1	XYZ2 - Setting for Vertex Coordinate Values
+0019fc80	1	XYZ2 - Setting for Vertex Coordinate Values
+0019fd74	1	If not even make even
+0019fdf8	1	If the short at the same index is -1, copy the old integer back into the new array
+0019feb0	1	Set last entry to -0x2
+001a0928	1	Reset EE's timer 1 modes
+001a094c	1	Check if PCRTC(image display) was setup
+001a0970	1	^^^^^^ If not mark to set up next render cycle
+001b7920	1	ConvertAndSendSkinVertexesToGS
+001bab6c	1	Check if only 1 shader is present in the material
+001babb4	1	When multiple shaders present
+001bbf0c	1	Read material name size
+001bbf44	1	Read material's name, delete it literally after this
+001bd0e4	1	ReadUint()
+001bd104	1	ReadBytes(0x60)
+001bd12c	1	ReadBytes(0x20) - thrown away
+001bd188	1	ReadBytes(size - 0x80)
+001bd468	1	Read unused blob size
+001bd4b0	1	Read the unused blob
+001cad64	1	XBox resources loading leftovers
+001cd220	1	Switch on bitfield's UnkVal2
+001cd364	1	Switch on bitfield's UnkVal3
+001cd73c	1	ReadByte()
+001cdeb4	1	Blob existance flag
+001cdf00	1	ReadUShort()
+001cdf38	1	ReadBytes(0x10)
+001cdf70	1	ReadFloat
+001cdfd0	1	ReadInt()
+001fc5a8	1	Calculate vector length to see if its length is less than 0.0001
+001fe2f4	1	GetTransformMatrix(instTransform, unkChunkTransform)
+002010c4	1	ReadBytes(0x16)
+00202a6c	1	If memory allocation size is not bigger than 0x94(148 bytes)
+00202c14	1	Get an index through an memory alloc sizes table giving a function a memory alloc size and convert it to multiple of 4
+00202c28	1	First parameter is MemoryController, at field 0x30 is the allocator cache table pulling memory fast
+00202c40	1	If cache was hit return it
+00202c48	1	If cache miss happened use a previous allocator in case it has some free memory available
+00202c54	1	If nothing found in cache, create entirely new allocator
+00202c84	1	Shift 5 because 0x20 >> 0x5 is 1 and MemoryAllocator size is 0x20
+00202cc4	1	Store new allocator in cache to speed things up
+00202ce8	1	OOF, somehow we ran out of memory
+002047b8	1	If string was previously created deallocate it after copy
+00204c8c	1	Depending on requested size, use cache alloc or heap alloc?
+00205388	1	Allocate memory for cache
+00205418	1	If allocator is back to full, return it into the pool
+00205508	1	Divide the allocated memory into requested chunks
+002065cc	1	Load command index
+00206610	1	Read size of resulted struct - 0xC bytes from the script
+00206a9c	1	Execute if function call result is bigger or equal to condition->unkF3
+00206e4c	1	Check if 13th bit is not set. 13th bit denotes whether the stored index is a slot or not
+00206fc0	1	Check for NOT gate flag
+00207000	1	Check for NOT gate flag
+00207034	1	If current condition is weaker or equal to the previous true condition
+0020705c	1	Check if there is a new state to jump to
+00207090	1	Execute state body's commands
+00207108	1	Sadly none of the existing node types have this method present
+00207798	1	Before being replaced by script data, this is header script ID + 2
+00208a68	1	Load the bitfield
+00208be8	1	Read script header (ID, mask, flag)
+00208c0c	1	Read script unkInt1
+00208c24	1	Read script unkInt2 into local_3c
+00208db0	1	Reset flag field
+00208f6c	1	Check first 5 bits
+00209060	1	Read the bitfield
+00209074	1	Check 15th bit
+002090a8	1	Check 16th bit
+002091e0	1	Read unkInt1
+002091f8	1	Read unkInt2
+00209250	1	Fill byte array
+00209744	1	Read the header
+00209764	1	Set flag to 0
+0020cb18	1	Get first scriptID
+0020fe98	1	Check for 11th bit
+002100a4	1	Check non existence of ScriptStateBody
+002100e8	1	Check if any more scripts can be called
+002110a8	1	Destroy the calling instance
+00212338	1	Get the OGI table
+002123e0	1	Get the animation table
+0021e59c	1	If bit 3 is set copy instance position?
+0021e5f4	1	Whether to fetch a sound or not
+0022a138	1	Take the stored short, divide it by 2 and use it to shift the 0x1 then bitwise AND the result.
+0023d6e0	1	DestroyInstanceParticles()
+002403b8	1	Set bit 6 on the bitfield if last 4 bits of the script argument equal to 5
+002519ec	1	Read commands amount
+0025525c	1	Find a point between two :^)
+0025d664	1	Read object header
+0025d6cc	1	Read amount of unkInt32 script slots
+0025d804	1	Read amount of OGI script slots
+0025d8fc	1	Read amount of Animation script slots
+0025d9f4	1	Read amount of Script script slots
+0025daf0	1	Read amount of Object script slots
+0025dc00	1	Read amount of Sound script slots
+0025de10	1	Returns 9 for playable characters
+0025de2c	1	Returns 0x38 for playable characters
+0025de44	1	Returns 3 for playable characters
+0025e360	1	Get OGI node
+0025e3d0	1	Get GameNode which depends on GameObject's type
+0025e474	1	Check if the address is not null
+0025f100	1	Check for any leftover address
+0025f494	1	For each position do something
+0025f59c	1	For each path do
+0025fa08	1	Get the next ID address call
+0025fa28	1	Check if it's a parent object and not itself
+0025fb6c	1	Get the OGI ID
+0025fb88	1	Check if the ID is not -1
+0025fba0	1	Check if the requested OGI was loaded
+0025fbf0	1	Store the OGI in case it was be loaded anew
+0025ff48	1	Call next elem address function with itemCounter as parameter\n
+0025ff84	1	Find script ptr in the resource table
+0025ff88	1	If search ended up at a null ptr, create new script
+0025ffec	1	Increment a short in script header, store the ptr in the table(in case it was null before) for future searches
+00260264	1	Copy object ID
+00260288	1	Find object ptr in resource table
+00260f3c	1	Read resourceExistsBitfield
+00260f50	1	Check for objects
+00260fac	1	Check for OGIs
+0026100c	1	Check for Animations
+0026106c	1	Check for Code Models
+002610cc	1	Check for Scripts
+0026112c	1	Check for Unk
+0026118c	1	Check for Sounds
+00261258	1	Read unkInt1
+0026129c	1	Load flags amount from disk
+002612b4	1	Allocate flags amount * 4 amount of bytes so new int[flagsAmt]
+00261310	1	Load flags from disk into the list
+002613b0	1	Load the float props
+00261438	1	Load the integer props
+00261634	1	Get node type of 3
+00261958	1	Skip all existing flags
+00261974	1	Grab new flag
+00262130	1	Returns 0x38 for playable characters
+00262618	1	Check the 5th bit of the header
+00262d54	1	Read amount of elements
+00263ac8	1	Read short
+0026491c	1	Check whether we are loading from Default or not
+00266810	1	Set and reset some flags in GameResourceMnanager
+00266908	1	Positions related function call
+00266928	1	Paths related function call
+0026a5a8	1	Collision data reader
+0026a5bc	1	Particle data reader
+0026a5d0	1	Code section reader
+0026a5d8	1	Graphics section reader
+0026a628	1	Instance sections
+0026dc90	1	Check if it's a header script or not
+0026dd3c	1	Store loaded script into the resource table
+0026e060	1	Store loaded instance in the loaded instance table
+0026e064	1	Increase number of loaded instances
+00293d48	1	Get total amount of frames in the animation
+002948ec	1	RotVecEulerToQuaternion()
+002949fc	1	Result of vcallms(0x818) [RotVecEulerToQuaternion]
+00294a24	1	RotVecByAdditionalVec
+00294a90	1	RotateJoint
+00294b74	1	Check if used local rotation
+00294ba4	1	Check if used local scale
+00294bb4	1	ConstructJointLocalTransformMatrix(parentJointScale, jointScale, jointRotation)
+00294bc0	1	ConstructJointLocalTransformMatrixWithoutScale(parentJointScale, jointRotation)
+00294be8	1	Check if used local scale
+00294ca8	1	GetTransformMatrix(localJointTransform, parentJointTransform)
+00294da8	1	Set that used local rotation
+00294de0	1	Set that used global scale
+00294dec	1	Set that used local translation and scale
+00296304	1	Might be a check for Demo RM2?
+00296c28	1	GetTransformMatrix(jointRestPoseTransform, jointTransform)
+00297f5c	1	Pointer to a matrix?
+002983bc	1	Check if used local rotation
+002985e8	1	Check if scale is local
+002ab590	1	binReader->GetReadAmount()
+002ab5dc	1	binReader->MovePositionBy(offset)
+002ab5fc	1	binReader->ReturnToBeg()
+002ab838	1	binReader->GetBlockSize()
+002ac418	1	By observing numbers used in the call of this function, this statement always produces 0x1
+002ac7a8	1	Call LoadSection(diskPosition, sectionSize?, ArrayOfGenericSectionLoaders)
+002ad8f8	1	binReader->ReturnToBeg()
+002b2e04	1	Controller is not connected or not found
+002b2e1c	1	Controller is not in communication error and controller isn't a CTP 1.0
+002b2ed8	1	Controller is not connected
+002b2f58	1	Get currently operating controller mode ID
+002b2f74	1	Get currently operating controller mode iD that has a vibration function available
+002b2fc4	1	Get total number of controller mode IDs
+002b3034	1	Lock analog switch
+002b31a4	1	Set controller to pressure-sensistive mode
+002b3244	1	Get current button data
+002b4844	1	itemInterface->GetItemSectionReader(itemNum, &item, &item_size);
+002b49a8	1	Check for legal section header
+002b4a28	1	Check if the item has children or not
+002b4d00	1	Copy file name from disk
+002b4ed0	1	If there is anything in the storage, dispatch it in the buffer and free the storage
+002b506c	1	Destroy the reader
+002b5138	1	Destroy the reader
+002b6f44	1	Find the folder to put the file in?
+002b7428	1	Check if max capacity was reached on files loaded
+002b7670	1	Copy over file offset in archive and file size
+002b7690	1	Else extend the capacity and load the next file
+002c242c	1	Check if DMA channel 1 is started
+002c2430	1	Check if DMA channel 2 is started\n
+002c2444	1	Check if VIF1 status is not idle\n
+002c2454	1	Get the GIF status mask
+002c2458	1	Check if VU1 force break is set
+002c2464	1	Check if GIF data path transfer is not idle
+002c2468	1	Loop until none of the above conditions happen
+002c2634	1	Check for function handler
+002c2678	1	This part never seems to execute
+002c7054	1	Load in quads first if possible
+002c70a0	1	Then load in double words if possible
+002c70d4	1	Load byte by byte
+002c7204	1	Check if size is bigger than 8 bytes and the address is a multiple of 16
+002c7214	1	Fill 32 bytes at a time if size allows
+002c7268	1	Fill 8 bytes at a time if size allows
+002c7278	1	Fill byte by byte at last
+002c7648	1	Check if address is word aligned
+002c7670	1	Check if address is double word aligned
+002c7678	1	Read the 128-bits of data(text)
+002c767c	1	Copy data to a variable in reverse bit order (low->high) (high->low)
+002c769c	1	Lower all the character data by 1 byte and store the result
+002c76a0	1	Reverse all the bits from the loaded data
+002c76a8	1	Do bitwise AND between the result and the loaded data and store the result
+002c76ac	1	Do betwise AND between the 0x80(16 of them) and the result and store the result
+002c76b0	1	Load high order bits from low order of the result and low order bits into high order from 0x80(16)
+002c76b4	1	Truncate high 64-bits from the results and bitwise OR them together
+002c76b8	1	Check if the result is equal to 0
+002c76c0	1	If the result was 0 move to next 128 bits
+002c76c4	1	Load the 128-bits data
+002c76c8	1	Reverse all the data characters bits
+002c76cc	1	Subtract 1 from each byte of 128-bit data and store the result
+002c76d0	1	Bitwise AND the result and the reversed bits of OG data and store the result
+002c76d4	1	BItwise AND the result and the 0x01(16) data
+002c76d8	1	Copy the high bits from the results into lower bits, the lower ones from the very previous result into higher ones
+002c76dc	1	Truncate high bits and bitwise OR with the previous result of the iteration
+002c76e0	1	Exit if the result is non zero, else load next 128-bits and do another iteration
+002c7768	1	Load the byte from where we stopped at
+002c7778	1	Keep loading until zero is reached
+002cf264	1	Exit()
+002cf284	1	void Exit(int Status)
+002cfb68	1	Check that the interruptions were disabled
+002cff84	1	Make positions multiple of 192
+002d0518	1	Check if thread is in DORMANT state
+002d1f1c	1	Check DMAC SIF0 channel for having interrupt status, clear if it does
+002d1f3c	1	Check if SIF0 is stopped, if so set channel start it, set to chain mode and enable tag transfer bit
+002d5148	1	Check for Interruption enabled bit in the Status regiter of Coprocessor 0\n
+002d5158	1	Disable interruption\n
+002d515c	1	Wait for a memory access or pipeline operation during the execution is complete
+002d5168	1	Keep attempting to disable interruption bit\n
+002d517c	1	Return whether the operation was not a success
+002d52d8	1	Set syscall handler 0x83 to use function 0x2D5248
+002d52e4	1	Set syscall handler 0x5A to use function 0x2D5210
+002f593c	1	virtual ~SectionReaderInterface();
+002f5944	1	virtual void LoadItems(byte* diskPosition, int size) = 0;
+002f594c	1	Assumed to be a lost static debug function
+002f61bc	1	virtual void ExecuteEvent()?;
+002f61dc	1	virtual int GetNodeIndex() = 0;
+002fb2ec	1	virtual void GetVU_ProgramIndex() = 0;
+002fb304	1	virtual void CreateSettings() = 0;
+002fb34c	1	virtual void ReadPrecompShader(BinaryReader* reader);
+002fcf2c	1	virtual void Execute(TimeClock* p1, ScriptCallerContext* p2) = 0;
+002fcf3c	1	virtual void GetScriptActionSize() = 0;
+00303584	1	GetInstFlagPtr(index)
+0030358c	1	GetInstFloatPtr(index)
+00303594	1	GetInstIntPtr(index)
+003035ac	1	GetMaxInstFlagsAmount
+003035b4	1	GetMaxInstFloatsAmount
+003035bc	1	GetMaxInstIntsAmount
+00305114	1	virtual void GetBuilderTableIndex() = 0;
+0030511c	1	virtual void ReadCameraSubtype(BinaryReader* binReader);
+00306c2c	1	virtual void StartLoadItemAsync(unkInitStruct) = 0;
+00306c34	1	virtual bool UnkCheckFunction() = 0;
+00306c3c	1	virtual void Load<T>(T data);
+0019252c	0	Set return
+_elfProgramHeaders::00000000	0	PT_LOAD - Loadable segment
+_elfSectionHeaders::00000000	0	EMPTYNAME_0x0 - SHT_NULL
+_elfSectionHeaders::00000028	0	.text - SHT_PROGBITS
+_elfSectionHeaders::00000050	0	.vutext - SHT_PROGBITS
+_elfSectionHeaders::00000078	0	.reginfo - SHT_MIPS_REGINFO
+_elfSectionHeaders::000000a0	0	.DVP.ovlytab - SHT_0x7ffff420
+_elfSectionHeaders::000000c8	0	.DVP.ovlystrtab - SHT_STRTAB
+_elfSectionHeaders::000000f0	0	.DVP.overlay..0x0.3889407171.7.0 - SHT_0x7ffff421
+_elfSectionHeaders::00000118	0	.DVP.overlay..0x800.3889407171.107.1 - SHT_0x7ffff421
+_elfSectionHeaders::00000140	0	.DVP.overlay..0x0.1050379619.7.0 - SHT_0x7ffff421
+_elfSectionHeaders::00000168	0	.DVP.overlay..0x0.3889418259.23.0 - SHT_0x7ffff421
+_elfSectionHeaders::00000190	0	.DVP.overlay..0x800.3889418259.225.1 - SHT_0x7ffff421
+_elfSectionHeaders::000001b8	0	.data - SHT_PROGBITS
+_elfSectionHeaders::000001e0	0	.vudata - SHT_PROGBITS
+_elfSectionHeaders::00000208	0	.rodata - SHT_PROGBITS
+_elfSectionHeaders::00000230	0	.sdata - SHT_PROGBITS
+_elfSectionHeaders::00000258	0	.sbss - SHT_NOBITS
+_elfSectionHeaders::00000280	0	.bss - SHT_NOBITS
+_elfSectionHeaders::000002a8	0	.vubss - SHT_NOBITS
+_elfSectionHeaders::000002d0	0	.shstrtab - SHT_STRTAB

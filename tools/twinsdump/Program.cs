@@ -17,7 +17,8 @@ static class Program
         Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
         var file = new TwinsFile();
         var stdout = Console.Out; Console.SetOut(System.IO.TextWriter.Null);   // library prints load noise
-        file.LoadFile(args[0], TwinsFile.FileType.RM2);
+        file.LoadFile(args[0], args[0].EndsWith(".sm2", StringComparison.OrdinalIgnoreCase)
+                                   ? TwinsFile.FileType.SM2 : TwinsFile.FileType.RM2);   // .sm2 holds the scenery, lights included
         Console.SetOut(stdout);
 
         var items = new List<(TwinsItem item, string path)>();
@@ -68,6 +69,34 @@ static class Program
                             Console.WriteLine("      " + string.Join(" ", typeof(TwinsShader).GetFields().Where(fi => fi.FieldType.IsEnum || fi.FieldType == typeof(bool) || fi.FieldType == typeof(byte))
                                 .Select(fi => $"{fi.Name}={fi.GetValue(shd)}")) + $" ShaderType={shd.ShaderType}");
                 }
+                break;
+            }
+            case "types":                                  // twinsdump <rm2> types : how many of each item type the file holds
+            {
+                foreach (var g in items.GroupBy(i => i.item.GetType().Name).OrderByDescending(g => g.Count()))
+                    Console.WriteLine($"{g.Count(),6}  {g.Key}   e.g. {g.First().path}");
+                break;
+            }
+            case "lights":                                 // twinsdump <rm2> lights [-v] : the scenery's runtime lights, per chunk
+            {
+                bool verbose = args.Contains("-v");
+                int ta = 0, td = 0, tp = 0, tn = 0;
+                foreach (var (item, path) in items.Where(i => i.item is SceneryData))
+                {
+                    var s = (SceneryData)item;
+                    ta += s.LightsAmbient.Count; td += s.LightsDirectional.Count;
+                    tp += s.LightsPoint.Count; tn += s.LightsNegative.Count;
+                    Console.WriteLine($"scenery {s.ID,6} {s.ChunkName?.TrimEnd('\0')}: ambient {s.LightsAmbient.Count}, directional {s.LightsDirectional.Count}, point {s.LightsPoint.Count}, negative {s.LightsNegative.Count}");
+                    if (!verbose) continue;
+                    void Show(string kind, IEnumerable<SceneryData.LightBase> ls)
+                    {
+                        foreach (var l in ls)
+                            Console.WriteLine($"    {kind,-11} rgb ({l.Color_R:0.##}, {l.Color_G:0.##}, {l.Color_B:0.##}) a {l.Color_Unk:0.##}  radius {l.Radius:0.##}  at ({l.Position.X:0.#}, {l.Position.Y:0.#}, {l.Position.Z:0.#})");
+                    }
+                    Show("ambient", s.LightsAmbient); Show("directional", s.LightsDirectional);
+                    Show("point", s.LightsPoint); Show("negative", s.LightsNegative);
+                }
+                Console.WriteLine($"total: ambient {ta}, directional {td}, point {tp}, negative {tn}");
                 break;
             }
             case "objgfx":                                 // twinsdump <rm2> objgfx [regex] : object -> OGI (collision?) -> materials (layer, FBA)

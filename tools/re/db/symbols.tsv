@@ -1,0 +1,1900 @@
+# Names for Crash Twinsanity's PAL executable (SLES_525.68), applied by tools/re/ghidra.py import.
+# address	kind	name	detail        kind F = function (detail = prototype), L = label (detail = data type)
+00100008	F	entry	undefined entry(void)
+00100228	F	GameContextConstructor	GameContext * GameContextConstructor(GameContext * param_1)
+00101520	F	CreateGameContext	GameContext * CreateGameContext(uint wordNum, ArchivesData * words)
+00101610	F	GetSysFolder	char * GetSysFolder(void)
+00106c40	F	BuildScriptCondition	ScriptCondition * BuildScriptCondition(ObjectBuilderInterface * param_1, undefined4 index, int unkNegativeNumber)
+0010a628	F	InitInstanceNodeType8	InstanceNode_type8 * InitInstanceNodeType8(InstanceNode_type8 * param_1)
+0011be80	F	GetColor	undefined GetColor(Color * param_1, int colorIndex)
+0011bfa0	F	RSQRT	float RSQRT(float param_1, Vector4 * param_2)
+0011c008	F	MovePositionFromPos2ToPos1	Vector4 * MovePositionFromPos2ToPos1(Vector4 * pos1, Vector4 * pos2)
+0011c018	F	GetPositionFromRTS	Vector4 * GetPositionFromRTS(Matrix4x4 * param_1, int CONST_3)
+0011c088	F	RemoveReference	undefined RemoveReference(ReferenceCounter * * param_1)
+0011c1c8	F	MoveShortFromS2toS1	undefined MoveShortFromS2toS1(short * s1, short * s2)
+0011c1d8	F	SetUndefinedID?	undefined SetUndefinedID?(short * param_1)
+0011e210	F	CheckConditionAlways	float CheckConditionAlways(ScriptCondition * this)
+0011e4c8	F	InitInstanceNodeType1	InstanceNode_type1 * InitInstanceNodeType1(InstanceNode_type1 * param_1, ChunkMetaStruct * param_2)
+0011eb70	F	InitTriggerEvent	TriggerEventCaller? * InitTriggerEvent(TriggerEventCaller? * param_1, short param_2, ReferenceCounter * * param_3, undefined4 param_4)
+0012d520	F	GetNodeBasedOnInstanceType	GameNode * GetNodeBasedOnInstanceType(GameResourceManager? * this, ChunkMetaStruct * param_2, GameInstance * gameInst, InstanceContext * instContext?, InstanceNode_type1 * instNode)
+0012dc60	F	GetInstanceNodeFromObject	InstanceNode_type1 * GetInstanceNodeFromObject(GameResourceManager? * this, ChunkMetaStruct * chunkMeta, GameObject * gameObj)
+0012dd80	F	GetTriggerNode	TriggerNode * GetTriggerNode(GameResourceManager? * resourceManager, ChunkMetaStruct * chunkMeta, GameTrigger * trigger, InstanceContext * instCxt)
+0013b8a8	F	SetPlayerVehicle	undefined * SetPlayerVehicle(PlayableCharacterObjectInstanceContext * param_1, int vehicleId, ObjectInstanceContextBase * param_3, int param_4)
+0013e5f0	F	GetPlayableCharacterFlag	undefined GetPlayableCharacterFlag(InstancePropsHolderPlayableCharacter * param_1, undefined4 param_2)
+0013e600	F	GetPlayableCharacterFloat	undefined GetPlayableCharacterFloat(InstancePropsHolderPlayableCharacter * param_1, undefined4 param_2)
+0013e610	F	GetPlayableCharacterInteger	undefined GetPlayableCharacterInteger(InstancePropsHolderPlayableCharacter * param_1, undefined4 param_2)
+0013f170	F	GetNodeIndex	undefined GetNodeIndex(void)
+0013f278	F	InitObjectEventCaller	ObjectEventCaller? * InitObjectEventCaller(ObjectEventCaller? * param_1, undefined4 param_2, ReferenceCounter * * param_3, undefined4 param_4)
+0013f838	F	GetPlayerPosition	undefined GetPlayerPosition(PlayableCharacterObjectInstanceContext * param_1, Vector4 * playerPosition)
+0013ffa0	F	InitHolderType0	InstancePropsHolderPlayableCharacter * InitHolderType0(InstancePropsHolderPlayableCharacter * param_1, InstanceProperties * param_2)
+00140378	F	InitHolderType5	InstancePropsHolderType5 * InitHolderType5(InstancePropsHolderType5 * param_1, InstanceProperties * param_2)
+00140728	F	InitHolderType2	InstancePropsHolderType2 * InitHolderType2(InstancePropsHolderType2 * param_1, InstanceProperties * param_2)
+00140ce8	F	InitHolderType3	InstancePropsHolderType3 * InitHolderType3(InstancePropsHolderType3 * param_1, InstanceProperties * param_2)
+00140f60	F	InitHolderType7	InstancePropsHolderType7 * InitHolderType7(InstancePropsHolderType7 * param_1, InstanceProperties * param_2)
+00141108	F	InitHolderType4	InstancePropsHolderType4 * InitHolderType4(InstancePropsHolderType4 * param_1, InstanceProperties * param_2)
+00141838	F	InitHolderType6	InstancePropsHolderType6 * InitHolderType6(InstancePropsHolderType6 * param_1, InstanceProperties * param_2)
+00141a38	F	InitHolderType1	InstancePropsHolderType1 * InitHolderType1(InstancePropsHolderType1 * param_1, InstanceProperties * param_2)
+00164cc0	F	InitVehicleButtonBindings	VehicleButtonBindings * InitVehicleButtonBindings(VehicleButtonBindings * param_1, undefined param_2)
+00164db8	F	InitBindings	ButtonBindings * InitBindings(ButtonBindings * param_1)
+001720d8	F	HandleEvent	undefined HandleEvent(PlayableCharacterNode * param_1, ReferenceCounter * * eventRef)
+001784a0	F	LoadGlobalResources	bool LoadGlobalResources(GameController * param_1)
+001794f8	F	DestroyItem	undefined DestroyItem(ItemInterface * param_1, ulong param_2)
+00179cb0	F	ReadBanksHeader	undefined ReadBanksHeader(BanksHeader * param_1, BinaryReader * param_2)
+00179d20	F	WriteBanksHeader	undefined WriteBanksHeader(BanksHeader * param_1, BinaryReader * param_2)
+0017a400	F	GetChunkMeta	ChunkMetaStruct * GetChunkMeta(ChunkManager? * chunkManager, char * chunkName, ChunkData * chunkData)
+0017a680	F	InitializeAllGameResources	GameResources * InitializeAllGameResources(GameResources * resources)
+0017a750	F	GetNodeIndex	undefined GetNodeIndex(void)
+0017ad08	F	GetNodeIndex	undefined GetNodeIndex(void)
+0017add0	F	GetNodeIndex	undefined GetNodeIndex(void)
+0017af60	F	GetNodeIndex	undefined GetNodeIndex(void)
+0017b130	F	GetNodeIndex	undefined GetNodeIndex(void)
+0017b208	F	GetNodeIndex	undefined GetNodeIndex(void)
+0017b218	F	GetNodeIndex	undefined GetNodeIndex(void)
+0017b258	F	CreateButtonBindingsNode	ButtonBindingsNode * CreateButtonBindingsNode(ButtonBindingsNode * param_1)
+0017c490	F	GetSubItemsAmount	undefined GetSubItemsAmount(CodeSubItem * param_1)
+0017c500	F	GetSoundItemSectionReader	CodeSubItemSectionReader * GetSoundItemSectionReader(CodeSubItem * param_1, int * param_2, ItemHeader * param_3)
+0017c7e0	F	~SectionReaderInterface	undefined ~SectionReaderInterface(SectionReaderInterface * this, ulong param_2)
+0017c890	F	GetNodeIndex_0xc	undefined GetNodeIndex_0xc(void)
+0017c900	F	LoadSound	undefined LoadSound(CodeSubItemSectionReader * param_1, undefined4 diskPos, undefined4 size)
+0017ca20	F	AbstractMethodCallException	undefined AbstractMethodCallException(void)
+0017cee8	F	GetRomName	undefined1 * GetRomName(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+0017cf58	F	IsT10K	ulong IsT10K(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+0017cf98	F	GetSystemLanguageIndex	int GetSystemLanguageIndex(void)
+0017d008	F	sceScfGetTimeZone	long sceScfGetTimeZone(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+0017d060	F	sceScfGetSummerTime	ulong sceScfGetSummerTime(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+0017d0c8	F	tobcd	uint tobcd(undefined8 param_1)
+0017d0f8	F	frombcd	uint frombcd(undefined8 param_1)
+0017d118	F	convertfrombcd	undefined convertfrombcd(int param_1)
+0017d180	F	converttobcd	undefined converttobcd(int param_1)
+0017d2a0	F	subdate	undefined subdate(void)
+0017d348	F	addhour	undefined addhour(int param_1)
+0017d378	F	subhour	undefined subhour(int param_1)
+0017d3a0	F	AdjustTime	undefined AdjustTime(int param_1, int param_2)
+0017d430	F	sceScfGetLocalTimefromRTC	void sceScfGetLocalTimefromRTC(sceCdCLOCK * rtc)
+0017d478	F	InitDisk	undefined InitDisk(void)
+0017d560	F	Main	int Main(uint args, char * * argv)
+0017d840	F	ParseArguments	GameContext * ParseArguments(uint argc, char * * argv)
+0017dc68	F	MainRender	undefined MainRender(GameContext * gameArchives, bool param_2)
+0017e1f0	F	SetDmaRegisterPointers	undefined SetDmaRegisterPointers(void)
+0017e308	F	FinishDMATransferAll	ulong FinishDMATransferAll(void)
+0017e658	F	InitDMA_Manager	undefined InitDMA_Manager(DmaTagManager * param_1)
+00181758	F	StringEqualToRB	bool StringEqualToRB(GameContext * param_1, char * word, char * param_3)
+001817a0	F	GetArchivePath	bool GetArchivePath(GameContext * param_1, char * word, char * BATCH, String * archivePath)
+00181a00	F	InitAGlobalRelatedToLanguages	undefined InitAGlobalRelatedToLanguages(uint languageAmount, char * * languages)
+00181b18	F	SetGameLanguage	undefined SetGameLanguage(int languageIndex)
+00181c20	F	SimpleCopyrightChecksum?	undefined SimpleCopyrightChecksum?(void)
+00181cf0	F	MemoryAllocate	void * MemoryAllocate(uint memoryAllocSize)
+00181d20	F	MemoryDeallocate2?	undefined MemoryDeallocate2?(void * address)
+00181d50	F	MemoryAllocate2	void * MemoryAllocate2(ulong memoryAllocSize)
+00181d80	F	MemoryDeallocate?	undefined MemoryDeallocate?(void * address)
+00181db0	F	GetHeapManager?	HeapManager? * GetHeapManager?(void)
+00181e58	F	GetDiskManager?	DiskManager? * GetDiskManager?(void)
+00181ed8	F	IsVIF0_TransferingFromMemory	bool IsVIF0_TransferingFromMemory(int param_1)
+00181f00	F	TransferDMA_Data	int TransferDMA_Data(int dmaChannelIndex, sceDmaTag * dmaData, bool CONST_TRUE)
+00182040	F	FinishDMATransferChannel1	undefined4 FinishDMATransferChannel1(void)
+00182060	F	FinishDMATransfer	int FinishDMATransfer(int channelNum)
+001820f8	F	Start_DMAC_GIF_Transfer	undefined Start_DMAC_GIF_Transfer(sceDmaTag * tagAddress)
+001823e0	F	AllocDmaTags	sceDmaTag * AllocDmaTags(DmaTagManager * tagManager, int tagsAmount, int memoryAmount)
+00186a38	F	GetRotationXY	undefined GetRotationXY(Vector4 * vec, undefined4 rotX, undefined4 rotY)
+00186bd8	F	GetRotationXZ	undefined GetRotationXZ(Vector4 * vec, undefined4 rotX, undefined4 rotZ)
+00186d70	F	GetRotationYZ	undefined GetRotationYZ(Vector4 * vec, undefined4 rotY, undefined4 rotZ)
+00186f10	F	GetRotationXYZ	undefined GetRotationXYZ(Vector4 * vec, undefined4 rotX, undefined4 rotY, undefined4 rotZ)
+00187090	F	GetRotationVec?	undefined GetRotationVec?(Vector4 * rotVec?, TransformedGeometyPoint * transformMat)
+0018b5d0	F	ConstructTransGeoPoint	TransformedGeometyPoint * ConstructTransGeoPoint(TransformedGeometyPoint * param_1)
+0018b738	F	RotateAndTranslate	undefined RotateAndTranslate(TransformedGeometyPoint * param_1)
+0018bec0	F	UnkDebugFunction3	undefined UnkDebugFunction3(void)
+0018c7a8	F	GetRandom	int GetRandom(int endRange)
+0018c7f0	F	GetRandRange	int GetRandRange(int min, long max)
+0018c848	F	GetRandFloat	float GetRandFloat(void)
+0018c8c0	F	GetRandFloat?	float GetRandFloat?(float maxFloat)
+0018ca30	F	ClampFloat	float ClampFloat(float val, float minVal, float maxVal)
+0018d470	F	FillPosition	undefined FillPosition(Matrix4x4 * matrix, Vector4 * position)
+0018d570	F	MultiplyMatByMat	undefined MultiplyMatByMat(Matrix4x4 * finalMatrix, Matrix4x4 * mat2)
+0018dce8	F	RotateVecByVec	undefined RotateVecByVec(Vector4 * resVec, Vector4 * param_2, Vector4 * param_3)
+0018e970	F	ReadPath	undefined ReadPath(GamePath * param_1, BinaryReader * binReader)
+0018eb98	F	ReadPathPoints	undefined ReadPathPoints(GamePath * param_1, BinaryReader * binReader)
+0018ec48	F	TransformVector?	undefined TransformVector?(Matrix4x4 * transformMat, Vector4 * inVec, Vector4 * outVec)
+0018ec80	F	MultiplyMatrixByVector	Vector4 * MultiplyMatrixByVector(Matrix4x4 * mat, Vector4 * vecTarget, Vector4 * vecRes)
+0018ed00	F	InitIdentityMatrix	undefined InitIdentityMatrix(Matrix4x4 * matrix)
+0018ed30	F	MultiplyMatrices	undefined MultiplyMatrices(Matrix4x4 * mat1, Matrix4x4 * mat2, Matrix4x4 * resMat)
+0018edb0	F	Rotate?	void Rotate?(Matrix4x4 * mat, Vector4 * rotVec)
+0018eed0	F	CopyMatrix?	undefined CopyMatrix?(Matrix4x4 * srcMatrix, Matrix4x4 * resMatrix)
+00191f98	F	AdvanceGlobalClock	undefined4 AdvanceGlobalClock(GameTimeController * param_1)
+00191fc8	F	AdvanceClocks	undefined AdvanceClocks(TimeClock * param_1, GameTimeController * param_2)
+001920b0	F	GetCPU_Timer0_Count	ulong GetCPU_Timer0_Count(void)
+00192110	F	CPU_Timer0_Interrupt_Handler	undefined CPU_Timer0_Interrupt_Handler(void)
+00192158	F	SetupCPU_Timer0	undefined SetupCPU_Timer0(void)
+00192528	F	InitGameNode?	GameNode * InitGameNode?(GameNode * param_1)
+00192558	F	DestroyNode?	undefined DestroyNode?(GameNode * param_1, ulong param_2)
+001925a8	F	SetContextIfNone	undefined SetContextIfNone(GameNode * this, InstanceContext * value)
+00192638	F	DestroyNodesList	undefined DestroyNodesList(NodeList * nodeList, ulong param_2)
+001927b8	F	AttachNodeToContext	bool AttachNodeToContext(NodeList * nodeList, GameNode * node)
+001928a8	F	GetGameNode?	GameNode * GetGameNode?(NodeList * nodeList, int index)
+001977d8	F	CreateContextRef	uint CreateContextRef(InstanceContext * instContext?)
+00197da8	F	GetContextClock	TimeClock * GetContextClock(InstanceContext * param_1)
+0019a180	F	AddGameNodeToList	undefined AddGameNodeToList(GameNode * param1, GameNode * * param_2, int CONST_D, int CONST_11)
+0019a1c0	F	UnloadNode	undefined UnloadNode(GameNode * param_1, GameNode * * param_2, int CONST_D, int CONST_11)
+0019a6d0	F	HasNodeSpaceInList	bool HasNodeSpaceInList(NodeRelatedStruct * param_1)
+0019a7d8	F	GetNodeIndex	int GetNodeIndex(UnkMatricesNode? * param_1)
+0019a7f8	F	GetNodeIndex	undefined GetNodeIndex(void)
+0019ad48	F	Rotate	undefined4 Rotate(TransformedGeometyPoint * param_1, Vector4 * rotateVec)
+0019b238	F	InitDefaultGifTags?	undefined InitDefaultGifTags?(void)
+0019b780	F	SetupPCRTC	undefined SetupPCRTC(void)
+0019bd38	F	SetRigidModelRenderDMA	undefined4 SetRigidModelRenderDMA(RigidModelInfo * param_1, Matrix4x4 * transformMatrix, bool param_3, Vector4 * param_4, Vector4 * param_5, Vector4 * param_6)
+0019e4c0	F	SetInstanceOGI?	void SetInstanceOGI?(OgiNode * ogiNode, GameOGI * ogi, int cameraJoints, int exitPointsRequired)
+0019e988	F	InitGraphicsItem	GraphicsItem * InitGraphicsItem(GraphicsItem * graphicsItem)
+0019ead0	F	UnloadGraphics	undefined UnloadGraphics(GraphicsItem * this, ulong param_2)
+0019f548	F	GetGraphicsSectionReader	undefined GetGraphicsSectionReader(GraphicsItem * this, undefined8 param_2, ItemHeader * param_3, undefined4 param_4)
+001a0128	F	SetParticleDataBinReader	undefined4 SetParticleDataBinReader(BinaryReader * binReader)
+001a0160	F	ReadBytesIntoMemWithGlobalBinReader	undefined ReadBytesIntoMemWithGlobalBinReader(void * dest, int amount)
+001a0198	F	ReadFloatFromGlobalBinReader	float ReadFloatFromGlobalBinReader(void)
+001a01d0	F	ReadUIntFromGlobalBinReader	undefined4 ReadUIntFromGlobalBinReader(void)
+001a0210	F	ReadUShortFromGlobalBinReader	undefined2 ReadUShortFromGlobalBinReader(void)
+001a0248	F	ReadByteFromGlobalBinReader	byte ReadByteFromGlobalBinReader(void)
+001a0280	F	GetNodeIndex	undefined GetNodeIndex(void)
+001a02a8	F	InitRenderer?	GameRendererController * InitRenderer?(GameRendererController * renderer, undefined2 CONST_0x200, short CONST_0x200_2, bool CONST_TRUE)
+001a04e8	F	Render	void Render(GameRendererController * renderer)
+001a08e0	F	PerformRender	void PerformRender(undefined8 param_1, bool startTransferFlag)
+001a17c0	F	InitOgiNode	OgiNode * InitOgiNode(OgiNode * param_1)
+001a1ac0	F	LoadGraphicsSection	undefined LoadGraphicsSection(GraphicsSectionReader * param_1)
+001a2238	F	LoadGraphicsSubSection	undefined LoadGraphicsSubSection(GraphicsItem * graphicsSec, int sectionID, undefined4 sectionOffset)
+001a2328	F	GetSubSectionsAmount	int GetSubSectionsAmount(void)
+001a2988	F	GetLodsAmount	ushort GetLodsAmount(GraphicsSubItem * param_1)
+001a29b0	F	GetLodsSectionReader	GraphicsSubItemSectionReader * GetLodsSectionReader(GraphicsSubItem * param_1, undefined8 param_2, ItemHeader * param_3)
+001a2b00	F	GetRigidModels2Amount	ushort GetRigidModels2Amount(GraphicsSubItem * param_1)
+001a2b28	F	GetRigidModels2SectionReader	GraphicsSubItemSectionReader * GetRigidModels2SectionReader(GraphicsSubItem * rigidModels2Item, undefined8 param_2, ItemHeader * param_3)
+001a2c78	F	GetSkydomesAmount	ushort GetSkydomesAmount(GraphicsSubItem * param_1)
+001a2ca0	F	GetSkydomeSectionReader	GraphicsSubItemSectionReader * GetSkydomeSectionReader(GraphicsSubItem * param_1, undefined8 param_2, ItemHeader * param_3)
+001a2df0	F	GetBlendSkinsAmount	ushort GetBlendSkinsAmount(GraphicsSubItem * param_1)
+001a2e18	F	GetBlendSkinSectionLoader	GraphicsSubItemSectionReader * GetBlendSkinSectionLoader(GraphicsSubItem * blendSkinItem, undefined8 param_2, ItemHeader * param_3)
+001a2f68	F	GetSkinsAmount	ushort GetSkinsAmount(GraphicsSubItem * param_1)
+001a2f90	F	GetSkinsSubSectionReader	GraphicsSubItemSectionReader * GetSkinsSubSectionReader(GraphicsSubItem * param_1, undefined8 param_2, ItemHeader * param_3)
+001a30e0	F	GetRigidModelsAmount	ushort GetRigidModelsAmount(GraphicsSubItem * param_1)
+001a3108	F	GetRigidModelsReader	GraphicsSubItemSectionReader * GetRigidModelsReader(GraphicsSubItem * rigidModelsSection, undefined8 param_2, int param_3)
+001a3258	F	GetMaterialsItemsAmount	ushort GetMaterialsItemsAmount(GraphicsSubItem * param_1)
+001a3280	F	GetGameModelReader	GraphicsSubItemSectionReader * GetGameModelReader(GraphicsSubItem * param_1, undefined8 param_2, ItemHeader * param_3)
+001a33d0	F	GetSubSectionsAmount	undefined GetSubSectionsAmount(void)
+001a33f8	F	GetTextureItemSectionReader	GraphicsSubItemSectionReader * GetTextureItemSectionReader(GraphicsSubItem * textureSubSection, undefined8 param_2, ItemHeader * itemHeader)
+001a3548	F	GetSubSectionAmount	ushort GetSubSectionAmount(GraphicsSubItem * param_1)
+001a3570	F	GetMaterialsItemSectionReader	GraphicsSubItemSectionReader * GetMaterialsItemSectionReader(GraphicsSubItem * param_1, undefined8 param_2, ItemHeader * param_3)
+001a62a0	F	LoadMaterial	undefined LoadMaterial(GraphicsSubItemSectionReader * param_1, undefined4 diskPos, undefined4 size)
+001a6300	F	LoadTexture	undefined LoadTexture(GraphicsSubItemSectionReader * param_1, undefined4 diskPos, undefined4 size)
+001a6360	F	LoadGameModel	undefined LoadGameModel(GraphicsSubItemSectionReader * modelSectionReader, undefined4 diskPos, undefined4 size)
+001a63c0	F	LoadRigidModel	undefined LoadRigidModel(GraphicsSubItemSectionReader * param_1, undefined4 param_2, undefined4 param_3)
+001a6420	F	LoadGameSkin	undefined LoadGameSkin(GraphicsSubItemSectionReader * param_1, undefined4 param_2, undefined4 param_3)
+001a6480	F	LoadBlendSkin	undefined LoadBlendSkin(GraphicsSubItemSectionReader * param_1, undefined4 param_2, undefined4 param_3)
+001a64e0	F	LoadSkydome	undefined LoadSkydome(GraphicsSubItemSectionReader * param_1, undefined4 param_2, undefined4 param_3)
+001a6540	F	LoadRigidModel2	undefined LoadRigidModel2(GraphicsSubItemSectionReader * param_1, undefined4 param_2, undefined4 param_3)
+001a65a0	F	LoadLOD	undefined LoadLOD(GraphicsSubItemSectionReader * param_1, undefined4 param_2, undefined4 param_3)
+001aaa70	F	ReadFont	undefined ReadFont(Font * font, char * fontName)
+001acec0	F	ClearFontTexMat	undefined ClearFontTexMat(Font * param_1)
+001b7db0	F	GetLoadedParticleIndexByName	int GetLoadedParticleIndexByName(char * partInstName, char param_2)
+001b8670	F	ReadParticleType	undefined ReadParticleType(GameParticle * ptl, int particleDataSecType?, undefined param_3)
+001b90a0	F	ReadMainParticleSection	int ReadMainParticleSection(byte param_1, ChunkData * param_2)
+001bb2e0	F	RenderMaterial	uint * RenderMaterial(MaterialShader? * shader, sceDmaTag * tag, int param_3)
+001bbea0	F	ReadMaterialShader	undefined ReadMaterialShader(MaterialShader? * shader?, BinaryReader * binReader)
+001bd0b0	F	ReadTexture	undefined ReadTexture(GameTexture * tex, BinaryReader * binReader)
+001bd2e8	F	ReadGameModel	undefined ReadGameModel(GameModel * model, BinaryReader * binReader)
+001bd508	F	ReadRigidModel	undefined ReadRigidModel(GameRigidModel * rigidModel, BinaryReader * binReader)
+001bd790	F	SetRigidModelDma?	undefined SetRigidModelDma?(GameRigidModel * rigidModel, Matrix4x4 * transformMatrix, Vector4 * lightVec1, Vector4 * lightVec2, Vector4 * lightVec3, bool param_6)
+001bd998	F	ReadBlendSkin	undefined ReadBlendSkin(GameBlendSkin * blendSkin, BinaryReader * binReader)
+001bdb00	F	SetBlendSkinDMA	undefined SetBlendSkinDMA(GameBlendSkin * blendSkin, undefined4 jointTransforms, byte jointAmt, float * blendShapeFloats, undefined4 blendShapeIndices, undefined4 param_6, undefined4 param_7)
+001bdf90	F	ReadBlendSkinSubBlend	undefined ReadBlendSkinSubBlend(GameBlendSkinSubBlend * subBlend, BinaryReader * binReader, undefined4 blendShapesAmount)
+001be140	F	CreateSubBlendDMA_Chain?	sceDmaTag * CreateSubBlendDMA_Chain?(GameBlendSkinSubBlend * param_1, sceDmaTag * param_2, float * blendShapeFloats, int * blendShapeIndices, int * blendShapeIndicesCount, Vector4 * blendShapeVec)
+001be518	F	ReadGameSkin	undefined ReadGameSkin(GameSkin * gameSkin, BinaryReader * binReader)
+001be828	F	SetSkinDMA	undefined SetSkinDMA(GameSkin * skin, sceDmaTag * jointData, byte jointAmount, bool param_4)
+001bed00	F	ReadRigidModel2	undefined ReadRigidModel2(GameRigidModel * param_1, BinaryReader * binReader)
+001bf5e8	F	ReadLOD	undefined ReadLOD(GameLOD * lod, BinaryReader * binReader)
+001bfe90	F	InitGraphicsResourceTables	undefined InitGraphicsResourceTables(long param_1, long param_2)
+001c0738	F	ReadSkydome	undefined ReadSkydome(GameSkydome * skydome, BinaryReader * binReader)
+001c0b98	F	InitShadersRenderedAmt	undefined InitShadersRenderedAmt(void)
+001c0e00	F	ReadMaterial	undefined ReadMaterial(GameMaterial * param_1, BinaryReader * param_2)
+001c1010	F	SetTextureDma?	sceDmaTag * SetTextureDma?(undefined8 param_1, sceDmaTag * param_2, TextureHeaderData * param_3, UnkTextureRelated * param_4)
+001c13a0	F	InitGameModel	GameModel * InitGameModel(GameModel * param_1, uint id)
+001c1a10	F	ReadBlendSkinSubBlendStorage	undefined ReadBlendSkinSubBlendStorage(GameBlendSkinSubBlendStorage * type1, BinaryReader * binReader, undefined4 blendShapesAmount)
+001c5fd0	F	TextureExists?	bool TextureExists?(GraphicsResourceTable * textureTable, uint * texId)
+001c6090	F	GetTexture	GameTexture * GetTexture(GraphicsResourceTable * textureTable, uint * itemId)
+001c7628	F	ReadBaseLight	undefined ReadBaseLight(LightBase * param_1, BinaryReader * binReader)
+001c7778	F	CreateChunkLightController	ChunkLightController * CreateChunkLightController(ChunkLightController * param_1, undefined4 param_2)
+001c8550	F	ReadSceneryLights	undefined ReadSceneryLights(ChunkLightController * param_1, BinaryReader * binReader)
+001cb630	F	ReadDirectionalLight	undefined ReadDirectionalLight(DirectionalLight * param_1, BinaryReader * binReader)
+001cb9a8	F	ReadPointLight	undefined ReadPointLight(PointLight * param_1, int * param_2)
+001cbd18	F	ReadNegativeLight	undefined ReadNegativeLight(NegativeLight * param_1, BinaryReader * binReader)
+001cc518	F	GetNodeIndex	int GetNodeIndex(void)
+001cc528	F	InitUnkNode	UnkNode_index_0xa * InitUnkNode(UnkNode_index_0xa * param_1)
+001ccd10	F	InitVU_Programs	undefined InitVU_Programs(void)
+001ccf08	F	PutProgramIntoDMAPipeline	undefined PutProgramIntoDMAPipeline(int programIndex, int CONST_0)
+001cd710	F	ReadBasePrecompShader?	undefined ReadBasePrecompShader?(PrecompiledShaderBase * precompShader, BinaryReader * binReader)
+001cff80	F	SetShaderSettings	undefined SetShaderSettings(PrecompiledShaderType_0x2 * shader)
+001d9068	F	GetShaderSettings	undefined GetShaderSettings(PrecompiledShaderBase * param_1)
+001d9338	F	SetShaderType	undefined SetShaderType(int param_1)
+001da780	F	RegisterVU_Program	undefined RegisterVU_Program(byte * vuCode, short instructionsAmt, int programIndex)
+001da7f0	F	PutVUProgramsIntoDMAPipeline	undefined PutVUProgramsIntoDMAPipeline(void)
+001dac68	F	ReadPrecompShaderType_0x14	undefined ReadPrecompShaderType_0x14(PrecompiledShaderType_0x14 * param_1, BinaryReader * param_2)
+001dae30	F	ReadPrecompShaderType_0x13?	undefined ReadPrecompShaderType_0x13?(PrecompiledShaderType_0x13 * param_1, BinaryReader * param_2)
+001daee0	F	ReadPrecompShaderType_0xC	undefined ReadPrecompShaderType_0xC(ulong * param_1, BinaryReader * param_2)
+001daf78	F	ReadPrecompShaderType_0xD	undefined ReadPrecompShaderType_0xD(PrecompiledShaderType_0xD * param_1, BinaryReader * param_2)
+001db548	F	ReadPrecompShaderType_0x1F	undefined ReadPrecompShaderType_0x1F(ulong * param_1, BinaryReader * param_2)
+001db630	F	ReadPrecompShaderType_0x2?	undefined ReadPrecompShaderType_0x2?(PrecompiledShaderType_0x2 * param_1, BinaryReader * param_2)
+001db718	F	ReadPrecompShaderType_0x15	undefined ReadPrecompShaderType_0x15(PrecompiledShaderType_0x15 * param_1, BinaryReader * param_2)
+001db798	F	ReadPrecompShaderType_0x0	undefined ReadPrecompShaderType_0x0(PrecompiledShaderType_0x0 * param_1, int * param_2)
+001db960	F	ReadPrecompShaderType_0x12	undefined ReadPrecompShaderType_0x12(PrecompiledShaderType_0x12 * param_1, BinaryReader * param_2)
+001dbb78	F	ReadPrecompShaderType_0x1A	undefined ReadPrecompShaderType_0x1A(PrecompiledShaderType_0x1A * param_1, BinaryReader * param_2)
+001dbdf8	F	ReadPrecompShaderType_0x17	undefined ReadPrecompShaderType_0x17(PrecompiledShaderType_0x17 * param_1, BinaryReader * param_2)
+001dbf48	F	ReadPrecompShaderType_0x19	undefined ReadPrecompShaderType_0x19(PrecompiledShaderType_0x19 * param_1, BinaryReader * param_2)
+001dc030	F	ReadPrecompShaderType_0x16	undefined ReadPrecompShaderType_0x16(PrecompiledShaderType_0x16 * param_1, BinaryReader * param_2)
+001dc118	F	ReadPrecompShaderType_0x1E	undefined ReadPrecompShaderType_0x1E(ulong * param_1, BinaryReader * param_2)
+001dc200	F	ReadPrecompShaderType_0x1B	undefined ReadPrecompShaderType_0x1B(ulong * param_1, BinaryReader * param_2)
+001dc330	F	ReadPrecompShaderType_0xE	undefined ReadPrecompShaderType_0xE(PrecompiledShaderType_0xE * param_1, int * param_2)
+001dc418	F	ReadPrecompShaderType_0x1?	undefined ReadPrecompShaderType_0x1?(PrecompiledShaderType_0x1 * param_1, BinaryReader * param_2)
+001dc5e0	F	ReadPrecompShaderType_0x10	undefined ReadPrecompShaderType_0x10(PrecompiledShaderType_0x10 * param_1, BinaryReader * param_2)
+001dc988	F	ReadPrecompShaderType_0xB	undefined ReadPrecompShaderType_0xB(ulong * param_1, BinaryReader * param_2)
+001dd0e8	F	ReadPrecompShaderType_0xF	undefined ReadPrecompShaderType_0xF(ulong * param_1, BinaryReader * param_2)
+001dd1d0	F	ReadPrecompShaderType_0x20	undefined ReadPrecompShaderType_0x20(ulong * param_1, BinaryReader * param_2)
+001dd268	F	ReadPrecompShaderType_0x11	undefined ReadPrecompShaderType_0x11(PrecompiledShaderType_0x11 * param_1, BinaryReader * param_2)
+001dd418	F	ReadPrecompShaderType_0x4	undefined ReadPrecompShaderType_0x4(ulong * param_1, BinaryReader * param_2)
+001dd4b0	F	ReadPrecompShaderType_0xA	undefined ReadPrecompShaderType_0xA(ulong * param_1, BinaryReader * param_2)
+001df5a0	F	GetSoundAddress	GameSound * GetSoundAddress(short soundId)
+001e5f00	F	PlaySound?	ulong PlaySound?(float param_1, float param_2, short soundId, int param_4, int param_5, Vector4 * instPosition, long param_7, uint param_8)
+001e70f8	F	fBufferReceiverFromUnkRPC_Call	undefined fBufferReceiverFromUnkRPC_Call(void)
+001e81d0	F	Increment_0x309FA8	int Increment_0x309FA8(void)
+001e8928	F	GetData_0x309EA0	undefined4 GetData_0x309EA0(void)
+001e89f8	F	UnknownDebugFunction?	undefined UnknownDebugFunction?(void)
+001e8a00	F	UnkDebugFunction2	undefined UnkDebugFunction2(void)
+001e9c78	F	ReadSceneryBase	undefined ReadSceneryBase(SceneryBase * baseScenery, BinaryReader * binReader)
+001eb570	F	CopyMatrixAtIndex	undefined CopyMatrixAtIndex(InstanceContextCollisionInformation * param_1, byte jointIndex, int index, Matrix4x4 * unkMatrix)
+001eb9f8	F	GetCollisionData	undefined GetCollisionData(InstanceContextCollisionInformation * instCxtColInfo, Matrix4x4 * modelMatrix, undefined4 index, ModelCollisionData * * param_4, Matrix4x4 * resultMatrix)
+001ec068	F	ReadScenery_Type_0x1600	undefined ReadScenery_Type_0x1600(SceneryNode * scenery_0x1600, BinaryReader * binReader)
+001ece30	F	CreateChunkData	ChunkData * CreateChunkData(ChunkData * param_1, ChunkListData? * param_2, char * path)
+001ed5d8	F	ReadScenery	undefined ReadScenery(ChunkData * param_1, BinaryReader * binReader)
+001ee6c8	F	RenderDynamicScenery?	ulong RenderDynamicScenery?(DynamicSceneryModelStorage * param_1, ChunkRendererBase * param_2)
+001eec40	F	RenderScenery?	uint RenderScenery?(SceneryRoot * sceneryRoot, int param_2, ChunkRendererBase * param_3, ChunkData * chunkData)
+001efbe8	F	LoadSceneryType	undefined LoadSceneryType(SceneryTypeReader * param_1)
+001f0698	F	GetChildrenAmount	undefined GetChildrenAmount(void)
+001f06a0	F	GetSceneryChildren	undefined GetSceneryChildren(SceneryNode * param_1)
+001f0748	F	InitCollisionInformation?	InstanceContextCollisionInformation * InitCollisionInformation?(InstanceContextCollisionInformation * param_1, InstanceContext * param_2)
+001f0c48	F	GetAmountOfBBoxes	uint GetAmountOfBBoxes(InstanceContextCollisionInformation * param_1)
+001f1408	F	ReadSceneryRoot	undefined ReadSceneryRoot(SceneryRoot * param_1, BinaryReader * binReader)
+001f1468	F	LoadLoadWall	ChunkLinksLoadWall * LoadLoadWall(ChunkLinksLoadWall * param_1, BinaryReader * binReader)
+001f15f8	F	GetChunkListData?	ChunkListData? * GetChunkListData?(void)
+001f1638	F	InitChunkListData?	ChunkListData? * InitChunkListData?(ChunkListData? * param_1)
+001f16e8	F	GetChunkData?	ChunkData * GetChunkData?(ChunkListData? * chunkListData?, String * chunkPath?)
+001f3fe8	F	UnloadChunk?	undefined UnloadChunk?(ChunkData * param_1, ChunkListData? * param_2, int CONST_14D, int CONST_149)
+001f4128	F	StringsNotEqual	bool StringsNotEqual(String * str, char * param_2)
+001f4870	F	StartLoadingSM2	undefined4 StartLoadingSM2(ChunkSm2Loader * param_1, bool param_2, bool param_3)
+001f4a40	F	LoadSM2	undefined LoadSM2(Sm2Reader * param_1, undefined8 * position, uint blockSize)
+001f5bb8	F	CreateSM2	Sm2Item * CreateSM2(Sm2Item * sm2_item, ChunkSm2Loader * param_2)
+001f5cb0	F	GetSubSectionsAmount_SM2	undefined GetSubSectionsAmount_SM2(void)
+001f5cd0	F	GetSm2ItemSectionReader	Sm2Reader * GetSm2ItemSectionReader(Sm2Item * param_1, undefined8 param_2, ItemHeader * param_3, int * itemSize)
+001fa170	F	CreateBBoxFromModelMatrix	undefined CreateBBoxFromModelMatrix(BoundingBox * resultBB, Matrix4x4 * modelMatrix)
+001fbef8	F	CreateBBOX	undefined CreateBBOX(ModelCollisionData * param_1, Vector4 * bbox_min, Vector4 * bbox_max)
+001fe640	F	DoDynamicSceneryAnimation	undefined4 DoDynamicSceneryAnimation(float delta, DynamicSceneryNode * dynSceneryNode)
+001fed78	F	LoadDynamicScenery	undefined4 LoadDynamicScenery(GameDynamicScenery * param_1, BinaryReader * binReader)
+001ffea8	F	MergeBBox	undefined MergeBBox(BoundingBox * resultBBox, BoundingBox * bbox)
+001fff48	F	CreateDefaultBBox	undefined CreateDefaultBBox(BoundingBox * param_1)
+00200008	F	GetMaxCoordDistInBB	float GetMaxCoordDistInBB(BoundingBox * param_1)
+00200950	F	LoadBbox	undefined LoadBbox(ModelCollisionData * param_1, Matrix4x4 * transformMatrix, BoundingBox * resultBBox)
+00200998	F	GetBBFromModelColData	undefined GetBBFromModelColData(ModelCollisionData * param_1, BoundingBox * param_2)
+00201098	F	ReadModelCollisionData	undefined ReadModelCollisionData(ModelCollisionData * colData, BinaryReader * binReader)
+002017a8	F	GetNodeIndex	undefined GetNodeIndex(void)
+00201828	F	GetDynamicSceneryRotationResult	float * GetDynamicSceneryRotationResult(float blendFactor, float * resultRotationValue, ushort * stackPointer)
+002019d8	F	AnimateDynamicScenery	undefined AnimateDynamicScenery(undefined4 param_1, TimeClock * param_2)
+00201bf0	F	GetBbox	BoundingBox * GetBbox(Vector4 * posArray, ushort size, Matrix4x4 * unkMat)
+00202470	F	ReverseStringConcatenation	undefined ReverseStringConcatenation(String * param_1, char * param_2)
+00202a60	F	GetIndexBasedOnAllocSize	uint GetIndexBasedOnAllocSize(uint memoryAllocSize)
+00202be8	F	CacheAlloc?	void * CacheAlloc?(MemoryController? * memController, int memoryAllocSize)
+002037a8	F	GetReadTableIndex	ulong GetReadTableIndex(uint readAmt?)
+002042d8	F	NewString	bool NewString(String * str, int length)
+00204338	F	StringDelete	undefined StringDelete(String * param_1)
+002043f0	F	FloatToString	String * FloatToString(float param_1, String * param_2)
+00204498	F	NumberToString?	String * NumberToString?(String * param_1, int param_2)
+00204558	F	CopyToString	String * CopyToString(String * param_1, char * param_2)
+00204718	F	CreateStringFromChar	String * CreateStringFromChar(String * newStr, char * string)
+002047f0	F	ConcatenateString	String * ConcatenateString(String * strObj, char * str)
+002049b0	F	StringLess	bool StringLess(String * param_1, String * param_2)
+002049f0	F	GetGameResourceName?	undefined GetGameResourceName?(String * param_1, BinaryReader * param_2)
+00204b18	F	ForwardToBackSlash	undefined ForwardToBackSlash(String * param_1)
+00204c88	F	GetMemoryAddress	void * GetMemoryAddress(HeapManager? * heapManager, uint memoryAllocSize)
+00204cc0	F	MemoryAllocateAligned	void * MemoryAllocateAligned(HeapManager? * param_1, uint size, int alignment)
+00204d38	F	FreeMemory	undefined FreeMemory(HeapManager? * heapManager, void * deallocAddress)
+00204ed0	F	CreateHeapManager?	HeapManager? * CreateHeapManager?(HeapManager? * param_1)
+00204f20	F	InitHeapManager?	undefined InitHeapManager?(HeapManager? * param_1)
+00205188	F	HeapAlloc?	int * * HeapAlloc?(HeapManager? * param_1, int memoryAllocSize?)
+002051d8	F	FreeHeap?	undefined FreeHeap?(HeapManager? * heapManager, void * deallocAddress)
+002052c0	F	InitMemController?	MemoryController? * InitMemController?(MemoryController? * param_1)
+00205340	F	InitAllocatorCache	undefined InitAllocatorCache(MemoryController? * param_1, MemoryAllocatorNode * lastNode, int allocatorsAmt)
+002053c8	F	FreeCache?	undefined FreeCache?(MemoryController? * memController, void * deallocAddress)
+00205488	F	InitRootNode?	MemoryAllocatorNode * InitRootNode?(MemoryAllocatorNode * param_1)
+002054d8	F	AllocateMemory	undefined AllocateMemory(MemoryAllocatorNode * allocNode, int totalMemoryAlloc, int allocChunkSize, void * firstEntryAddress)
+00205550	F	GetAvailableAddress	void * GetAvailableAddress(MemoryAllocatorNode * allocNode)
+00205580	F	FreeAddress	undefined FreeAddress(MemoryAllocatorNode * allocNode, void * address)
+00205608	F	IsDiskNodeLoaded?	bool IsDiskNodeLoaded?(DiskReaderNode * param_1)
+00205b50	F	GetDiskNodeIndex	undefined4 GetDiskNodeIndex(undefined4 outNodeIndex, DiskManager? * diskManager?, int blockSize, bool param_4, undefined8 param_5)
+00205cb8	F	GetReadDiskDataPosition?	byte * GetReadDiskDataPosition?(DiskManager? * param_1, int * diskNodeIndex)
+00205e00	F	StoreInCacheChain	undefined StoreInCacheChain(MemoryAllocatorNode * newAllocator, MemoryAllocatorNode * * cahcedAllocator, int CONST_19, int CONST_1D)
+00206580	F	ReadScriptCommand	ScriptCommand * ReadScriptCommand(BinaryReader * binReader)
+00206900	F	ExecuteScripts?	ScriptState * ExecuteScripts?(ScriptState * param_1, ScriptCall * scriptCall, ScriptExecutionState * execState, TimeClock * clock, ScriptControlPacket * controlPacket)
+00206e40	F	GetChildScriptDataToCall	ScriptData * GetChildScriptDataToCall(ScriptState * scriptState, GameObject * gameObj)
+00206f00	F	ExecuteScripts2?	bool ExecuteScripts2?(ScriptState * scriptState, ScriptCall * scriptCall, ScriptExecutionState * executionState, TimeClock * clock)
+00207178	F	InitSomeUnkownGlobals	undefined InitSomeUnkownGlobals(void)
+00207378	F	GetVector4FromByteIndexInScriptSupport1	undefined GetVector4FromByteIndexInScriptSupport1(ScriptControlPacket * param_1, undefined4 byteIndex, undefined4 param_3, Vector4 * param_4)
+00207750	F	LoadMajorScriptData	undefined LoadMajorScriptData(HeaderScript * this, GameObjectResourceTable * resourceTable)
+00207838	F	ReadScriptCondition	ScriptCondition * ReadScriptCondition(BinaryReader * binReader)
+00207910	F	CreateTriggerEvent	TriggerEventCaller? * CreateTriggerEvent(TriggerNode * param_1, short triggerArg, long param_3, TriggerEventCaller? * param_4)
+002081c0	F	InitTriggerNode	TriggerNode * InitTriggerNode(TriggerNode * trgNode, ChunkData * param_2, GameTrigger * trigger)
+00208800	F	GetCurrentPosition	undefined GetCurrentPosition(DiskDataReader * param_1)
+00208858	F	GetScriptId	short GetScriptId(GenericScriptInfo * this)
+00208860	F	SetFlagField	undefined SetFlagField(GenericScriptInfo * this)
+00208888	F	IsHeader	bool IsHeader(HeaderScript * this)
+002088c0	F	GetScriptId	short GetScriptId(MainScript * this)
+002088d0	F	IsHeader	bool IsHeader(void)
+00208a40	F	ReadStateBody	undefined ReadStateBody(ScriptStateBody * stateBody, BinaryReader * binReader)
+00208bb0	F	ReadScriptData	undefined ReadScriptData(ScriptData * scrData, BinaryReader * binReader)
+00208cb0	F	InitGenericScriptInfo	GenericScriptInfo * InitGenericScriptInfo(GenericScriptInfo * param_1)
+00208d18	F	DestroyGenericScriptInfo?	undefined DestroyGenericScriptInfo?(GenericScriptInfo * this, ulong param_2)
+00208f50	F	LoadStateBodies	undefined LoadStateBodies(ScriptState * state, BinaryReader * binReader)
+00208fc0	F	LoadStateBodyAddresses	undefined LoadStateBodyAddresses(ScriptState * param_1)
+00209010	F	LoadScriptState	void LoadScriptState(ScriptState * state, BinaryReader * binReader, bool param_3)
+002091b8	F	ReadScriptType1	undefined ReadScriptType1(ScriptControlPacket * param_1, BinaryReader * binReader)
+002093b8	F	GetFloatFromByteIndexInScriptSupport1	bool GetFloatFromByteIndexInScriptSupport1(ScriptControlPacket * param_1, uint byteIndex, undefined4 param_3, undefined4 param_4)
+00209450	F	GetIntFromByteIndexInScriptSupport1	bool GetIntFromByteIndexInScriptSupport1(ScriptControlPacket * param_1, uint index, InstancePropsHolderBase * param_3, undefined4 * param_4)
+002094e8	F	GetFlagFromByteIndexInScriptSupport1	bool GetFlagFromByteIndexInScriptSupport1(ScriptControlPacket * param_1, uint byteIndex, InstancePropsHolderBase * param_3, int * param_4)
+00209660	F	DestroyHeaderScript	undefined DestroyHeaderScript(HeaderScript * this, ulong param_2)
+00209710	F	ReadHeaderScript	undefined ReadHeaderScript(HeaderScript * this, BinaryReader * binReader)
+00209918	F	DestroyObj?	undefined DestroyObj?(void * param_1, ulong param_2)
+00209b40	F	DestroyMajorScript	undefined DestroyMajorScript(MainScript * this, ulong param_2)
+00209bd8	F	ReadMainScript	undefined ReadMainScript(MainScript * param_1, BinaryReader * binReader)
+00209c38	F	SetFlagField	undefined SetFlagField(MainScript * this)
+00209ca0	F	ReadTrigger	undefined ReadTrigger(GameTrigger * param_1, BinaryReader * param_2)
+002101d8	F	GetContextByCallConvention	InstanceContext * GetContextByCallConvention(int * callConvention, ScriptCall * scriptCall)
+00211df8	F	SetInstanceAnimation?	undefined SetInstanceAnimation?(PlayAnimationCommand * this, InstancePropsHolderBase * propsHolder, GameAnimation * anim, OgiAnimatorService * param_4)
+0021e9f0	F	GetSoundID	short GetSoundID(InstanceNode_type0 * param_1, short sndIndexInObject)
+00220860	F	GetScriptActionSize	undefined GetScriptActionSize(void)
+00220a60	F	GetScriptCommandSize	undefined GetScriptCommandSize(void)
+002211c8	F	ExecuteCommand_Destroy	undefined ExecuteCommand_Destroy(DestroyCommand * this, TimeClock * param_2, ScriptCall * param_3)
+002212e0	F	ExecuteCommand_0x4E	undefined ExecuteCommand_0x4E(ScriptCommand_0x4E * param_1, TimeClock * param_2, ScriptCall * param_3)
+00221ba0	F	ExecutePlayAnimationCommand	undefined ExecutePlayAnimationCommand(PlayAnimationCommand * this, TimeClock * param_2, ScriptCall * param_3)
+00229178	F	CheckConditionInstanceContextBitfieldRelated	undefined CheckConditionInstanceContextBitfieldRelated(ScriptCondition * this, InstanceNode_type0 * param_2)
+002291a8	F	CheckConditionInstanceContextBitfieldFlag11	float CheckConditionInstanceContextBitfieldFlag11(ScriptCondition * this, InstanceNode_type0 * param_2)
+002291d0	F	CheckPersistentFlagCondition	float CheckPersistentFlagCondition(ScriptCondition * this, InstanceNode_type0 * param_2)
+0022a020	F	CheckAnimationProgressCondition?	undefined CheckAnimationProgressCondition?(ScriptCondition * this, InstanceNode_type0 * param_2, ScriptExecutionState * param_3, undefined4 param_4)
+0022a070	F	CheckConditionDefault	float CheckConditionDefault(ScriptCondition * this, InstanceNode_type0 * param_2, ScriptExecutionState * param_3)
+0022a088	F	CheckConditionGetRandFloat	float CheckConditionGetRandFloat(ScriptCondition * this)
+0022a0a8	F	CheckInstanceTypeCondition	float CheckInstanceTypeCondition(ScriptCondition * param_1, InstanceNode_type0 * param_2)
+0022a128	F	CheckInstanceFlagSet	float CheckInstanceFlagSet(ScriptCondition * param_1, InstanceNode_type0 * param_2)
+0022b328	F	CheckAnimationEndedCondition	float CheckAnimationEndedCondition(ScriptCondition * param_1, InstanceNode_type1 * param_2)
+0023c7a8	F	GetNodeIndex	undefined GetNodeIndex(void)
+0023c870	F	GetGameObjectAddress_FromInstance?	GameObject * GetGameObjectAddress_FromInstance?(InstanceNode_type1 * param_1)
+0023c8a8	F	GetPropsHolderFromInstanceNode	undefined4 GetPropsHolderFromInstanceNode(InstanceNode_type1 * param_1)
+0023d598	F	InitInstanceNodeType0	InstanceNode_type0 * InitInstanceNodeType0(InstanceNode_type0 * param_1, ChunkMetaStruct * param_2, bool param_3)
+0023e200	F	DestroyInstanceParticles	undefined DestroyInstanceParticles(InstanceNode_type0 * this)
+00240f70	F	CheckDistanceFromPlayerCondition	undefined CheckDistanceFromPlayerCondition(ScriptCondition * this, InstanceNode_type0 * param_2)
+00251900	F	InitGameObjectScriptAppend	ScriptPack * InitGameObjectScriptAppend(ScriptPack * param_1)
+00251970	F	ExecuteGameObjectAppendCommands	undefined ExecuteGameObjectAppendCommands(ScriptPack * script_append, InstanceNode_type1 * param_2)
+002519c8	F	LoadScriptPack	undefined LoadScriptPack(ScriptPack * param_1, BinaryReader * param_2)
+00252078	F	CheckDistanceFromSpawnCondition	undefined CheckDistanceFromSpawnCondition(ScriptCondition * this, InstanceNode_type0 * param_2)
+002598e8	F	GetOgiNodeFromObject	OgiNode * GetOgiNodeFromObject(GameObject * gameObj)
+0025a160	F	GetTicksFromTime	float GetTicksFromTime(int * time)
+0025cf50	F	LoadParticles?	undefined4 LoadParticles?(char * param_1)
+0025d2b0	F	CreateGameObject	GameObject * CreateGameObject(GameObject * param_1, BinaryReader * param_2)
+0025d618	F	ReadGameObject	undefined ReadGameObject(GameObject * gameObj, BinaryReader * binReader)
+0025ddb8	F	CopyInstanceProperties	undefined CopyInstanceProperties(InstancePropsHolderBase * propsHolder, InstanceProperties * instProps)
+0025e080	F	CreateInstanceContext	InstanceContext * CreateInstanceContext(GameResourceManager? * gameResourceManager?, ChunkMetaStruct * chunkMeta, GameInstance * gameInst)
+0025f080	F	ReadInstance	undefined ReadInstance(GameInstance * instancePtr, BinaryReader * binReader)
+0025f938	F	LoadObjectResources	void LoadObjectResources(GameObjectReferencedResources * objRequiredResources, short * objId, GameResources * resources)
+00260f08	F	ReadResourceReferences	undefined ReadResourceReferences(GameObjectReferencedResources * param_1, BinaryReader * binary_reader)
+00261218	F	ReadInstancePropertiesList	undefined ReadInstancePropertiesList(InstanceProperties * instProps, BinaryReader * binReader)
+002616c0	F	ExecuteEvent	int ExecuteEvent(ObjectInstanceContextBase * objInstCxt, ScriptEventIndex eventIndex, InstanceContext * instContext?, long param_4, byte param_5)
+00261a40	F	ReadCodeModel	undefined ReadCodeModel(GameCodeModel * codeModel, BinaryReader * binReader)
+00261d90	F	GetTriggerReceiver	uint * GetTriggerReceiver(GameObject * param_1, int slotIndex)
+00261da0	F	GetOgiID_FromScriptSlots	short * GetOgiID_FromScriptSlots(short * destination, GameObject * gameObj, int index)
+00261dd8	F	GetAnimID_FromObject	short * GetAnimID_FromObject(short * param_1, GameObject * param_2, int index)
+00261e10	F	GetScriptId_FromScriptSlot	short * GetScriptId_FromScriptSlot(short * destination, GameObject * gameObj, int slotIndex)
+00261e50	F	GetSoundID_FromObject	short * GetSoundID_FromObject(short * destination, GameObject * gameObject, short soundIndex)
+00261f30	F	StoreInstanceFlagInHolder	int * StoreInstanceFlagInHolder(InstancePropsHolderBase * propsHolder, int flagIndex, int * instFlag)
+00261fd0	F	GetFlagPropAtIndex	int * GetFlagPropAtIndex(int * param_1, InstancePropsHolderBase * param_2, int index)
+00262080	F	StoreInstanceFloatInHolder	float * StoreInstanceFloatInHolder(float * float, InstancePropsHolderBase * propsHolder, int floatIndex)
+00262110	F	GetFloatPropAtIndex	float GetFloatPropAtIndex(InstancePropsHolderBase * propsHolder, uint floatIndex)
+002621a0	F	StoreInstanceIntInHolder	int * StoreInstanceIntInHolder(InstancePropsHolderBase * propsHolder, int intIndex, int * int)
+00262230	F	GetInstanceIntProp	int GetInstanceIntProp(InstancePropsHolderBase * propsHolder, int propIndex)
+002622b8	F	InitInstanceConstructor	InstanceConstructor? * InitInstanceConstructor(InstanceConstructor? * param_1, GameInstance * gameInst, GameResources * param_3, InstanceContext * instCxt)
+00262340	F	DestroyInstanceConstructor	undefined DestroyInstanceConstructor(InstanceConstructor? * param_1, ulong param_2)
+00262400	F	GetOgiNodeFromInstance	OgiNode * GetOgiNodeFromInstance(GameResourceManager? * this, ChunkMetaStruct * param_2, GameInstance * gameInst, InstanceContext * instCxt)
+00262858	F	InitGameInstance?	GameInstance * InitGameInstance?(GameInstance * param_1)
+00262900	F	InitInstance	GameInstance * InitInstance(GameInstance * instancePtr, BinaryReader * binReader?)
+002629c0	F	CopyInstProps?	undefined CopyInstProps?(GameInstance * gameInst, undefined4 instProps)
+00262c80	F	GetNextObjectElemIdAddress	int * GetNextObjectElemIdAddress(ObjectElements * elemStruct)
+00262f80	F	InitInstanceProperties	InstanceProperties * InitInstanceProperties(InstanceProperties * instProps, BinaryReader * bin_reader)
+00262fd0	F	FreeInstancePropsList?	undefined FreeInstancePropsList?(InstanceProperties * instProps, ulong freeAllPropsFlag)
+002630b0	F	GetFlagPropAtIndex	uint * GetFlagPropAtIndex(uint * param_1, InstanceProperties * param_2, int index)
+002630d0	F	GetFloatPropAtIndex	float * GetFloatPropAtIndex(InstanceProperties * param_1, int propIndex)
+002630e8	F	GetIntegerPropAtIndex	undefined4 GetIntegerPropAtIndex(InstanceProperties * instProps, int index)
+002631e8	F	RETURN_BACK	undefined RETURN_BACK(void)
+002636f0	F	AddExtraFlag	undefined AddExtraFlag(ExtraInstancePropsStorage * param_1, int index, int * newFlag)
+00263718	F	AddExtraFloat	undefined AddExtraFloat(float * newFloat, ExtraInstancePropsStorage * param_2, int index)
+00263750	F	AddExtraInt	undefined AddExtraInt(ExtraInstancePropsStorage * param_1, int index, undefined4 newInt)
+002637d0	F	GetExtraFloatProp	float GetExtraFloatProp(ExtraInstancePropsStorage * param_1, int index)
+002648e8	F	ReadParticleData	undefined ReadParticleData(Rm2Item * rm2, BinaryReader * binReader)
+00264a30	F	CreateRM2	Rm2Item * CreateRM2(Rm2Item * rm2_item, ChunkMetaStruct * param_2)
+00264b30	F	InitResources	GameResources * InitResources(GameResources * resources, undefined4 languagesAmt, char * levelAgentsStr)
+00265a20	F	InitObjectTable	undefined4 InitObjectTable(GameResources * resources, uint tableSize)
+00265b18	F	InitScriptTable	undefined4 InitScriptTable(GameResources * resources, uint tableSize)
+00265c20	F	InitCodeModelTable	undefined4 InitCodeModelTable(GameResources * param_1, uint tableSize)
+00265d10	F	InitAnimationTable	undefined4 InitAnimationTable(GameResources * resources, uint tableSize)
+00265e00	F	InitSoundTable	undefined4 InitSoundTable(GameResources * param_1, uint tableSize)
+00265ef8	F	InitVoiceTables	GameObjectResourceTable * * InitVoiceTables(GameResources * param_1, uint param_2)
+00266090	F	InitOgiTable	undefined4 InitOgiTable(GameResources * param_1, uint tableSize)
+00266340	F	InitCodeItem	CodeItem * InitCodeItem(CodeItem * code, GameResources * resources, undefined4 param_3)
+00267710	F	InitInstanceSectionItem	InstanceSectionItem * InitInstanceSectionItem(InstanceSectionItem * param_1, InstanceSectionResources * param_2)
+002678d8	F	GetInstanceSectionReader	InstanceSectionReader * GetInstanceSectionReader(InstanceSectionItem * param_1, int resTableIndex, ItemHeader * param_3, int * itemSize)
+00268528	F	UnloadCode	undefined UnloadCode(CodeItem * param_1, ulong param_2)
+00268c98	F	LoadDefault	undefined LoadDefault(ChunkManager? * param_1, char * defaultChunkPath)
+00268dd0	F	FindChunkInfoByName	ChunkMetaStruct * FindChunkInfoByName(ChunkManager? * param_1, char * param_2)
+00269140	F	UnloadAllChunks?	undefined UnloadAllChunks?(ChunkManager? * param_1)
+0026a1b8	F	LoadRM2	undefined LoadRM2(Rm2Reader * param_1, undefined4 diskPos, undefined4 size)
+0026a208	F	CreateDefaultRM2	Rm2Item * CreateDefaultRM2(Rm2Item * rm2Item, char * defaultChunkPath, GameResources * gameResources, UnkObjectIdsRelated * param_4)
+0026a2c0	F	DestroyRM2	undefined DestroyRM2(Rm2Item * this, ulong param_2)
+0026a360	F	GetSubSectionsAmount_RM2	undefined GetSubSectionsAmount_RM2(void)
+0026a368	F	GetRm2ItemSectionReader	Rm2Reader * GetRm2ItemSectionReader(Rm2Item * this, int param_2, ItemHeader * itemHeader, int * itemSize)
+0026a580	F	ReadRM2	undefined ReadRM2(Rm2Item * rm2, uint secId, int secOffset, BinaryReader * binReader)
+0026a6c0	F	AddRm2ToLoadQueue	undefined AddRm2ToLoadQueue(Rm2Item * rm2_item, bool loadIntoMemory, bool addToLoadQueue)
+0026a810	F	LoadItem	undefined LoadItem(CodeSectionReader * this)
+0026a838	F	LoadCodeSubSection	undefined LoadCodeSubSection(CodeItem * parent, int codeSectionID, byte * subSectionOffset)
+0026a938	F	GetSubSectionsAmount	int GetSubSectionsAmount(undefined param_1)
+0026b498	F	LoadInstanceSection	undefined LoadInstanceSection(InstanceSectionReader * param_1)
+0026b4c0	F	LoadInstanceSectionSubSection	undefined LoadInstanceSectionSubSection(InstanceSectionItem * param_1, int subSectionID, byte * subSectionOffset)
+0026b590	F	GetInstanceSectionSubSectionsAmount	undefined GetInstanceSectionSubSectionsAmount(void)
+0026bb60	F	GetInstanceSubSectionItemAmount	undefined GetInstanceSubSectionItemAmount(InstanceSectionSubItem * param_1)
+0026bb80	F	GetCameraSectionReader	InstanceSectionSubSectionReader * GetCameraSectionReader(InstanceSectionSubItem * param_1, int param_2, ItemHeader * param_3, int * param_4)
+0026bd28	F	GetTriggerAmount	undefined GetTriggerAmount(InstanceSectionSubItem * param_1)
+0026bd48	F	GetTriggerSectionReader	InstanceSectionSubSectionReader * GetTriggerSectionReader(InstanceSectionSubItem * param_1, undefined8 param_2, undefined8 param_3, int * param_4)
+0026c608	F	GetObjectInstanceAmount	undefined GetObjectInstanceAmount(InstanceSectionSubItem * param_1)
+0026c628	F	GetObjectInstanceSectionReader	InstanceSectionSubSectionReader * GetObjectInstanceSectionReader(InstanceSectionSubItem * objectInstanceItem, undefined8 param_2, undefined8 param_3, int * param_4)
+0026c9c8	F	GetCodeModelSubItemsAmount	undefined GetCodeModelSubItemsAmount(CodeSubItem * param_1)
+0026ca38	F	GetCodeModelSectionReader	CodeSubItemSectionReader * GetCodeModelSectionReader(CodeSubItem * codeModelItem, int * discPos, ItemHeader * param_3)
+0026cbb0	F	GetOgiSubItemsAmount	undefined GetOgiSubItemsAmount(CodeSubItem * param_1)
+0026cc20	F	GetOgiItemReader	CodeSubItemSectionReader * GetOgiItemReader(CodeSubItem * ogiSubItem, int resTableIndex, ItemHeader * itemHeader)
+0026cd98	F	GetSubItemsAmount	undefined GetSubItemsAmount(void)
+0026ce08	F	GetAnimationItemReader	CodeSubItemSectionReader * GetAnimationItemReader(CodeSubItem * animationItem, int resTableIndex, ItemHeader * itemHeader)
+0026cf80	F	GetSubSectionAmount	undefined GetSubSectionAmount(void)
+0026cff0	F	GetScriptSectionItemReader	CodeSubItemSectionReader * GetScriptSectionItemReader(CodeSubItem * scriptSection, int resTableIndex, ItemHeader * itemHeader)
+0026d168	F	GetSubItemsAmount	undefined GetSubItemsAmount(CodeSubItem * this)
+0026d1d8	F	GetObjectSectionReader	CodeSubItemSectionReader * GetObjectSectionReader(CodeSubItem * this, int resTableIndex, ItemHeader * itemHeader)
+0026d350	F	LoadAnimation	undefined LoadAnimation(CodeSubItemSectionReader * param_1, undefined4 discPosition, undefined4 blockSize)
+0026d508	F	LoadOgi	undefined LoadOgi(CodeSubItemSectionReader * ogiItemReader, undefined4 diskPos, undefined4 blockSize)
+0026d6a8	F	LoadCodeModel	undefined LoadCodeModel(CodeSubItemSectionReader * codeModelReader, undefined4 position, undefined4 size)
+0026db58	F	LoadObject	undefined LoadObject(CodeSubItemSectionReader * param_1, undefined4 discPosition?, undefined4 blockSize?)
+0026dc58	F	LoadScript	undefined LoadScript(CodeSubItemSectionReader * scrLoader, byte * diskPosition, int size)
+0026ddb8	F	LoadInstanceTemplate	undefined LoadInstanceTemplate(void)
+0026df20	F	LoadInstance	undefined LoadInstance(InstanceSectionSubSectionReader * param_1, undefined4 instancePtr, int instanceSizeOnDisk)
+0026e4c0	F	LoadPath	undefined LoadPath(int param_1, undefined4 param_2, undefined4 param_3)
+0026e640	F	LoadTrigger	undefined LoadTrigger(InstanceSectionSubSectionReader * triggerReader, undefined4 param_2, undefined4 param_3)
+0026e7b8	F	LoadCamera	undefined LoadCamera(InstanceSectionSubSectionReader * param_1, undefined4 diskPos, undefined4 size)
+0026e930	F	LoadCollisionSurface	undefined LoadCollisionSurface(InstanceSectionSubSectionReader * collisionSurfaceReader, undefined4 position, undefined4 blockSize)
+0026eb88	F	ReadBaseTrigger	undefined ReadBaseTrigger(GameBaseTrigger * baseTrigger, BinaryReader * binReader)
+0026ee00	F	InitTrigger	GameBaseTrigger * InitTrigger(GameBaseTrigger * param_1)
+002794c8	F	ReadMainCamera	undefined ReadMainCamera(MainCamera * camRel, BinaryReader * binReader)
+0027b5f8	F	GetNodeIndex_0x9	undefined GetNodeIndex_0x9(void)
+0027cdf8	F	ReadBaseSubtypeCamera	undefined ReadBaseSubtypeCamera(GameCameraSubtypeBase * param_1, BinaryReader * binReader)
+0027e240	F	ReadCamera	undefined ReadCamera(GameCamera * gameCam, BinaryReader * binReader)
+0027e3e8	F	InitCameraNode	CameraNode * InitCameraNode(CameraNode * param_1, long param_2, GameCamera * param_3)
+0027ee28	F	ReadCollisionSurface	undefined ReadCollisionSurface(GameCollisionSurface * param_1, BinaryReader * binReader)
+0027fb58	F	CheckCollisionType0	undefined CheckCollisionType0(CollisionData * param_1, int trgIndex, CollisionTestController_Type0 * param_3, undefined8 param_4)
+0027fd40	F	CheckCollision	bool CheckCollision(CollisionData * param_1, Vector4 * position, Vector4 * param_3, undefined4 surfMask, long param_5, Vector4 * param_6, int colTestMethod?)
+0027ff80	F	CheckCollisionType1	undefined CheckCollisionType1(CollisionData * param_1, undefined4 trgIndex, CollisionTestController_Type1 * param_3)
+00282538	F	LoadCollisionData	undefined LoadCollisionData(CollisionDataSectionReader * this, byte * position)
+00282658	F	GetCollisionSurface	GameCollisionSurface * GetCollisionSurface(CollisionTriangle * param_1)
+00282730	F	GetCollisionCheck	bool GetCollisionCheck(ChunkData * param_1, Vector4 * position, Vector4 * param_3, undefined4 param_4, long param_5, Vector4 * param_6, int testMethod)
+00293c78	F	CalculateProgress	float CalculateProgress(AnimationChain * param_1)
+00293cf0	F	SetAnimationData	undefined SetAnimationData(AnimationStatus * animStatus, bool isMainAnim)
+00294000	F	ProgressAnimation	undefined ProgressAnimation(AnimationStatus * animStatus, uint clockValue, bool isMainAnim)
+00294570	F	ReadJoint	undefined ReadJoint(JointStruct * joint, BinaryReader * binReader)
+00294718	F	AnimateJoint	undefined AnimateJoint(float factor, undefined4 frameInterpolation, JointAnimator * jointAnimator, AnimationData * animData)
+00294b58	F	CreateJointTransform	undefined CreateJointTransform(JointAnimator * animator, JointAnimation * parentJointAnim, bool param_3, Matrix4x4 * transformMat)
+00294cd8	F	DoAnimation	undefined DoAnimation(float param_1, JointAnimator * jointAnimator, AnimationChain * animChain)
+002950c0	F	GetJointAnimationFromParentJoint	JointAnimation * GetJointAnimationFromParentJoint(JointAnimation * parentJoint, JointStruct * joint)
+00295370	F	TransformJoints	undefined TransformJoints(JointAnimation * jointAnim, AnimationChain * param_2, JointAnimation * parentJointAnim, OgiJointTransforms * param_4)
+00295500	F	SetJointAnimations	undefined SetJointAnimations(OgiAnimatorService * param_1, uint jointAmount)
+002956b0	F	FacialAnimation	undefined FacialAnimation(OgiAnimatorService * param_1, OgiBlendShapeAnimation * param_2)
+002962d8	F	ReadOgi	undefined ReadOgi(GameOGI * gameOgi, BinaryReader * binReader)
+00296a80	F	SetupOGIRender	undefined SetupOGIRender(GameOGI * ogi, Matrix4x4 * instTransformMatrix, OgiJointTransforms * jointTransforms, OgiBlendShapeAnimation * blendShapeAnimation, ChunkLightController * lightController, bool param_6)
+00296e10	F	ReadAnimation	undefined ReadAnimation(GameAnimation * gameAnim, BinaryReader * binReader)
+00297260	F	AnimateShader	undefined AnimateShader(PrecompiledShaderAnimation * param_1, uint * currentFrame)
+00297d30	F	InitOgiAnimatorService	OgiAnimatorService * InitOgiAnimatorService(OgiAnimatorService * param_1, GameOGI * param_2, int param_3, int exitPointsRequired)
+00297f38	F	CopyJointTransform	bool CopyJointTransform(OgiAnimatorService * param_1, byte jointIndex, Matrix4x4 * param_3)
+00298398	F	RotateJoint	void RotateJoint(JointAnimator * param_1)
+00298400	F	AnimateJointRotation	undefined AnimateJointRotation(AnimationHelper * param_1, float * param_2, float * param_3)
+002985e0	F	ScaleJoint	undefined ScaleJoint(float factor, JointAnimator * param_2, Vector4 * scaleVec)
+002986c0	F	TranslateJoint	undefined TranslateJoint(float factor, JointAnimator * animator, Vector4 * translationVec)
+00298e50	F	GetAnimationProgress	float GetAnimationProgress(OgiAnimatorService * param_1, uint cameraJointIndex)
+00299010	F	ProcessAnimationData	undefined ProcessAnimationData(OgiAnimatorService * param_1, OgiJointTransforms * param_2, OgiBlendShapeAnimation * param_3)
+00299198	F	InitOGI	GameOGI * InitOGI(GameOGI * param_1)
+00299240	F	GetJointIndexByID	byte GetJointIndexByID(GameOGI * ogi, byte id)
+00299430	F	InitAnimation	GameAnimation * InitAnimation(GameAnimation * param_1)
+002997f8	F	ReadDynamicScenery	undefined ReadDynamicScenery(DynamicSceneryData * param_1, BinaryReader * binReader)
+0029e100	F	ReadCutscene	undefined ReadCutscene(GameCutscene * cutscene, BinaryReader * binReader)
+0029e538	F	LoadCutscene	undefined LoadCutscene(CutsceneReader * param_1, byte * diskPosition, int size)
+002a9ef8	F	LoadChunkLinks	undefined LoadChunkLinks(ChunkLoader * param_1, BinaryReader * binReader)
+002ac028	F	Load	undefined Load(UnkItemReader_0x10 * this, GenericItemReader * * readersStorage)
+002ac2f0	F	InitUnkSecReader_0x30	SubItemsReader * InitUnkSecReader_0x30(SubItemsReader * param_1, char * itemName, SectionReaderInterface * secReaderInterface, uint param_4)
+002ac3c0	F	CreateSubItemsReader	SubItemsReader * CreateSubItemsReader(SubItemsReader * subItemsReader, char * itemName, undefined4 secReader, uint param_4, undefined4 param_5, undefined4 param_6)
+002ac4a8	F	CreateSubItemsReader	SubItemsReader * CreateSubItemsReader(SubItemsReader * param_1, SectionReaderInterface * param_2, uint CONST_8, byte * subSectionStart, undefined4 subSectionHeaderSizes)
+002acb38	F	InitBDReader	BDReader * InitBDReader(BDReader * bd, String * bigArchive, SectionReaderInterface * readerInterface, undefined CONST_0, undefined CONST_1)
+002acfb8	F	ReadChunkLink	undefined ReadChunkLink(GameChunkLink * param_1, BinaryReader * binReader)
+002ae170	F	StartLoadingFileFromDisk?	int StartLoadingFileFromDisk?(char * fileName)
+002ae398	F	GetFileSize	undefined4 GetFileSize(void)
+002aeed8	F	Render	undefined4 Render(GameMovieController? * param_1)
+002b2250	F	GetButtonPressure	float GetButtonPressure(GamePad * gamePad, byte buttonIndex)
+002b2278	F	UpArrowPressure	undefined UpArrowPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b22a0	F	DownArrowPressure	undefined DownArrowPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b22b8	F	LeftArrowPressure	undefined LeftArrowPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b22d0	F	RightArrowPressure	undefined RightArrowPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b22e8	F	TriangleButtonPressure	undefined TriangleButtonPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b2300	F	CrossButtonPressure	undefined CrossButtonPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b2318	F	SquareButtonPressure	undefined SquareButtonPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b2330	F	CircleButtonPressure	undefined CircleButtonPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b26cc	F	L1ButtonPressure	undefined L1ButtonPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b26e4	F	L2ButtonPressure	undefined L2ButtonPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b26fc	F	R1ButtonPressure	undefined R1ButtonPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b2714	F	R2ButtonPressure	undefined R2ButtonPressure(undefined8 param_1, undefined8 param_2, GamePad * param_3)
+002b3dc8	F	GetButtonState	bool GetButtonState(GamePad * param_1, uint inputIndex, bool holding)
+002b4110	F	CreateGamePadInfo	GamePadInformation * CreateGamePadInfo(undefined4 port, undefined4 slot)
+002b4380	F	SetDigitalBind	undefined4 SetDigitalBind(ButtonBindings * param_1, int index, undefined buttonIndex)
+002b43d8	F	SetAnalogBind	undefined4 SetAnalogBind(float param_1, ButtonBindings * param_2, int param_3, undefined param_4)
+002b4468	F	BuildObject	void * BuildObject(PublicObjectBuilder? * param_1, int tableIndex, int unkNegativeInt)
+002b4798	F	LoadItemSection	void LoadItemSection(ItemSectionReader * this, byte * diskPosition, int itemSize)
+002b4c38	F	UnpackArchiveIntoMemory	void UnpackArchiveIntoMemory(ArchiveSectionReader * this, byte * diskPosition, uint archiveSize, GenericItemReader * * param_4)
+002b4eb0	F	SetNextArchiveReader?	bool SetNextArchiveReader?(GameReadersStorage * readersStorage)
+002b4fd0	F	ReadSections?	bool ReadSections?(GameReadersStorage * readersStorage, bool * param_2)
+002b51f8	F	InitReadersStorage	GameReadersStorage * InitReadersStorage(uint index)
+002b5310	F	LoadQueuedSectionsIntoMemory?	undefined LoadQueuedSectionsIntoMemory?(void)
+002b5f60	F	BinReader_Get0	int BinReader_Get0(BinaryReader * this)
+002b5f68	F	GetBlockSize	undefined4 GetBlockSize(BinaryReader * this)
+002b5f70	F	GetReadAmount	int GetReadAmount(BinaryReader * this)
+002b5f80	F	GetEOF	bool GetEOF(BinaryReader * this)
+002b5fc0	F	ReturnToBeg	undefined ReturnToBeg(BinaryReader * this)
+002b5fd0	F	SetEOF	undefined SetEOF(BinaryReader * this)
+002b5fe8	F	MovePositionBy	undefined MovePositionBy(BinaryReader * this, int amount)
+002b5ff8	F	SetPosition	undefined SetPosition(BinaryReader * this, int position)
+002b6008	F	ReadByte	undefined ReadByte(BinaryReader * this, byte * byteAddress)
+002b6028	F	ReadShort	undefined ReadShort(BinaryReader * this, short * shortAddress)
+002b6050	F	ReadInt	undefined ReadInt(BinaryReader * this, int * param_2)
+002b6078	F	ReadLong	undefined ReadLong(BinaryReader * this, ulong * longAddress)
+002b60a0	F	ReadChar?	undefined ReadChar?(BinaryReader * this, char * charAddr)
+002b60c0	F	ReadUShort?	undefined ReadUShort?(BinaryReader * this, short * param_2)
+002b60e8	F	ReadUInt?	undefined ReadUInt?(BinaryReader * this, uint * uintAddr)
+002b6110	F	ReadULong?	undefined ReadULong?(BinaryReader * param_1, undefined4 param_2)
+002b6138	F	ReadAnotherOneByteSizedThing	undefined ReadAnotherOneByteSizedThing(BinaryReader * this, undefined * param_2)
+002b6158	F	ReadFloat	undefined ReadFloat(BinaryReader * this, float * param_2)
+002b61f0	F	WriteInt	undefined WriteInt(BinaryReader * this, undefined4 param_2)
+002b63c0	F	SyncMemory	void SyncMemory(BinaryReader * this)
+002b6548	F	CreateBinReader	BinaryReader * CreateBinReader(BinaryReader * binReader, void * position, undefined4 blockSize, uint param_4, undefined2 param_5)
+002b65e0	F	DeleteBinaryReader	undefined DeleteBinaryReader(BinaryReader * param_1, ulong onHeap?)
+002b6670	F	ReadBytesIntoMemory	undefined8 ReadBytesIntoMemory(BinaryReader * this, void * memory, long readAmount)
+002b66b8	F	WriteBlock	uint WriteBlock(BinaryReader * this, void * writeMem, uint amount)
+002b67f0	F	MoveCurPositionBackwards	undefined MoveCurPositionBackwards(BinaryReader * param_1, undefined8 param_2, int param_3)
+002b68a0	F	GetItemsAmountInItem	int GetItemsAmountInItem(byte * diskPos)
+002b68a8	F	GetSectionSize	int GetSectionSize(byte * diskPos)
+002b68e8	F	AddResourcePackageToLoadQueue	void AddResourcePackageToLoadQueue(ItemInterface * itemInterface, char * packagePath, long param_3)
+002b69d0	F	AddSectionToLoadQueue	undefined AddSectionToLoadQueue(ItemInterface * item, byte * sectionOffset)
+002b6a80	F	SetNextItem	ItemHeader * SetNextItem(ItemHeader * item, ItemHeader * nextItem, int size)
+002b6e40	F	LoadFileIntoMemory	long LoadFileIntoMemory(FileLoader? * fileLoader?, BasicFileInfo * baseFileInfo, String * fileName)
+002b7188	F	AddItemReaderToReaderStorage	undefined AddItemReaderToReaderStorage(GameReadersStorage * readersStorage, GenericItemReader * itemReader, bool pushOnBuffer)
+002b73c0	F	LoadSectionItems	void LoadSectionItems(PackageSectionReader * this, byte * diskPosition, int sizeOnDisk)
+002b7870	F	gcc2_compiled.	undefined gcc2_compiled.(void)
+002b7940	F	sceMpegCreate	undefined4 sceMpegCreate(undefined4 * param_1, undefined8 * param_2, uint param_3)
+002b7b78	F	_clearEach	uint _clearEach(int param_1)
+002b7c40	F	_getpic	undefined4 _getpic(int param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002b7df8	F	_updateRefImage	int _updateRefImage(int param_1, int param_2)
+002b80b0	F	_decodeOrSkipFrame	ulong _decodeOrSkipFrame(long param_1, int param_2, int param_3)
+002b8220	F	_decodeOrSkipField	undefined4 _decodeOrSkipField(long param_1, int param_2, int param_3)
+002b83e8	F	sceMpegInit	undefined4 sceMpegInit(void)
+002b84a8	F	sceMpegGetPicture	undefined4 sceMpegGetPicture(int param_1, ulong param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002b84f0	F	sceMpegGetPictureRAW8	undefined4 sceMpegGetPictureRAW8(int param_1, ulong param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002b8548	F	sceMpegReset	undefined4 sceMpegReset(int param_1)
+002b85e0	F	sceMpegAddCallback	undefined4 sceMpegAddCallback(int param_1, int param_2, undefined4 param_3, undefined4 param_4)
+002b8628	F	_sceMpegDispatchMpegCallback	undefined8 _sceMpegDispatchMpegCallback(long param_1, int * param_2)
+002b86a0	F	_sceMpegDispatchMpegCbNodata	undefined4 _sceMpegDispatchMpegCbNodata(long param_1)
+002b8718	F	_decodeOrSkip	ulong _decodeOrSkip(long param_1, int param_2, int param_3)
+002b8760	F	sceMpegClearRefBuff	undefined4 sceMpegClearRefBuff(int param_1)
+002b87e0	F	_decPicture	ulong _decPicture(long param_1, int param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002b88e8	F	_sceMpegAlalcAlloc	int _sceMpegAlalcAlloc(long param_1, int * param_2, undefined8 param_3, long param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002b89a8	F	gcc2_compiled.	undefined gcc2_compiled.(void)
+002b8c38	F	_dispRefImage	undefined _dispRefImage(void)
+002b8ef8	F	_dispRefImageField	undefined _dispRefImageField(long param_1, uint * param_2, uint * param_3)
+002b9318	F	_sceMpegFlush	undefined4 _sceMpegFlush(int param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002b93d8	F	_sceMpegOutputFrame	undefined _sceMpegOutputFrame(long param_1, int param_2, long param_3)
+002b9468	F	gcc2_compiled.	undefined gcc2_compiled.(long param_1, uint param_2, int param_3)
+002b9628	F	_sceMpegCscStoreRefImage	undefined _sceMpegCscStoreRefImage(long param_1, uint * param_2)
+002b9d28	F	_system_header	undefined4 _system_header(ulong * param_1)
+002b9ef8	F	_pack_header	undefined4 _pack_header(ulong * param_1, uint * param_2)
+002ba5a0	F	_PES_packet	undefined8 _PES_packet(long param_1, undefined8 param_2, undefined8 param_3)
+002bc348	F	sceMpegDemuxPssRing	undefined4 sceMpegDemuxPssRing(undefined8 param_1, byte * param_2, undefined8 param_3, byte * param_4, int param_5)
+002bc728	F	sceMpegDemuxPss	undefined4 sceMpegDemuxPss(sceMpeg * param_1, byte * pss_data, int pss_size)
+002bc748	F	sceMpegAddStrCallback	undefined4 sceMpegAddStrCallback(int param_1, ulong param_2, long param_3, undefined4 param_4, undefined4 param_5)
+002bc878	F	gcc2_compiled.	undefined gcc2_compiled.(undefined8 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002bc888	F	_sceMpegStopIpuDma	undefined _sceMpegStopIpuDma(void)
+002bc928	F	_sceMpegErrorBdec	undefined _sceMpegErrorBdec(long param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002bc9f0	F	_sceMpegError	undefined _sceMpegError(long param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002bca48	F	_sceMpegError1	undefined _sceMpegError1(long param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002bca90	F	gcc2_compiled.	undefined gcc2_compiled.(int param_1, int * param_2, int * param_3, long param_4, long param_5)
+002bcc18	F	_getAllRefs	undefined _getAllRefs(long param_1, undefined8 param_2, int param_3, ulong param_4, ulong param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002bd320	F	_motionComp0	undefined4 _motionComp0(long param_1, int param_2, int param_3, ulong param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002bd570	F	_getRef0	undefined _getRef0(int param_1, int * param_2, int param_3, int param_4, int param_5, int param_6, int param_7, int param_8, uint param_9, uint param_10, uint param_11, int param_12)
+002bdc18	F	_sceMpegPictureData0	ulong _sceMpegPictureData0(long param_1)
+002bde58	F	_slice0	uint _slice0(long param_1, long param_2)
+002be188	F	_motionVector	undefined _motionVector(int param_1, int * param_2, int * param_3, long param_4, long param_5, long param_6, long param_7, long param_8)
+002be5b0	F	_motionVectors	undefined _motionVectors(int param_1, int param_2, int * param_3, int param_4, int param_5, int param_6, long param_7, long param_8, int param_9, int param_10, int param_11)
+002be750	F	_decMB0	undefined4 _decMB0(long param_1, uint * param_2, uint * param_3, uint * param_4, int * param_5, uint * param_6, int * param_7)
+002beca8	F	_sceMpegMbAddressIncrement	int _sceMpegMbAddressIncrement(long param_1)
+002bee20	F	_sceMpegWaitIpuIdle	undefined _sceMpegWaitIpuIdle(int param_1)
+002bef88	F	_sceMpegWaitIpuIdle64	long _sceMpegWaitIpuIdle64(int param_1)
+002bf108	F	_sceMpegNextBit	uint _sceMpegNextBit(int param_1, uint param_2)
+002bf1f0	F	_sceMpegPeepBit	uint _sceMpegPeepBit(int param_1, int param_2)
+002bf280	F	_sceMpegFlushBuf	undefined _sceMpegFlushBuf(int param_1, uint param_2)
+002bf318	F	_waitIpuIdle	undefined _waitIpuIdle(int param_1)
+002bf350	F	_sceMpegFlushBuf	undefined _sceMpegFlushBuf(int param_1, uint param_2)
+002bf358	F	_skipMB0	ulong _skipMB0(long param_1, undefined4 * param_2, undefined8 param_3, undefined8 param_4, uint * param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002bf418	F	_copyAddRefImage	undefined _copyAddRefImage(void)
+002bf5c8	F	dmaRefImage	undefined dmaRefImage(int param_1)
+002c0438	F	receiveDataFromIPU	undefined receiveDataFromIPU(uint param_1, int param_2)
+002c04d8	F	gcc2_compiled.	undefined4 gcc2_compiled.(long param_1, undefined8 param_2, int * param_3, int * param_4, undefined4 * param_5)
+002c0678	F	_initSeq	undefined _initSeq(int * param_1)
+002c0990	F	_sequenceHeader	undefined _sequenceHeader(long param_1)
+002c0c40	F	_groupOfPicturesHeader	undefined _groupOfPicturesHeader(undefined8 param_1)
+002c0ce0	F	_pictureHeader	undefined _pictureHeader(undefined8 param_1)
+002c0e28	F	_sequenceExtension	undefined _sequenceExtension(long param_1)
+002c0f68	F	_quantMatrixExtension	undefined _quantMatrixExtension(long param_1)
+002c1278	F	_extensionAndUserData	undefined _extensionAndUserData(undefined8 param_1)
+002c1448	F	_waitIpuIdle	undefined _waitIpuIdle(int param_1)
+002c1480	F	_sceMpegFlushBuf	undefined _sceMpegFlushBuf(int param_1, uint param_2)
+002c1488	F	_sceMpegNextHeader	undefined4 _sceMpegNextHeader(long param_1)
+002c15e8	F	flushByteBoundary	undefined flushByteBoundary(int param_1)
+002c1638	F	_sequenceDisplayExtension	undefined _sequenceDisplayExtension(int param_1)
+002c16c8	F	_copyrightExtension	uint _copyrightExtension(int param_1)
+002c1760	F	_pictureDisplayExtension	undefined _pictureDisplayExtension(void)
+002c1858	F	setD3_CHCR	undefined setD3_CHCR(undefined4 param_1)
+002c18d0	F	setD4_CHCR	undefined setD4_CHCR(undefined4 param_1)
+002c1948	F	sceIpuStopDMA	undefined sceIpuStopDMA(undefined4 * param_1)
+002c1a30	F	sceIpuRestartDMA	undefined sceIpuRestartDMA(int * param_1)
+002c1b80	F	sceIpuSync	uint sceIpuSync(int param_1)
+002c1be8	F	setD4_CHCR	undefined setD4_CHCR(undefined4 param_1)
+002c1c60	F	sceIpuInit	undefined sceIpuInit(void)
+002c2350	F	ResetGIF	undefined ResetGIF(void)
+002c23f0	F	WaitGraphicalDataTransferFinish	undefined WaitGraphicalDataTransferFinish(void)
+002c2478	F	sceGsResetGraph	void sceGsResetGraph(short mode, short inter, short outMode, short ffMode)
+002c2608	F	sceGsGetGParam	sceGsGParam * sceGsGetGParam(void)
+002c2618	F	RenderVSync	uint RenderVSync(void)
+002c26b0	F	sceGsSyncVCallback	void * sceGsSyncVCallback(void * handler)
+002c2758	F	memclr	undefined memclr(undefined * param_1, long param_2)
+002c2790	F	sceDmaGetChan	sceDmaChan * sceDmaGetChan(uint param_1)
+002c27b8	F	sceDmaReset	uint sceDmaReset(bool param_1)
+002c2898	F	sceDmaPutEnv	undefined4 sceDmaPutEnv(byte * param_1)
+002c2ac0	F	sceDevVu0Pause	undefined4 sceDevVu0Pause(void)
+002c2b20	F	sceDevVu0Sync	undefined sceDevVu0Sync(void)
+002c2ba0	F	sceDevVu1Pause	undefined4 sceDevVu1Pause(void)
+002c2c00	F	sceDevVu1Sync	undefined sceDevVu1Sync(void)
+002c2c58	F	ResetVIF0	undefined ResetVIF0(void)
+002c2c90	F	ResetVIF1	undefined ResetVIF1(void)
+002c2e08	F	_pad_intr_hdr	undefined _pad_intr_hdr(int param_1)
+002c2e50	F	scePadInit2	undefined * scePadInit2(void)
+002c2f48	F	_send_to_iop	undefined4 _send_to_iop(int param_1, int param_2)
+002c3060	F	scePadPortOpen	int scePadPortOpen(int port, int slot, void * data)
+002c3248	F	scePadPortClose	undefined4 scePadPortClose(int param_1, int param_2)
+002c3300	F	scePadGetDmaStr	int scePadGetDmaStr(int param_1, int param_2, undefined8 * param_3)
+002c3458	F	scePadRead	int scePadRead(int param_1, int param_2, uchar * param_3)
+002c34d0	F	scePadGetState	ulong scePadGetState(int param_1, int param_2)
+002c3550	F	scePadSetReqState	undefined8 scePadSetReqState(int param_1, int param_2, undefined param_3)
+002c3608	F	scePadGetReqState	ulong scePadGetReqState(int param_1, int param_2)
+002c3668	F	scePadInfoAct	ulong scePadInfoAct(int param_1, int param_2, long param_3, ulong param_4)
+002c3788	F	scePadInfoMode	ulong scePadInfoMode(int param_1, int param_2, ulong param_3, long param_4)
+002c38c0	F	scePadSetMainMode	int scePadSetMainMode(int port, int slot, int offset, int lock)
+002c3978	F	scePadSetActDirect	int scePadSetActDirect(int param_1, int param_2, uchar * param_3)
+002c3a40	F	scePadSetActAlign	ulong scePadSetActAlign(int param_1, int param_2, uchar * param_3)
+002c3b18	F	scePadGetButtonMask	int scePadGetButtonMask(int param_1, int param_2)
+002c3bc8	F	scePadSetButtonInfo	int scePadSetButtonInfo(int param_1, int param_2, undefined4 param_3)
+002c3cd8	F	scePadEnterPressMode	int scePadEnterPressMode(int param_1, int param_2)
+002c3dc0	F	cmd_sem_init	undefined cmd_sem_init(void)
+002c3ea8	F	cdvd_exit	undefined cdvd_exit(void)
+002c3f48	F	_sceCd_Poff_Intr	undefined _sceCd_Poff_Intr(void)
+002c3fa0	F	PowerOffCB	undefined4 PowerOffCB(void)
+002c4018	F	sceCdLayerSearchFile	undefined4 sceCdLayerSearchFile(sceCdlFILE * param_1, byte * param_2, undefined4 param_3)
+002c4318	F	sceCdSearchFile	undefined4 sceCdSearchFile(sceCdlFILE * param_1, byte * param_2)
+002c4338	F	_sceCd_ncmd_prechk	undefined4 _sceCd_ncmd_prechk(undefined8 param_1)
+002c4490	F	sceCdSync	undefined4 sceCdSync(int mode)
+002c4530	F	sceCdSyncS	undefined4 sceCdSyncS(long param_1)
+002c45a0	F	_sceCd_scmd_prechk	undefined4 _sceCd_scmd_prechk(undefined8 param_1)
+002c46f8	F	sceCdInit	int sceCdInit(int init_mode)
+002c49e0	F	sceCdDiskReady_old	int sceCdDiskReady_old(long param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002c4bf8	F	sceCdDiskReady	int sceCdDiskReady(int mode)
+002c4e18	F	FID_conflict:sceCdGetError	undefined * FID_conflict:sceCdGetError(void)
+002c4eb0	F	sceCdBreak	undefined * sceCdBreak(void)
+002c4f68	F	sceCdMmode	int sceCdMmode(int media)
+002c5040	F	sceCdReadClock	undefined * sceCdReadClock(sceCdCLOCK * param_1)
+002c5100	F	sceCdStInit	undefined4 sceCdStInit(undefined4 param_1, undefined4 param_2, undefined4 param_3)
+002c5130	F	FID_conflict:sceCddaStStart	undefined4 FID_conflict:sceCddaStStart(undefined4 param_1, sceCdRMode * param_2)
+002c5170	F	FID_conflict:sceCdStSeek	undefined4 FID_conflict:sceCdStSeek(undefined4 param_1)
+002c51a0	F	FID_conflict:sceCdStStop	undefined4 FID_conflict:sceCdStStop(void)
+002c51d8	F	sceCdStRead	ulong sceCdStRead(long param_1, uint param_2, long param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002c5368	F	sceCdStream	undefined4 sceCdStream(undefined4 param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4, long param_5)
+002c54d0	F	sceSdRemoteInit	undefined4 sceSdRemoteInit(void)
+002c5590	F	sceSdRemote	int sceSdRemote(bool is_block, int command, int arg, ...)
+002c5b60	F	sceMcOpen	undefined4 sceMcOpen(undefined4 param_1, undefined4 param_2, char * param_3, undefined4 param_4)
+002c5c88	F	sceMcMkdir	int sceMcMkdir(undefined4 param_1, undefined4 param_2, char * param_3)
+002c5cc0	F	FID_conflict:sceMcClose	undefined4 FID_conflict:sceMcClose(undefined4 param_1)
+002c5e30	F	sceMcRead	undefined * sceMcRead(undefined4 param_1, uint param_2, long param_3)
+002c5f48	F	sceMcWrite	undefined4 sceMcWrite(undefined4 param_1, undefined * param_2, long param_3)
+002c60c0	F	sceMcSync	ulong sceMcSync(long param_1, long param_2, long param_3)
+002c61e0	F	sceMcGetInfo	undefined4 sceMcGetInfo(undefined4 param_1, undefined4 param_2, long param_3, long param_4, long param_5)
+002c6360	F	sceMcGetDir	undefined4 sceMcGetDir(undefined4 param_1, undefined4 param_2, char * param_3, undefined4 param_4, long param_5, uint param_6)
+002c64b0	F	mceStorePwd	undefined mceStorePwd(long param_1)
+002c6540	F	sceMcChdir	undefined4 sceMcChdir(undefined4 param_1, undefined4 param_2, long param_3, uint * param_4)
+002c6680	F	FID_conflict:sceMcUnformat	undefined4 FID_conflict:sceMcUnformat(undefined4 param_1, undefined4 param_2)
+002c6750	F	sceMcDelete	undefined4 sceMcDelete(undefined4 param_1, undefined4 param_2, long param_3)
+002c7050	F	CopyBytesIntoMemory	void * CopyBytesIntoMemory(void * memory, byte * position, uint copyAmount)
+002c71f8	F	memset	void * memset(void * memory, byte filler, uint bytesAmount)
+002c72b0	F	DoConcat	char * DoConcat(char * param_1, char * param_2)
+002c73e0	F	StringDifference	int StringDifference(char * param_1, char * param_2)
+002c752c	F	CopyString	char * CopyString(char * param_1, char * param_2)
+002c7644	F	GetStringLength	uint GetStringLength(char * param_1)
+002c7788	F	StringCopy	char * StringCopy(char * param_1, char * param_2, undefined4 param_3)
+002c7958	F	FormatString	int FormatString(char * outString, char * formatString, ...)
+002c7b20	F	WaitSemaphore1	undefined WaitSemaphore1(void)
+002c7b80	F	SignalSemaphore1	undefined SignalSemaphore1(void)
+002c85a0	F	GetRand	uint GetRand(void)
+002c94d8	F	CompareStrings	byte CompareStrings(char * word1, char * word2, int strLen)
+002cceb0	F	ToLowerCase	char ToLowerCase(char param_1)
+002cf260	F	SetGsCrt	undefined SetGsCrt(void)
+002cf280	F	Exit	undefined Exit(void)
+002cf340	F	AddIntcHandler2	int AddIntcHandler2(int int_cause, void * handler, int next, void * arg, int flag)
+002cf350	F	AddIntcHandler2	undefined AddIntcHandler2(void)
+002cf360	F	RemoveIntcHandler	undefined RemoveIntcHandler(void)
+002cf370	F	AddDmacHandler2	int AddDmacHandler2(int dma_cause, _PIFI * handler, int next)
+002cf380	F	AddDmacHandler2	undefined AddDmacHandler2(void)
+002cf390	F	RemoveDmacHandler	undefined RemoveDmacHandler(void)
+002cf3a0	F	_EnableIntc	undefined _EnableIntc(void)
+002cf3b0	F	_DisableIntc	undefined _DisableIntc(void)
+002cf3c0	F	_EnableDmac	undefined _EnableDmac(void)
+002cf3d0	F	_DisableDmac	undefined _DisableDmac(void)
+002cf460	F	CreateThread	int CreateThread(ThreadParam * t)
+002cf480	F	StartThread	void StartThread(int thread_id, void * arg)
+002cf4f0	F	ChangeThreadPriority	void ChangeThreadPriority(int thread_id, int priority)
+002cf510	F	RotateThreadReadyQueue	void RotateThreadReadyQueue(int priority)
+002cf550	F	GetThreadId	undefined GetThreadId(void)
+002cf560	F	ReferThreadStatus	int ReferThreadStatus(int threadId, ThreadParam * status)
+002cf580	F	SleepThread	undefined SleepThread(void)
+002cf590	F	WakeupThread	undefined WakeupThread(void)
+002cf5a0	F	_iWakeupThread	undefined _iWakeupThread(void)
+002cf5d0	F	SuspendThread	undefined SuspendThread(void)
+002cf640	F	EndOfHeap	undefined EndOfHeap(void)
+002cf660	F	CreateSema	int CreateSema(SemaParam * semaParam)
+002cf670	F	DeleteSema	undefined DeleteSema(int sema_id)
+002cf680	F	SignalSema	undefined SignalSema(int sema_id)
+002cf690	F	iSignalSema	undefined iSignalSema(void)
+002cf6a0	F	WaitSema	void WaitSema(int sema_id)
+002cf6b0	F	PollSema	undefined PollSema(int sema_id)
+002cf700	F	SetOsdConfigParam	undefined SetOsdConfigParam(void)
+002cf710	F	GetOsdConfigParam	undefined GetOsdConfigParam(int * result)
+002cf8e0	F	FlushCache	void FlushCache(int mode)
+002cf910	F	iFlushCache	undefined iFlushCache(void)
+002cf930	F	sceSifStopDma	undefined sceSifStopDma(void)
+002cf970	F	GetOsdConfigParam2	undefined GetOsdConfigParam2(void)
+002cf9a0	F	GsPutIMR	undefined GsPutIMR(long val)
+002cf9d0	F	SetVSyncFlag	undefined SetVSyncFlag(void)
+002cfa00	F	sceSifDmaStat	undefined sceSifDmaStat(void)
+002cfa20	F	sceSifSetDma	undefined sceSifSetDma(void)
+002cfa30	F	isceSifSetDma	undefined isceSifSetDma(void)
+002cfa40	F	sceSifSetDChain	undefined sceSifSetDChain(void)
+002cfa50	F	isceSifSetDChain	undefined isceSifSetDChain(void)
+002cfa60	F	sceSifSetReg	undefined sceSifSetReg(void)
+002cfa70	F	sceSifGetReg	undefined sceSifGetReg(void)
+002cfa90	F	Deci2Call	undefined Deci2Call(void)
+002cfac0	F	GetMemorySize	int GetMemorySize(void)
+002cfad0	F	UnkSyscall_0x82	undefined UnkSyscall_0x82(void)
+002cfaf0	F	WaitForVSync	undefined WaitForVSync(void)
+002cfb80	F	WaitForVSyncSet	undefined8 WaitForVSyncSet(void)
+002cfc28	F	write	ssize_t write(int __fd, void * __buf, size_t __n)
+002cfcb0	F	sbrk	void * sbrk(intptr_t __delta)
+002cfd68	F	FID_conflict:gcc2_compiled.	undefined FID_conflict:gcc2_compiled.(uint param_1, uint param_2)
+002cfe10	F	FID_conflict:SyncDCache	undefined FID_conflict:SyncDCache(uint param_1, uint param_2)
+002cfe98	F	FID_conflict:gcc2_compiled.	bool FID_conflict:gcc2_compiled.(byte * begPos, byte * endPos)
+002cff40	F	FID_conflict:SyncDCache	bool FID_conflict:SyncDCache(byte * begPos, byte * endPos)
+002cffc0	F	FID_conflict:iInvalidDCache	undefined FID_conflict:iInvalidDCache(uint param_1, uint param_2)
+002cffd8	F	AreInterruptionsDisabled	bool AreInterruptionsDisabled(void)
+002cffe8	F	DisableIntc	undefined8 DisableIntc(void)
+002d0050	F	EnableIntc	undefined8 EnableIntc(void)
+002d00b8	F	DisableDmac	undefined8 DisableDmac(void)
+002d0120	F	EnableDmac	undefined8 EnableDmac(void)
+002d0188	F	topThread	int topThread(uint * param_1)
+002d0260	F	InitThread	int InitThread(void)
+002d0350	F	iWakeupThread	undefined iWakeupThread(void)
+002d03f0	F	DelayThread	uint DelayThread(ulong param_1)
+002d04b8	F	StartThread	undefined StartThread(int threadId, undefined4 arg)
+002d0630	F	_DelayThreadHandler	undefined8 _DelayThreadHandler(void)
+002d0658	F	QueueInit	undefined4 * QueueInit(undefined4 param_1)
+002d0680	F	QueuePeekWriteDone	undefined QueuePeekWriteDone(int * param_1)
+002d06c8	F	sceTtyHandler	undefined sceTtyHandler(int param_1, long param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002d0860	F	sceTtyWrite	int sceTtyWrite(char * param_1, int param_2)
+002d09d8	F	sceTtyInit	undefined4 sceTtyInit(void)
+002d0a98	F	kputchar	undefined8 kputchar(undefined8 param_1)
+002d0ad0	F	deci2Putchar	undefined deci2Putchar(int param_1)
+002d0b80	F	serialPutchar	undefined serialPutchar(long param_1)
+002d0bb8	F	ftoi	undefined4 ftoi(ulong param_1)
+002d0c48	F	printfloat	int printfloat(undefined8 param_1, undefined8 param_2, undefined8 param_3, ulong param_4)
+002d0e20	F	_sceSnprintf	undefined _sceSnprintf(undefined4 handler, undefined4 param_2, undefined4 param_3, char * message, undefined4 param_5)
+002d1b90	F	printf_char	undefined4 printf_char(undefined8 param_1, undefined8 param_2, long param_3)
+002d1bb8	F	kprintf_char	undefined4 kprintf_char(undefined8 param_1, undefined8 param_2, long param_3)
+002d1be0	F	_sceSnprintf_pf	undefined _sceSnprintf_pf(undefined8 param_1, undefined8 param_2, int * param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002d1c30	F	sceSnprintf	undefined sceSnprintf(undefined4 param_1, undefined8 param_2, undefined8 param_3, undefined8 param_4, undefined8 param_5, undefined8 param_6, undefined8 param_7, undefined8 param_8)
+002d1c78	F	DebugPrint?	undefined DebugPrint?(char * message, ...)
+002d1cf8	F	kprintf	undefined kprintf(char * a0, int a1, int a2, int a3, int t0, int t1)
+002d1da8	F	sceSifGetSreg	undefined4 sceSifGetSreg(int param_1)
+002d1dd0	F	sceSifInitCmd	undefined sceSifInitCmd(void)
+002d2050	F	sceSifExitCmd	undefined sceSifExitCmd(void)
+002d2088	F	sceSifAddCmdHandler	undefined sceSifAddCmdHandler(uint param_1, undefined4 callback, undefined4 param_3)
+002d2100	F	sceSifRemoveCmdHandler	undefined sceSifRemoveCmdHandler(uint param_1)
+002d2150	F	_sceSifSendCmd	undefined8 _sceSifSendCmd(uint param_1, ulong param_2, uint * param_3, long param_4, uint * param_5, uint param_6, long param_7)
+002d2288	F	sceSifSendCmd	undefined sceSifSendCmd(uint param_1, uint * param_2, long param_3, uint * param_4, uint param_5, long param_6)
+002d22c8	F	isceSifSendCmd	undefined isceSifSendCmd(uint param_1, uint * param_2, long param_3, uint * param_4, uint param_5, long param_6)
+002d2308	F	SIF0_InterruptHandler	int SIF0_InterruptHandler(int param_1)
+002d2450	F	sceSifWriteBackDCache	undefined sceSifWriteBackDCache(int * mediaType, long param_2)
+002d2500	F	sceSifInitRpc	undefined sceSifInitRpc(void)
+002d26a0	F	sceSifExitRpc	undefined sceSifExitRpc(void)
+002d26c8	F	_sceRpcGetPacket	int _sceRpcGetPacket(int * param_1)
+002d2770	F	_sceRpcFreePacket	undefined _sceRpcFreePacket(int param_1)
+002d2790	F	_sceRpcGetFPacket	int _sceRpcGetFPacket(int param_1)
+002d27c0	F	_sceRpcGetFPacket2	undefined _sceRpcGetFPacket2(void)
+002d2800	F	_request_end	undefined _request_end(int param_1)
+002d28d0	F	_alarm_rdata	undefined _alarm_rdata(void)
+002d2910	F	_request_rdata	uint _request_rdata(int param_1, undefined8 param_2)
+002d29e8	F	_search_svdata	int * _search_svdata(int param_1, int param_2)
+002d2a38	F	_alarm_bind	undefined _alarm_bind(void)
+002d2a78	F	_request_bind	uint _request_bind(int param_1, int param_2)
+002d2b48	F	sceSifBindRpc	undefined4 sceSifBindRpc(sceSifClientData * param_1, uint request_id, ulong mode)
+002d2c98	F	_request_call	undefined _request_call(void)
+002d2d28	F	sceSifCallRpc	undefined4 sceSifCallRpc(sceSifClientData * bd, uint fno, uint mode, void * send, int ssize, void * receive, int rsize, void * end_func, void * end_param)
+002d2f28	F	sceSifCheckStatRpc	undefined4 sceSifCheckStatRpc(sceSifRpcData * param_1)
+002d2f68	F	sceSifSetRpcQueue	undefined sceSifSetRpcQueue(undefined * param_1, undefined4 threadId)
+002d3000	F	sceSifRegisterRpc	undefined sceSifRegisterRpc(undefined4 * param_1, undefined4 param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5, undefined4 param_6, undefined * param_7)
+002d30d8	F	sceSifGetNextRequest	undefined sceSifGetNextRequest(undefined * param_1)
+002d3130	F	sceSifExecRequest	undefined sceSifExecRequest(int param_1)
+002d32f8	F	sceSifRpcLoop	undefined sceSifRpcLoop(undefined * param_1)
+002d3338	F	_sceFsIobSemaMK	undefined _sceFsIobSemaMK(void)
+002d33b0	F	new_iob	ulong new_iob(void)
+002d3438	F	sceFsSifCallRpc	int sceFsSifCallRpc(uint * * param_1, uint param_2, ulong param_3, long param_4, long param_5, long param_6, long param_7, long param_8, uint * param_9, int param_10)
+002d3528	F	get_iob	undefined * get_iob(int param_1)
+002d3598	F	_sceFs_Rcv_Intr	undefined _sceFs_Rcv_Intr(int param_1)
+002d3950	F	_sceFsSemInit	undefined _sceFsSemInit(void)
+002d39a8	F	_sceFsWaitS	undefined8 _sceFsWaitS(void)
+002d3a30	F	sceFsInit	undefined4 sceFsInit(void)
+002d3c38	F	_fs_version	ulong _fs_version(void)
+002d3d00	F	sceOpen	undefined * sceOpen(char * param_1, uint param_2, int param_3, int param_4, int param_5, int param_6, int param_7, int * param_8)
+002d3f90	F	sceClose	undefined * sceClose(int param_1)
+002d4108	F	sceLseek	undefined * sceLseek(int param_1, undefined4 param_2, undefined4 param_3)
+002d4348	F	sceRead	undefined * sceRead(int param_1, uint param_2, long param_3)
+002d45b8	F	sceWrite	undefined * sceWrite(int param_1, uint param_2, long param_3)
+002d48d8	F	sceSifInitIopHeap	undefined4 sceSifInitIopHeap(void)
+002d4960	F	sceSifAllocIopHeap	void * sceSifAllocIopHeap(undefined4 param_1)
+002d49d0	F	sceSifFreeSysMemory	undefined4 sceSifFreeSysMemory(undefined4 param_1)
+002d4a48	F	sceSifFreeIopHeap	undefined4 sceSifFreeIopHeap(undefined4 param_1)
+002d4a78	F	_lf_bind	undefined4 _lf_bind(void)
+002d4b78	F	_lf_version	ulong _lf_version(void)
+002d4c18	F	_sceSifLoadModule	undefined _sceSifLoadModule(undefined4 libPath, undefined8 param_2, undefined4 param_3, undefined4 param_4, undefined4 param_5)
+002d4e40	F	sceSifLoadModule	void sceSifLoadModule(char * libPath, int args, char * argp)
+002d4e88	F	sceSifResetIop	undefined4 sceSifResetIop(char * param_1, undefined4 param_2)
+002d4fe0	F	sceSifSyncIop	uint sceSifSyncIop(void)
+002d5030	F	sceSifRebootIop	undefined4 sceSifRebootIop(char * param_1)
+002d5140	F	DisableInterruptions	bool DisableInterruptions(void)
+002d5190	F	EnableInterruptions	bool EnableInterruptions(void)
+002d51a8	F	InitSemaphores	undefined InitSemaphores(void)
+002d5210	F	kCopy	undefined8 kCopy(undefined4 * param_1, undefined4 * param_2, undefined8 param_3)
+002d5248	F	kFindAddress	int * kFindAddress(int * param_1, int * param_2, int param_3)
+002d5288	F	Call_FUN_002D5248	int * Call_FUN_002D5248(int * param_1, int * param_2, int param_3)
+002d52a0	F	InitSystemCallTableAddress	undefined InitSystemCallTableAddress(void)
+002d53a0	F	SetSyscall	void SetSyscall(int index, int address)
+002d53b0	F	SystemInit	undefined8 * SystemInit(void)
+002d5408	F	RFU116	undefined RFU116(void)
+002d5418	F	Copy	undefined Copy(void)
+002d5460	F	RFU091	undefined RFU091(void)
+002d5470	F	PatchIsNeeded	undefined8 PatchIsNeeded(void)
+002d54d8	F	InitExecPS2	undefined InitExecPS2(void)
+002d55b8	F	InitTLB	undefined InitTLB(void)
+002d55c0	F	ProgramExit	void ProgramExit(int status)
+002d55f0	F	RFU116	void RFU116(int index, int address)
+002d5600	F	Copy	undefined Copy(void)
+002d5610	F	kCopy	undefined8 kCopy(undefined4 * param_1, undefined4 * param_2, undefined8 param_3)
+002d5648	F	DoSyscall_Handler_5B	undefined DoSyscall_Handler_5B(void)
+002d5658	F	InitAlarm	undefined InitAlarm(void)
+002d5730	F	SetT2	undefined SetT2(void)
+002d57a0	F	SetT2_COUNT	undefined SetT2_COUNT(undefined4 param_1)
+002d57b0	F	SetT2_MODE	undefined SetT2_MODE(undefined4 param_1)
+002d57c0	F	SetT2_COMP	undefined SetT2_COMP(undefined4 param_1)
+002d57d0	F	InitTimer	undefined4 InitTimer(uint param_1)
+002d5930	F	StartTimerSystemTime	undefined4 StartTimerSystemTime(void)
+002d59c8	F	SetNextComp	undefined SetNextComp(long param_1)
+002d5b58	F	InsertAlarm	undefined InsertAlarm(undefined4 * param_1)
+002d5be0	F	UnlinkAlarm	int UnlinkAlarm(int * param_1)
+002d5c18	F	cbTimerHandler	undefined8 cbTimerHandler(undefined8 param_1, undefined8 param_2, undefined8 param_3)
+002d5ec0	F	iGetTimerSystemTime	long iGetTimerSystemTime(void)
+002d5f18	F	iAllocTimerCounter	uint iAllocTimerCounter(void)
+002d5f88	F	AllocTimerCounter	uint AllocTimerCounter(void)
+002d5fe0	F	iStartTimerCounter	undefined4 iStartTimerCounter(uint param_1)
+002d6090	F	StartTimerCounter	undefined4 StartTimerCounter(uint param_1)
+002d6110	F	iSetTimerHandler	undefined4 iSetTimerHandler(uint param_1, undefined8 param_2, long param_3, int param_4)
+002d6208	F	SetTimerHandler	undefined4 SetTimerHandler(uint param_1, undefined8 param_2, long param_3, int param_4)
+002d6288	F	TimerUSec2BusClock	long TimerUSec2BusClock(int param_1, ulong param_2)
+002d6308	F	_InitAlarm	undefined8 _InitAlarm(void)
+002d6358	F	AlarmHandler	int AlarmHandler(uint param_1, undefined8 param_2, undefined8 param_3, undefined4 * param_4)
+002d63b8	F	SetTimerAlarm	uint SetTimerAlarm(undefined8 param_1, long param_2, undefined4 sema_id)
+002d64e8	F	iSetTimerAlarm	uint iSetTimerAlarm(undefined8 param_1, long param_2, undefined4 param_3)
+002d65d8	F	sceSifInitRebootNotify	undefined sceSifInitRebootNotify(void)
+002d6610	F	sceSifExecNotifyHandler	undefined * sceSifExecNotifyHandler(long param_1, undefined8 param_2)
+002d66b8	F	sceDeci2Open	undefined sceDeci2Open(void)
+002d6708	F	sceDeci2ReqSend	undefined sceDeci2ReqSend(void)
+002d6738	F	sceDeci2Poll	undefined sceDeci2Poll(void)
+002d6768	F	sceDeci2ExRecv	undefined sceDeci2ExRecv(void)
+002d67a0	F	sceDeci2ExSend	undefined sceDeci2ExSend(void)
+002d67e8	F	kputs	undefined kputs(void)
+002d6818	F	Copy	undefined Copy(void)
+002d6860	F	_GetEntryAddress	undefined _GetEntryAddress(void)
+002d6870	F	_setup	undefined _setup(void)
+002d6880	F	InitTLBFunctions	undefined InitTLBFunctions(void)
+002d6948	F	UnkSyscall_0x56	undefined UnkSyscall_0x56(void)
+002d6958	F	InitTLB	undefined InitTLB(void)
+002d6998	F	InitTLB32MB	undefined InitTLB32MB(void)
+00106c74	L	switchD	
+00108edc	L	switchD	
+00109668	L	switchD	
+0010a784	L	switchD	
+0010a980	L	switchD	
+0010cf04	L	switchD	
+0010e52c	L	switchD	
+0010ec78	L	switchD	
+00111084	L	switchD	
+00112638	L	switchD	
+00112860	L	switchD	
+00113b08	L	switchD	
+0011418c	L	switchD	
+00114e04	L	switchD	
+00116abc	L	switchD	
+00116e5c	L	switchD	
+00116edc	L	switchD	
+00117160	L	switchD	
+00119a0c	L	switchD	
+00119c34	L	switchD	
+0011a6d4	L	switchD	
+0011b8ec	L	switchD	
+0011bbec	L	switchD	
+0011fdc0	L	switchD	
+00121ab4	L	switchD	
+00122108	L	switchD	
+0012372c	L	switchD	
+0012d5dc	L	switchD	
+0012dc98	L	switchD	
+0012e04c	L	switchD	
+00134f90	L	switchD	
+0013b9e4	L	switchD	
+0013c71c	L	switchD	
+0013e090	L	switchD	
+00141734	L	switchD	
+00144114	L	switchD	
+001469f8	L	switchD	
+00146a80	L	switchD	
+001485e8	L	switchD	
+00148674	L	switchD	
+001488d4	L	switchD	
+001489b8	L	switchD	
+00149b0c	L	switchD	
+0014a418	L	switchD	
+0014a9a0	L	switchD	
+0014e1bc	L	switchD	
+0014fef4	L	switchD	
+0015485c	L	switchD	
+00163724	L	switchD	
+00167e10	L	switchD	
+001732a8	L	switchD	
+00174690	L	switchD	
+0017486c	L	switchD	
+001762e0	L	switchD	
+00176598	L	switchD	
+0017660c	L	switchD	
+001773d0	L	switchD	
+001798f8	L	switchD	
+0017a338	L	switchD	
+00193d64	L	switchD	
+00198448	L	prt_198448_e8a03a78	
+001984d0	L	prt_1984d0_ac788337	
+001984e8	L	prt_1984e8_1a5e6f97	
+00198510	L	prt_198510_1a5e6f97	
+00198558	L	prt_198558_1a5e6f97	
+00198d90	L	prt_198d90_54158d24	
+00198ddc	L	prt_198ddc_1a5e6f97	
+00198f50	L	prt_198f50_e8a03a78	
+00198f70	L	prt_198f70_1a5e6f97	
+00198f9c	L	prt_198f9c_1a5e6f97	
+0019946c	L	prt_19946c_57644cba	
+00199904	L	prt_199904_c0ac20eb	
+0019a728	L	prt_19a728_1a5e6f97	
+0019a750	L	prt_19a750_1a5e6f97	
+001a2270	L	case_0x1	
+001a2280	L	case_0x0	
+001a2290	L	case_0x2	
+001a22a0	L	case_0x3	
+001a22b0	L	case_0x4	
+001a22c0	L	case_0x5	
+001a22d0	L	case_0x8	
+001a22e0	L	case_0x6	
+001a22f0	L	case_0x7	
+001ae56c	L	prt_1ae56c_6439a23b	
+001bacb0	L	prt_1bacb0_2cc5409f	
+001badac	L	prt_1badac_8c25935b	
+001bb08c	L	prt_1bb08c_3df65c50	
+001bb3e8	L	prt_1bb3e8_2cc5409f	
+001bbfc0	L	switchD	
+001cd248	L	switchD	
+001cd364	L	switchD	
+001df92c	L	switchD	
+001e0398	L	switchD	
+001e0418	L	switchD	
+001e1778	L	switchD	
+001eb354	L	prt_1eb354_d01178eb	
+001eb820	L	prt_1eb820_d01178eb	
+001ebdb4	L	prt_1ebdb4_d86478e1	
+001ed3b4	L	prt_1ed3b4_a217fd1c	
+001edf8c	L	switchD	
+001eed08	L	prt_1eed08_b4862041	
+001eed68	L	prt_1eed68_905cc9dc	
+001eee48	L	prt_1eee48_41e5a09c	
+001f5b2c	L	switchD	
+001f6e54	L	switchD	
+001f8afc	L	switchD	
+001fa824	L	switchD	
+001fde0c	L	switchD	
+00203614	L	switchD	
+002036e4	L	switchD	
+00203b9c	L	switchD	
+00206250	L	switchD	
+0020699c	L	prt_20699c_60e65efb	
+00209f24	L	switchD	
+0020a7d8	L	switchD	
+0020c384	L	switchD	
+0020d02c	L	switchD	
+0020d4e0	L	switchD	
+0020e9f4	L	switchD	
+00210210	L	switchD	
+00212064	L	prt_212064_a7005581	
+00213518	L	switchD	
+0021475c	L	switchD	
+002170c8	L	switchD	
+0021b28c	L	switchD	
+0021c3a4	L	switchD	
+0021c470	L	switchD	
+0021c538	L	switchD	
+0021f144	L	switchD	
+0021f624	L	switchD	
+0022db18	L	switchD	
+0022ddd4	L	switchD	
+0022dea0	L	switchD	
+002300d4	L	prt_2300d4_d62d68f6	
+002310c0	L	switchD	
+00233eb8	L	switchD	
+00233fcc	L	switchD	
+002341e0	L	switchD	
+00235338	L	switchD	
+00236304	L	switchD	
+002364d0	L	switchD	
+00236658	L	switchD	
+002367e0	L	switchD	
+00238414	L	switchD	
+002392cc	L	switchD	
+0023ab3c	L	switchD	
+0023ac5c	L	switchD	
+0023ad7c	L	switchD	
+0023e89c	L	switchD	
+0023f594	L	switchD	
+0023f6f0	L	switchD	
+0023f800	L	switchD	
+0023f910	L	switchD	
+0024c438	L	switchD	
+0024c550	L	switchD	
+0024ef50	L	switchD	
+0024f4b8	L	switchD	
+00250900	L	prt_250900_7bdfe6f7	
+0025578c	L	switchD	
+002558ec	L	switchD	
+00255ae8	L	switchD	
+00256608	L	switchD	
+00256bb8	L	switchD	
+0025d0c0	L	switchD	
+0025e028	L	prt_25e028_1107dba4	
+0025e0c4	L	prt_25e0c4_1a5e6f97	
+0025e360	L	prt_25e360_a206e420	
+0025e3d4	L	prt_25e3d4_c60ed46c	
+0025e4a4	L	prt_25e4a4_79e9537c	
+0025e5dc	L	prt_25e5dc_179b23f0	
+00261ffc	L	prt_261ffc_2cc5409f	
+00262020	L	prt_262020_f351cf50	
+00262254	L	prt_262254_57644cba	
+00262278	L	prt_262278_541dfb93	
+00262778	L	prt_262778_55a97fd1	
+00264408	L	prt_264408_67a2c95b	
+00264840	L	prt_264840_75c43b8d	
+00266590	L	switchD	
+0026792c	L	case_0x0	
+0026792c	L	case_0x1	
+0026792c	L	case_0x2	
+0026792c	L	case_0x3	
+0026792c	L	case_0x4	
+0026792c	L	case_0x5	
+0026792c	L	case_0x6	
+0026792c	L	case_0x7	
+0026792c	L	case_0x8	
+0026a0b4	L	switchD	
+0026a868	L	switchD	
+0026b4f0	L	switchD	
+00282184	L	switchD	
+00282244	L	switchD	
+00294598	L	prt_294598_a5906d5c	
+002945b0	L	prt_2945b0_a5906d5c	
+002945c8	L	prt_2945c8_a5906d5c	
+002945e0	L	prt_2945e0_a5906d5c	
+002945f8	L	prt_2945f8_a5906d5c	
+002959c4	L	prt_2959c4_809ec808	
+0029ec8c	L	switchD	
+0029f8ac	L	switchD	
+0029fa30	L	switchD	
+0029fc00	L	switchD	
+0029fe6c	L	switchD	
+0029ff9c	L	switchD	
+002a0950	L	switchD	
+002a0b54	L	switchD	
+002a1070	L	switchD	
+002a12a8	L	switchD	
+002a1468	L	switchD	
+002a15f4	L	switchD	
+002a17e0	L	switchD	
+002a18d4	L	switchD	
+002a1de4	L	switchD	
+002a24b4	L	switchD	
+002a2d10	L	switchD	
+002a2df8	L	switchD	
+002a53e0	L	switchD	
+002a7458	L	switchD	
+002a786c	L	case_0x0	
+002a786c	L	case_0x1	
+002a786c	L	case_0x2	
+002a786c	L	case_0x3	
+002a786c	L	case_0x4	
+002a786c	L	case_0x5	
+002a786c	L	case_0x6	
+002a786c	L	case_0x7	
+002a786c	L	case_0x8	
+002a786c	L	case_0x9	
+002a786c	L	case_0xa	
+002a786c	L	case_0xb	
+002a786c	L	case_0xc	
+002a786c	L	case_0xd	
+002a786c	L	case_0xe	
+002aa934	L	switchD	
+002aaa00	L	prt_2aaa00_ba945473	
+002b2270	L	prt_2b2270_3578da0b	
+002b2f00	L	switchD	
+002b66f0	L	prt_2b66f0_57644cba	
+002c2af4	L	switchD	
+002c2bd4	L	switchD	
+002c4e18	L	FID_conflict:sceCdGetDiskType2	
+002c5130	L	FID_conflict:sceCdStStart	
+002c5170	L	FID_conflict:sceCddaStSeek	
+002c5170	L	FID_conflict:sceCdStSeekF	
+002c5170	L	FID_conflict:sceCddaStSeekF	
+002c51a0	L	FID_conflict:sceCddaStPause	
+002c51a0	L	FID_conflict:sceCddaStStop	
+002c5cc0	L	FID_conflict:sceMcFlush	
+002c6680	L	FID_conflict:sceMcFormat	
+002c8638	L	switchD	
+002c9e50	L	switchD	
+002ca03c	L	switchD	
+002cb334	L	switchD	
+002ce110	L	switchD	
+002cf370	L	AddDmacHandler	
+002cf480	L	_StartThread	
+002cfad0	L	InitTLB	
+002cfd68	L	FID_conflict:_sceIDC	
+002cfd68	L	_sceIDC	
+002cfe10	L	FID_conflict:InvalidDCache	
+002cfe10	L	SyncDCache	
+002cfe10	L	InvalidDCache	
+002cfe98	L	FID_conflict:_sceIDC	
+002cfe98	L	_sceIDC	
+002cff40	L	FID_conflict:InvalidDCache	
+002cff40	L	SyncDCache	
+002cff40	L	InvalidDCache	
+002cffc0	L	FID_conflict:iSyncDCache	
+002cffc0	L	iInvalidDCache	
+002cffc0	L	iSyncDCache	
+002d0ed4	L	switchD	
+002d3658	L	switchD	
+002d5408	L	SetSyscall	
+002d5408	L	setup	
+002d5460	L	GetEntryAddress	
+002d55f0	L	SetSyscall	
+002d55f0	L	setup	
+002d5648	L	RFU091	
+002d6090	L	GetTimerCount	
+002d6090	L	GetTimerBaseTime	
+002d6090	L	FreeTimerCounter	
+002d6090	L	StopTimerCounter	
+002d6288	L	sceTimerUSec2BusClock	
+002d6860	L	GetEntryAddress	
+002d6860	L	RFU091	
+002d6870	L	SetSyscall	
+002d6870	L	setup	
+002d6948	L	SetTLBEntry	
+002da060	L	G_MicroCode_2	byte[32]
+002dae70	L	G_UnkMicroProgramNum	byte[624]
+002db0e0	L	G_MicroCode_1	byte[144]
+002e28d0	L	G_MicroCode_6	byte[912]
+002e2c60	L	G_MicroCode_5	byte[384]
+002e4430	L	G_MicroCode_3	byte[912]
+002e47c0	L	G_MicroCode_4	byte[1776]
+002e6f00	L	GlobalLanguagesArray	undefined *32
+002e71c8	L	G_SonyLibsNames	char *[8]
+002e71f0	L	G_VVU_Games_String	string
+002e72f0	L	REQ_CHECKSUM	undefined4
+002e72f8	L	DMA_CHANNELS_CHCR_REG	sceDmaChan *
+002e7340	L	G_ClockSpeedScales	float[8]
+002e7360	L	G_Colors	Color[15]
+002e73e0	L	G_NullParticlePtr	GameParticle *
+002e73e4	L	G_LoadedParticles	GameParticle *[299]
+002e8130	L	CHCR_ARRAY	sceDmaChan *
+002e83d0	L	DMA_N_CHANNELS	undefined *32
+002e84a0	L	G_Sema_CDVD_Callback	undefined4
+002e84a8	L	G_Sema_CDVD_AsyncCommand	undefined4
+002e84ac	L	G_Sema_CDVD_SyncCommand	undefined4
+002e84b0	L	G_Sema_CDVD_CommandStatus?	undefined4
+002e9ac0	L	G_MediaType	undefined4
+002ea08c	L	G_SemaSceMc_SemaRegs	undefined4
+002ea090	L	G_SemaSceMc_SemaTimer	undefined4
+002ea138	L	CurrentSeed	int
+002ea3d0	L	G_WaitingThreadId?	int
+002ea3d4	L	G_WaitingThreadCount?	int
+002eabe8	L	G_UnkThreadId2	int
+002eaca8	L	syscallTableIndex_0x83	int
+002eacb0	L	syscallTableIndex_0x5A	int
+002eacb8	L	semaphore1_ID	int
+002eacbc	L	semaphore2_ID	int
+002ebbf0	L	syscallTableIndex_5A	int
+002ebbf8	L	syscallTableIndex_5B	int
+002ec2a4	L	G_UnkFunTableSize	undefined4
+002ec34c	L	G_MicroCode_2_InstructionAmt	undefined2
+002ec358	L	G_MicroCode_1_InstructionAmt	undefined2
+002ec3b4	L	G_MicroCode_5_InstructionAmt	undefined2
+002ec3cc	L	G_MicroCode_3_InstructionAmt	undefined2
+002ec3d0	L	G_MicroCode_4_InstructionAmt	undefined2
+002ec4e0	L	GameArchivesReader_Methods	undefined
+002ec530	L	ScriptCommandTable	undefined *32
+002ecf90	L	ScriptConditionTable	pointer
+002ed9b0	L	switchdataD_002ed9b0	pointer
+002ed9e0	L	switchdataD_002ed9e0	pointer
+002eda10	L	switchdataD_002eda10	pointer
+002eda50	L	switchdataD_002eda50	pointer
+002eda80	L	switchdataD_002eda80	pointer
+002edaa0	L	switchdataD_002edaa0	pointer
+002edb10	L	switchdataD_002edb10	pointer
+002edc10	L	switchdataD_002edc10	pointer
+002edc30	L	switchdataD_002edc30	pointer
+002edc60	L	switchdataD_002edc60	pointer
+002edc90	L	switchdataD_002edc90	pointer
+002edcc0	L	switchdataD_002edcc0	pointer
+002edd00	L	switchdataD_002edd00	pointer
+002eddf0	L	switchdataD_002eddf0	pointer
+002ede10	L	switchdataD_002ede10	pointer
+002edea0	L	switchdataD_002edea0	pointer
+002edec0	L	switchdataD_002edec0	pointer
+002edee0	L	switchdataD_002edee0	pointer
+002edf10	L	switchdataD_002edf10	pointer
+002edf40	L	switchdataD_002edf40	pointer
+002edf70	L	switchdataD_002edf70	pointer
+002ee070	L	switchdataD_002ee070	pointer
+002ee098	L	InstanceNodeType8_Methods	undefined
+002ee200	L	InstanceNodeType1_Methods	undefined
+002ee450	L	AlwaysCondition_Methods	undefined
+002ef088	L	ScriptCommand_0x22D_Methods	undefined
+002f0290	L	switchdataD_002f0290	pointer
+002f02b0	L	switchdataD_002f02b0	pointer
+002f02d0	L	switchdataD_002f02d0	pointer
+002f0300	L	TriggerEventCaller_Methods?	undefined
+002f0340	L	EventCaller_interface?	undefined
+002f0410	L	switchdataD_002f0410	pointer
+002f1fb0	L	switchdataD_002f1fb0	pointer
+002f1fe0	L	switchdataD_002f1fe0	pointer
+002f2010	L	switchdataD_002f2010	pointer
+002f2040	L	switchdataD_002f2040	pointer
+002f2060	L	switchdataD_002f2060	pointer
+002f2080	L	switchdataD_002f2080	pointer
+002f20a0	L	switchdataD_002f20a0	pointer
+002f20d0	L	UnkNode_0x14_Methods	undefined
+002f2130	L	ObjectInstanceContextType8_Methods	undefined
+002f2210	L	InstancePropsHolderType8_Methods	undefined
+002f2340	L	InstanceCreationHelperType1_Methods	undefined
+002f2360	L	InstancePropsHolderType1_Methods	undefined
+002f23d0	L	InstanceCreationHelperType6_Methods	undefined
+002f23f0	L	InstancePropsHolderType6_Methods	undefined
+002f2520	L	InstanceCreationHelperType4_Methods	undefined
+002f2540	L	InstancePropsHolderType4_Methods	undefined
+002f25b0	L	ObjectInstanceContextType7_Methods	undefined
+002f2670	L	InstanceCreationHelperType7_Methods	undefined
+002f2690	L	InstancePropsHolderType7_Methods	undefined
+002f27c0	L	InstanceCreationHelperType2_Methods	undefined
+002f27e0	L	InstancePropsHolderType2_Methods	undefined
+002f2910	L	InstanceCreationHelperType5_Methods	undefined
+002f2930	L	InstancePropsHolderType5_Methods	undefined
+002f29a0	L	GameResourceManager_Methods	undefined
+002f29f8	L	PlayableCharacterObjectInstanceContext_Methods	undefined
+002f2c68	L	InstanceCreationHelperPlayableCharacter_Methods	undefined
+002f2c88	L	InstanceCreationHelperType3_Methods	undefined
+002f2ca8	L	InstanceCreationHelperType8_Methods	undefined
+002f2cc8	L	InstancePropsHolderPlayableCharacter_Methods	undefined
+002f2d38	L	InstancePropsHolderType3_Methods	undefined
+002f2e50	L	switchdataD_002f2e50	undefined *32
+002f2e80	L	ObjectEventCaller_Methods	undefined
+002f3000	L	switchdataD_002f3000	pointer
+002f3020	L	switchdataD_002f3020	pointer
+002f3060	L	switchdataD_002f3060	pointer
+002f30a0	L	switchdataD_002f30a0	pointer
+002f30d0	L	switchdataD_002f30d0	pointer
+002f3100	L	switchdataD_002f3100	pointer
+002f3130	L	switchdataD_002f3130	pointer
+002f3160	L	switchdataD_002f3160	pointer
+002f31b0	L	switchdataD_002f31b0	pointer
+002f31d0	L	switchdataD_002f31d0	pointer
+002f3220	L	switchdataD_002f3220	pointer
+002f3240	L	switchdataD_002f3240	pointer
+002f3270	L	switchdataD_002f3270	pointer
+002f32f0	L	HoverboardVehicle_Methods	undefined
+002f3580	L	PlayableCharacterRelated_Methods	undefined
+002f3670	L	RollerbrawlVehicle_Methods	undefined
+002f3708	L	HumiliskateVehicle_Methods	undefined
+002f3870	L	VehicleBase_Methods	undefined
+002f3c60	L	switchdataD_002f3c60	pointer
+002f47a0	L	switchdataD_002f47a0	undefined *32
+002f4b60	L	switchdataD_002f4b60	pointer
+002f4b80	L	switchdataD_002f4b80	pointer
+002f4be0	L	switchdataD_002f4be0	pointer
+002f4c10	L	switchdataD_002f4c10	pointer
+002f4c50	L	switchdataD_002f4c50	pointer
+002f4c90	L	switchdataD_002f4c90	pointer
+002f4cd0	L	switchdataD_002f4cd0	pointer
+002f4d30	L	UnkNode_0x16_Methods	undefined
+002f4df0	L	UnkNode_0xE_Methods	undefined
+002f4e50	L	UnkNode_0x12_Methods	undefined
+002f4eb0	L	UnkNode_0x10_Methods	undefined
+002f4f10	L	UnkNode_0x13_Methods	undefined
+002f4f70	L	UnkNode_0xF_Methods	undefined
+002f4fd0	L	UnkNode_0xD_Methods	undefined
+002f5030	L	GameResources_Methods	undefined
+002f5058	L	UnkChunkInterfaceImp_Type1_methods	undefined
+002f5258	L	BanksHeader_methods	undefined
+002f5298	L	InstanceNodeBase_Methods	undefined
+002f52f8	L	ChunkManager?_Methods	undefined
+002f5320	L	MiniBigBoi_Methods	undefined
+002f5350	L	RendererRelatedInGameController_Methods	undefined
+002f5518	L	CodeSfxItem_Methods	undefined
+002f5568	L	ItemInterface_methods	undefined
+002f5740	L	switchdataD_002f5740	undefined *32
+002f5760	L	switchdataD_002f5760	undefined *32
+002f57a8	L	SoundSectionReader_Methods	undefined
+002f5810	L	UnkNode_0x11_Methods	undefined
+002f5888	L	PlayableCharacterNode_Methods	undefined
+002f58e8	L	UnkChunkInterfaceImp_Type2_methods	undefined
+002f5930	L	SectionReaderInterface_Methods	undefined
+002f5f40	L	switchdataD_002f5f40	pointer
+002f6070	L	UnkMatricesNode?_Methods	undefined
+002f60d0	L	InstanceContext_methods	undefined
+002f6108	L	NodeRelatedStruct_Methods	undefined
+002f6178	L	InstanceContextUnkParent_methods	undefined
+002f61b0	L	GameNode_Methods	undefined
+002f6310	L	RendererUtil_Methods	undefined
+002f6420	L	GraphicsSectionItem_Methods	undefined
+002f6470	L	LodItem_Methods	undefined
+002f64c0	L	RigidModel2Item_Methods	undefined
+002f6510	L	SkydomeItem_Methods	undefined
+002f6560	L	BlendSkinItem_Methods	undefined
+002f65b0	L	SkinItem_Methods	undefined
+002f6600	L	RigidModelItem_Methods	undefined
+002f6650	L	ModelsItem_Methods	undefined
+002f66a0	L	TextureItem_Methods	undefined
+002f66f0	L	MaterialItem_Methods	undefined
+002f6740	L	GraphicsSectionReader_Methods	undefined
+002f67b8	L	OgiNode_Methods	undefined
+002f6818	L	GameRendererController_Methods	undefined
+002f6970	L	switchTable	undefined *32
+002f6998	L	MaterialSectionReader_Methods	undefined
+002f69e8	L	ModelSectionReader_Methods	undefined
+002f6a10	L	RigidModelSectionReader_Methods	undefined
+002f6a38	L	SkinSectionReader_Methods	undefined
+002f6a60	L	BlendSkinSectionReader_Methods	undefined
+002f6a88	L	SkydomeSectionReader_Methods	undefined
+002f6ab0	L	RigidModel2SectionReader_Methods	undefined
+002f6ad8	L	LodSectionReader_Methods	undefined
+002f6b60	L	Font_Methods	undefined
+002f9010	L	switchdataD_002f9010	pointer
+002f95f8	L	MeshTable_methods	undefined
+002f9dd0	L	NegativeLight_Methods	undefined
+002f9e40	L	PointLight_Methods	undefined
+002f9eb0	L	DirectionalLight_Methods	undefined
+002f9f20	L	AmbientLight_Methods	undefined
+002f9f90	L	LightBase_Methods	undefined
+002fa070	L	switchdataD_002fa070	pointer
+002fa090	L	switchdataD_002fa090	pointer
+002fa138	L	PrecompiledShader?_Type?_0xE_Methods	undefined
+002fa1c8	L	PrecompiledShader?_Type_0x14_Methods	undefined
+002fa258	L	PrecompiledShader?_Type_0xD_Methods	undefined
+002fa2d8	L	PrecompiledShader?_Type_0x20_Methods	undefined
+002fa368	L	PrecompiledShader?_Type_0x1F_Methods	undefined
+002fa3f8	L	PrecompiledShader?_Type_0x1E_Methods	undefined
+002fa488	L	PrecompiledShader?_Type_0x1C_Methods	undefined
+002fa518	L	PrecompiledShader?_Type_0x1B_Methods	undefined
+002fa5a8	L	PrecompiledShader?_Type_0x1A_Methods	undefined
+002fa638	L	PrecompiledShader?_Type_0x19_Methods	undefined
+002fa758	L	PrecompiledShader?_Type_0x17_Methods	undefined
+002fa7e8	L	PrecompiledShader?_Type_0x16_Methods	undefined
+002fa878	L	PrecompiledShader?_Type_0x15_Methods	undefined
+002fa908	L	PrecompiledShader?_Type_0x13_Methods	undefined
+002fa998	L	PrecompiledShader?_Type_0x12_Methods	undefined
+002faa28	L	PrecompiledShader?_Type_0x11_Methods	undefined
+002faab8	L	PrecompiledShader?_Type_0x10_Methods	undefined
+002fab48	L	PrecompiledShader?_Type_0xF_Methods	undefined
+002fabc8	L	PrecompiledShader?_Type_0xC_Methods	undefined
+002fac48	L	PrecompiledShader?_Type_0xB_Methods	undefined
+002facc8	L	PrecompiledShader?_Type_0xA_Methods	undefined
+002faf88	L	PrecompiledShader?_Type_0x4_Methods	undefined
+002fb128	L	PrecompiledShader?_Type_0x0_Methods	undefined
+002fb1b8	L	PrecompiledShader?_Type_0x2_Methods	undefined
+002fb248	L	PrecompiledShader?_Type_0x1_Methods	undefined
+002fb2d8	L	PrecompiledShaderBaseInterface_Methods	undefined
+002fb370	L	switchdataD_002fb370	pointer
+002fb3a0	L	switchdataD_002fb3a0	pointer
+002fb3d0	L	switchdataD_002fb3d0	pointer
+002fb400	L	switchdataD_002fb400	pointer
+002fb630	L	switchdataD_002fb630	pointer
+002fb8a0	L	SceneryRoot_Methods	undefined
+002fb9c0	L	SceneryNode_Methods	undefined
+002fbae0	L	SceneryType_0x1612_Methods	undefined
+002fbc28	L	SceneryLeaf_Methods	undefined
+002fbd30	L	SceneryBase_Methods	undefined
+002fbe88	L	SceneryTypeSection_Reader	undefined
+002fbf60	L	ChunkRenderingRelated?_Type0_Methods	undefined
+002fbfd8	L	BaseTriggerNode_Methods	undefined
+002fc0d8	L	ChunkSm2Loader_Methods	undefined
+002fc130	L	SM2Item_Methods	undefined
+002fc180	L	SM2Reader_Methods	undefined
+002fc1a8	L	ChunkRenderingRelated?_Methods	undefined
+002fc218	L	ChunkLoadUtil_Sm2_Methods	undefined
+002fc250	L	switchdataD_002fc250	pointer
+002fc310	L	switchdataD_002fc310	pointer
+002fc370	L	switchdataD_002fc370	pointer
+002fc3a0	L	switchdataD_002fc3a0	pointer
+002fc3d0	L	switchdataD_002fc3d0	pointer
+002fc7b0	L	switchdataD_002fc7b0	pointer
+002fc7e0	L	switchdataD_002fc7e0	pointer
+002fc810	L	switchdataD_002fc810	pointer
+002fc988	L	MemoryAllocSizes	int[66]
+002fca90	L	switchdataD_002fca90	pointer
+002fcd80	L	TriggerNode_Methods	undefined
+002fce10	L	GameTrigger_Methods	undefined
+002fce38	L	MajorScript_methods	undefined
+002fce80	L	HeaderScript_methods	undefined
+002fcf10	L	ScriptCommandInterface_Methods	undefined
+002fcf50	L	DiskDataReaderMethods	undefined
+002fd090	L	switchdataD_002fd090	pointer
+002fd0e0	L	switchdataD_002fd0e0	pointer
+002fd100	L	switchdataD_002fd100	pointer
+002fd120	L	switchdataD_002fd120	pointer
+002fd160	L	switchdataD_002fd160	pointer
+002fd1a0	L	switchdataD_002fd1a0	pointer
+002fd248	L	ScriptEventCaller_Methods	undefined
+002fd320	L	switchdataD_002fd320	pointer
+002fd350	L	switchdataD_002fd350	pointer
+002fd3b0	L	switchdataD_002fd3b0	pointer
+002fd430	L	switchdataD_002fd430	pointer
+002fd4b0	L	switchdataD_002fd4b0	pointer
+002fd4d0	L	switchdataD_002fd4d0	pointer
+002fd520	L	switchdataD_002fd520	pointer
+002fd570	L	switchdataD_002fd570	pointer
+002fd5c0	L	switchdataD_002fd5c0	pointer
+002fd600	L	switchdataD_002fd600	pointer
+002fedd8	L	ScriptCommand_0x34_Methods	undefined
+002ff1d8	L	PlayAnimationCommand_Methods	undefined
+00300190	L	AnimationEndedCondition?_Methods	undefined
+00300708	L	InstanceFlagCondition_Methods	undefined
+00300758	L	InstanceTypeCondition_Methods	undefined
+003007a8	L	RandFloatCondition_Methods	undefined
+003007d0	L	AnimationProgressCondition?_Methods	undefined
+003007f8	L	DefaultCaseCondition_Methods	undefined
+00300b68	L	CheckPersistentFlagCondition_Methods	undefined
+00300be0	L	switchdataD_00300be0	pointer
+00300c20	L	switchdataD_00300c20	pointer
+00300c40	L	switchdataD_00300c40	pointer
+00300c70	L	switchdataD_00300c70	pointer
+00300cb0	L	switchdataD_00300cb0	undefined *32
+00300d30	L	switchdataD_00300d30	undefined *32
+00300d50	L	switchdataD_00300d50	pointer
+00300d70	L	switchdataD_00300d70	pointer
+00300da0	L	switchdataD_00300da0	pointer
+00300dc0	L	switchdataD_00300dc0	pointer
+00300de0	L	switchdataD_00300de0	pointer
+00300e00	L	switchdataD_00300e00	pointer
+00300e20	L	switchdataD_00300e20	pointer
+00300e40	L	switchdataD_00300e40	pointer
+00300e60	L	switchdataD_00300e60	pointer
+00300e80	L	switchdataD_00300e80	pointer
+00300ea0	L	switchdataD_00300ea0	pointer
+00300ee8	L	InstanceNodeType0_Methods	undefined
+003011c0	L	InstanceNodePrototype_Methods	undefined
+00301330	L	switchdataD_00301330	undefined *32
+00301360	L	switchdataD_00301360	undefined *32
+00301380	L	switchdataD_00301380	pointer
+003013a0	L	switchdataD_003013a0	pointer
+003013c0	L	switchdataD_003013c0	pointer
+00301460	L	switchdataD_00301460	undefined *32
+00301490	L	switchdataD_00301490	undefined *32
+003014c0	L	switchdataD_003014c0	pointer
+00301550	L	switchdataD_00301550	pointer
+00301738	L	TriggerSignalCommand_Methods	undefined
+00302298	L	DistanceFromSpawnCondition_Methods	undefined
+003026a8	L	DistanceFromPlayerCondition_Methods	undefined
+00302790	L	switchdataD_00302790	pointer
+003027b0	L	switchdataD_003027b0	pointer
+003027d0	L	switchdataD_003027d0	pointer
+003027f0	L	switchdataD_003027f0	pointer
+00302810	L	switchdataD_00302810	pointer
+003032f0	L	switchdataD_003032f0	pointer
+00303350	L	InstanceCreationHelperBase_Methods	undefined
+00303370	L	VirtualTable_303370	undefined
+00303390	L	SomeOffset	short
+003033a8	L	VirtualTable_3033A8	undefined
+00303468	L	GameResourceManagerPrototype_Methods	undefined
+003034c0	L	ObjectInstanceContextBase_Methods	undefined
+00303560	L	InstancePropsHolderBase_Methods	undefined
+003036a0	L	switchdataD_003036a0	pointer
+003036e0	L	switchTable	undefined *32
+00303c10	L	InstanceSectionItem_Methods	undefined
+00303c60	L	CollisionSurfaceItem_Methods	undefined
+00303cb0	L	CameraSectionItem_Methods	undefined
+00303d00	L	TriggerItem_Methods	undefined
+00303d50	L	PathItem_Methods	undefined
+00303da0	L	PositionSectionItemReader_Methods	undefined
+00303df0	L	AiPathSectionItemReader_Methods	undefined
+00303e40	L	AiPositionSectionItemReader_Methods	undefined
+00303e90	L	ObjectInstanceItem_Methods	undefined
+00303ee0	L	InstanceTemplateItem_Methods	undefined
+00303f30	L	InstanceSectionReader_Methods	undefined
+00303f58	L	ChunkRm2Loader_Methods	undefined
+00303fb0	L	ChunkLoadUtil_Rm2_Methods	undefined
+003041c0	L	UnkChunkInterface_methods	undefined
+00304230	L	GameResourcesPrototype_Methods	undefined
+00304258	L	RM2_Item_Methods	undefined
+003042a8	L	Rm2Reader_Methods	undefined
+003042d0	L	CodeSectionItemReader_Methods	undefined
+00304370	L	CodeModelItemReader_methods	undefined
+003043c0	L	OgiItemReader_Methods	undefined
+00304410	L	AnimationItemReader_methods	undefined
+00304460	L	BehavioursItemReader_Methods	undefined
+003044b0	L	ObjectsItemFunctions	undefined
+00304500	L	CodeSubSectionReader_Methods	undefined
+00304528	L	GameObjectResourceTable_Methods	undefined
+00304770	L	switchdataD_00304770	pointer
+003047a0	L	switchdataD_003047a0	pointer
+003047e0	L	switchdataD_003047e0	pointer
+00304808	L	ObjectsSectionReader_Methods	undefined
+00304830	L	ScriptSubItemReader_Methods	undefined
+00304858	L	AnimationSectionReader_methods	undefined
+00304880	L	OgiReader_Methods	undefined
+00304920	L	ObjectInstanceSectionReader_Methods	undefined
+003049e8	L	TriggerSectionReader_Methods	undefined
+00304a10	L	CameraSectionReader_Methods	undefined
+00304a38	L	CollisionSurfaceSectionReader_Methods	undefined
+00304c78	L	GameCamera_Methods	undefined
+00304e28	L	CameraSubtype_0x1C0F_Methods	undefined
+00304e68	L	CameraSubtype_0x1C0E_Methods	undefined
+00304ea8	L	CameraSubtype_0x1C0D_Methods	undefined
+00304ee8	L	CameraSubtype_0x1C0C_Methods	undefined
+00304f28	L	CameraSubtype_0x1C0B_Methods	undefined
+00304f68	L	CameraSubtype_0x1C09_Methods	undefined
+00304fa8	L	CameraSubtype_0x1C06_Methods	undefined
+00304fe8	L	CameraSubtype_0xA19_Methods	undefined
+00305028	L	CameraSubtype_0x1C02_Methods	undefined
+00305068	L	CameraSubtype_0x1C04_Methods	undefined
+003050a8	L	CameraSubtype_0x1C03_Methods	undefined
+003050e8	L	CameraSubtypeBase_Methods	undefined
+00305178	L	CameraNode_Methods	undefined
+00305280	L	UnkNode_0x9_Methods	undefined
+00305360	L	CollisionDataSectionReader_Methods	undefined
+003053b0	L	switchdataD_003053b0	undefined *32
+003053f0	L	switchdataD_003053f0	undefined *32
+00305ae0	L	CutsceneReader_Methods	undefined
+00305b10	L	switchdataD_00305b10	pointer
+00305b50	L	switchdataD_00305b50	undefined *32
+00305b90	L	switchdataD_00305b90	pointer
+00305bb0	L	switchdataD_00305bb0	pointer
+00305bf0	L	switchdataD_00305bf0	pointer
+00305c10	L	switchdataD_00305c10	pointer
+00305c50	L	switchdataD_00305c50	pointer
+00305c90	L	switchdataD_00305c90	pointer
+00306030	L	switchdataD_00306030	pointer
+00306070	L	switchdataD_00306070	undefined *32
+003060b0	L	switchdataD_003060b0	pointer
+003060d0	L	switchdataD_003060d0	pointer
+00306110	L	switchdataD_00306110	pointer
+00306150	L	switchdataD_00306150	pointer
+00306180	L	switchdataD_00306180	pointer
+003061b0	L	switchdataD_003061b0	pointer
+00306200	L	switchdataD_00306200	pointer
+00306220	L	switchdataD_00306220	pointer
+00306270	L	switchdataD_00306270	pointer
+003062a0	L	switchdataD_003062a0	pointer
+00306770	L	switchTable	undefined *32
+00306980	L	switchdataD_00306980	pointer
+00306a48	L	ScenerySectionReader_Methods	undefined
+00306ae0	L	SubSectionsReader_methods	undefined
+00306c18	L	ItemReaderInterface_methods	undefined
+00306c90	L	GameMovieController_Methods	undefined
+00306d60	L	G_ButtonPressureSwitchTable	undefined *32
+00306de0	L	switchdataD_00306de0	pointer
+00306e08	L	GamePadController_Methods	undefined
+00306e88	L	ArchiveLoader?Methods	undefined
+00306ed8	L	ItemSectionReader_methods	undefined
+00306f00	L	BinaryReader_Methods	undefined
+00307310	L	PackageSecReader_methods	undefined
+00307f10	L	switchdataD_00307f10	pointer
+00307f30	L	switchdataD_00307f30	pointer
+00308531	L	CasingTable	char[128]
+00308640	L	switchdataD_00308640	pointer
+00308720	L	switchdataD_00308720	pointer
+00308830	L	switchdataD_00308830	pointer
+00308a20	L	switchdataD_00308a20	pointer
+00308cc0	L	switchdataD_00308cc0	pointer
+00308f30	L	switchdataD_00308f30	pointer
+003090f0	L	switchdataD_003090f0	pointer
+00309888	L	G_GameController	GameController *
+0030988c	L	G_GameController	GameController *
+00309890	L	G_GameController	GameController *
+00309898	L	RB_String	char[3]
+003098a0	L	BATCH_String	string
+003098fc	L	G_UnkPlayableCharObjInstCxt	PlayableCharacterObjectInstanceContext *
+00309900	L	G_UnkCreationHelper	InstanceCreationHelperBase *
+00309904	L	G_UnkPlayableCharObjInstCxt2	PlayableCharacterObjectInstanceContext *
+00309908	L	G_UnkCreationHelper2	InstanceCreationHelperBase *
+00309914	L	G_GameController	GameController *
+00309950	L	G_GameController	GameController *
+003099a8	L	G_PrecompShader_0xE_2	PrecompiledShaderType_0xE *
+00309ab4	L	g_GameContext	GameContext *
+00309ab8	L	G_GameState?	undefined4
+00309abc	L	G_GamePadController	GamePadController *
+00309ac0	L	G_GameMovieController	GameMovieController? *
+00309ac4	L	G_UnkStruct_5C0	UnkStruct_0x5C0 *
+00309ac8	L	G_GameRendererController	GameRendererController *
+00309acc	L	G_GameClockController	GameTimeController *
+00309ad0	L	G_GameResourcesObjectPointer	GameResources *
+00309ad4	L	UnkStruct_0x14_HasSomeDataPTRs	undefined4
+00309ad8	L	G_ChunkLoadingManager?	ChunkLoadingManager? *
+00309adc	L	G_VideoController	VideoController *
+00309ae0	L	G_Renderer?	Renderer? *
+00309af0	L	GlobalLanguagesAmount	undefined
+00309af4	L	CurrentLanguageIndex	int
+00309af8	L	G_unkLanguagesStruct	char * *
+00309b64	L	G_GlobalClockSpeedScale	float
+00309b70	L	G_CPU_T0_OVERFLOW_COUNTER	long
+00309b78	L	G_Timer0_Set	bool
+00309b7c	L	G_TICKS_TO_TIME	float
+00309b80	L	G_TIME_TO_TICKS	float
+00309b90	L	g_GameNodeList	GameNode * *
+00309b9c	L	G_InstContext2	InstanceContext *
+00309ba4	L	G_SizeOfByteArrayAt_0x3D3F28_0x18	int
+00309bbc	L	G_ParticleBinReader	BinaryReader *
+00309bc4	L	G_DMA_ByteStream_Beg?	byte *
+00309bc8	L	G_DMA_ByteStream_CurPosition?	byte *
+00309bdc	L	G_FontRendererRel	FontRendererRelated *
+00309be0	L	G_RendRel	RenderingRelated *
+00309be4	L	G_UnkChunkData?	ChunkData *
+00309bf8	L	G_0x320_ArrayOf_0x14_SizeStruct	undefined *
+00309c54	L	G_ParticlesAmountLoaded?	undefined4
+00309c98	L	G_ParticleInstancesAmount?	undefined4
+00309cfc	L	G_BLEND_SKIN_ANIM_DATA_VU_ADDR_BEGIN	int
+00309d00	L	G_BLEND_SKIN_ANIM_DATA_VU_ADDR_END	int
+00309d04	L	G_CONST_D	int
+00309e10	L	G_MicroCode_7_Index	int
+00309e14	L	G_MicroCode_8_Index	int
+00309e18	L	G_MicroCode_9_Index	int
+00309e20	L	G_MicroCode_6_Index	int
+00309e58	L	G_UnkStructOfSize_0xe0	undefined4
+00309f90	L	UnkGlobalCounter	int
+0030a060	L	G_DynamicSceneryClockIndex	undefined4
+0030a0a8	L	G_ChunkManager	ChunkManager? *
+0030a0ac	L	G_StateDepth	undefined
+0030a0b8	L	G_ScriptStateBody_Ptr	ScriptStateBody *
+0030a0bc	L	G_ScriptCondition_Ptr	ScriptCondition *
+0030a0c0	L	G_ScriptTable	GameObjectResourceTable *
+0030a0c8	L	G_ChunkManager	ChunkManager? *
+0030a100	L	G_CurrentScriptCall	ScriptCall *
+0030a110	L	G_MiniBigBoi	MiniBigBoi_0x123C *
+0030a14c	L	G_GameResourcesManager?	GameResourceManager? *
+0030a150	L	G_ChunkManager?	ChunkManager? *
+0030a22c	L	G_BLEND_SHAPE_FLOATS_ALLOCATOR	pointer
+0030a3c4	L	G_PSS_FileLocation	uint
+0030a3c8	L	G_PSS_FileSize	uint
+0030a428	L	G_GameReadersStorages	GameReadersStorage *[2]
+0030a440	L	G_archiveExtesion_Header	char[3]
+0030a448	L	G_archiveExtesion_Data	char[3]
+0030a7d8	L	CopyrightChecked?	undefined4
+0030a8e0	L	G_UnkThreadId	int
+0030a928	L	G_UnkInstanceContextRefCounter	ReferenceCounter *
+0030aa98	L	G_ObjectBuilder?	PublicObjectBuilder? *
+0030aac8	L	G_SomeUnkStruct_27	astruct_27 *
+0030aacc	L	G_DMA_ByteStream_TagsAllocatedAmt	undefined4
+0030aad0	L	G_TotalDMA_Chains	undefined4
+0030aad8	L	G_DMA_ByteStream_Beg_2	byte *
+0030aadc	L	G_UnkDMA_0x187040_ByteStream_2	byte *
+0030aae0	L	G_UnkDMA_0x187040_ByteStream_1	undefined *
+0030aae4	L	G_HorizontalResolution	undefined4
+0030aae8	L	G_VerticalResolution	undefined4
+0030aaf0	L	G_VideoOutMode	undefined4
+0030aaf8	L	G_VideoFFMode	undefined4
+0030ab18	L	G_ShaderRel_1	PrecompShaderRelated *
+0030ab1c	L	G_ShaderRel_2	PrecompShaderRelated *
+0030ab24	L	G_ShaderRel_3	PrecompiledShaderAnimation *
+0030ab7c	L	G_RegisteredVuInstructionsAmt	undefined4
+0030ab80	L	G_TexRelArrayNextIndex	undefined4
+0030ab84	L	G_TexRelArraySize	undefined4
+0030ab8c	L	G_TexRelArray	UnkTextureRelated *
+0030ab90	L	G_ShadersRendered?	undefined4
+0030ab98	L	G_InstTransformMat	Matrix4x4 *
+0030ac98	L	G_InstanceContextListEndIndex	undefined4
+0030aca0	L	G_InstanceContextListIndex	undefined4
+0030acbc	L	G_IopAllocHeapAddress	undefined4
+0030acc0	L	G_IopHeapAllocSize	undefined4
+0030ad00	L	MainARGC	int
+0030ad04	L	MainARGV	char *
+0030be80	L	G_StartChunk_Path	String
+0030be90	L	G_PostCreditsChunk_Path	String
+0030bea0	L	G_PrecompShader_0xE	PrecompiledShaderType_0xE *
+00311870	L	_gp_1	undefined1
+00323608	L	G_DMA_N_CHANNELS	sceDmaChan *[10]
+00323680	L	G_DmaChains_Array?	UnkDmaChainStruct?[3]
+00323850	L	G_DefaultBbox?	BoundingBox
+00323870	L	GlobalJointScale	Vector4
+003238b0	L	G_GlobalClock?	TimeClock
+003238c0	L	G_InstCxtRefCountersTable?	ResourceTable
+003238d0	L	G_UnkResourceTable	ResourceTable
+003240a0	L	G_DefaultParticleData?_3240a0	GameParticleData?
+003323c0	L	G_PrecompShader_0x1C_3323C0	PrecompiledShaderType_0x1C
+003b0560	L	G_SkydomeTable?	GraphicsResourceTable
+003b0588	L	G_MaterialsTables?	GraphicsResourceTable
+003b05b0	L	G_UnkTexRel	UnkTextureRelated
+003b05c0	L	G_TexturesTable?	GraphicsResourceTable
+003b05e8	L	G_RigidModelsTable?	GraphicsResourceTable
+003b0610	L	G_ModelsTable?	GraphicsResourceTable
+003b0638	L	G_BlendSkinsTable?	GraphicsResourceTable
+003b0660	L	G_SkinsTable?	GraphicsResourceTable
+003b0688	L	G_MeshTable	GraphicsResourceTable
+003b06b0	L	G_LODsTable?	GraphicsResourceTable
+003b07f0	L	G_Shader_VU_Programs	Shader_VU_Program[13]
+003b2340	L	G_DataBuffer_UnkRPC_Call	byte[2048]
+003b3380	L	G_ReceiveBuffer_UnkRPC_Call	byte[2048]
+003b5ad0	L	G_InstanceContextRefsCounterArray	ReferenceCounter *[256]
+003bdb60	L	G_UnkInstanceContextRef	ReferenceCounter *
+003bdc10	L	G_CollisionSurfaces	GameCollisionSurface[30]
+003c6ee8	L	G_UnkDmaRelated	UnkVifDMARelated
+003ca4b0	L	G_UnkSemaphore	int
+003cadd4	L	G_SIF0_InterruptHandlerID	undefined4
+003d3ef4	L	G_MainGamePad	GamePad *
+003d3f00	L	VIF0_TADR_PTR	undefined4
+003d3f04	L	VIF1_TADR_PTR	undefined4
+003d3f08	L	GIF_TADR_PTR	undefined4
+003d3f0c	L	IPU_FROM_MADR_PTR	undefined4
+003d3f10	L	IPU_TO_TADR_PTR	undefined4
+003d3f14	L	SIF0_MADR_PTR	undefined4
+003d3f18	L	SIF1_TADR_PTR	undefined4
+003d3f1c	L	SIF2_MADR_PTR	undefined4
+003d3f20	L	SPR_FROM_MADR_PTR	undefined4
+003d3f24	L	SPR_TO_TADR_PTR	undefined4
+003d4780	L	G_MainGifDmaTag	sceDmaTag
+003d4790	L	G_MainGifTag	sceGifTag
+003d47a0	L	G_TEXFLUSH_GifTag	Gif_A+D_Data
+003d47b0	L	G_PROMODECONT_GifTag	Gif_A+D_Data
+003d47c0	L	G_XYOFFSET_2_GifData	Gif_A+D_Data
+003d47d0	L	G_FRAME_2_GifData	Gif_A+D_Data
+003d47e0	L	G_ZBUF_2_GifData	Gif_A+D_Data
+003d47f0	L	G_CLAMP_2_GifData	Gif_A+D_Data
+003d4800	L	G_COLCLAMP_GifData	Gif_A+D_Data
+003d4810	L	G_DTHE_GifData	Gif_A+D_Data
+003d4820	L	G_DIMX_GifData	Gif_A+D_Data
+003d4830	L	G_TEST_2_GifData	Gif_A+D_Data
+003d4840	L	G_FBA_2_GifData	Gif_A+D_Data
+003d4850	L	G_TEXA_GifData	Gif_A+D_Data
+003d4860	L	G_SCISSOR_2_GifData	Gif_A+D_Data
+003d4870	L	G_TEX0_2_GifData	Gif_A+D_Data
+003d4880	L	G_TEX1_2_GifData	Gif_A+D_Data
+003d4890	L	G_TEST_2_GifData_2	Gif_A+D_Data
+003d48a0	L	G_PRIM_GifData	Gif_A+D_Data
+003d48b0	L	G_RGBAQ_GifData	Gif_A+D_Data
+003d48c0	L	G_UV_XYZF2_GifData_Array	Gif_A+D_Data[64]
+003d4e60	L	G_FrameBufferBasePointer	undefined4
+003d4e64	L	G_FrameBufferWidth	undefined4
+003d4e68	L	G_FrameBufferPixelStorageFormat	undefined4
+003d4e7c	L	G_FixedAlphaValue	undefined4
+003d4e80	L	G_ReadCircuit1	undefined4
+003d4e84	L	G_ReadCircuit2	undefined4
+003d4e88	L	G_AlphaValueSelection_MMOD	undefined4
+003d4e8c	L	G_AlphaBlendingMethodSelection	undefined4
+003d4e90	L	G_CRT_OutputSwitching	undefined4
+003d4e94	L	G_OUT1_AlphaOutputSelection	undefined4
+003d4ea0	L	G_MagnificationInHDirection	undefined4
+003d4ea4	L	G_MagnificationInVDirection	undefined4
+003d4ea8	L	G_DisplayAreaWidth	undefined4
+003d4eac	L	G_DisplayAreaHeight	undefined4
+003d4ec0	L	G_SomeGifTag	GifTagRelated *
+003d6070	L	G_MaterialShaderArray?	MaterialShader? *
+003d6e80	L	G_DefaultMeshIDs	GameRigidModel *[8]
+003d6ea0	L	G_AlphaRegPresets	ulong[16]
+003d6f30	L	G_InstanceContextCache?	InstanceContext *[1024]
+003d7f2c	L	G_AllInstanceContexts?	
+003d9a60	L	G_ScriptStateJumpTable	ScriptState *[512]
+003da260	L	G_BLEND_SHAPE_FLOATS	float[1000]
+10005000	L	VIF1_FIFO	byte[16]
+10008000	L	VIF0_CHCR	sceDmaChan
+10008030	L	VIF0_TADR	
+10009000	L	VIF1_CHCR	sceDmaChan
+10009030	L	VIF1_TADR	
+1000a000	L	GIF_CHCR	sceDmaChan
+1000a030	L	GIF_TADR	
+1000b000	L	IPU_FROM_CHCR	sceDmaChan
+1000b010	L	IPU_FROM_MADR	
+1000b400	L	IPU_TO_CHCR	sceDmaChan
+1000b430	L	IPU_TO_TADR	
+1000c000	L	SIF0_CHCR	sceDmaChan
+1000c010	L	SIF0_MADR	
+1000c400	L	SIF1_CHCR	sceDmaChan
+1000c430	L	SIF1_TADR	
+1000c800	L	SIF2_CHCR	sceDmaChan
+1000c810	L	SIF2_MADR	
+1000d000	L	SPR_FROM_CHCR	sceDmaChan
+1000d010	L	SPR_FROM_MADR	
+1000d400	L	SPR_TO_CHCR	sceDmaChan
+1000d430	L	SPR_TO_TADR	
+12000000	L	PMODE_REGISTER	undefined8
+12000020	L	SMODE2_REGISTER	undefined8
+12000070	L	DISPFB1_REGISTER	undefined8
+12000080	L	DISPLAY1_REGISTER	undefined8
+12000090	L	DISPFB2_REGISTER	undefined8
+120000a0	L	DISPLAY2_REGISTER	undefined8
+120000b0	L	EXTBUF_REGISTER	undefined
+120000c0	L	EXTDATA_REGISTER	undefined
+120000d0	L	EXTWRITE_REGISTER	undefined
+120000e0	L	BGCOLOR_REGISTER	undefined
+12001000	L	CSR_REGISTER	undefined8
+12001010	L	IMG_REGISTER	undefined
+12001040	L	BUSDIR_REGISTER	undefined
+12001080	L	SIGLBLID_REGISTER	undefined
+70000000	L	scratchpad_top	undefined4

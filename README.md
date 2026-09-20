@@ -329,7 +329,7 @@ python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cort
 
 | ✅ Shipped | 🔭 Next up | 🧱 Bigger projects | 🔬 Investigating | ✔️ Checked, fine here | ⛔ Not doing |
 |:-:|:-:|:-:|:-:|:-:|:-:|
-| **11** | **4** | **3** | **5** | **2** | **2** |
+| **11** | **4** | **4** | **5** | **2** | **2** |
 
 *Nothing ships until the automated rig has played it. Most of the open list comes from bugs the community has
 documented for the PAL release, or from surveys of the level data; each line says where it stands and what is in the
@@ -370,7 +370,8 @@ These are features rather than fixes, and each needs new tooling before it can e
 |:-:|---|---|
 | 🚩 | **Checkpoints in the long stretches** | A survey of every level file found 22 of the 93 substantial ones with no checkpoint crate placed at all, among them the biggest in the game - the Earth hub, the 10th-dimension lab exterior, the Rockslide start, the Academy hub. Some of those respawn you another way, so each needs checking by playing it. Adding one means adding an *instance* to a level, which `twinsdump` cannot do yet; that tooling is the actual work, and placements have to be chosen in-game rather than guessed from coordinates. |
 | 🎥 | **Scenes that never play** | Ten cutscene directors are placed in levels with nothing pointing at them - among them `UKAUKA_DEFEATED`, `BR_CORTEX_PIPE`, `CAVERN`, `EARTH_HUB` and `HUB2_TO_HUB3`. Some are started another way (the Iceberg Lab's turned out to be a movie), so each has to be checked before claiming anything. Any that genuinely never run are scenes sitting unused on the retail disc, and restoring one is the same kind of edit as restoring a skip. |
-| 🎨 | **Engine-level graphics** | Not emulator settings and not new art - changes to what the game itself draws. A survey of all 10,464 material shaders in the game says the easy levers are already pulled: every one is gouraud-shaded with linear magnification and a slight sharpening LOD bias, so there is nothing to fix in the material data. Two real findings came out of it: **no material in the game enables GS fog at all**, so the fog line is draw distance or vertex shading rather than a fog register; and 3,791 shaders are still not shadow receivers. That leaves code-level work - draw distance, the shadow pass, the receiver set - which the rig can now A/B with the framing locked (`RIG_GS`, plus a save state so only the rendering differs). |
+| 💡 | **Lighting** | The levels have a real runtime lighting rig, and it is in the `.sm2` scenery files this mod has never opened: 140 ambient, 432 directional, 103 point and 11 negative lights across the game, evaluated per vertex. The Earth hub alone has a grey ambient, a warm key, a cool fill and four wide point lights. All of it is editable data that costs nothing at runtime, which makes it the one real lever for "better lit" - unlike Phong, which the PS2's hardware cannot do at all ([why](https://alexmollard.github.io/Crash-Twinsanity-Improved/engine/lighting)). |
+| 🎨 | **The rest of the rendering** | A survey of all 10,464 material shaders says the easy levers are already pulled: every one is gouraud-shaded with linear magnification and a slight sharpening LOD bias. Two findings came out of it - **no material in the game enables GS fog at all**, so the fog line is draw distance or vertex shading rather than a fog register; and the shadow-receiver set is finished, since a test build making all 3,218 remaining opaque materials receivers was indistinguishable from the shipped 580. What is left is code: draw distance and the shadow pass. The rig can A/B a rendering change with the framing locked (`RIG_GS`, plus a save state so only the rendering differs). |
 
 ### 🔬 Investigating
 

@@ -17,6 +17,7 @@ const sidebars: SidebarsConfig = {
         'engine/loading',
         'engine/movies',
         'engine/graphics',
+        'engine/lighting',
       ],
     },
     {

@@ -33,8 +33,12 @@ def materials(buf):
         if p == end: yield rid, name, shaders
 
 def crate_shadow_offsets(buf):
-    """Offsets of the FBA byte of every opaque crate shader that has it off."""
-    return [s + 24 for _, name, shaders in materials(buf) if CRATE_NAMES.match(name)
+    """Offsets of the FBA byte of every opaque crate shader that has it off.
+
+    CRASHMOD_RECEIVERS=all widens that to every opaque material, characters included, for A/B testing what the
+    excluded ones would look like: they cast the shadow volumes, so turning it on makes them shadow themselves."""
+    every = os.environ.get("CRASHMOD_RECEIVERS") == "all"
+    return [s + 24 for _, name, shaders in materials(buf) if every or CRATE_NAMES.match(name)
             for s, ablend, fba in shaders if ablend == 0 and fba == 0]
 
 if __name__ == "__main__":

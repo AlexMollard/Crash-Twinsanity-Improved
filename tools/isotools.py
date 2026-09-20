@@ -62,6 +62,39 @@ def patch_elf(f, files, patches):
     for va, orig, new, note in patches:
         f.seek(base + va - ELF_BASE + ELF_FILE_OFF); f.write(struct.pack("<I", new))
 
+def write_elf(f, data, log=print):
+    """Write DATA over /SLES_525.68, making room on the disc if the executable has grown.
+
+    The image has no slack anywhere, so a bigger executable has to push its neighbours along. Only the files
+    between it and CRASH.BD (the music bank and the archive header) are actually copied; CRASH.BD itself just
+    gets a new start sector, because rebuild_archive streams its contents in from the source disc afterwards,
+    and everything past CRASH.BD is about to be relocated by archive_last anyway - so it must NOT be touched
+    here, or archive_last would copy it from the wrong place."""
+    files = iso_files(f); udf = udf_layout(f)
+    lba, size, rec = files[ELF_PATH]
+    grow = -(-len(data) // SECTOR) - -(-size // SECTOR)
+    if grow > 0:
+        by_lba = {l: p for p, (l, _, _) in files.items()}
+        fe_of = {by_lba[rel + udf[0]]: fe for rel, fe in udf[2].items() if rel + udf[0] in by_lba} if udf else {}
+        bd_lba = files[BD][0]
+        between = sorted(((l, p) for p, (l, _, _) in files.items() if lba < l <= bd_lba), reverse=True)
+        for old, p in between:                         # highest first, so a file never lands on one not yet moved
+            psize = files[p][1]
+            if p != BD: _copy_sectors(f, old, old + grow, psize)       # CRASH.BD's data is rewritten, not moved
+            _set_record(f, files[p][2], old + grow, psize)
+            if udf: _write_fe(f, fe_of[p], udf[0], old + grow, psize)
+        log(f"  executable grew {len(data) - size:+d} bytes: {len(between)} files moved up {grow} sectors")
+    elif grow < 0:
+        raise SystemExit("a smaller executable is not handled (nothing would fill the gap)")
+    f.seek(lba * SECTOR); f.write(data)
+    pad = -len(data) % SECTOR
+    if pad: f.write(b"\0" * pad)
+    _set_record(f, rec, lba, len(data))
+    if udf:
+        fes = udf_layout(f)[2]
+        _write_fe(f, fes[lba - udf[0]], udf[0], lba, len(data))
+
+
 def patch_archive_bytes(f, patches):
     """patches: {archive name: {offset in file: byte}} applied in place in the image's CRASH.BD (sizes unchanged)."""
     files = iso_files(f); bd_lba = files["/CRASH6/CRASH.BD"][0]
