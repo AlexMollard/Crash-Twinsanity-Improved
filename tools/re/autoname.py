@@ -38,7 +38,7 @@ ENUMS = os.path.join(ROOT, "tools", "twinsanity-editor", "Twinsanity", "DefaultE
 OUT = os.path.join(HERE, "db", "generated.tsv")
 
 # Both bounds are the `sltiu` in the dispatch, so they are the engine's own and not a guess: conditions are
-# indexed by id + 1 (BuildScriptCondition at 0x106C40), commands by the id itself (0x1016F0).
+# indexed by id + 1 (BuildScriptCondition at 0x106C40), commands by the id itself (BuildScriptCommand 0x101720).
 CONDITION_TABLE, CONDITION_COUNT, CONDITION_BIAS = 0x2ECF90, 0x286, 1
 COMMAND_TABLE, COMMAND_COUNT, COMMAND_BIAS = 0x2EC530, 0x297, 0
 STATIC_DATA = range(0x2E6F00, 0x30A460)        # .data/.rodata/.sdata: where a methods table can live

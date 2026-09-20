@@ -42,7 +42,7 @@ into objects through two jump tables, found by reading the `sltiu` bound out of 
 
 | Table | Entries | Indexed by | Builder |
 |---|---|---|---|
-| `0x2EC530` | 663 | command id | `0x1016F0`, entered with `a2 == -10` |
+| `0x2EC530` | 663 | command id | `BuildScriptCommand` `0x101720`, entered with `a2 == -10` |
 | `0x2ECF90` | 646 | condition id **+ 1** | `BuildScriptCondition` `0x106C40`, `a2 == -11` |
 
 Both counts are the `sltiu` bound in the dispatch, so they are the engine's own numbers rather than a guess.

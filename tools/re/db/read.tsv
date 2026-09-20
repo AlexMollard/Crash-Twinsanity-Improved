@@ -1,0 +1,78 @@
+# Names worked out by reading the decompiled function, with tools/re/batch.py for context.
+# Only functions whose purpose is unambiguous from the body are named here; anything needing a guess is
+# left as FUN_, because a wrong name in a database several people rely on costs more than a blank one.
+# address	kind	name	detail
+00101408	F	InitPublicObjectBuilder	zeroes first/last builder and both counts
+00101620	F	BuilderIteratorAtEnd	index < 0 or index >= the container's count
+00101720	F	BuildScriptCommand	a2 == -10, id < 0x297, tail-calls ScriptCommandTable[id]
+0011bf10	F	AngleToFixed	mode 1 degrees x182.044, 2 revolutions x65536, else radians x10430.378
+0011e698	F	ResetInstanceCollisionTransform	identity matrix at the instance position, applied to its collision data
+0011e750	F	UpdateInstanceNodeType1	per-frame: vtable +0x6c, sync instInfo, stamp lastUpdateStamp
+0011eaa8	F	ClearScriptPackSlots	zeroes all five script-pack slots and their parallel arrays
+0011ea18	F	GetOrCreateInstanceParticles	lazily allocates the instance's particle block at +0xa4
+002083a0	F	ScriptCommandInterface_Destroy	restores the base vtable, destroys the chained object, frees when bit 0 of the flag is set
+00208798	F	InitDiskDataReader	binds a disk node, resolves its data position, rewinds
+002087f8	F	DiskDataReader_Rewind	cursor (+0xc) back to zero
+00208818	F	DiskDataReader_AtEnd	cursor >= the node's element count
+00208830	F	DiskDataReader_Next	cursor (+0xc) forward one
+001c11d0	F	ReleaseGameTexture	id -1 frees it and its vifCodeBlock, otherwise returns it to the texture table
+00299628	F	PrecompiledShaderAnimation_Destroy	frees the packed animation, releases the disc node, frees self on bit 0
+00164ca8	F	Vector4SetXY	copies x and y from a Vector2, leaves z and w alone
+001721a8	F	GetAgentNode	first present node among 0xd,0xe,0xf,0xc,0x10,0x11,0x14,0x12,0x13 - whichever agent type this is
+00205c18	F	ReleaseDiskNode	bit 17 of the node's bitfield picks which of the two release paths to take
+00208528	F	ReadScriptArgInt	reads one int argument, returning the default when the command does not supply it
+00200088	F	ExpandBoundingBox	grows a bbox by a radius: min components down, max components up
+001f8db0	F	BoundingBoxesOverlap	AABB overlap on all three axes
+00200550	F	InitModelCollisionData	zeroes the whole struct including the position array pointer
+00282680	F	GetCollisionSurface	indexes G_CollisionSurfaces by the u16 surface id at +0x30
+00208680	F	StoreScriptArgTyped	writes a command argument into a script value slot by its 2-bit type tag; angles go through AngleToFixed
+00209a68	F	GetScriptIntArg	literal (arg >> 3) or instance int property when bit 0 is set - the int sibling of GetScriptFloatArg
+00200590	F	ModelCollisionData_Destroy	frees the position array, then self when bit 0 of the flag is set
+00197918	F	AttachNodeToInstance	adds a node to the context's node list, gives it the context, registers it with the chunk
+0011c028	F	Vector4InverseLengthIfAbove	1/|v| when |v| exceeds the given threshold, otherwise the supplied default
+00208578	F	StoreScriptArgToSlot	writes the argument into slot 0, 1 or 2 by the selector in front of it
+001975b0	F	GetOrCreateLinkedObjectsNode	game node 6 - the linked-objects list - allocating and attaching it when absent
+0013fe60	F	CharacterIdToIndex	maps character object ids (0x232 up) to small indices
+0011c1e8	F	ResetBoundingBox	back to G_DefaultBbox_
+00208410	F	ReadMovementCommandArgs	walks the command's records, tagging 0x38 and 0x39 as the movement argument types
+002098a0	F	GetCameraInstanceContext	the renderer's current camera context, or null
+0023cfd8	F	AddRandomOffset	adds three independently scaled random components to a vector
+00141318	F	InitObjectInstanceContextType8	chains to the base constructor and installs the type 8 methods
+00141648	F	InitInstanceCreationHelperType8	zeroes the base and installs InstanceCreationHelperType8_Methods
+001979f0	F	InitInstanceContext	clears the reference counter and the rest of a fresh context
+0023e308	F	GetOrCreateWobble	lazily builds the 0x110-byte wobble block at instance +0x108 and points it back at the instance
+0023e510	F	ClearWobble	tears the wobble block down and clears +0x108
+002d39d8	F	SignalFileSemaphore	releases the semaphore the sce file calls hold
+0013e960	F	GetCreationHelperFlags	the flags word at helper +0x10 - bit 8 is "hurts the player on touch"
+001a1960	F	ApplyOgiToCollision	pushes the node's OGI into its context's collision data
+001c0dc8	F	InitGameMaterial	fresh material with the given id, no shader
+002c7a88	F	LibcMalloc	the C library allocator behind sbrk - distinct from the game's own MemoryAllocate pool
+002d7fa0	F	Multiply64	64-bit product assembled from 32-bit halves
+0011bea0	F	SetColourRGB	packs r, g, b and an opaque alpha into four bytes
+0017b330	F	SetButtonBindings	releases the node's current bindings and installs new ones
+00182200	F	WaitForDmaIdle	enables every DMA channel and spins until the pending one reports complete
+001a0098	F	InitMaterialShader	zeroes a freshly read shader
+0020f5b0	F	AdvanceKeyIndex	next key, wrapping to the first and flagging when it passes the last
+00263148	F	TouchEventWithin	true when the agent's last touch was of this kind and within the given number of seconds
+00269130	F	GetCounterValue	the script counter array, at flow + 0x1018 + index * 4
+00297f98	F	InitOgiAnimationSettings	binds the animation and works its length out from frame count, rate and speed
+00298010	F	OgiAnimationSettings_Destroy	frees on bit 0 of the flag
+002ad678	F	ChunkLinkCollisionDataList_Destroy	walks the list, releasing each link's collision data
+00140950	F	InitObjectInstanceContextType3	chains to the type 8 constructor, then its own methods and default bbox
+00140d88	F	InitInstanceCreationHelperType3	chains to the type 8 helper, then installs the type 3 methods
+001f1ca8	F	GetOrCreateChunkDataContext	lazily allocates the chunk's data context
+001f6028	F	InitBaseTriggerNode	binds the chunk, copies the trigger's activator bits
+001f62f0	F	InitChunkRenderer	installs the methods and runs both sub-initialisers
+0020fce8	F	PopScriptStatesAbove	kills every execution state above the current one and truncates the stack
+0020fef0	F	GetScriptCallContext	context receiver by index, falling back to the call's second context at 0xff
+0023d150	F	InitInstanceNodePrototype	base constructor for the instance node hierarchy
+0023d328	F	ClearPendingUserMessage	drops the pending event argument and its source context
+00101698	F	SetColourRed	float to byte, scaled by 192 - not 255
+001016b8	F	SetColourGreen	float to byte, scaled by 192
+001016d8	F	SetColourBlue	float to byte, scaled by 192
+00101678	F	SetColourAlpha	float to byte, scaled by 128 - the GS convention where 0x80 is 1.0
+00261ea8	F	InitInstancePropsHolderBase	clears the state flags and the extra storage pointer
+001cd070	F	InitPrecompiledShaderBase	default bitfield, no texture, no animation
+002ace20	F	InitGenericItemReader	binds a section reader implementation
+002d9540	F	SoftFloatCompare	unpacks both doubles and compares them
+002d9208	F	SoftFloatSub	unpacks both doubles, flips the second's sign, adds

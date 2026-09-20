@@ -41,7 +41,7 @@ public class ImportDb extends GhidraScript {
         int named = 0, kept = 0, made = 0, missed = 0, commented = 0;
 
         // symbols.tsv is hand-curated and goes first, so a name worked out by hand beats a generated one.
-        for (String which : new String[]{"/symbols.tsv", "/generated.tsv"}) {
+        for (String which : new String[]{"/symbols.tsv", "/read.tsv", "/generated.tsv", "/shapes.tsv"}) {
             File sf = new File(args[0] + which);
             if (!sf.exists()) continue;
             try (BufferedReader r = open(sf.getPath())) {
