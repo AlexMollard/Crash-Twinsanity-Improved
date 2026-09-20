@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="wiki/static/img/logo.svg" alt="" width="112" height="112">
+
 # Crash Twinsanity Improved
 
 **A fix-and-polish mod for the PAL release of *Crash Twinsanity* (PS2), built for PCSX2.**
@@ -289,6 +291,7 @@ tools/
 ├── isotools.py          ISO9660 + UDF, CRASH.BD/BH archive and executable helpers
 ├── verify_iso.py        checks a build against the original
 ├── materials.py         material fixes (crates receive shadows)
+├── shader_survey.py     what GS state the game's own materials ask for
 ├── twinsdump/           level inspection and editing CLI (uses the Twinsanity Editor library)
 ├── re/                  headless Ghidra scripts for the twinsanity-reversed project (ghidra.py xref/decomp/callers)
 ├── rig/                 automated test rig driving an isolated PCSX2 over PINE
@@ -367,7 +370,7 @@ These are features rather than fixes, and each needs new tooling before it can e
 |:-:|---|---|
 | 🚩 | **Checkpoints in the long stretches** | A survey of every level file found 22 of the 93 substantial ones with no checkpoint crate placed at all, among them the biggest in the game - the Earth hub, the 10th-dimension lab exterior, the Rockslide start, the Academy hub. Some of those respawn you another way, so each needs checking by playing it. Adding one means adding an *instance* to a level, which `twinsdump` cannot do yet; that tooling is the actual work, and placements have to be chosen in-game rather than guessed from coordinates. |
 | 🎥 | **Scenes that never play** | Ten cutscene directors are placed in levels with nothing pointing at them - among them `UKAUKA_DEFEATED`, `BR_CORTEX_PIPE`, `CAVERN`, `EARTH_HUB` and `HUB2_TO_HUB3`. Some are started another way (the Iceberg Lab's turned out to be a movie), so each has to be checked before claiming anything. Any that genuinely never run are scenes sitting unused on the retail disc, and restoring one is the same kind of edit as restoring a skip. |
-| 🎨 | **Graphics polish that keeps the look** | Not new art - the aim is the game as it was meant to look. The rig can now A/B a graphics setting with the framing locked (`RIG_GS="hw_mipmap = true"` plus a save state, so only the rendering differs). First result: mipmapping on vs off is about 1/255 mean difference in stills - its real benefit is less shimmer *in motion*, so that needs a temporal test before the preset changes. Still on the list: trilinear filtering, full texture preloading, the fog line below, and extending the shadow-receiver flag past crates. |
+| 🎨 | **Engine-level graphics** | Not emulator settings and not new art - changes to what the game itself draws. A survey of all 10,464 material shaders in the game says the easy levers are already pulled: every one is gouraud-shaded with linear magnification and a slight sharpening LOD bias, so there is nothing to fix in the material data. Two real findings came out of it: **no material in the game enables GS fog at all**, so the fog line is draw distance or vertex shading rather than a fog register; and 3,791 shaders are still not shadow receivers. That leaves code-level work - draw distance, the shadow pass, the receiver set - which the rig can now A/B with the framing locked (`RIG_GS`, plus a save state so only the rendering differs). |
 
 ### 🔬 Investigating
 

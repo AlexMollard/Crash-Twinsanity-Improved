@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Crash Twinsanity Improved',
   tagline: 'How the game works, and how this mod changes it',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.svg',
 
   future: {v4: true},
 

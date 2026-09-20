@@ -10,12 +10,11 @@
     </linearGradient>
   </defs>
 
-  <!-- Two mirrored triangles: the twins, and the button you hold to skip.
-       No outlines, so the mark keeps its shape on any background at 16px. -->
-  <path d="M32 4 59 51H5Z" fill="url(#warm)"/>
-  <path d="M32 60 5 13h54Z" fill="url(#cool)" opacity="0.78"/>
-
-  <!-- The centre: the thing that was put right. -->
-  <circle cx="32" cy="32" r="8.5" fill="#fff" opacity="0.92"/>
-  <circle cx="32" cy="32" r="4.6" fill="#f05a19"/>
+  <rect width="64" height="64" rx="14" fill="#11141c"/>
+  <g transform="translate(32 32) scale(0.8) translate(-32 -32)">
+    <path d="M32 4 59 51H5Z" fill="url(#warm)"/>
+    <path d="M32 60 5 13h54Z" fill="url(#cool)" opacity="0.78"/>
+    <circle cx="32" cy="32" r="9" fill="#fff" opacity="0.94"/>
+    <circle cx="32" cy="32" r="4.9" fill="#f05a19"/>
+  </g>
 </svg>
