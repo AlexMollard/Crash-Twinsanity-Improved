@@ -48,6 +48,7 @@ def patch_editor():
     The submodule is upstream's code and is not ours to commit into, but the library drops a few fields it
     reads (see tools/patches/texture-preserve-reserved.patch), which makes a full re-save lossy. Carrying the
     fixes as patches keeps them visible, reviewable and easy to send upstream."""
+    changed = False
     for patch in sorted(glob.glob(os.path.join(HERE, "patches", "*.patch"))):
         check = subprocess.run(["git", "apply", "--reverse", "--check", patch], cwd=EDITOR, capture_output=True)
         if check.returncode == 0: continue                # already applied
@@ -55,8 +56,8 @@ def patch_editor():
         if applied.returncode:
             raise SystemExit(f"could not apply {os.path.basename(patch)} to the editor submodule:\n{applied.stderr}")
         print(f"  applied {os.path.basename(patch)} to the editor submodule")
-        return True                                       # something changed: the library must be rebuilt
-    return False
+        changed = True                                    # the library has to be rebuilt afterwards
+    return changed
 
 
 def ensure_tools():

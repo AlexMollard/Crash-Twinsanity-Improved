@@ -123,15 +123,15 @@ scenery, dynamic scenery, models, skins, blend skins, materials, textures, skydo
 paths, and the whole script and instance layer - and `build_mod.py` can rebuild the disc around a CRASH.BD of
 any size. What has been missing is confidence that a level survives a round trip.
 
-It very nearly does. Loading `beach.rm2` through the library and saving it again gives a file of **exactly the
-same size** that differs in **134 bytes**, and every one of them is the same field:
+`tools/roundtrip_check.py` answers that for every file in the archive, and `--explain` traces each differing
+byte back to the section and the offset within the item that holds it - which turns "this level loses 42
+bytes" into "field +24 of every collision surface", i.e. something fixable. Two bugs came out of it.
 
-```text
-section 11 (graphics), subsection 0 (textures), offset +88 in each item
-94 textures affected, each losing 1-2 bytes, always non-zero -> zero
-```
+### The texture field
 
-`Texture.cs` reads three fields it does not keep:
+Loading `beach.rm2` and saving it gave a file of **exactly the same size** differing in **134 bytes**, all of
+them at `section 11 (graphics) / subsection 0 (textures) / offset +88`, across 94 textures. `Texture.cs` reads
+three fields it does not keep:
 
 ```csharp
 reader.ReadInt32(); // Reserved, in game's code refers to an index of vifCodeBlock
@@ -139,13 +139,51 @@ reader.ReadInt32(); // Reserved, in game's code refers to an unknown pointer
 reader.ReadBytes(2); // Reserved, unknown
 ```
 
-and `Save` writes zeros back in their place. Only the first is ever non-zero in shipped data, which is why the
-damage is 134 bytes and not thousands. So the round trip is lossless to within one discarded integer per
-texture - a three-line fix in the editor, upstream in
-[twinsanity-editor](https://github.com/Smartkin/twinsanity-editor).
+and `Save` writes zeros in their place. Only the first is ever non-zero on the disc, which is why the damage is
+134 bytes and not thousands. Preserving them took one field each.
 
-Until then the mod avoids the library's full re-save entirely and splices single items in place with
-`tools/rig/rm2splice.py`, which preserves every byte it does not deliberately change.
+### The collision surface overrun
+
+The second is worse, because it is not a dropped value but a corrupted layout. `CollisionSurface.cs`:
+
+| | |
+|---|---|
+| `Load` | reads a `ushort` at +24 and discards it |
+| `GetSize()` | returns **114** |
+| `Save` | writes `writer.Write(65535)` - an `int` literal, so **four bytes** |
+
+So `Save` emits 116 bytes into a 114-byte slot. Every surface overruns the next by two, the whole subsection
+shifts, and the file comes out the same size with scrambled tails - 18 bytes on `huba`, 452 on `labext`.
+
+:::danger Saving a level through the editor damages its collision
+This is upstream behaviour, not something this mod introduced, and it applies to anyone editing surfaces in
+the GUI. The mod has never been exposed to it because `build_mod` splices single items with
+`tools/rig/rm2splice.py` and never takes the library's full-file save path.
+:::
+
+Both fixes live as patches that `build_mod` applies to the submodule, so a fresh clone gets them and they stay
+easy to send upstream to
+[twinsanity-editor](https://github.com/Smartkin/twinsanity-editor):
+
+```text
+tools/patches/texture-preserve-reserved.patch
+tools/patches/collisionsurface-padding-size.patch
+```
+
+### Where it stands
+
+| | Files round-tripping byte-for-byte |
+|---|---|
+| Before | **1** of 135 |
+| After the texture fix | **98** of 135 |
+| After the collision fix | 98 of 135, and `Startup\Default.rm2` stops changing size (2127 bytes and +56 → 170 bytes and +0) |
+
+So the collision fix repairs the *layout* damage without changing the file count - the remaining 37 files were
+already losing bytes for a third reason. What is left is small and non-structural: between 4 and 452 bytes per
+file, no size changes, no shifted items. `--explain` cannot yet attribute them, because the walker it uses to
+map an offset back to an item only descends three levels and gives up on sections it cannot parse, so they all
+report as "outside any item". Fixing the walker is the next step, not fixing the editor - there is no point
+guessing at a field before knowing which item type holds it.
 
 ## How a name gets worked out
 

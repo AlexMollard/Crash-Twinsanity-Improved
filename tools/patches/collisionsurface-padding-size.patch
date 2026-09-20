@@ -1,0 +1,30 @@
+diff --git a/Twinsanity/Items/Instances/CollisionSurface.cs b/Twinsanity/Items/Instances/CollisionSurface.cs
+index a05bcd9..c50f38d 100644
+--- a/Twinsanity/Items/Instances/CollisionSurface.cs
++++ b/Twinsanity/Items/Instances/CollisionSurface.cs
+@@ -28,6 +28,7 @@ namespace Twinsanity
+         public Pos UnkVector = new Pos(0, 0, 0, 1);
+         public Pos UnkBoundingBox1 = new Pos(0, 0, 0, 0);
+         public Pos UnkBoundingBox2 = new Pos(0, 0, 0, 0);
++        private ushort unusedPadding = 65535;   // read past by the game; preserved so a re-save is lossless
+ 
+         public override void Save(BinaryWriter writer)
+         {
+@@ -42,7 +43,7 @@ namespace Twinsanity
+             writer.Write(Particle_3);
+             writer.Write(Sound_5);
+             writer.Write(Sound_6);
+-            writer.Write(65535);
++            writer.Write(unusedPadding);
+             writer.Write(UnkFloat1);
+             writer.Write(UnkFloat2);
+             writer.Write(UnkFloat3);
+@@ -80,7 +81,7 @@ namespace Twinsanity
+             Particle_3 = reader.ReadUInt16();
+             Sound_5 = reader.ReadUInt16();
+             Sound_6 = reader.ReadUInt16();
+-            reader.ReadUInt16(); // not stored by the game, just skipped
++            unusedPadding = reader.ReadUInt16(); // not stored by the game, but kept so a re-save is lossless
+             UnkFloat1 = reader.ReadSingle();
+             UnkFloat2 = reader.ReadSingle();
+             UnkFloat3 = reader.ReadSingle();
