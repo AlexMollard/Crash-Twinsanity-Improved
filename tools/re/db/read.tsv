@@ -234,3 +234,13 @@
 001a0b30	F	QueueTextDraw	allocates a text item, copies the renderer's font, position and colour, appends it to the font's list
 001925c0	F	StampNodeUpdate	marks a node updated for this clock tick, reporting whether it had already been done
 0018cfc0	F	MakeTranslationTransform	identity rotation at the given position
+002d91b0	F	SoftFloatAdd	unpacks both doubles, adds, repacks - SoftFloatSub is this with the second sign flipped
+0020c9f8	F	AdvanceScriptControlPacket	retires the current control packet and clears the pending bit
+#
+# Cutscene mode lives in a 6-bit field of GameController + 0x8, bits 44-49. BeginCutsceneMode requires 0xC
+# and moves to 0x34; EndCutsceneMode requires 0xD and moves to 0x2C; both also accept 0x7 as a lighter
+# variant that only touches the letterbox. Bit 0 of GameController + 0x10 is "the letterbox is up".
+#
+00176b78	F	BeginCutsceneMode	state 0xC to 0x34: takes control, raises the letterbox, clears the bottom text
+00176cb8	F	EndCutsceneMode	state 0xD to 0x2C: lowers the letterbox and returns control
+00176db0	F	ShowBottomTextStrip	only in state 0xC: clears the text and raises the strip
