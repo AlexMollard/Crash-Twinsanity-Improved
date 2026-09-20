@@ -15,6 +15,53 @@ static class Program
     {
         if (args.Length < 2) { Console.Error.WriteLine("usage: twinsdump <file.rm2> scripts <regex> | refs <ids> | list"); return 2; }
         Console.SetOut(new System.IO.StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
+        if (args[1] == "psm")
+        {
+            // twinsdump <file.psm> psm <outdir> : decode a gallery / loading-screen image into PNG tiles.
+            // A .psm is a run of PTC records: texture id, material id, Texture, Material. The pictures are stored as
+            // a grid of textures. The library's Material.Load dereferences Parent.Parent, which a standalone file
+            // cannot provide, so the material is skipped by hand using its known layout rather than parsed.
+            var dir = args.Length > 2 ? args[2] : ".";
+            System.IO.Directory.CreateDirectory(dir);
+            var raw = System.IO.File.ReadAllBytes(args[0]);
+            var stem = System.IO.Path.GetFileNameWithoutExtension(args[0]);
+            int saved = 0;
+            using (var ms = new System.IO.MemoryStream(raw))
+            using (var r = new System.IO.BinaryReader(ms))
+            {
+                while (ms.Position + 16 < raw.Length)
+                {
+                    r.ReadUInt32(); r.ReadUInt32();                 // texture id, material id
+                    var tex = new Texture();
+                    try { tex.Load(r, 0); } catch { break; }
+                    if (tex.RawData != null)
+                    {
+                        var name = System.IO.Path.Combine(dir, $"{stem}_{saved:D2}.png");
+                        using (var bmp = tex.GetBmp()) bmp.Save(name, System.Drawing.Imaging.ImageFormat.Png);
+                        Console.WriteLine($"{name}  {tex.Width}x{tex.Height}  {tex.PixelFormat}");
+                        saved++;
+                    }
+                    else Console.WriteLine($"{stem}[{saved}]  {tex.Width}x{tex.Height}  {tex.PixelFormat} -> no decoder");
+                    // skip the material: u64 header, i32 layer, i32 nameLen, name, i32 shaderCount, then each shader
+                    try
+                    {
+                        r.ReadUInt64(); r.ReadInt32();
+                        int nameLen = r.ReadInt32(); r.ReadBytes(nameLen);
+                        int shaders = r.ReadInt32();
+                        for (int i = 0; i < shaders; i++)
+                        {
+                            uint kind = r.ReadUInt32();
+                            int extra = kind == 23 ? 12 : kind == 26 ? 20 : (kind == 16 || kind == 17) ? 4 : 0;
+                            r.ReadBytes(extra + 24 + 6 + 4 + 48 + 8);
+                        }
+                    }
+                    catch { break; }
+                }
+            }
+            Console.WriteLine($"{saved} tiles");
+            return saved > 0 ? 0 : 1;
+        }
+
         var file = new TwinsFile();
         var stdout = Console.Out; Console.SetOut(System.IO.TextWriter.Null);   // library prints load noise
         file.LoadFile(args[0], args[0].EndsWith(".sm2", StringComparison.OrdinalIgnoreCase)
