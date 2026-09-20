@@ -31,7 +31,7 @@
 00197918	F	AttachNodeToInstance	adds a node to the context's node list, gives it the context, registers it with the chunk
 0011c028	F	Vector4InverseLengthIfAbove	1/|v| when |v| exceeds the given threshold, otherwise the supplied default
 00208578	F	StoreScriptArgToSlot	writes the argument into slot 0, 1 or 2 by the selector in front of it
-001975b0	F	GetOrCreateLinkedObjectsNode	game node 6 - the linked-objects list - allocating and attaching it when absent
+001975b0	F	GetOrCreateContextRefsNode	game node 6 - the contexts this instance references - allocating and attaching it when absent. TriggerLinkedObjects reads it as linked objects, NowRotateJoint as joints, so the list is general
 0013fe60	F	CharacterIdToIndex	maps character object ids (0x232 up) to small indices
 0011c1e8	F	ResetBoundingBox	back to G_DefaultBbox_
 00208410	F	ReadMovementCommandArgs	walks the command's records, tagging 0x38 and 0x39 as the movement argument types
@@ -76,3 +76,44 @@
 002ace20	F	InitGenericItemReader	binds a section reader implementation
 002d9540	F	SoftFloatCompare	unpacks both doubles and compares them
 002d9208	F	SoftFloatSub	unpacks both doubles, flips the second's sign, adds
+001f0458	F	SetCollisionQueryContext	binds a collision query to a context and caches its collision id
+001417a8	F	ResetInstanceCreationHelperType8	the default bitfield a fresh type 8 helper starts with
+001f1ed0	F	ChunkQueryNearestInstance	nearest instance in the chunk, 1e30 when the chunk holds none
+001f1f08	F	ChunkBroadcastToInstances	delivers to every instance in the chunk, returning how many took it
+001958c8	F	InitInstanceInformation	empty chunk name, bound to the given chunk
+001da880	F	EnsureVuProgramUploaded	uploads a shader's VU program if it is not already resident and advances the VU memory cursor
+0023ddd8	F	RefreshWobbleTarget	rebuilds the wobble block when the impulse target has changed
+00263198	F	AgentEventWithin	true when the agent's last event was within the given number of seconds
+00268e60	F	FindChunkByIndex	linear search of the loaded chunks
+002b63d8	F	InitBinaryReaderFromFile	fresh reader, then opens the path
+001c1180	F	InitGameTexture	fresh texture with the given id and no vifCodeBlock
+0018c880	F	RandomFloatSigned	GetRand scaled to -1..1 - the constants are 2^30 and 2^-30
+001f0e78	F	ReallocCollisionMatrixValues	resizes the per-matrix short array, freeing the old one
+001d9278	F	InitPrecompiledShaderType1	stamps the shader's type number
+001da718	F	ResetVuPrograms	rewinds the VU memory cursor and re-registers programs 0x0e to 0x2a
+00201a60	F	RenderDynamicSceneryNode	forwards the node's model storage to the dynamic scenery renderer
+00204378	F	AppendDecimalDigits	recursive digit emitter with a minimum width
+0023d238	F	ResetInstanceNodePrototype	clears the id, the instance node and the pending message
+002406d8	F	WobbleBlock_Destroy	frees the wobble block's own buffer, then itself on bit 0
+00240240	F	InitInstanceParticles	fresh particle block with a unit scale
+002631d8	F	ResetInstanceCreationHelperBase	zeroes the three base fields
+00140df0	F	ResetInstanceCreationHelperType3	chains to the type 8 reset, then the type 3 defaults
+0015e4a8	F	ResetCameraState	vtable reset plus the four sub-state resets Command_ResetCamera_Run wants
+001bc810	F	ReleaseGameMaterial	id -1 frees the material and every precompiled shader on it, otherwise returns it to the table
+0028a518	F	ApplyImpulseAtPoint	adds linear velocity, torque from r x F, blends angular velocity 0.7/0.3, accumulates the magnitude
+001ed750	F	ForEachInstanceInVolume	delivers to every instance inside the volume, returning how many took it
+0018ddb0	F	AngleToQuaternion	fixed-point angle to a quaternion on VU0; the constant is 2*pi/65536, halved for the half-angle
+001f1f58	F	ForEachInstanceOverlappingModel	the ForEachInstanceInVolume sibling that takes a collision model and a transform
+001f20d0	F	AddInstanceToChunk	binds a context to a chunk, allocating the chunk's 769-slot instance storage on first use
+00298d70	F	ApplyAnimationSpeed	rebuilds the animation settings at a new speed and applies them to both halves of the chain
+001f6ad8	F	MakeBoundsFromSegment	centre and radius of the sphere spanning two endpoints
+00196258	F	AddContextRef	appends a context to node 6's list of up to 16, with a per-entry flag byte at +0x60
+00196d88	F	DetachAttachedObject	finds the attachment by index and either detaches it or just clears its owner
+001f36d0	F	ClearSceneryChildren	nulls every child pointer a scenery node owns
+00269278	F	SetChunkStateBit	sets or clears one bit of the chunk's persistent state bitfield, bounds-checked
+00281128	F	UnpackCollisionTriangle	three 18-bit vertex indices out of one packed word, surface index in the top bits
+00182280	F	BeginDmaChain	takes the next tag from a chain manager and opens a chain on it
+001955a0	F	FindDefaultAttachment	first attachment whose slot byte is -1
+00195600	F	FindAttachmentBySlot	first attachment in the requested slot
+001a0dd0	F	AppendGifTag	writes a GIF tag reference into the chain for mode 1 or 2
+001a2750	F	FindGraphicsResourceById	binary search of a graphics resource table

@@ -1,0 +1,52 @@
+# Looked at, deliberately not named. One reason per line, so nobody re-reads them hoping for better luck.
+00253de0  # two-level lookup through G_MiniBigBoi, which nobody has identified
+002098d8  # sets a 3-bit argument type tag to 2; what type 2 means is not established
+00208550  # reads an argument of an unknown type through FUN_002085c0
+002d9270  # softfloat op via FUN_002d9808 - which operation is not established
+002084f0  # generic "field at +4 is zero" test
+002abfc0  # constructor for a reader type with no known purpose
+00204d78  # links an 8-byte node into a heap-manager list; purpose of the list unknown
+001c10f0  # returns 2, 3 or 4 from a texture's mip count; what the number selects is unknown
+00140278  # set-once on helper field +0x24, contents unknown
+001402a8  # set-once on helper field +0x28, contents unknown
+00257c38  # finds a list element by a 12-bit id; container type unknown
+0025c948  # packs a bitfield and installs a vtable; class unknown
+0025a378  # broadcasts over a 64-bit mask to renderer sub-objects; which call is unclear
+0025a418  # as above, different callee
+0023e918  # node 1 plus a vtable predicate; what the predicate tests is unknown
+002749c8  # camera state setup, all magic bitmasks
+0027c980  # camera state setup, all magic bitmasks
+0018c190  # forwards to BinaryReader vtable +0xac; which read is unknown
+00196e00  # forwards through two unnamed helpers
+0023f2c0  # three-way dispatch into unnamed initialisers
+00263598  # attach-focus helper, too entangled to name from the body
+0011e428	# 0.8-second wrapping accumulator into two globals; what it drives is unknown
+0011cc58  # destructor for an unidentified ScriptCommandInterface subclass
+0011d098  # destructor for an unidentified ScriptCommandInterface subclass
+00166a28  # destructor for an unidentified class
+0011e570  # sets the type 1 vtable then chains; constructor or destructor unclear
+0011e5b8  # guarded vtable call behind a global flag
+0011e600  # packs instance property 0 into a 5-bit field of scriptCalls
+0011e658  # frees a buffer at +0x2c; what the buffer is is unknown
+0011e7a8  # vtable calls plus bbox reset; class unclear
+0011e848  # releases field_0xa8 and clears a bit
+0011e9c8  # maps a value to its index in a 10-entry table at PTR_0030aaa8
+002b6ab8  # MultithreadingRelated_ constructor; the class is a placeholder name
+002b6ae0  # matching destructor
+002d8018  # forwards to FUN_002d8038 with a zero
+0017b5f0  # caches the playable character context; which one is unclear
+002691f8  # zeroes an array obtained through two vtable getters
+00195f68  # chain of three unnamed node helpers
+001c09e0  # builds a DMA tag from shader field +0x60; what the field holds is unknown
+001c1e70  # constructor for a rigid-model reader with no known purpose
+001e5a20  # picks one of two pointers out of a global table and forwards
+00201a80  # sibling of RenderDynamicSceneryNode through an unidentified callee
+001f0348  # writes a single zero
+002542e0  # sets +0xa8 and a flag, propagating to +0xd4; fields unknown
+002542a0  # sets +0xb4 and a flag, propagating to +0xd4; fields unknown
+00254340  # sets +0xb0 and a flag, propagating to +0xd4; fields unknown
+001a26c8  # zeroes six bytes of an unidentified struct
+0027c608  # copies five camera defaults back; the fields are unidentified
+002d86d0  # softfloat wrapper around FUN_002d86f0
+0025bed8  # destructor for the same unidentified class as 00166a28
+002ada20  # section-loading state machine, too entangled to name from the body

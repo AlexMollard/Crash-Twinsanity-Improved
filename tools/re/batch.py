@@ -29,6 +29,23 @@ def load():
     return bodies, names
 
 
+def declined():
+    """Addresses looked at and deliberately not named, so the frontier keeps moving.
+
+    Some functions are perfectly legible and still not nameable - a two-level table lookup through a global
+    nobody has identified, a generic `return x == 0`. Recording them keeps them out of the next batch without
+    pretending they have been understood."""
+    path = os.path.join(HERE, "db", "declined.txt")
+    if not os.path.exists(path): return set()
+    out = set()
+    for line in open(path, encoding="utf-8"):
+        line = line.split("#")[0].strip()
+        if line:
+            try: out.add(int(line, 16))
+            except ValueError: pass
+    return out
+
+
 def already_named():
     """Every address that has a name in the database, whatever produced it.
 
@@ -58,7 +75,7 @@ def main():
     o = ap.parse_args()
 
     bodies, names = load()
-    known = already_named()
+    known = already_named() | declined()
     for a in known:
         if a in names and names[a].startswith('FUN_'): names[a] = 'NAMED_%08x' % a
 
