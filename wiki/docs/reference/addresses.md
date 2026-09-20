@@ -27,6 +27,7 @@ gp          = 0x311870        (so a gp-relative -32740 is *(0x30988C))
 | `0x30A3C2` | movie: vsync accumulator |
 | `0x30A3C3` | movie: the loop is waiting for a frame |
 | `0x30BE90` | the level-path string the end-of-credits code loads (the rig's warp target) |
+| `0x0097C700` | Evil Crash's live position in the `altdoc` state (**build-specific** - re-find it after any rebuild; the previous build's `0xC48230` now reads zero) |
 | `0x2EC530` | script command factory table, indexed by command id |
 | `0x2F0AB8` | script condition check table |
 
