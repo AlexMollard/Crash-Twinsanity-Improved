@@ -43,7 +43,7 @@
   <text x="523" y="188" fill="#f2a33c" font-size="11" font-weight="600" text-anchor="middle">moved to the end</text>
 
   <!-- notes -->
-  <text x="140" y="284" fill="#7d8798" font-size="10.5">The grey block at the left is the executable and boot files. The image stays exactly the same size, and the game finds every file by name, so nothing breaks.</text>
+  <text x="140" y="284" fill="#7d8798" font-size="10.5">Left of CRASH.BD: the executable, the boot files and the 211 MB music archive — already ahead of it, so none of it moves. The image stays the same size.</text>
 
   <!-- results -->
   <rect x="140" y="296" width="700" height="38" rx="6" fill="#20242d" stroke="#2c323d"/>

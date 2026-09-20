@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" role="img" aria-label="What a skip replaces. Normally the director runs the scene and then tidies up. On condition 572 the director jumps to a skip script instead, which rejoins at tidy up, so the scene never finishes. The skip script must also send message 244 to each actor so they warp to their end marks, and that has to happen before the scene ends because the marks only resolve while it is running.">
+  <defs>
+    <marker id="g3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#6b7484"/></marker>
+    <marker id="o3" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#f2a33c"/></marker>
+  </defs>
+
+  <rect width="900" height="320" rx="10" fill="#171a21"/>
+
+  <text x="28" y="34" fill="#e8ebf1" font-size="17" font-weight="600">What a skip has to replace</text>
+  <text x="28" y="54" fill="#98a2b3" font-size="12.5">The skip bypasses the scene — but it still has to reach the actors, or they are left stranded.</text>
+
+  <!-- normal track -->
+  <text x="118" y="96" fill="#7d8798" font-size="10.5" text-anchor="end">normally</text>
+  <g>
+    <rect x="128" y="76" width="118" height="36" rx="5" fill="#34608f"/>
+    <text x="187" y="99" fill="#dbe7f5" font-size="10.5" text-anchor="middle">CUTSCENE_BEGIN</text>
+
+    <rect x="288" y="76" width="232" height="36" rx="5" fill="#3f7fd4"/>
+    <text x="404" y="93" fill="#0e1520" font-size="11.5" font-weight="700" text-anchor="middle">the scene, all the way through</text>
+    <text x="404" y="106" fill="#12293f" font-size="9.5" text-anchor="middle">camera moves · waits · 207 to the actors</text>
+
+    <rect x="562" y="76" width="118" height="36" rx="5" fill="#34608f"/>
+    <text x="621" y="99" fill="#dbe7f5" font-size="10.5" text-anchor="middle">tidy up</text>
+
+    <rect x="722" y="76" width="70" height="36" rx="5" fill="#4a5361"/>
+    <text x="757" y="99" fill="#c2c9d6" font-size="11" text-anchor="middle">end</text>
+  </g>
+  <g stroke="#6b7484" stroke-width="1.6" fill="none" marker-end="url(#g3)">
+    <line x1="246" y1="94" x2="282" y2="94"/>
+    <line x1="520" y1="94" x2="556" y2="94"/>
+    <line x1="680" y1="94" x2="716" y2="94"/>
+  </g>
+
+  <!-- branch down -->
+  <path d="M264 112 L264 168" stroke="#f2a33c" stroke-width="2" fill="none" marker-end="url(#o3)"/>
+  <text x="274" y="140" fill="#f2a33c" font-size="10.5">if condition 572 — △ held</text>
+
+  <!-- skip track -->
+  <text x="118" y="194" fill="#f2a33c" font-size="10.5" text-anchor="end" font-weight="700">skipped</text>
+  <rect x="180" y="174" width="200" height="38" rx="5" fill="#f2a33c"/>
+  <text x="280" y="197" fill="#171a21" font-size="11.5" font-weight="700" text-anchor="middle">*_CUTSCENE_SKIP</text>
+
+  <!-- rejoin: orthogonal, up into tidy up -->
+  <path d="M380 186 L621 186 L621 118" stroke="#f2a33c" stroke-width="2" fill="none" marker-end="url(#o3)"/>
+  <text x="500" y="178" fill="#f2a33c" font-size="10.5" text-anchor="middle">rejoins at “tidy up” — the scene never finishes</text>
+
+  <!-- 244 to actors: orthogonal, down then right -->
+  <path d="M380 202 L452 202 L452 252 L536 252" stroke="#f2a33c" stroke-width="2" fill="none" marker-end="url(#o3)"/>
+  <text x="392" y="224" fill="#f2a33c" font-size="10.5">message 244 — “skipped”</text>
+
+  <rect x="542" y="234" width="300" height="38" rx="5" fill="#8a6a2e"/>
+  <text x="692" y="250" fill="#f4e4c4" font-size="11" font-weight="700" text-anchor="middle">each actor warps to its end mark</text>
+  <text x="692" y="263" fill="#d8c19a" font-size="9.5" text-anchor="middle">SetFocusToKey + PosWarp, then finishes its part</text>
+
+  <!-- the constraint -->
+  <rect x="128" y="286" width="714" height="24" rx="5" fill="#20242d" stroke="#e05c5c"/>
+  <text x="142" y="302" fill="#e05c5c" font-size="10.5" font-weight="700">The catch</text>
+  <text x="212" y="302" fill="#b6becb" font-size="10.5">marks only resolve while the scene is running, so the 244 handlers must fire before it ends — not from the director afterwards</text>
+</svg>

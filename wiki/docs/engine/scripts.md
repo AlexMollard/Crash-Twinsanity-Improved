@@ -35,6 +35,8 @@ Script  "COM_TIKI_MON_ACTIVATED"
 └─ state 13  ◄── the start state (not always 0)
 ```
 
+![Anatomy of a script: a script holds numbered states; a state holds a flag word, an optional sub-script and a list of rules; a rule holds a condition with its parameter, interval and threshold, a target state, and the commands that run on the transition into that target](/img/script-anatomy.svg)
+
 A **state** has:
 
 - a **flag word** that says how it behaves (below),

@@ -92,6 +92,21 @@ started from the *Wrath of Cortex* engine, and *Wrath of Cortex* being the first
 the shared vocabulary below. It is an inference from a very short chain, not a string you can grep for.
 :::
 
+### The console was full
+
+One number from this project's own reverse engineering says more about the conditions than any interview does.
+Twinsanity uses **essentially all 32 MB of the PlayStation 2's memory**: an 11.5 MB general pool and a 16.6 MB
+streaming buffer, leaving **8 KB of headroom**. Adding 8 KB of new code to the executable does not shrink some slack -
+it breaks the boot outright, because the second allocation then overruns the heap.
+
+The disc is packed the same way: not one spare sector between files. A bigger executable pushes everything after it
+along.
+
+That is a game shipped exactly to the edge of its hardware, by a team that had already built it once and started
+again. It is also why this mod's own changes have to be paid for rather than simply added - the working code cave is
+funded by shrinking the streaming buffer by precisely the cave's size, so total memory use matches retail to the
+byte. The details are on [The executable](../engine/executable).
+
 ### The Haven Rosetta stone
 
 Haven is useful beyond its symbol names, because it shipped its scripts as **plain text with the developers' own

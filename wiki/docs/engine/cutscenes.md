@@ -43,6 +43,8 @@ with a dozen arguments; waits are `AnimationFinished`, `TimeInUnit` or "is the t
 **The actors** (`CRASH_CUTSCENE_H02B`, `CORTEX_CUTSCENE_H02B`, …) are one script per character, kept in the director
 object's script slots. Each one walks its character through its part and waits for the scene's messages.
 
+![Four lanes: the director runs a begin script, then the scene, then tidies up; the scene sends message 207 to the Crash and Cortex actors; and a skip branch on condition 572 bypasses the scene but still sends message 244 to the actors, which must fire before the scene ends](/img/cutscene-flow.svg)
+
 ## Marks and keys
 
 Actors are placed with `SetFocusToKey(n)` followed by `PosWarp` / `RotWarp`. The "key" is a named position that
@@ -63,6 +65,8 @@ The design is clean:
 2. When it passes, the scene jumps to a `*_CUTSCENE_SKIP` script that fades the screen, fires the messages the scene
    would have fired, and fades back.
 3. Each actor answers user message **244** ("skipped") by warping to its end mark and finishing its part.
+
+![What a skip replaces: on condition 572 the director jumps to a skip script instead of the scene, rejoining at tidy up so the scene never finishes - and the skip must also send message 244 to each actor so they warp to their end marks, before the scene ends](/img/cutscene-skip.svg)
 
 And in the retail build none of it works, for two separate reasons:
 

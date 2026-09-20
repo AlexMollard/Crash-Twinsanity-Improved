@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" width="900" height="330" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" role="img" aria-label="How a cutscene runs normally. The director plays a begin script, then runs the scene as a sub-script, then tidies up and ends. The scene is a chain of camera moves and waits, and at each step it sends message 207 to the Crash and Cortex actor scripts, which wait for it and then perform their step.">
+  <defs>
+    <marker id="g2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#6b7484"/></marker>
+    <marker id="b2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#5b96e0"/></marker>
+  </defs>
+
+  <rect width="900" height="330" rx="10" fill="#171a21"/>
+
+  <text x="28" y="34" fill="#e8ebf1" font-size="17" font-weight="600">How a cutscene runs</text>
+  <text x="28" y="54" fill="#98a2b3" font-size="12.5">The director runs the scene; the scene messages the actors. One step at a time.</text>
+
+  <!-- director lane -->
+  <text x="112" y="103" fill="#5b96e0" font-size="11.5" font-weight="700" text-anchor="end">Director</text>
+  <g>
+    <rect x="128" y="82" width="140" height="36" rx="5" fill="#34608f"/>
+    <text x="198" y="99" fill="#dbe7f5" font-size="10" text-anchor="middle">COM_GENERIC</text>
+    <text x="198" y="111" fill="#9dbad6" font-size="10" text-anchor="middle">_CUTSCENE_BEGIN</text>
+
+    <rect x="300" y="82" width="140" height="36" rx="5" fill="#3f7fd4"/>
+    <text x="370" y="105" fill="#0e1520" font-size="11.5" font-weight="700" text-anchor="middle">run the scene</text>
+
+    <rect x="560" y="82" width="120" height="36" rx="5" fill="#34608f"/>
+    <text x="620" y="99" fill="#dbe7f5" font-size="10.5" text-anchor="middle">tidy up</text>
+    <text x="620" y="111" fill="#9dbad6" font-size="10" text-anchor="middle">cutscene camera off</text>
+
+    <rect x="712" y="82" width="80" height="36" rx="5" fill="#4a5361"/>
+    <text x="752" y="105" fill="#c2c9d6" font-size="11" text-anchor="middle">end</text>
+  </g>
+  <g stroke="#6b7484" stroke-width="1.6" fill="none" marker-end="url(#g2)">
+    <line x1="268" y1="100" x2="294" y2="100"/>
+    <line x1="440" y1="100" x2="554" y2="100"/>
+    <line x1="680" y1="100" x2="706" y2="100"/>
+  </g>
+
+  <!-- scene container -->
+  <rect x="240" y="136" width="560" height="150" rx="8" fill="#1d2430" stroke="#4a5361" stroke-dasharray="6 5"/>
+  <text x="520" y="276" fill="#7d8798" font-size="10.5" text-anchor="middle">while the scene is running</text>
+
+  <!-- director runs the scene -->
+  <line x1="370" y1="118" x2="370" y2="150" stroke="#5b96e0" stroke-width="1.8" marker-end="url(#b2)"/>
+  <text x="380" y="134" fill="#5b96e0" font-size="10">as a sub-script</text>
+
+  <!-- scene lane -->
+  <text x="232" y="177" fill="#c2c9d6" font-size="11.5" font-weight="700" text-anchor="end">Scene</text>
+  <g>
+    <rect x="280" y="156" width="110" height="34" rx="5" fill="#4a5361"/>
+    <text x="335" y="177" fill="#c2c9d6" font-size="10.5" text-anchor="middle">camera move</text>
+    <rect x="404" y="156" width="46" height="34" rx="5" fill="#3a4250"/>
+    <text x="427" y="177" fill="#98a2b3" font-size="10.5" text-anchor="middle">wait</text>
+    <rect x="462" y="156" width="110" height="34" rx="5" fill="#4a5361"/>
+    <text x="517" y="177" fill="#c2c9d6" font-size="10.5" text-anchor="middle">camera move</text>
+    <rect x="586" y="156" width="46" height="34" rx="5" fill="#3a4250"/>
+    <text x="609" y="177" fill="#98a2b3" font-size="10.5" text-anchor="middle">wait</text>
+    <rect x="646" y="156" width="70" height="34" rx="5" fill="#4a5361"/>
+    <text x="681" y="177" fill="#c2c9d6" font-size="10.5" text-anchor="middle">end</text>
+  </g>
+  <g stroke="#6b7484" stroke-width="1.4" fill="none" marker-end="url(#g2)">
+    <line x1="390" y1="173" x2="399" y2="173"/>
+    <line x1="450" y1="173" x2="457" y2="173"/>
+    <line x1="572" y1="173" x2="581" y2="173"/>
+    <line x1="632" y1="173" x2="641" y2="173"/>
+  </g>
+
+  <!-- forks to actors -->
+  <g stroke="#5b96e0" stroke-width="1.5" fill="none">
+    <path d="M335 190 L335 204 M291 204 L379 204"/>
+    <path d="M517 190 L517 204 M473 204 L561 204"/>
+  </g>
+  <g stroke="#5b96e0" stroke-width="1.5" fill="none" marker-end="url(#b2)">
+    <line x1="291" y1="204" x2="291" y2="214"/>
+    <line x1="379" y1="204" x2="379" y2="214"/>
+    <line x1="473" y1="204" x2="473" y2="214"/>
+    <line x1="561" y1="204" x2="561" y2="214"/>
+  </g>
+
+  <!-- actors -->
+  <text x="232" y="238" fill="#e0a86a" font-size="11.5" font-weight="700" text-anchor="end">Actors</text>
+  <g font-size="9.5">
+    <rect x="251" y="218" width="80" height="34" rx="5" fill="#8a6a2e"/>
+    <text x="291" y="233" fill="#f4e4c4" text-anchor="middle" font-weight="700">Crash</text>
+    <text x="291" y="245" fill="#d8c19a" text-anchor="middle">207 → step</text>
+
+    <rect x="339" y="218" width="80" height="34" rx="5" fill="#8a6a2e"/>
+    <text x="379" y="233" fill="#f4e4c4" text-anchor="middle" font-weight="700">Cortex</text>
+    <text x="379" y="245" fill="#d8c19a" text-anchor="middle">207 → step</text>
+
+    <rect x="433" y="218" width="80" height="34" rx="5" fill="#8a6a2e"/>
+    <text x="473" y="233" fill="#f4e4c4" text-anchor="middle" font-weight="700">Crash</text>
+    <text x="473" y="245" fill="#d8c19a" text-anchor="middle">207 → step</text>
+
+    <rect x="521" y="218" width="80" height="34" rx="5" fill="#8a6a2e"/>
+    <text x="561" y="233" fill="#f4e4c4" text-anchor="middle" font-weight="700">Cortex</text>
+    <text x="561" y="245" fill="#d8c19a" text-anchor="middle">207 → step</text>
+  </g>
+
+  <!-- legend -->
+  <text x="626" y="230" fill="#5b96e0" font-size="10.5">message 207 — “carry on”</text>
+  <text x="626" y="244" fill="#6b7484" font-size="9.5">each actor waits on GotUserMessageEquals,</text>
+  <text x="626" y="256" fill="#6b7484" font-size="9.5">then ClearUserMessage, then does its step</text>
+
+  <text x="28" y="312" fill="#6b7484" font-size="11">Actors are one script per character, kept in the director object's script slots. Skipping is on the next diagram.</text>
+</svg>
