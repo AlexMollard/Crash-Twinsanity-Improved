@@ -104,6 +104,11 @@ they talk about praying not to be thrown into wonky directions.
 **The deviation did not reproduce.** About one degree at both rates, which is the jump's own fixed bias rather than
 anything random, and the difference between the two is well under what a player could perceive.
 
+That is evidence against the community's explanation, and it narrows where the cause can be. What was tested is the
+**PAL build** at 60 Hz - and the PAL and NTSC builds differ in far more than their refresh rate. So if the rate alone
+does not produce the deviation, the likelier home for it is something in the NTSC builds themselves, or a trigger
+this test cannot reach. "It is the 60 Hz" is the one explanation these numbers make less likely.
+
 :::note What this test cannot show
 The bug is reported as *intermittent* - "sometimes". Every run here is deterministic: the same save state and the
 same frame-exact input give bit-identical results, which is what makes the 1% figure trustworthy and is also exactly
