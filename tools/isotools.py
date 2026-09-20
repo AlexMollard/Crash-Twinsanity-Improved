@@ -205,7 +205,8 @@ def rebuild_archive(src, dst, reps, log=print):
     Every file is streamed in original order to where DST's directory puts CRASH.BD; BH offsets and the ISO9660 and
     UDF sizes of CRASH.BD are updated. If CRASH.BD is the last file (archive_last), the image ends right after it."""
     files = iso_files(src); dfiles = iso_files(dst)
-    bh_lba, bh_size, _ = files[BH]; bd_lba, bd_size, _ = files[BD]
+    bh_lba, bh_size, _ = files[BH]; bd_lba, bd_size, _ = files[BD]      # where to read the originals from
+    dbh_lba = dfiles[BH][0]                                             # where CRASH.BH now lives (write_elf moves it)
     at, _, rec = dfiles[BD]
     later = [l for l, _, _ in dfiles.values() if l > at]
     room = (min(later) - at) * SECTOR if later else None
@@ -227,7 +228,7 @@ def rebuild_archive(src, dst, reps, log=print):
         struct.pack_into("<II", bh, brec, pos, size); pos += size
     left = (room if room is not None else -(-pos // SECTOR) * SECTOR) - pos
     while left: n = min(left, 16 << 20); dst.write(b"\0" * n); left -= n
-    dst.seek(bh_lba * SECTOR); dst.write(bh)
+    dst.seek(dbh_lba * SECTOR); dst.write(bh)
     _set_record(dst, rec, at, pos)
     udf = udf_layout(dst)
     if udf: udf_set_extent(dst, udf, at, at, pos)

@@ -18,6 +18,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import isotools as it
+import asmpatch
+import elfpatch
+sys.path.insert(0, os.path.join(HERE, "re"))
+import ghidra as re_ghidra
 sys.path.insert(0, os.path.join(HERE, "rig"))
 import rm2splice
 import materials
@@ -62,6 +66,28 @@ def read_elf_patches(path):
         if s:
             a, o, n = s.split()[:3]; patches.append((int(a, 16), int(o, 16), int(n, 16), group))
     return patches
+
+def build_elf(dst, files, include):
+    """Patch the executable in DST: the raw word patches from mod/elf_patches.txt, then the assembly in
+    mod/asm/*.s, which may both replace words in place and add code to the cave past the end of .bss."""
+    elf = elfpatch.Elf(it.read_file(dst, files, it.ELF_PATH))
+    patches = read_elf_patches(os.path.join(ROOT, "mod", "elf_patches.txt"))
+    for va, orig, new, note in patches: elf.patch(va, orig, new, note)
+    for g in dict.fromkeys(p[3] for p in patches): print(f"  {g}: {sum(1 for p in patches if p[3] == g)} words")
+
+    symbols, _ = re_ghidra.load_symbols()
+    dirs = [os.path.join(ROOT, "mod", "asm")] + [os.path.join(d, "asm") for d in include]
+    cave, asm_patches, labels, paths = asmpatch.load([d for d in dirs if os.path.isdir(d)],
+                                                     elfpatch.CAVE_CODE, symbols)
+    for addr, originals, code, where in asm_patches:
+        for i, original in enumerate(originals):
+            elf.patch(addr + 4 * i, original, int.from_bytes(code[4 * i:4 * i + 4], "little"), where)
+    elf.add_cave(cave)
+    for p in paths: print(f"  {os.path.relpath(p, ROOT)}")
+    print(f"  cave: {len(cave)} of {elfpatch.CAVE_SIZE - elfpatch.CAVE_GUARD} bytes used at {elfpatch.CAVE_CODE:08X}"
+          f", {len(asm_patches)} hook(s), heap now starts at {elfpatch.CAVE_BASE + elfpatch.CAVE_SIZE:08X}")
+    it.write_elf(dst, bytes(elf), log=print)
+
 
 def level_edits(src_iso, recipe_files, work):
     """{archive name: new bytes} from twinsdump edit recipes applied to the original files."""
@@ -171,8 +197,7 @@ def main():
         with open(src, "rb") as s, open(tmp, "r+b") as d:
             files = it.iso_files(d)
             step("Executable patches")
-            patches = read_elf_patches(os.path.join(ROOT, "mod", "elf_patches.txt")); it.patch_elf(d, files, patches)
-            for g in dict.fromkeys(p[3] for p in patches): print(f"  {g}: {sum(1 for p in patches if p[3] == g)} words")
+            build_elf(d, files, o.include)
             step("Disc layout")                        # level data to the fast outer edge of the disc (and room to grow)
             it.archive_last(d, log=print)
             step("Archive"); it.rebuild_archive(s, d, reps, log=print)

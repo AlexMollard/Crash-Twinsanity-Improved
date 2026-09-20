@@ -5,26 +5,35 @@ Crash Twinsanity's SLES_525.68 is a plain 32-bit MIPS ELF with a single loadable
     PT_LOAD  file 0x1000  vaddr 0x100000  filesz 0x20a460  memsz 0x2db200
 
 so 0x100000-0x30a460 comes off the disc (.text, .vutext, .data, .rodata, .sdata) and 0x30a460-0x3db200 is
-zeroed storage (.sbss, .bss). The entry point clears exactly that second range and then calls InitHeap with
-0x3db200 - the linker's `_end` - as the base of the heap, with no size limit, so every byte of the console's
-remaining 28 MB belongs to the game's allocator from boot onwards.
+zeroed storage (.sbss, .bss). Everything above 0x3db200 - the linker's `_end`, and 28 MB of it - is the game's
+to allocate.
 
-That makes the top of `_end` the one place in the address map that is nobody's: past the range the boot code
-zeroes, and below the heap only because a single `addiu` in the entry point says so. CAVE_BASE puts our code
-there, a second PT_LOAD loads it, and `heap_base` moves the game's allocator up by the same amount. The cave
-survives the bss clear, no game data moves, and no existing address changes.
+Which makes `_end` the one seam in the address map worth prying at, and three things decide what sits there:
+
+  * the entry point zeroes the bss with 128-bit `sq` stores in a loop that tests before it increments, so it
+    runs one store past `_end` and wipes 0x3db200-0x3db20f. CAVE_GUARD is that overshoot: code starts after it.
+  * malloc gets its memory from sbrk (0x2cfcb0), whose break pointer is a single .data word at SBRK_BREAK,
+    sitting in the image initialised to `_end`. Moving it is what actually reserves the cave - the game's
+    11.5 MB pool is the first thing sbrk hands out, and without this it lands straight on top of our code.
+  * entry() also calls InitHeap with `_end` as the base, which sets the ceiling sbrk checks against. Moving
+    that too costs one word and keeps the two agreeing.
+
+A second PT_LOAD then loads the cave off the disc. Nothing in the game moves and no existing address changes.
 
 Before this, patches had to squeeze into an unused debug function at 0x116ea8 - 0x130 bytes, about 75
-instructions, and by the time cutscene skipping, 60 Hz frame timing and movie pacing were in, it was full.
+instructions - and cutscene skipping, 60 Hz frame timing and movie pacing had filled it.
 """
 import struct
 
 ELF_BASE = 0x100000
-CAVE_BASE = 0x3DB200            # `_end`: above the bss the entry point clears, below the heap once it is moved
+CAVE_BASE = 0x3DB200            # `_end`, where the segment is mapped
+CAVE_GUARD = 0x10               # the boot-time bss clear overshoots this far past `_end`; nothing may live here
 CAVE_SIZE = 0x2000              # 8 KB reserved whatever we use, so cave addresses do not move between builds
+CAVE_CODE = CAVE_BASE + CAVE_GUARD
 
 HEAP_BASE_INSN = 0x1000A0       # in entry(): addiu a0, a0, -0x4e00 -> a0 = 0x3db200, the InitHeap base
 HEAP_BASE_ORIG = 0x2484B200
+SBRK_BREAK = 0x2EABE4           # sbrk's break pointer, a .data word holding `_end` in the shipped image
 
 
 class Elf:
@@ -82,16 +91,18 @@ class Elf:
         self.segments.append((1, off, vaddr, vaddr, len(data), len(data), 7, 0x10))
 
     def add_cave(self, code, base=CAVE_BASE, size=CAVE_SIZE):
-        """Load CODE at BASE and move the game's heap up past it."""
-        if len(code) > size: raise SystemExit(f"cave code is {len(code)} bytes, the cave is {size}")
+        """Load CODE at BASE + CAVE_GUARD and move everything the game allocates up past the whole cave."""
+        room = size - CAVE_GUARD
+        if len(code) > room: raise SystemExit(f"cave code is {len(code)} bytes, the cave holds {room}")
         self.heap_base(base + size)
-        self.add_segment(base, bytes(code).ljust(size, b"\0"))
+        self.add_segment(base, (b"\0" * CAVE_GUARD + bytes(code)).ljust(size, b"\0"))
 
     def heap_base(self, addr):
-        """Repoint the InitHeap call in entry() at ADDR (the immediate is added to 0x3e0000)."""
-        delta = addr - 0x3E0000
+        """Move the bottom of the game's memory to ADDR: sbrk's break, and the ceiling InitHeap sets for it."""
+        self.patch(SBRK_BREAK, CAVE_BASE, addr, "sbrk break pointer")
+        delta = addr - 0x3E0000                        # entry() builds the base as lui 0x3e + addiu <delta>
         if not -0x8000 <= delta < 0x8000: raise SystemExit(f"heap base {addr:08X} too far from 0x3e0000")
-        self.patch(HEAP_BASE_INSN, HEAP_BASE_ORIG, (HEAP_BASE_ORIG & 0xFFFF0000) | (delta & 0xFFFF), "heap base")
+        self.patch(HEAP_BASE_INSN, HEAP_BASE_ORIG, (HEAP_BASE_ORIG & 0xFFFF0000) | (delta & 0xFFFF), "InitHeap base")
 
     # ---------------------------------------------------------------- output
     def crc(self):

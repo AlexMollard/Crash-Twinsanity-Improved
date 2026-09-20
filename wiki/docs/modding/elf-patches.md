@@ -6,7 +6,9 @@ sidebar_position: 3
 
 # Executable patches
 
-Everything the mod changes in the game's code lives in `mod/elf_patches.txt`, one word per line:
+There are two ways to change the game's code, and they end up in the same place.
+
+`mod/elf_patches.txt` is the original one, one word per line:
 
 ```text
 ADDRESS  ORIGINAL  PATCHED   # comment
@@ -14,6 +16,26 @@ ADDRESS  ORIGINAL  PATCHED   # comment
 
 Addresses are virtual (the ELF loads at `0x100000`). The build refuses to write a word whose `ORIGINAL` does not
 match, so a patch written against a different build fails instead of corrupting anything.
+
+`mod/asm/*.s` is the newer one, and is what new work should use: MIPS assembly, assembled at build time.
+
+```asm
+.cave movie_skip                      # goes in the code cave, address assigned by the build
+    lui    $a0, 0x30
+    lw     $a0, -0x6774($a0)          # G_GameController
+    jal    GetButtonPressure          # a name out of the symbol database
+    li     $a1, 4                     # ... in the delay slot, where you put it
+
+.patch 0x2AFA6C 0x0C0ABE56            # replace one word, checking what is there first
+    jal    movie_skip
+```
+
+Names resolve from labels in any `.s` file and then from `tools/re/db/symbols.tsv`, so a hook can call
+`GetButtonPressure` rather than `0x2B2250`. A `.patch` block must assemble to exactly as many words as it lists
+originals for, which is what stops it running over the instruction after it.
+
+Both mechanisms are applied by `tools/build_mod.py` in one pass over an in-memory copy of the executable, so a
+word claimed twice is caught at build time.
 
 ## What is patched today
 

@@ -40,31 +40,36 @@ public class ImportDb extends GhidraScript {
         boolean dry = args.length > 1 && args[1].equals("dry");
         int named = 0, kept = 0, made = 0, missed = 0, commented = 0;
 
-        try (BufferedReader r = open(args[0] + "/symbols.tsv")) {
-            String line;
-            while ((line = r.readLine()) != null) {
-                if (line.startsWith("#") || line.isBlank()) continue;
-                String[] c = line.split("\t", -1);
-                Address a = toAddr(c[0]);
-                if (a == null) { missed++; continue; }
-                if (c[1].equals("F")) {
-                    Function f = getFunctionAt(a);
-                    if (f == null) {
-                        if (dry) { made++; continue; }
-                        f = createFunction(a, c[2]);
-                        made++;
-                        if (f == null) { missed++; continue; }
+        // symbols.tsv is hand-curated and goes first, so a name worked out by hand beats a generated one.
+        for (String which : new String[]{"/symbols.tsv", "/generated.tsv"}) {
+            File sf = new File(args[0] + which);
+            if (!sf.exists()) continue;
+            try (BufferedReader r = open(sf.getPath())) {
+                String line;
+                while ((line = r.readLine()) != null) {
+                    if (line.startsWith("#") || line.isBlank()) continue;
+                    String[] c = line.split("\t", -1);
+                    Address a = toAddr(c[0]);
+                    if (a == null) { missed++; continue; }
+                    if (c[1].equals("F")) {
+                        Function f = getFunctionAt(a);
+                        if (f == null) {
+                            if (dry) { made++; continue; }
+                            f = createFunction(a, c[2]);
+                            made++;
+                            if (f == null) { missed++; continue; }
+                        }
+                        if (!isAuto(f.getName()) && !f.getName().equals(c[2])) { kept++; continue; }
+                        if (!dry) f.setName(c[2], SourceType.USER_DEFINED);
+                        named++;
+                    } else {
+                        boolean have = false;
+                        for (Symbol s : currentProgram.getSymbolTable().getSymbols(a))
+                            if (s.getName().equals(c[2])) have = true;
+                        if (have) { kept++; continue; }
+                        if (!dry) currentProgram.getSymbolTable().createLabel(a, c[2], SourceType.USER_DEFINED);
+                        named++;
                     }
-                    if (!isAuto(f.getName()) && !f.getName().equals(c[2])) { kept++; continue; }
-                    if (!dry) f.setName(c[2], SourceType.USER_DEFINED);
-                    named++;
-                } else {
-                    boolean have = false;
-                    for (Symbol s : currentProgram.getSymbolTable().getSymbols(a))
-                        if (s.getName().equals(c[2])) have = true;
-                    if (have) { kept++; continue; }
-                    if (!dry) currentProgram.getSymbolTable().createLabel(a, c[2], SourceType.USER_DEFINED);
-                    named++;
                 }
             }
         }
