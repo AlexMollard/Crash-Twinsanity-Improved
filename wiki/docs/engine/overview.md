@@ -23,8 +23,9 @@ files, and the build has to keep them in agreement - see [the archive page](arch
 ## The archive
 
 `CRASH.BD` is a flat blob and `CRASH.BH` is its table of contents: a list of names with an offset and a length. The
-game only ever looks files up **by name**, which is why the build can move the whole archive to the outer edge of the
-disc for [faster loading](loading) without breaking anything.
+game only ever looks files up **by name**, never by position, which is what lets the build move the whole archive to
+the outer edge of the disc for [faster loading](loading). The details are on
+[The archive and the disc](archive).
 
 Inside the archive, each level is two files:
 
@@ -60,15 +61,11 @@ format; almost all of this wiki was found by reading them.
 
 ## The executable
 
-`SLES_525.68` is a 2 MB ELF that the PS2 loads at virtual address `0x100000`. The mapping from a file offset to a
-virtual address is:
+`SLES_525.68` is a 2 MB ELF that the PS2 loads at virtual address `0x100000`. Because PCSX2 identifies a game by a
+CRC over that executable, every change to it produces a new CRC and needs a matching `.pnach` - which the build
+regenerates itself, deleting the stale one.
 
-```text
-file offset = virtual address - 0x100000 + 0x1000
-```
-
-PCSX2 identifies a game by a CRC over that executable, so any change to it produces a new CRC and needs a matching
-`.pnach`. The build regenerates that automatically. See [The executable](executable).
+The address arithmetic, the patch file format and the code cave are on [The executable](executable).
 
 ## How the pieces line up at runtime
 

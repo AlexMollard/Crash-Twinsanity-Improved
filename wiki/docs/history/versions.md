@@ -94,7 +94,6 @@ Useful mostly for reading other people's videos and speedruns, which are often N
 
 - A **big tree next to the farm** which is not in any other version, and which lets players bypass Totem Hokum easily.
 - Cortex's and Mecha-Bandicoot's plasma blasts are much larger.
-- Skipping an FMV requires waiting a second first.
 - Crates exist that no other version has.
 - There is **no checkpoint outside the top lab's interior**, and Cortex starts far from the entrance inside it.
 - An extra checkpoint next to the world checkpoint at the start of Rockslide Rumble.
@@ -102,6 +101,13 @@ Useful mostly for reading other people's videos and speedruns, which are often N
 - Dying while triggering the first Boiler Room Doom cutscene locks Crash in place.
 
 NTSC PS2 2.0, the *Action Pack* build, back-ports the PAL crash fixes onto the American version.
+
+:::note One source claim left out
+Beyond Twinsanity lists "skipping FMVs requires waiting a second" as exclusive to NTSC-U 1.0. It is not repeated
+above, because this project measured the same roughly one-second delay before ✕ takes effect on the PAL disc - see
+[The movie player](../engine/movies), where ✕ ends a movie in 6.8 s against 7.0 s untouched. Whatever the difference
+between the versions is, "PAL skips instantly" is not it.
+:::
 
 ## Japanese version
 

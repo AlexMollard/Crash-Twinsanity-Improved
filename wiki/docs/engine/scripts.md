@@ -97,23 +97,22 @@ state that is running a sub-script.
 A condition is an engine function picked by number. `Next` (0) means "the state is finished" - the sub-script ended,
 or there was nothing to wait for. The ones that come up constantly:
 
+Just enough to read the dump above:
+
 | Id | Name | Means |
 |---|---|---|
 | 0 | `Next` | done with this state |
 | 2 | `Else` | always true; the fall-through rule |
-| 5 | `TimeInUnit` | *threshold* seconds have passed in this state |
-| 7 | `AnimationFinished` | the current animation has ended |
-| 51 | `GotUserMessageEquals` | a user message with this number arrived |
 | 572 | `CutsceneSkipped` | **stubbed to always return 0 in the retail build** - see [Cutscenes](cutscenes) |
 | 575 | *Triangle held* | reads the pad's Triangle pressure for player *param* |
-| 639 | story progress | how far through the game you are |
 
 The *threshold* is compared against the value the condition returns, so the same condition id does different work with
 different thresholds - `TimeInUnit` with `thr=0.3` is "wait 0.3 s", and a distance condition with `thr=150` is "within
 150 units".
 
-The full list of ids the engine knows is a jump table in the executable; the ones that have been identified are in
-[Reference → script ids](../reference/script-ids).
+The full list of ids the engine knows is a jump table in the executable. Every id identified so far - timers,
+animation waits, message conditions, boss counters, distances - is tabulated in
+[Reference → script ids](../reference/script-ids), which is the page to keep open while reading a dump.
 
 ## Commands
 
