@@ -27,7 +27,8 @@ TEST = os.path.join(MOD, "tools", "pcsx2-test")
 EXE = os.path.join(TEST, "pcsx2-qt.exe")
 ISOS = {"modded": os.path.join(MOD, "Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It) [Modded].iso"),
         "original": os.path.join(MOD, "Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It).iso"),
-        "test": os.path.join(HERE, "test.iso")}             # build_mod.py --out tools/rig/test.iso [--include ...]
+        "test": os.path.join(HERE, "test.iso"),             # build_mod.py --out tools/rig/test.iso [--include ...]
+        "re": os.path.join(MOD, "work", "re", "test_re.iso")}   # a second build to drive alongside it, without sharing a filename
 PORT = 28012
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.dirname(HERE))

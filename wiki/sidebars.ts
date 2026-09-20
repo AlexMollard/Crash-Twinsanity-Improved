@@ -29,6 +29,7 @@ const sidebars: SidebarsConfig = {
         'modding/recipes',
         'modding/elf-patches',
         'modding/rig',
+        'modding/reverse-engineering',
       ],
     },
     {
