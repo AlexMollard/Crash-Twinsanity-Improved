@@ -59,10 +59,11 @@ def rebuild():
     ids = sorted(idx)
     print(f"scanned {len(files)} files, {len(failed)} failed, {len(ids)} distinct ids "
           f"spanning {ids[0]}..{ids[-1]}")
+    for f, e in failed:
+        print(f"  FAILED {os.path.basename(f)}: {e[:90]}")
     if failed:
-        raise SystemExit("some files did not parse - the index is incomplete, fix before using it")
-    for f, e in failed[:5]:
-        print(f"  FAILED {os.path.basename(f)}: {e[:80]}")
+        raise SystemExit(f"{len(failed)} file(s) did not parse - the index is incomplete, so an id missing "
+                         f"from it may simply be in one of those. Fix them before using it.")
     return data
 
 
