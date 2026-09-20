@@ -44,6 +44,7 @@ twinsdump level.rm2 msg 244            # who sends and who handles a user messag
 | `delcmd SCRIPT STATE BODYIDX CMDIDX` | Remove one command |
 | `movebody SCRIPT FROMSTATE BODYIDX TOSTATE` | Move a rule between states |
 | `settarget SCRIPT STATE BODYIDX TARGET` | Re-point a rule (size-neutral) |
+| `setcond SCRIPT STATE BODYIDX COND PARAM [INTERVAL [THRESHOLD]]` | Rewrite a rule's condition, keeping its commands and target (size-neutral) |
 | `setarg SCRIPT STATE BODYIDX CMDIDX ARGIDX VALUE` | Change one command argument |
 | `skipprompt auto` or `skipprompt SCRIPT STATE[,STATE] [TEXT]` | Add the "hold △ to skip" hint to states that can be skipped |
 
@@ -72,8 +73,10 @@ archive's file table - so after a recipe change, rebuild them:
 python tools/rig/rebuild.py            # ~18 minutes: builds test.iso and all 34 states
 ```
 
-`settarget` and `setarg` are size-neutral, which makes them useful for quick experiments: the existing states stay
-valid, so a test is two minutes instead of twenty.
+`settarget`, `setcond` and `setarg` are size-neutral, which makes them the tools of choice for experiments: the
+existing save states stay valid, so a test is two minutes instead of twenty. `setcond` in particular can force a
+script down a path the rig cannot otherwise reach - swap a "wait for message 269" for a "wait three seconds" and the
+rest of the machine runs unchanged.
 
 ## Test-only recipes
 

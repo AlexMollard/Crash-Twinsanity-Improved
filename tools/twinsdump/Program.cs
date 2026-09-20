@@ -290,6 +290,24 @@ static class Program
                         // settarget SCRIPT STATE BODYIDX TARGET
                         var b = BodyAt(st, int.Parse(t[3])); b.scriptStateListIndex = int.Parse(t[4]); b.bitfield |= 0x400;
                     }
+                    else if (t[0] == "setcond")
+                    {
+                        // setcond SCRIPT STATE BODYIDX COND PARAM [INTERVAL [THRESHOLD]]
+                        // Rewrites an existing rule's condition in place, keeping its commands and target. Size-neutral,
+                        // so save states made from an earlier build stay valid - which makes it the cheap way to force a
+                        // script down a path the rig cannot otherwise reach.
+                        var inv2 = System.Globalization.CultureInfo.InvariantCulture;
+                        var b = BodyAt(st, int.Parse(t[3]));
+                        if (b.condition == null) throw new Exception("rule has no condition: " + line);
+                        b.condition.VTableIndex = ushort.Parse(t[4]);
+                        b.condition.Parameter = ushort.Parse(t[5]);
+                        if (t.Length > 6) b.condition.Interval = float.Parse(t[6], inv2);
+                        if (t.Length > 7)
+                        {
+                            float thr2 = float.Parse(t[7], inv2);
+                            b.condition.Threshold = thr2; b.condition.ThresholdInverse = 1f / thr2;
+                        }
+                    }
                     else if (t[0] == "setarg")
                     {
                         // setarg SCRIPT STATE BODYIDX CMDIDX ARGIDX VALUE

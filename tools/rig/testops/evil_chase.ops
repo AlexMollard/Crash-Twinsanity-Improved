@@ -1,0 +1,6 @@
+# TEST ONLY: force the Bandicoot Pursuit chase to start, so the rig can watch Evil Crash steer.
+# He normally waits for user message 269 (sent by the summoner once it has a focus object) and then branches on
+# counter 26. Neither happens from a level warp. Both edits are size-neutral, so the save states stay valid.
+file Levels\AltEarth\Hub\altdoc.rm2
+setcond 5177 1 0 5 0 0 3.0   # COM_ALTEARTH_DOCAMOK_EVILCRASH_DEFAULT state 1: GotUserMessageEquals(269) -> TimeInUnit 3s
+setcond 5177 2 0 2 0         # state 2: CounterValueEqualsThreshold(26)==1 -> Else, so he always enters PHASE1
