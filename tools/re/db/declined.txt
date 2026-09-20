@@ -50,3 +50,6 @@
 002d86d0  # softfloat wrapper around FUN_002d86f0
 0025bed8  # destructor for the same unidentified class as 00166a28
 002ada20  # section-loading state machine, too entangled to name from the body
+001f0dc8  # fills a short array with a value; the count comes from node 4 or an unknown field
+001e69c0  # stops three 0x40-stride slots of G_UnkStructOfSize_0xe0; what they are is unknown
+001e6cd0  # state transition on a 0x3e-masked bitfield; the states are unidentified

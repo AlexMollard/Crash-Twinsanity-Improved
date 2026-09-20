@@ -170,3 +170,29 @@
 00298ca8	F	SetJointAnimation	installs an animation on a joint's chain, creating the chain on first use
 001f0a78	F	SetCollisionWorldMatrix	replaces the cached world matrix and recomputes the bounding box
 002943c8	F	UpdateExitPointMatrix	instance transform times exit-point matrix times joint transform, orthonormalised, dirty bits cleared
+0019a140	F	LinkIntoIntrusiveList	inserts at the head of a list whose prev and next offsets are passed in - the counterpart to UnlinkFromIntrusiveList
+00195ed8	F	RemoveContextRefAt	removes one entry from node 6's list by swapping the last into its place
+00195450	F	RemoveAttachmentAt	removes an attachment by index and shifts the rest down
+0020f758	F	DiscardRoute	frees the route at +0x34 and marks the node index at +0x3c unset
+0023d290	F	InstanceNodePrototype_Destroy	restores the base vtable, frees both instance information blocks
+001f0830	F	GetCollisionModelId	the model's id, falling back through both collision pointers to the OGI array
+001e6c20	F	StartMusicFade	fade duration clamped to at least 0.3 s, target levels latched, flags set
+001e9418	F	ComputeSceneryCellIndex	spatial grid cell from the instance's position, at a cell size chosen by its bbox
+001f66d8	F	ReadVuTransformResult	pulls the transformed matrix and clip result back out of the VU0 registers
+001f6778	F	VuTestBoundingBox	uploads a bbox and matrix to VU0 and runs microprogram 0x500 - the cull ReadClipFlags reads
+00205f70	F	UnlinkAllocatorNode	removes an allocator from the doubly-linked cache list and clears both links
+002095e8	F	InitHeaderScript	fresh script header with undefined id and the default flag, mask and priority
+00225540	F	InitSpawnResidentAgentCommand	the SpawnResidentAgent command object, with the second variant's bit packed in
+00238318	F	InitWobbleBlock	the wobble block's defaults - amplitude 4.0 and cleared targets
+0023d3a8	F	GetInstanceGameObject	looks the instance's object id up in the resource table
+0023d460	F	BindNodeToObjectContext	copies the game object and props holder onto the node, or clears them
+00254030	F	Collider_Destroy	runs the three sub-destructors, then frees on bit 0
+0025d1e0	F	InitGameObject	fresh object with every script-slot array empty and an undefined id
+00261610	F	BindInstanceOgi	resolves the object's first OGI slot and installs it on node 3
+001993b0	F	RegisterNodeWithChunk	adds a node to the chunk's per-index node list, exactly once
+00263840	F	InitGameCodeModel	fresh code model with no packs, commands or script ids
+00266180	F	LoadObjectListResources	loads the resources of every object id in a list
+002693b8	F	GetChunkStateBit	reads one bit of the chunk's persistent state bitfield - the getter for SetChunkStateBit
+00198138	F	ResolveInstanceChunk	the instance's chunk, re-resolved through the scenery when the instance has moved
+0027bd48	F	SetControllerRumble	float strength to a pad rumble byte, scaled by 1024 and clamped to 0x14..0xff
+00280c28	F	RayTriangleIntersect	edge sign tests with a 1e-4 epsilon, then the plane hit; 1e30 means no hit
