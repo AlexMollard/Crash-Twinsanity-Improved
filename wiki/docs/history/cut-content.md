@@ -116,6 +116,12 @@ someone had modelled and textured it.
 That matters because it is a second line of evidence for the same story as the
 [storyboard distribution](development#sixteen-chapters-storyboarded), and it does not depend on page counts at all.
 
+![A rendered environment at sunset: hot air balloons moored above ornate towers and walkways on tall stalks, with a hand-lettered label in the corner reading BALLOON CITY, CRASH BANDICOOT, 16.10.02](/img/shots/balloon-city.png)
+
+*Balloon City, from `Extras\Unseen\`. Not a sketch - a lit, textured, rendered scene of a place that appears in no
+version of the finished game, hand-dated **16 October 2002**, which is inside the window when the project was being
+restarted. The developers' own gallery art, shipped on the disc.*
+
 Some of it is worth knowing about individually:
 
 | | |
