@@ -45,6 +45,23 @@ explain things that were never set up, and - most relevant here - why features l
 rather than finished. See [Cut and unshipped content](cut-content).
 :::
 
+### Sixteen chapters, storyboarded
+
+The disc's Extras gallery contains **161 storyboard pages**, filed in sixteen sets numbered in the game's own chapter
+order - a record of what Twinsanity was planned to be, chapter by chapter, preserved inside the shipped product.
+
+![Bar chart of storyboard pages per chapter: the first eight chapters carry 103 pages between them and peak at 17 for Ice Climb, while the last eight carry 58, with the finale set the smallest of any chapter at five pages](/img/storyboard-pages.svg)
+
+The distribution is lopsided. The first eight chapters have **103 pages** between them, several with fourteen to
+seventeen each; the last eight have **58**, and `13-Twinsanity` - the finale - has the fewest of any set at five.
+
+:::note How much weight this carries
+Suggestive, not proven. Page counts are not effort, and a short sequence can legitimately need fewer boards than a
+long one. But the shape matches everything else on this page: a project that spent its planning early and was
+finishing against a deadline by the end. It is unusual to be able to point at that from inside the disc rather than
+from an interview.
+:::
+
 ## The name came out of a one-hour deadline
 
 Working titles included *Unlimited*, *Fully Fluxed* and *Twinsane*. Publisher Vivendi eventually gave the team **one
