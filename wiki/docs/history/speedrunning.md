@@ -74,8 +74,8 @@ Routing is built almost entirely on two things:
 Both are faster than walking, which is why runs look like a continuous chain of slides rather than a platformer.
 
 Note the frame rate interaction documented on the [versions page](versions): at 60 Hz, slide jumps are **shorter and
-possibly slower** than at 50 Hz, and on NTSC builds a slide can throw Crash in a random direction entirely. PAL at
-50 Hz has the longest and most reliable slide jumps of any retail build.
+possibly slower** than at 50 Hz, and on NTSC builds a slide can throw Crash in a random direction entirely. The PAL
+builds, running at 50 Hz, therefore have the longest and most reliable slide jumps.
 
 ## Bugs that are not skips
 

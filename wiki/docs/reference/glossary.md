@@ -9,6 +9,10 @@ sidebar_position: 3
 **Agent** — the physical side of an object instance: whether it collides, whether it hurts you, whether it is active
 at all. Changed by the `SetAgent` command. See [Objects](../engine/objects).
 
+**AgentLab** — the in-house tool the developers scripted gameplay behaviour with. Its output is what this wiki calls a
+script; the tool is not on the disc, but its name is, in `Language\AgentLab\` and in a reference to
+`Import\LevelAgents.axp`. See [How the game got made](../history/development#agentlab-is-still-on-your-disc).
+
 **Body** — the file format's name for a **rule** inside a state: a condition, a target state, and a list of commands.
 
 **Chunk** — a piece of a level that the streaming loader pulls in and drops as you move.

@@ -31,7 +31,7 @@ Inside the archive, each level is two files:
 | | |
 |---|---|
 | `Levels\Earth\Hub\hubd.rm2` | the level itself - models, textures, animations, collision, objects, instances, scripts |
-| `Levels\Earth\Hub\hubd.sm2` | the level's sound bank |
+| `Levels\Earth\Hub\hubd.sm2` | the level's **scenery** - its models, materials, textures, LOD models, the skydome and the lights. See [Lighting](lighting). |
 
 Paths use backslashes and are matched case-insensitively.
 

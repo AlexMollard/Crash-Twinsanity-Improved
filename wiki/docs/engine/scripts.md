@@ -14,7 +14,13 @@ walks these state machines, and that interpreter is the entire scripting runtime
 
 The names that survive in the data (`COM_TIKI_MON_ACTIVATED`, `CRASH_CUTSCENE_H02B`) and the shape of it - states with
 numbered conditions and numbered commands - point at an in-house authoring tool where these machines were laid out
-visually. That tool is not on the disc; what shipped is the compiled result.
+visually.
+
+That tool has a name: **AgentLab**. A developer interview names it as how gameplay behaviours were scripted, and the
+retail disc still carries a `Language\AgentLab\` folder of text, while the executable references a file called
+`Import\LevelAgents.axp`. It is also where this wiki's word *agent* comes from. The tool itself is not on the disc;
+what shipped is its compiled output - which is what the rest of this page describes. See
+[How the game got made](../history/development#agentlab-is-still-on-your-disc).
 
 ## The shape of it
 

@@ -40,8 +40,10 @@ have to be updated, along with UDF's file entry lengths and the anchor that reco
 
 ## Level files
 
-Inside the archive each level is `<path>.rm2` (the level) and `<path>.sm2` (its sounds). An `.rm2` is a container of
-numbered items in sections.
+Inside the archive each level is `<path>.rm2` - scripts, objects, instances, triggers, characters and collision - and
+`<path>.sm2`, the scenery: its models, materials, textures, the skydome and the level's lights (see
+[Lighting](lighting)). There are 135 of the first and 134 of the second. Both are containers of numbered items in
+sections.
 
 :::warning Never re-save a whole level
 The Twinsanity Editor library's full save drops about 134 bytes of not-yet-understood data per level. The build
