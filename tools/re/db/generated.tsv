@@ -309,12 +309,17 @@
 0010892c	F	BuildCondition_PlayerHeadLookingAtMe	condition 555
 00108948	F	BuildCondition_PlayerHeadCanSeeMe	condition 556
 00108ad0	F	BuildCondition_NodeTraffic	condition 545
+0010cad8	F	Command_SetChiChiGrass_Read	command 527 methods +0x14
 0010cc78	F	Command_BecomeSticky_Read	command 577 methods +0x14
 0010cdd0	F	Command_BecomeNormal_Read	command 581 methods +0x14
 0010d648	F	Command_CreateCrateContents_Read	command 512 methods +0x14
 0010def8	F	Command_CharacterSoundProxy_Read	command 622 methods +0x14
 0010dfb8	F	Command_CharacterSoundProxy_Run	command 622 methods +0x1c
 0010f140	F	Command_SetCamera_Run	command 559 methods +0x1c
+0010f248	F	Command_CameraFocusObject_Run	command 606 methods +0x1c
+0010f368	F	Command_CameraStopFocusObject_Run	command 607 methods +0x1c
+0010fb88	F	Command_PlayerFaceTowardsCamera_Run	command 588 methods +0x1c
+00111fd0	F	Command_CameraTopdownMode_Run	command 652 methods +0x1c
 00112190	F	Command_SetPlayerMode_Read	command 633 methods +0x14
 00112270	F	Command_FadeoutScreen_Read	command 602 methods +0x14
 00112440	F	Command_FadeoutScreen_Run	command 602 methods +0x1c
@@ -324,11 +329,20 @@
 00112a80	F	Command_PlayMovie_Read	command 634 methods +0x14
 0011a298	F	Command_SetPlayerInput_Read	command 521 methods +0x14
 0011a628	F	Command_SetPlayerInput_Run	command 521 methods +0x1c
+0011aad8	F	Command_SetPlayerRespawnPosition_Run	command 516 methods +0x1c
+0011acb8	F	Command_LinkToFocusCharacter_Run	command 561 methods +0x1c
 0011b558	F	Command_SwitchCharacter_Read	command 625 methods +0x14
 0011b670	F	Command_SwitchCharacter_Run	command 625 methods +0x1c
 0011b7a0	F	Command_PlayerVehicleBounce_Run	command 631 methods +0x1c
+0011b880	F	Command_SetAgent_Read	command 515 methods +0x14
+0011bb80	F	Command_SetAgent_Run	command 515 methods +0x1c
+0011c628	F	Command_AddCrystal_Run	command 535 methods +0x1c
 0011c688	F	Command_AddGem_Run	command 537 methods +0x1c
+0011c6e0	F	Command_CA_PickUpHealth_Run	command 520 methods +0x1c
+0011c740	F	Command_DUMMY_538_Run	command 538 methods +0x1c
 0011c7a0	F	Command_CA_PickUpWumpa_Run	command 513 methods +0x1c
+0011cb40	F	Command_DisablePlayerControl_Read	command 613 methods +0x14
+0011d290	F	Command_BottomTextClear_Read	command 608 methods +0x14
 0011e1e0	F	Condition_Next_Read	condition 0 methods +0xc
 0011e210	F	Condition_Next_Check	condition 0 methods +0x14
 0011e220	F	Condition_GotFocusPosition_Read	condition 57 methods +0xc
@@ -337,31 +351,68 @@
 0011e2a0	F	Condition_GotFocusObject_Check	condition 56 methods +0x14
 0011f150	F	Command_NowGoBackCollidable_Read	command 533 methods +0x14
 0011f1e0	F	Command_NowGoBackCollidable_Run	command 533 methods +0x1c
+0011f2b8	F	Command_SetChiChiGrass_Run	command 527 methods +0x1c
 0011f3b0	F	Command_BecomeSticky_Run	command 577 methods +0x1c
 0011f468	F	Command_BecomeNormal_Run	command 581 methods +0x1c
 0011f5e8	F	Command_CreateCrateContents_Run	command 512 methods +0x1c
 0011fac8	F	Command_DamageOriginator_Read	command 563 methods +0x14
+0011fc48	F	Command_DUMMY_584_Run	command 584 methods +0x1c
 0011fc50	F	Command_SetCamera_Read	command 559 methods +0x14
+0011fd20	F	Command_CameraFocusObject_Read	command 606 methods +0x14
+0011fd28	F	Command_CameraStopFocusObject_Read	command 607 methods +0x14
+0011fd30	F	Command_RestoreCameraDefaults_Run	command 560 methods +0x1c
+0011ff60	F	Command_ResetCamera_Run	command 662 methods +0x1c
+0011ffc8	F	Command_DUMMY_609_Run	command 609 methods +0x1c
+0011ffd0	F	Command_DUMMY_610_Run	command 610 methods +0x1c
+001201d0	F	Command_ResetGame_Run	command 517 methods +0x1c
 001201f8	F	Command_SetPlayerMode_Run	command 633 methods +0x1c
+001205c8	F	Command_CutsceneStart_Read	command 589 methods +0x14
+00120658	F	Command_CutsceneStart_Run	command 589 methods +0x1c
+00120698	F	Command_CutsceneEnd_Read	command 590 methods +0x14
+00120728	F	Command_CutsceneEnd_Run	command 590 methods +0x1c
 00120768	F	Command_BossModeEnable_Read	command 638 methods +0x14
 00120840	F	Command_BossModeEnable_Run	command 638 methods +0x1c
+00120918	F	Command_BossModeDamage_Read	command 639 methods +0x14
+001209a8	F	Command_BossModeDamage_Run	command 639 methods +0x1c
+001209d0	F	Command_BossModeExit_Run	command 640 methods +0x1c
 001209f8	F	Command_WhackawormStart_Read	command 596 methods +0x14
 00120ad0	F	Command_WhackawormStart_Run	command 596 methods +0x1c
+00120bc8	F	Command_WhackawormProgress_Read	command 597 methods +0x14
+00120c58	F	Command_WhackawormProgress_Run	command 597 methods +0x1c
+00120c80	F	Command_WhackawormEnd_Run	command 598 methods +0x1c
+00120ca8	F	Command_PlayCredits_Run	command 654 methods +0x1c
+00120cd0	F	Command_ForceGameOver_Run	command 618 methods +0x1c
+00120cf8	F	Command_BottomTextShow_Read	command 619 methods +0x14
+00120d88	F	Command_BottomTextShow_Run	command 619 methods +0x1c
+00120dc0	F	Command_BottomTextHide_Read	command 620 methods +0x14
+00120e50	F	Command_BottomTextHide_Run	command 620 methods +0x1c
+00120e88	F	Command_DemoHubMusicFlagOn_Run	command 624 methods +0x1c
 00120e98	F	Command_BottomTextDisplay_Run	command 603 methods +0x1c
+00120f68	F	Command_BottomTextClear_Run	command 608 methods +0x1c
 00120f98	F	Command_PlayMovie_Run	command 634 methods +0x1c
+00121168	F	Command_SetFocusToPlayer_Run	command 556 methods +0x1c
 00121758	F	Command_DUMMY_586_Read	command 586 methods +0x14
 001217e8	F	Command_DUMMY_586_Run	command 586 methods +0x1c
+001222c0	F	Command_DUMMY_FuelPayGate_Read	command 550 methods +0x14
+001222c8	F	Command_DUMMY_FuelPayGate_Run	command 550 methods +0x1c
 001222d0	F	Command_DUMMY_536_Read	command 536 methods +0x14
 001222d8	F	Command_DUMMY_536_Run	command 536 methods +0x1c
 00122398	F	Command_AddGem_Read	command 537 methods +0x14
 00122430	F	Command_CA_PickUpWumpa_Read	command 513 methods +0x14
+00122618	F	Command_SetPlayerRespawnPosition_Read	command 516 methods +0x14
+001226c8	F	Command_LinkToFocusCharacter_Read	command 561 methods +0x14
+00122788	F	Command_UnlinkCharacters_Run	command 562 methods +0x1c
 001228d8	F	Command_DismissCharacter_Read	command 605 methods +0x14
 00122968	F	Command_DismissCharacter_Run	command 605 methods +0x1c
+00122b78	F	Command_DisablePlayerControl_Run	command 613 methods +0x1c
 00122ce8	F	Command_PlayerVehicleBounce_Read	command 631 methods +0x14
 00122dc8	F	Command_SetCrate_Read	command 518 methods +0x14
 00122e58	F	Command_SetCrate_Run	command 518 methods +0x1c
+001230e8	F	Command_TriggerAllNitroCrates_Run	command 522 methods +0x1c
+001231d0	F	Command_TriggerBalancedCrateFalling_Run	command 519 methods +0x1c
 00123be8	F	Command_Shoot_Read	command 548 methods +0x14
 00124758	F	Command_SetVehicleRollerbrawl_Run	command 570 methods +0x1c
+001248c0	F	Command_SetVehicleWrestleCreature_Run	command 601 methods +0x1c
 00124990	F	Command_SetVehicleHumiliskate_Read	command 555 methods +0x14
 00124ad8	F	Command_SetVehicleHumiliskate_Run	command 555 methods +0x1c
 00124c98	F	Command_SetVehicleHoverboard_Read	command 571 methods +0x14
@@ -384,10 +435,18 @@
 00128298	F	Condition_CanStrafeRight_Check	condition 528 methods +0x14
 00128430	F	Condition_MeToPlayerSqrDist_Check	condition 517 methods +0x14
 00128568	F	Condition_PlayerToMyFocusSqrDist_Check	condition 538 methods +0x14
+00128ed8	F	Command_DUMMY_NowGoForwardCollidable_Read	command 532 methods +0x14
+00128f00	F	Command_DUMMY_NowGoForwardCollidable_Run	command 532 methods +0x1c
+00128fb0	F	Command_OpenAllLinkedFurniture_Run	command 551 methods +0x1c
+00129060	F	Command_CloseAllLinkedFurniture_Run	command 552 methods +0x1c
 00129110	F	Command_AttachAllLinkedAgents_Read	command 553 methods +0x14
 001291c0	F	Command_AttachAllLinkedAgents_Run	command 553 methods +0x1c
+00129240	F	Command_DetachAllLinkedAgents_Run	command 554 methods +0x1c
 00129548	F	Command_Shoot_Run	command 548 methods +0x1c
+001295f8	F	Command_SetVehicleWrestleCreature_Read	command 601 methods +0x14
 00129710	F	Command_SetVehicleRollerbrawl_Read	command 570 methods +0x14
+001297c0	F	Command_ExitVehicleMode_Read	command 569 methods +0x14
+00129850	F	Command_ExitVehicleMode_Run	command 569 methods +0x1c
 00129d08	F	Command_AddAmmo_Run	command 636 methods +0x1c
 00129e00	F	Command_AddAmmo_Read	command 636 methods +0x14
 00129ec0	F	Condition_AgentIsOnGround_Read	condition 518 methods +0xc
@@ -483,14 +542,19 @@
 0012ca48	F	Condition_NodeTraffic_Read	condition 545 methods +0xc
 0012cb58	F	Condition_NodeTraffic_Check	condition 545 methods +0x14
 0017ca20	F	Command_DamageOriginator_Run	command 563 methods +0x1c
-00208378	F	Command_NowRotateJoint_Read	command 23 methods +0x14
 002102c8	F	Command_RunScriptSlot_Run	command 124 methods +0x1c
+00210390	F	Command_SetBehaviourPriority_Read	command 42 methods +0x14
+002106d8	F	Command_RestartPrevious_Run	command 7 methods +0x1c
 00210980	F	Command_DestroyMe_Read	command 85 methods +0x14
 002126e8	F	Command_ForceAnimUpdate_Read	command 74 methods +0x14
+00216990	F	Command_RotWarp_Read	command 29 methods +0x14
 00216f18	F	Command_SubtypeOf177_Read	command 179 methods +0x14
 00217300	F	Command_SubtypeOf177_Run	command 179 methods +0x1c
+002176e8	F	Command_RotWarp_Run	command 29 methods +0x1c
 0021b408	F	Command_DUMMY_197_Read	command 197 methods +0x14
 0021bf48	F	Command_SetWobble_Read	command 12 methods +0x14
+0021c980	F	Command_AlterWobblePhase_Read	command 87 methods +0x14
+0021cab0	F	Command_AlterWobblePhase_Run	command 87 methods +0x1c
 0021d7c0	F	Command_SetShadow_Read	command 187 methods +0x14
 0021d8b0	F	Command_SetShadowCircle_Read	command 188 methods +0x14
 0021db88	F	Command_SetShadowMesh_Read	command 189 methods +0x14
@@ -500,17 +564,45 @@
 00220410	F	Command_DestroySpawnedAttachment_Read	command 75 methods +0x14
 002204d8	F	Command_DestroySpawnedAttachment_Run	command 75 methods +0x1c
 00220d38	F	Command_RunScriptSlot_Read	command 124 methods +0x14
+00221010	F	Command_ClearThreats_Read	command 31 methods +0x14
+002210a8	F	Command_SetBehaviourPriority_Run	command 42 methods +0x1c
+002210f8	F	Command_ClearThreats_Run	command 31 methods +0x1c
 002211c8	F	Command_DestroyMe_Run	command 85 methods +0x1c
+00221950	F	Command_ControllerRumble_Read	command 214 methods +0x14
+002219e0	F	Command_ControllerRumble_Run	command 214 methods +0x1c
 00221d80	F	Command_ForceAnimUpdate_Run	command 74 methods +0x1c
+00222468	F	Command_RequestAttachmentFocus_Read	command 57 methods +0x14
+002224f8	F	Command_RequestAttachmentFocus_Run	command 57 methods +0x1c
+00222660	F	Command_ClearFocus_Run	command 52 methods +0x1c
+00222a88	F	Command_NowMoveForwards_Read	command 14 methods +0x14
+00222ab0	F	Command_NowMoveBackwards_Read	command 15 methods +0x14
+00222ad8	F	Command_NowStrafeLeft_Read	command 16 methods +0x14
+00222b00	F	Command_NowStrafeRight_Read	command 17 methods +0x14
+00222b78	F	Command_NowMoveForwards_Run	command 14 methods +0x1c
+00222c10	F	Command_NowMoveBackwards_Run	command 15 methods +0x1c
+00222c60	F	Command_NowStrafeLeft_Run	command 16 methods +0x1c
+00222d00	F	Command_NowStrafeRight_Run	command 17 methods +0x1c
+00222e18	F	Command_StopMoving_Run	command 61 methods +0x1c
 00222f60	F	Command_TriggerLinkedObjects_Read	command 33 methods +0x14
 00223000	F	Command_TriggerLinkedObjects_Run	command 33 methods +0x1c
+00223410	F	Command_SetState_Read	command 34 methods +0x14
+002234a8	F	Command_SetState_Run	command 34 methods +0x1c
+00223538	F	Command_ToggleState_Run	command 35 methods +0x1c
+00223720	F	Command_NextKey_Run	command 5 methods +0x1c
+00223790	F	Command_NextRouteNode_Run	command 36 methods +0x1c
+002237d0	F	Command_DiscardRoute_Run	command 39 methods +0x1c
 00223ca8	F	Command_DUMMY_197_Run	command 197 methods +0x1c
 00224258	F	Command_SetWobble_Run	command 12 methods +0x1c
+00224360	F	Command_ClearWobble_Run	command 13 methods +0x1c
 00224ab8	F	Command_SetShadow_Run	command 187 methods +0x1c
 00224ae8	F	Command_SetShadowCircle_Run	command 188 methods +0x1c
 00224b18	F	Command_SetShadowMesh_Run	command 189 methods +0x1c
 00224b48	F	Command_SetShadowRectangle_Run	command 190 methods +0x1c
+00224b78	F	Command_ShadowToggle_Read	command 191 methods +0x14
+00224c50	F	Command_ShadowToggle_Run	command 191 methods +0x1c
 00224e20	F	Command_BeginMusic_Run	command 88 methods +0x1c
+002250f0	F	Command_EndContextMusic_Read	command 89 methods +0x14
+00225180	F	Command_EndContextMusic_Run	command 89 methods +0x1c
 002251c8	F	Command_SetSound_Run	command 86 methods +0x1c
 00225cf8	F	Condition_MeFacingFocus_Check	condition 22 methods +0x14
 00226378	F	Condition_FocusFacingMe_Check	condition 23 methods +0x14
@@ -631,7 +723,6 @@
 00244710	F	Command_ContinueColliderMotion_Run	command 70 methods +0x1c
 002454f8	F	Command_ApplyImpulse_Read	command 76 methods +0x14
 00245758	F	Command_ApplyImpulse_Run	command 76 methods +0x1c
-0024ca00	F	Command_NowRotateJoint_Run	command 23 methods +0x1c
 0024cb28	F	Command_AttachFocusObject2_Read	command 94 methods +0x14
 0024cec0	F	Command_AttachFocusObject2_Run	command 94 methods +0x1c
 0024d9d0	F	Command_DropAttachedObject_Read	command 48 methods +0x14
@@ -653,31 +744,71 @@
 00251fb0	F	Condition_BoxAboveIsOverlapped_Read	condition 72 methods +0xc
 00252078	F	Condition_MeToInitPosSqrDist_Check	condition 9 methods +0x14
 00252f70	F	Command_SetSurface_Run	command 167 methods +0x1c
+00253908	F	Command_ClearCollisions_Run	command 53 methods +0x1c
+00253ad0	F	Command_ClearContactResponse_Run	command 84 methods +0x1c
+00253bb8	F	Command_RevertColliderMotion_Run	command 71 methods +0x1c
+00254f88	F	Command_DetachAllSprings_Run	command 81 methods +0x1c
+00254fc0	F	Command_UnsupportOverFocus_Run	command 50 methods +0x1c
+00254ff0	F	Command_RequestDetach_Run	command 77 methods +0x1c
+00255170	F	Command_ClearUserMessage_Run	command 66 methods +0x1c
 002ee400	L	Condition_GotFocusObject_Methods	condition 56 methods
 002ee428	L	Condition_GotFocusPosition_Methods	condition 57 methods
 002ee450	L	Condition_Next_Methods	condition 0 methods
 002ee6c8	L	Command_DUMMY_586_Methods	command 586 methods
+002ee788	L	Command_CameraTopdownMode_Methods	command 652 methods
+002ee948	L	Command_DUMMY_610_Methods	command 610 methods
+002ee988	L	Command_DUMMY_609_Methods	command 609 methods
+002eeac8	L	Command_CameraStopFocusObject_Methods	command 607 methods
+002eeb08	L	Command_CameraFocusObject_Methods	command 606 methods
+002eeb48	L	Command_PlayerFaceTowardsCamera_Methods	command 588 methods
+002eeb88	L	Command_ResetCamera_Methods	command 662 methods
+002eec08	L	Command_RestoreCameraDefaults_Methods	command 560 methods
 002eec48	L	Command_SetCamera_Methods	command 559 methods
 002eed48	L	Command_BecomeNormal_Methods	command 581 methods
 002eed88	L	Command_BecomeSticky_Methods	command 577 methods
 002eee88	L	Command_CharacterSoundProxy_Methods	command 622 methods
+002ef188	L	Command_SetFocusToPlayer_Methods	command 556 methods
 002ef248	L	Command_DisplayBottomTextInstance_Methods	command 657 methods
 002ef288	L	Command_PlayMovie_Methods	command 634 methods
+002ef2c8	L	Command_BottomTextClear_Methods	command 608 methods
 002ef308	L	Command_BottomTextDisplay_Methods	command 603 methods
 002ef348	L	Command_FadeoutScreen_Methods	command 602 methods
+002ef388	L	Command_DemoHubMusicFlagOn_Methods	command 624 methods
+002ef3c8	L	Command_BottomTextHide_Methods	command 620 methods
+002ef408	L	Command_BottomTextShow_Methods	command 619 methods
+002ef448	L	Command_ForceGameOver_Methods	command 618 methods
+002ef488	L	Command_PlayCredits_Methods	command 654 methods
+002ef4c8	L	Command_WhackawormEnd_Methods	command 598 methods
+002ef508	L	Command_WhackawormProgress_Methods	command 597 methods
 002ef548	L	Command_WhackawormStart_Methods	command 596 methods
+002ef588	L	Command_BossModeExit_Methods	command 640 methods
+002ef5c8	L	Command_BossModeDamage_Methods	command 639 methods
 002ef608	L	Command_BossModeEnable_Methods	command 638 methods
+002ef648	L	Command_CutsceneEnd_Methods	command 590 methods
+002ef688	L	Command_CutsceneStart_Methods	command 589 methods
 002ef748	L	Command_SetPlayerMode_Methods	command 633 methods
+002ef788	L	Command_ResetGame_Methods	command 517 methods
+002ef888	L	Command_DUMMY_584_Methods	command 584 methods
 002ef8c8	L	Command_PlayerVehicleBounce_Methods	command 631 methods
 002ef908	L	Command_SwitchCharacter_Methods	command 625 methods
+002ef988	L	Command_DisablePlayerControl_Methods	command 613 methods
 002efb08	L	Command_DismissCharacter_Methods	command 605 methods
+002efc88	L	Command_UnlinkCharacters_Methods	command 562 methods
+002efcc8	L	Command_LinkToFocusCharacter_Methods	command 561 methods
+002efd08	L	Command_SetPlayerRespawnPosition_Methods	command 516 methods
 002efd48	L	Command_SetPlayerInput_Methods	command 521 methods
 002efd88	L	Command_SetCrate_Methods	command 518 methods
+002efdc8	L	Command_SetAgent_Methods	command 515 methods
 002efe08	L	Command_CA_PickUpWumpa_Methods	command 513 methods
+002efe48	L	Command_DUMMY_538_Methods	command 538 methods
+002efe88	L	Command_CA_PickUpHealth_Methods	command 520 methods
 002efec8	L	Command_AddGem_Methods	command 537 methods
+002eff08	L	Command_AddCrystal_Methods	command 535 methods
 002eff48	L	Command_DUMMY_536_Methods	command 536 methods
+002eff88	L	Command_DUMMY_FuelPayGate_Methods	command 550 methods
 002f0098	L	Command_DamageOriginator_Methods	command 563 methods
 002f00e0	L	Command_CreateCrateContents_Methods	command 512 methods
+002f0120	L	Command_SetChiChiGrass_Methods	command 527 methods
 002f0160	L	Command_NowGoBackCollidable_Methods	command 533 methods
 002f0810	L	Condition_NodeTraffic_Methods	condition 545 methods
 002f0888	L	Condition_DemoHubMusicFlag_Methods	condition 629 methods
@@ -735,24 +866,53 @@
 002f1878	L	Condition_AgentWasTouched_Methods	condition 520 methods
 002f18c8	L	Condition_AgentIsOnGround_Methods	condition 518 methods
 002f18f0	L	Command_AddAmmo_Methods	command 636 methods
+002f1ab0	L	Command_ExitVehicleMode_Methods	command 569 methods
 002f1af0	L	Command_SetVehicleHoverboard_Methods	command 571 methods
 002f1b30	L	Command_SetVehicleHumiliskate_Methods	command 555 methods
+002f1b70	L	Command_SetVehicleWrestleCreature_Methods	command 601 methods
 002f1bb0	L	Command_SetVehicleRollerbrawl_Methods	command 570 methods
 002f1c30	L	Command_Shoot_Methods	command 548 methods
+002f1cf0	L	Command_DetachAllLinkedAgents_Methods	command 554 methods
 002f1d30	L	Command_AttachAllLinkedAgents_Methods	command 553 methods
+002f1d70	L	Command_CloseAllLinkedFurniture_Methods	command 552 methods
+002f1db0	L	Command_OpenAllLinkedFurniture_Methods	command 551 methods
+002f1e30	L	Command_DUMMY_NowGoForwardCollidable_Methods	command 532 methods
+002f1e70	L	Command_TriggerBalancedCrateFalling_Methods	command 519 methods
+002f1eb0	L	Command_TriggerAllNitroCrates_Methods	command 522 methods
 002fd918	L	Command_DestroySpawnedAttachment_Methods	command 75 methods
 002fdb18	L	Command_SetSound_Methods	command 86 methods
+002fdb98	L	Command_EndContextMusic_Methods	command 89 methods
 002fdbd8	L	Command_BeginMusic_Methods	command 88 methods
+002fdc98	L	Command_ShadowToggle_Methods	command 191 methods
 002fdcd8	L	Command_SetShadowRectangle_Methods	command 190 methods
 002fdd18	L	Command_SetShadowMesh_Methods	command 189 methods
 002fdd58	L	Command_SetShadowCircle_Methods	command 188 methods
 002fdd98	L	Command_SetShadow_Methods	command 187 methods
+002fe1d8	L	Command_ClearWobble_Methods	command 13 methods
+002fe298	L	Command_AlterWobblePhase_Methods	command 87 methods
 002fe2d8	L	Command_SetWobble_Methods	command 12 methods
 002fe398	L	Command_DUMMY_197_Methods	command 197 methods
+002fe498	L	Command_DiscardRoute_Methods	command 39 methods
+002fe518	L	Command_NextRouteNode_Methods	command 36 methods
+002fe5d8	L	Command_NextKey_Methods	command 5 methods
+002fe658	L	Command_ToggleState_Methods	command 35 methods
+002fe698	L	Command_SetState_Methods	command 34 methods
 002fe818	L	Command_TriggerLinkedObjects_Methods	command 33 methods
+002fe958	L	Command_RotWarp_Methods	command 29 methods
 002fe998	L	Command_SubtypeOf177_Methods	command 179 methods
+002fea18	L	Command_StopMoving_Methods	command 61 methods
+002fead8	L	Command_NowStrafeRight_Methods	command 17 methods
+002feb18	L	Command_NowStrafeLeft_Methods	command 16 methods
+002feb58	L	Command_NowMoveBackwards_Methods	command 15 methods
+002feb98	L	Command_NowMoveForwards_Methods	command 14 methods
+002fedd8	L	Command_ClearFocus_Methods	command 52 methods
+002fee98	L	Command_RequestAttachmentFocus_Methods	command 57 methods
 002ff158	L	Command_ForceAnimUpdate_Methods	command 74 methods
+002ff218	L	Command_ControllerRumble_Methods	command 214 methods
+002ff598	L	Command_RestartPrevious_Methods	command 7 methods
 002ff658	L	Command_DestroyMe_Methods	command 85 methods
+002ff698	L	Command_ClearThreats_Methods	command 31 methods
+002ff7d8	L	Command_SetBehaviourPriority_Methods	command 42 methods
 002ff8d8	L	Command_RunScriptSlot_Methods	command 124 methods
 002ff9e8	L	Condition_IsInExternalScript_Methods	condition 6 methods
 002ffb00	L	Condition_FocusHeadCanSeeMe_Methods	condition 44 methods
@@ -808,14 +968,20 @@
 00300b90	L	Condition_IsVisible_Methods	condition 4 methods
 00300bb8	L	Condition_IsCollidable_Methods	condition 1 methods
 003016f8	L	Command_BroadcastUserMessage_Methods	command 55 methods
+00301778	L	Command_ClearUserMessage_Methods	command 66 methods
 003017f8	L	Command_ForceVolumeController_Methods	command 165 methods
 00301878	L	Command_UnsupportAbove_Methods	command 51 methods
+003018b8	L	Command_RequestDetach_Methods	command 77 methods
+003018f8	L	Command_UnsupportOverFocus_Methods	command 50 methods
 00301978	L	Command_ThrowAttachedObject_Methods	command 49 methods
 003019f8	L	Command_DropAttachedObject_Methods	command 48 methods
+00301a38	L	Command_DetachAllSprings_Methods	command 81 methods
 00301ab8	L	Command_AttachFocusObject2_Methods	command 94 methods
-00301af8	L	Command_NowRotateJoint_Methods	command 23 methods
+00301d78	L	Command_ClearContactResponse_Methods	command 84 methods
 00301df8	L	Command_ApplyImpulse_Methods	command 76 methods
+00301eb8	L	Command_RevertColliderMotion_Methods	command 71 methods
 00301ef8	L	Command_ContinueColliderMotion_Methods	command 70 methods
+00301ff8	L	Command_ClearCollisions_Methods	command 53 methods
 00302078	L	Command_SetSurface_Methods	command 167 methods
 00302138	L	Command_SetLogicalRadius_Methods	command 40 methods
 00302220	L	Condition_BoxAboveIsOverlapped_Methods	condition 72 methods

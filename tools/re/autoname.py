@@ -37,8 +37,10 @@ import isotools as it
 ENUMS = os.path.join(ROOT, "tools", "twinsanity-editor", "Twinsanity", "DefaultEnums.cs")
 OUT = os.path.join(HERE, "db", "generated.tsv")
 
+# Both bounds are the `sltiu` in the dispatch, so they are the engine's own and not a guess: conditions are
+# indexed by id + 1 (BuildScriptCondition at 0x106C40), commands by the id itself (0x1016F0).
 CONDITION_TABLE, CONDITION_COUNT, CONDITION_BIAS = 0x2ECF90, 0x286, 1
-COMMAND_TABLE, COMMAND_COUNT, COMMAND_BIAS = 0x2EC530, 0x2A0, 0
+COMMAND_TABLE, COMMAND_COUNT, COMMAND_BIAS = 0x2EC530, 0x297, 0
 STATIC_DATA = range(0x2E6F00, 0x30A460)        # .data/.rodata/.sdata: where a methods table can live
 TEXT = range(0x100000, 0x2D9D88)
 
@@ -84,8 +86,11 @@ class Image:
         """The static address a builder installs as the object's methods pointer.
 
         Every builder allocates, then builds one address out of a lui/addiu pair and stores it. Taking the
-        first such pair that lands in static data is enough - there is only ever one."""
-        parts = {}
+        first such pair that lands in static data is enough - there is only ever one.
+
+        Most builders finish with `b <shared tail>` and put the `addiu` that completes the address in the
+        delay slot, so the scan has to run one instruction past the branch, not stop at it."""
+        parts, left = {}, None
         for insn in self.code(builder):
             op = insn.mnemonic
             args = [a.strip() for a in insn.op_str.split(",")]
@@ -95,8 +100,11 @@ class Image:
                 value = parts[args[1]] + int(args[2], 0)
                 if value in STATIC_DATA: return value
                 parts[args[0]] = value
-            elif op in ("jr", "b"):
-                break
+            if left is not None:
+                left -= 1
+                if left < 0: break
+            elif op in ("jr", "b", "j") or (op.startswith("b") and op != "break"):
+                left = 1                               # the delay slot still runs
         return None
 
 

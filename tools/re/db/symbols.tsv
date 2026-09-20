@@ -314,12 +314,17 @@
 00108948	F	BuildCondition_PlayerHeadCanSeeMe	undefined BuildCondition_PlayerHeadCanSeeMe(void)
 00108ad0	F	BuildCondition_NodeTraffic	undefined BuildCondition_NodeTraffic(void)
 0010a628	F	InitInstanceNodeType8	InstanceNode_type8 * InitInstanceNodeType8(InstanceNode_type8 * param_1)
+0010cad8	F	Command_SetChiChiGrass_Read	undefined Command_SetChiChiGrass_Read(int param_1, int * param_2)
 0010cc78	F	Command_BecomeSticky_Read	undefined Command_BecomeSticky_Read(int param_1, int * param_2)
 0010cdd0	F	Command_BecomeNormal_Read	undefined Command_BecomeNormal_Read(int param_1, int * param_2)
 0010d648	F	Command_CreateCrateContents_Read	undefined Command_CreateCrateContents_Read(SpawnObjectCommand? * param_1, int * param_2)
 0010def8	F	Command_CharacterSoundProxy_Read	undefined Command_CharacterSoundProxy_Read(ScriptCommand_0x22D * param_1, int * param_2)
 0010dfb8	F	Command_CharacterSoundProxy_Run	undefined Command_CharacterSoundProxy_Run(ScriptCommand_0x22D * param_1, TimeClock * param_2, ScriptCall * param_3)
 0010f140	F	Command_SetCamera_Run	undefined Command_SetCamera_Run(ScriptCommand_0x22F * param_1, TimeClock * param_2, ScriptCall * param_3)
+0010f248	F	Command_CameraFocusObject_Run	undefined Command_CameraFocusObject_Run(undefined8 param_1, undefined8 param_2, int param_3)
+0010f368	F	Command_CameraStopFocusObject_Run	undefined Command_CameraStopFocusObject_Run(void)
+0010fb88	F	Command_PlayerFaceTowardsCamera_Run	uint Command_PlayerFaceTowardsCamera_Run(undefined8 param_1, undefined8 param_2, int param_3)
+00111fd0	F	Command_CameraTopdownMode_Run	undefined Command_CameraTopdownMode_Run(void)
 00112190	F	Command_SetPlayerMode_Read	undefined Command_SetPlayerMode_Read(int param_1, int * param_2)
 00112270	F	Command_FadeoutScreen_Read	undefined Command_FadeoutScreen_Read(int param_1, int * param_2)
 00112440	F	Command_FadeoutScreen_Run	undefined Command_FadeoutScreen_Run(int param_1)
@@ -329,9 +334,13 @@
 00112a80	F	Command_PlayMovie_Read	undefined Command_PlayMovie_Read(int param_1, int * param_2)
 0011a298	F	Command_SetPlayerInput_Read	undefined Command_SetPlayerInput_Read(int param_1, int * param_2)
 0011a628	F	Command_SetPlayerInput_Run	undefined Command_SetPlayerInput_Run(ScriptCommand_0x209 * this, TimeClock * param_2, ScriptCall * param_3)
+0011aad8	F	Command_SetPlayerRespawnPosition_Run	ulong Command_SetPlayerRespawnPosition_Run(int param_1, undefined8 param_2, ScriptCall * param_3)
+0011acb8	F	Command_LinkToFocusCharacter_Run	undefined Command_LinkToFocusCharacter_Run(void)
 0011b558	F	Command_SwitchCharacter_Read	undefined Command_SwitchCharacter_Read(int param_1, int * param_2)
 0011b670	F	Command_SwitchCharacter_Run	ulong Command_SwitchCharacter_Run(int param_1, undefined8 param_2, int param_3)
 0011b7a0	F	Command_PlayerVehicleBounce_Run	undefined Command_PlayerVehicleBounce_Run(int param_1, undefined8 param_2, int param_3)
+0011b880	F	Command_SetAgent_Read	undefined Command_SetAgent_Read(int param_1, int * param_2)
+0011bb80	F	Command_SetAgent_Run	undefined Command_SetAgent_Run(int param_1, undefined8 param_2, int param_3)
 0011be80	F	GetColor	undefined GetColor(Color * param_1, int colorIndex)
 0011bfa0	F	RSQRT	float RSQRT(float param_1, Vector4 * param_2)
 0011c008	F	MovePositionFromPos2ToPos1	Vector4 * MovePositionFromPos2ToPos1(Vector4 * pos1, Vector4 * pos2)
@@ -339,8 +348,13 @@
 0011c088	F	RemoveReference	undefined RemoveReference(ReferenceCounter * * param_1)
 0011c1c8	F	MoveShortFromS2toS1	undefined MoveShortFromS2toS1(short * s1, short * s2)
 0011c1d8	F	SetUndefinedID?	undefined SetUndefinedID?(short * param_1)
+0011c628	F	Command_AddCrystal_Run	undefined Command_AddCrystal_Run(int param_1, undefined8 param_2, int param_3)
 0011c688	F	Command_AddGem_Run	undefined Command_AddGem_Run(void)
+0011c6e0	F	Command_CA_PickUpHealth_Run	undefined Command_CA_PickUpHealth_Run(int param_1, undefined8 param_2, int param_3)
+0011c740	F	Command_DUMMY_538_Run	undefined Command_DUMMY_538_Run(void)
 0011c7a0	F	Command_CA_PickUpWumpa_Run	undefined Command_CA_PickUpWumpa_Run(void)
+0011cb40	F	Command_DisablePlayerControl_Read	undefined Command_DisablePlayerControl_Read(void)
+0011d290	F	Command_BottomTextClear_Read	undefined Command_BottomTextClear_Read(void)
 0011e1e0	F	Condition_Next_Read	undefined Condition_Next_Read(ScriptCondition * this, ulong param_2)
 0011e210	F	CheckConditionAlways	float CheckConditionAlways(ScriptCondition * this)
 0011e220	F	Condition_GotFocusPosition_Read	undefined Condition_GotFocusPosition_Read(ulong param_1, ulong param_2)
@@ -351,31 +365,68 @@
 0011eb70	F	InitTriggerEvent	TriggerEventCaller? * InitTriggerEvent(TriggerEventCaller? * param_1, short param_2, ReferenceCounter * * param_3, undefined4 param_4)
 0011f150	F	Command_NowGoBackCollidable_Read	undefined Command_NowGoBackCollidable_Read(int param_1, int * param_2)
 0011f1e0	F	Command_NowGoBackCollidable_Run	undefined Command_NowGoBackCollidable_Run(void)
+0011f2b8	F	Command_SetChiChiGrass_Run	undefined Command_SetChiChiGrass_Run(void)
 0011f3b0	F	Command_BecomeSticky_Run	undefined Command_BecomeSticky_Run(int param_1, undefined8 param_2, int param_3)
 0011f468	F	Command_BecomeNormal_Run	undefined Command_BecomeNormal_Run(int param_1, undefined8 param_2, int param_3)
 0011f5e8	F	Command_CreateCrateContents_Run	undefined Command_CreateCrateContents_Run(SpawnObjectCommand? * param_1, TimeClock * param_2, ScriptCall * param_3)
 0011fac8	F	Command_DamageOriginator_Read	undefined Command_DamageOriginator_Read(int param_1, int * param_2)
+0011fc48	F	Command_DUMMY_584_Run	undefined Command_DUMMY_584_Run(void)
 0011fc50	F	Command_SetCamera_Read	undefined Command_SetCamera_Read(ScriptCommand_0x22F * param_1, int * param_2)
+0011fd20	F	Command_CameraFocusObject_Read	undefined Command_CameraFocusObject_Read(void)
+0011fd28	F	Command_CameraStopFocusObject_Read	undefined Command_CameraStopFocusObject_Read(void)
+0011fd30	F	Command_RestoreCameraDefaults_Run	undefined Command_RestoreCameraDefaults_Run(void)
+0011ff60	F	Command_ResetCamera_Run	undefined Command_ResetCamera_Run(void)
+0011ffc8	F	Command_DUMMY_609_Run	undefined Command_DUMMY_609_Run(void)
+0011ffd0	F	Command_DUMMY_610_Run	undefined Command_DUMMY_610_Run(void)
+001201d0	F	Command_ResetGame_Run	undefined4 Command_ResetGame_Run(void)
 001201f8	F	Command_SetPlayerMode_Run	undefined Command_SetPlayerMode_Run(int param_1)
+001205c8	F	Command_CutsceneStart_Read	undefined Command_CutsceneStart_Read(int param_1, int * param_2)
+00120658	F	Command_CutsceneStart_Run	uint Command_CutsceneStart_Run(int param_1)
+00120698	F	Command_CutsceneEnd_Read	undefined Command_CutsceneEnd_Read(int param_1, int * param_2)
+00120728	F	Command_CutsceneEnd_Run	undefined4 Command_CutsceneEnd_Run(int param_1)
 00120768	F	Command_BossModeEnable_Read	undefined Command_BossModeEnable_Read(int param_1, int * param_2)
 00120840	F	Command_BossModeEnable_Run	undefined4 Command_BossModeEnable_Run(int param_1, TimeClock * param_2, ScriptCall * param_3)
+00120918	F	Command_BossModeDamage_Read	undefined Command_BossModeDamage_Read(int param_1, int * param_2)
+001209a8	F	Command_BossModeDamage_Run	undefined4 Command_BossModeDamage_Run(int param_1)
+001209d0	F	Command_BossModeExit_Run	undefined4 Command_BossModeExit_Run(void)
 001209f8	F	Command_WhackawormStart_Read	undefined Command_WhackawormStart_Read(int param_1, int * param_2)
 00120ad0	F	Command_WhackawormStart_Run	undefined4 Command_WhackawormStart_Run(int param_1, undefined8 param_2, int param_3)
+00120bc8	F	Command_WhackawormProgress_Read	undefined Command_WhackawormProgress_Read(int param_1, int * param_2)
+00120c58	F	Command_WhackawormProgress_Run	undefined4 Command_WhackawormProgress_Run(int param_1)
+00120c80	F	Command_WhackawormEnd_Run	undefined4 Command_WhackawormEnd_Run(void)
+00120ca8	F	Command_PlayCredits_Run	undefined4 Command_PlayCredits_Run(void)
+00120cd0	F	Command_ForceGameOver_Run	undefined4 Command_ForceGameOver_Run(void)
+00120cf8	F	Command_BottomTextShow_Read	undefined Command_BottomTextShow_Read(int param_1, int * param_2)
+00120d88	F	Command_BottomTextShow_Run	undefined4 Command_BottomTextShow_Run(int param_1)
+00120dc0	F	Command_BottomTextHide_Read	undefined Command_BottomTextHide_Read(int param_1, int * param_2)
+00120e50	F	Command_BottomTextHide_Run	undefined4 Command_BottomTextHide_Run(int param_1)
+00120e88	F	Command_DemoHubMusicFlagOn_Run	undefined Command_DemoHubMusicFlagOn_Run(void)
 00120e98	F	Command_BottomTextDisplay_Run	undefined Command_BottomTextDisplay_Run(int param_1)
+00120f68	F	Command_BottomTextClear_Run	undefined Command_BottomTextClear_Run(void)
 00120f98	F	Command_PlayMovie_Run	undefined4 Command_PlayMovie_Run(int param_1, undefined8 param_2, int param_3)
+00121168	F	Command_SetFocusToPlayer_Run	undefined Command_SetFocusToPlayer_Run(void)
 00121758	F	Command_DUMMY_586_Read	undefined Command_DUMMY_586_Read(int param_1, int * param_2)
 001217e8	F	Command_DUMMY_586_Run	undefined Command_DUMMY_586_Run(void)
+001222c0	F	Command_DUMMY_FuelPayGate_Read	undefined Command_DUMMY_FuelPayGate_Read(void)
+001222c8	F	Command_DUMMY_FuelPayGate_Run	undefined Command_DUMMY_FuelPayGate_Run(void)
 001222d0	F	Command_DUMMY_536_Read	undefined Command_DUMMY_536_Read(void)
 001222d8	F	Command_DUMMY_536_Run	undefined Command_DUMMY_536_Run(void)
 00122398	F	Command_AddGem_Read	undefined Command_AddGem_Read(int param_1, int * param_2)
 00122430	F	Command_CA_PickUpWumpa_Read	undefined Command_CA_PickUpWumpa_Read(int param_1, int * param_2)
+00122618	F	Command_SetPlayerRespawnPosition_Read	undefined Command_SetPlayerRespawnPosition_Read(int param_1, int * param_2)
+001226c8	F	Command_LinkToFocusCharacter_Read	undefined Command_LinkToFocusCharacter_Read(int param_1, int * param_2)
+00122788	F	Command_UnlinkCharacters_Run	undefined Command_UnlinkCharacters_Run(undefined8 param_1, undefined8 param_2, int param_3)
 001228d8	F	Command_DismissCharacter_Read	undefined Command_DismissCharacter_Read(int param_1, int * param_2)
 00122968	F	Command_DismissCharacter_Run	undefined Command_DismissCharacter_Run(int param_1)
+00122b78	F	Command_DisablePlayerControl_Run	undefined4 Command_DisablePlayerControl_Run(void)
 00122ce8	F	Command_PlayerVehicleBounce_Read	undefined Command_PlayerVehicleBounce_Read(int param_1, int * param_2)
 00122dc8	F	Command_SetCrate_Read	undefined Command_SetCrate_Read(void)
 00122e58	F	Command_SetCrate_Run	undefined Command_SetCrate_Run(int param_1, undefined8 param_2, int param_3)
+001230e8	F	Command_TriggerAllNitroCrates_Run	undefined Command_TriggerAllNitroCrates_Run(undefined8 param_1, undefined8 param_2, int param_3)
+001231d0	F	Command_TriggerBalancedCrateFalling_Run	undefined Command_TriggerBalancedCrateFalling_Run(ScriptCommandInterface? * crateUnsupport, undefined8 param_2, ScriptCall * param_3)
 00123be8	F	Command_Shoot_Read	undefined Command_Shoot_Read(int param_1, int * param_2)
 00124758	F	Command_SetVehicleRollerbrawl_Run	undefined Command_SetVehicleRollerbrawl_Run(SetVehicleRollerbrawlCommand * param_1)
+001248c0	F	Command_SetVehicleWrestleCreature_Run	undefined Command_SetVehicleWrestleCreature_Run(undefined8 param_1, undefined8 param_2, ScriptCall * param_3)
 00124990	F	Command_SetVehicleHumiliskate_Read	undefined Command_SetVehicleHumiliskate_Read(int param_1, int * param_2)
 00124ad8	F	Command_SetVehicleHumiliskate_Run	undefined Command_SetVehicleHumiliskate_Run(int param_1, TimeClock * param_2, ScriptCall * param_3)
 00124c98	F	Command_SetVehicleHoverboard_Read	undefined Command_SetVehicleHoverboard_Read(int param_1, int * param_2)
@@ -398,10 +449,18 @@
 00128298	F	Condition_CanStrafeRight_Check	float Condition_CanStrafeRight_Check(int param_1, int * param_2)
 00128430	F	Condition_MeToPlayerSqrDist_Check	float Condition_MeToPlayerSqrDist_Check(ScriptCondition * param_1, InstanceNode_type0 * param_2)
 00128568	F	Condition_PlayerToMyFocusSqrDist_Check	float Condition_PlayerToMyFocusSqrDist_Check(undefined8 param_1, int param_2)
+00128ed8	F	Command_DUMMY_NowGoForwardCollidable_Read	undefined Command_DUMMY_NowGoForwardCollidable_Read(void)
+00128f00	F	Command_DUMMY_NowGoForwardCollidable_Run	undefined Command_DUMMY_NowGoForwardCollidable_Run(void)
+00128fb0	F	Command_OpenAllLinkedFurniture_Run	undefined Command_OpenAllLinkedFurniture_Run(undefined8 param_1, undefined8 param_2, int param_3)
+00129060	F	Command_CloseAllLinkedFurniture_Run	undefined Command_CloseAllLinkedFurniture_Run(undefined8 param_1, undefined8 param_2, int param_3)
 00129110	F	Command_AttachAllLinkedAgents_Read	undefined Command_AttachAllLinkedAgents_Read(int param_1, int * param_2)
 001291c0	F	Command_AttachAllLinkedAgents_Run	undefined Command_AttachAllLinkedAgents_Run(int param_1, undefined8 param_2, int param_3)
+00129240	F	Command_DetachAllLinkedAgents_Run	undefined Command_DetachAllLinkedAgents_Run(undefined8 param_1, undefined8 param_2, int param_3)
 00129548	F	Command_Shoot_Run	undefined Command_Shoot_Run(int param_1, undefined8 param_2, int param_3)
+001295f8	F	Command_SetVehicleWrestleCreature_Read	undefined Command_SetVehicleWrestleCreature_Read(void)
 00129710	F	Command_SetVehicleRollerbrawl_Read	undefined Command_SetVehicleRollerbrawl_Read(int param_1, int * param_2)
+001297c0	F	Command_ExitVehicleMode_Read	undefined Command_ExitVehicleMode_Read(int param_1, int * param_2)
+00129850	F	Command_ExitVehicleMode_Run	undefined Command_ExitVehicleMode_Run(int param_1)
 00129d08	F	Command_AddAmmo_Run	undefined Command_AddAmmo_Run(int param_1, undefined8 param_2, int param_3)
 00129e00	F	Command_AddAmmo_Read	undefined Command_AddAmmo_Read(int param_1, int * param_2)
 00129ec0	F	Condition_AgentIsOnGround_Read	undefined Condition_AgentIsOnGround_Read(ulong param_1, ulong param_2)
@@ -617,6 +676,7 @@
 0019a6d0	F	HasNodeSpaceInList	bool HasNodeSpaceInList(NodeRelatedStruct * param_1)
 0019a7d8	F	GetNodeIndex	int GetNodeIndex(UnkMatricesNode? * param_1)
 0019a7f8	F	GetNodeIndex	undefined GetNodeIndex(void)
+0019abc0	F	TranslateTransformLocal	undefined4 TranslateTransformLocal(undefined8 param_1, float * param_2)
 0019ad48	F	Rotate	undefined4 Rotate(TransformedGeometyPoint * param_1, Vector4 * rotateVec)
 0019b238	F	InitDefaultGifTags?	undefined InitDefaultGifTags?(void)
 0019b780	F	SetupPCRTC	undefined SetupPCRTC(void)
@@ -843,19 +903,27 @@
 00209660	F	DestroyHeaderScript	undefined DestroyHeaderScript(HeaderScript * this, ulong param_2)
 00209710	F	ReadHeaderScript	undefined ReadHeaderScript(HeaderScript * this, BinaryReader * binReader)
 00209918	F	DestroyObj?	undefined DestroyObj?(void * param_1, ulong param_2)
+00209a00	F	GetScriptFloatArg	float GetScriptFloatArg(uint * param_1, InstancePropsHolderBase * param_2)
 00209b40	F	DestroyMajorScript	undefined DestroyMajorScript(MainScript * this, ulong param_2)
 00209bd8	F	ReadMainScript	undefined ReadMainScript(MainScript * param_1, BinaryReader * binReader)
 00209c38	F	SetFlagField	undefined SetFlagField(MainScript * this)
 00209ca0	F	ReadTrigger	undefined ReadTrigger(GameTrigger * param_1, BinaryReader * param_2)
 002101d8	F	GetContextByCallConvention	InstanceContext * GetContextByCallConvention(int * callConvention, ScriptCall * scriptCall)
 002102c8	F	Command_RunScriptSlot_Run	undefined Command_RunScriptSlot_Run(int param_1, undefined8 param_2, int param_3)
+00210390	F	Command_SetBehaviourPriority_Read	undefined Command_SetBehaviourPriority_Read(int param_1, int * param_2)
+002106d8	F	Command_RestartPrevious_Run	undefined Command_RestartPrevious_Run(undefined8 param_1, TimeClock * param_2, ScriptCall * param_3, int param_4)
 00210980	F	Command_DestroyMe_Read	undefined Command_DestroyMe_Read(int param_1, int * param_2)
 00211df8	F	SetInstanceAnimation?	undefined SetInstanceAnimation?(PlayAnimationCommand * this, InstancePropsHolderBase * propsHolder, GameAnimation * anim, OgiAnimatorService * param_4)
 002126e8	F	Command_ForceAnimUpdate_Read	undefined Command_ForceAnimUpdate_Read(int param_1, int * param_2)
+00215e88	F	Command_NowTurn_Run	uint Command_NowTurn_Run(int param_1, undefined8 param_2, int param_3)
+00216990	F	Command_RotWarp_Read	undefined Command_RotWarp_Read(int param_1, int * param_2)
 00216f18	F	Command_SubtypeOf177_Read	undefined Command_SubtypeOf177_Read(int param_1, int * param_2)
 00217300	F	Command_SubtypeOf177_Run	undefined Command_SubtypeOf177_Run(int param_1, undefined8 param_2, int param_3)
+002176e8	F	Command_RotWarp_Run	ulong Command_RotWarp_Run(int param_1, undefined8 param_2, int param_3)
 0021b408	F	Command_DUMMY_197_Read	undefined Command_DUMMY_197_Read(void)
 0021bf48	F	Command_SetWobble_Read	undefined Command_SetWobble_Read(void)
+0021c980	F	Command_AlterWobblePhase_Read	undefined Command_AlterWobblePhase_Read(int param_1, int * param_2)
+0021cab0	F	Command_AlterWobblePhase_Run	undefined Command_AlterWobblePhase_Run(int param_1, undefined8 param_2, int param_3)
 0021d7c0	F	Command_SetShadow_Read	undefined Command_SetShadow_Read(int param_1, int * param_2)
 0021d8b0	F	Command_SetShadowCircle_Read	undefined Command_SetShadowCircle_Read(int param_1, int * param_2)
 0021db88	F	Command_SetShadowMesh_Read	undefined Command_SetShadowMesh_Read(int param_1, int * param_2)
@@ -868,19 +936,47 @@
 00220860	F	GetScriptActionSize	undefined GetScriptActionSize(void)
 00220a60	F	GetScriptCommandSize	undefined GetScriptCommandSize(void)
 00220d38	F	Command_RunScriptSlot_Read	undefined Command_RunScriptSlot_Read(int param_1, int * param_2)
+00221010	F	Command_ClearThreats_Read	undefined Command_ClearThreats_Read(int param_1, int * param_2)
+002210a8	F	Command_SetBehaviourPriority_Run	undefined Command_SetBehaviourPriority_Run(ScriptCommand_0x2A * this, TimeClock * param_2, ScriptCall * param_3)
+002210f8	F	Command_ClearThreats_Run	undefined Command_ClearThreats_Run(void)
 002211c8	F	ExecuteCommand_Destroy	undefined ExecuteCommand_Destroy(DestroyCommand * this, TimeClock * param_2, ScriptCall * param_3)
 002212e0	F	ExecuteCommand_0x4E	undefined ExecuteCommand_0x4E(ScriptCommand_0x4E * param_1, TimeClock * param_2, ScriptCall * param_3)
+00221950	F	Command_ControllerRumble_Read	undefined Command_ControllerRumble_Read(int param_1, int * param_2)
+002219e0	F	Command_ControllerRumble_Run	undefined Command_ControllerRumble_Run(int param_1)
 00221ba0	F	ExecutePlayAnimationCommand	undefined ExecutePlayAnimationCommand(PlayAnimationCommand * this, TimeClock * param_2, ScriptCall * param_3)
 00221d80	F	Command_ForceAnimUpdate_Run	undefined Command_ForceAnimUpdate_Run(int param_1, undefined8 param_2, int param_3)
+00222468	F	Command_RequestAttachmentFocus_Read	undefined Command_RequestAttachmentFocus_Read(int param_1, int * param_2)
+002224f8	F	Command_RequestAttachmentFocus_Run	undefined Command_RequestAttachmentFocus_Run(int param_1, undefined8 param_2, int param_3)
+00222660	F	Command_ClearFocus_Run	void Command_ClearFocus_Run(ScriptCommand_0x34 * param_1, undefined8 param_2, ScriptCall * param_3)
+00222a88	F	Command_NowMoveForwards_Read	undefined Command_NowMoveForwards_Read(void)
+00222ab0	F	Command_NowMoveBackwards_Read	undefined Command_NowMoveBackwards_Read(void)
+00222ad8	F	Command_NowStrafeLeft_Read	undefined Command_NowStrafeLeft_Read(void)
+00222b00	F	Command_NowStrafeRight_Read	undefined Command_NowStrafeRight_Read(void)
+00222b78	F	Command_NowMoveForwards_Run	uint Command_NowMoveForwards_Run(int param_1, undefined8 param_2, int param_3)
+00222c10	F	Command_NowMoveBackwards_Run	ulong Command_NowMoveBackwards_Run(undefined8 param_1, undefined8 param_2, int param_3)
+00222c60	F	Command_NowStrafeLeft_Run	uint Command_NowStrafeLeft_Run(int param_1, undefined8 param_2, int param_3)
+00222d00	F	Command_NowStrafeRight_Run	uint Command_NowStrafeRight_Run(int param_1, undefined8 param_2, int param_3)
+00222e18	F	Command_StopMoving_Run	undefined Command_StopMoving_Run(undefined8 param_1, undefined8 param_2, int param_3)
 00222f60	F	Command_TriggerLinkedObjects_Read	undefined Command_TriggerLinkedObjects_Read(ScriptCommand_0x21 * param_1, int * param_2)
 00223000	F	Command_TriggerLinkedObjects_Run	undefined Command_TriggerLinkedObjects_Run(ScriptCommand_0x21 * param_1, TimeClock * param_2, ScriptCall * param_3)
+00223410	F	Command_SetState_Read	undefined Command_SetState_Read(int param_1, int * param_2)
+002234a8	F	Command_SetState_Run	undefined Command_SetState_Run(int param_1, TimeClock * param_2, ScriptCall * param_3)
+00223538	F	Command_ToggleState_Run	undefined Command_ToggleState_Run(undefined8 param_1, undefined8 param_2, int param_3)
+00223720	F	Command_NextKey_Run	undefined Command_NextKey_Run(undefined8 param_1, undefined8 param_2, int param_3)
+00223790	F	Command_NextRouteNode_Run	undefined Command_NextRouteNode_Run(undefined8 param_1, undefined8 param_2, int param_3)
+002237d0	F	Command_DiscardRoute_Run	undefined Command_DiscardRoute_Run(undefined8 param_1, undefined8 param_2, int param_3)
 00223ca8	F	Command_DUMMY_197_Run	undefined Command_DUMMY_197_Run(int param_1, undefined8 param_2, int param_3)
 00224258	F	Command_SetWobble_Run	undefined Command_SetWobble_Run(int param_1, int param_2, int param_3)
+00224360	F	Command_ClearWobble_Run	undefined Command_ClearWobble_Run(undefined8 param_1, undefined8 param_2, ScriptCall * param_3)
 00224ab8	F	Command_SetShadow_Run	undefined Command_SetShadow_Run(int param_1, undefined8 param_2, int param_3)
 00224ae8	F	Command_SetShadowCircle_Run	undefined Command_SetShadowCircle_Run(int param_1, undefined8 param_2, int param_3)
 00224b18	F	Command_SetShadowMesh_Run	undefined Command_SetShadowMesh_Run(int param_1, undefined8 param_2, int param_3)
 00224b48	F	Command_SetShadowRectangle_Run	undefined Command_SetShadowRectangle_Run(int param_1, undefined8 param_2, int param_3)
+00224b78	F	Command_ShadowToggle_Read	undefined Command_ShadowToggle_Read(int param_1, int * param_2)
+00224c50	F	Command_ShadowToggle_Run	undefined Command_ShadowToggle_Run(int param_1, undefined8 param_2, int param_3)
 00224e20	F	Command_BeginMusic_Run	undefined Command_BeginMusic_Run(int param_1, undefined8 param_2, int param_3)
+002250f0	F	Command_EndContextMusic_Read	undefined Command_EndContextMusic_Read(int param_1, int * param_2)
+00225180	F	Command_EndContextMusic_Run	undefined4 Command_EndContextMusic_Run(int param_1)
 002251c8	F	Command_SetSound_Run	undefined Command_SetSound_Run(int param_1, undefined8 param_2, int param_3)
 00225cf8	F	Condition_MeFacingFocus_Check	float Condition_MeFacingFocus_Check(ScriptCondition * param_1, InstanceNode_type0 * param_2)
 00226378	F	Condition_FocusFacingMe_Check	float Condition_FocusFacingMe_Check(ScriptCondition * param_1, InstanceNode_type0 * param_2)
@@ -988,6 +1084,7 @@
 0022be98	F	Condition_FocusHeadCanSeeMe_Read	undefined Condition_FocusHeadCanSeeMe_Read(ulong param_1, ulong param_2)
 0022c1f8	F	Condition_IsInExternalScript_Read	undefined Condition_IsInExternalScript_Read(ScriptCondition * param_1, ulong param_2)
 0022c258	F	Condition_IsInExternalScript_Check	float Condition_IsInExternalScript_Check(ScriptCondition * this, InstanceNode_type0 * param_2, ScriptExecutionState * param_3, int * param_4)
+0022c760	F	NodeContainsActor	undefined4 NodeContainsActor(float * param_1, InstanceNode_type0 * param_2)
 0023c7a8	F	GetNodeIndex	undefined GetNodeIndex(void)
 0023c870	F	GetGameObjectAddress_FromInstance?	GameObject * GetGameObjectAddress_FromInstance?(InstanceNode_type1 * param_1)
 0023c8a8	F	GetPropsHolderFromInstanceNode	undefined4 GetPropsHolderFromInstanceNode(InstanceNode_type1 * param_1)
@@ -1031,6 +1128,13 @@
 00251fb0	F	Condition_BoxAboveIsOverlapped_Read	undefined Condition_BoxAboveIsOverlapped_Read(ulong param_1, ulong param_2)
 00252078	F	CheckDistanceFromSpawnCondition	undefined CheckDistanceFromSpawnCondition(ScriptCondition * this, InstanceNode_type0 * param_2)
 00252f70	F	Command_SetSurface_Run	undefined Command_SetSurface_Run(int param_1, undefined8 param_2, int param_3)
+00253908	F	Command_ClearCollisions_Run	undefined Command_ClearCollisions_Run(undefined8 param_1, undefined8 param_2, int param_3)
+00253ad0	F	Command_ClearContactResponse_Run	undefined Command_ClearContactResponse_Run(undefined8 param_1, TimeClock * param_2, ScriptCall * param_3)
+00253bb8	F	Command_RevertColliderMotion_Run	undefined Command_RevertColliderMotion_Run(undefined8 param_1, undefined8 param_2, ScriptCall * param_3)
+00254f88	F	Command_DetachAllSprings_Run	undefined Command_DetachAllSprings_Run(undefined8 param_1, undefined8 param_2, int param_3)
+00254fc0	F	Command_UnsupportOverFocus_Run	undefined Command_UnsupportOverFocus_Run(undefined8 param_1, undefined8 param_2, int param_3)
+00254ff0	F	Command_RequestDetach_Run	undefined Command_RequestDetach_Run(void)
+00255170	F	Command_ClearUserMessage_Run	undefined Command_ClearUserMessage_Run(undefined8 param_1, undefined8 param_2, int param_3)
 002598e8	F	GetOgiNodeFromObject	OgiNode * GetOgiNodeFromObject(GameObject * gameObj)
 0025a160	F	GetTicksFromTime	float GetTicksFromTime(int * time)
 0025cf50	F	LoadParticles?	undefined4 LoadParticles?(char * param_1)
@@ -1961,28 +2065,61 @@
 002ee450	L	AlwaysCondition_Methods	undefined
 002ee450	L	Condition_Next_Methods	undefined
 002ee6c8	L	Command_DUMMY_586_Methods	undefined
+002ee788	L	Command_CameraTopdownMode_Methods	undefined
+002ee948	L	Command_DUMMY_610_Methods	undefined
+002ee988	L	Command_DUMMY_609_Methods	undefined
+002eeac8	L	Command_CameraStopFocusObject_Methods	undefined
+002eeb08	L	Command_CameraFocusObject_Methods	undefined
+002eeb48	L	Command_PlayerFaceTowardsCamera_Methods	undefined
+002eeb88	L	Command_ResetCamera_Methods	undefined
+002eec08	L	Command_RestoreCameraDefaults_Methods	undefined
 002eec48	L	Command_SetCamera_Methods	undefined
 002eed48	L	Command_BecomeNormal_Methods	undefined
 002eed88	L	Command_BecomeSticky_Methods	undefined
 002eee88	L	Command_CharacterSoundProxy_Methods	undefined
 002ef088	L	ScriptCommand_0x22D_Methods	undefined
+002ef188	L	Command_SetFocusToPlayer_Methods	undefined
 002ef248	L	Command_DisplayBottomTextInstance_Methods	undefined
 002ef288	L	Command_PlayMovie_Methods	undefined
+002ef2c8	L	Command_BottomTextClear_Methods	undefined
 002ef308	L	Command_BottomTextDisplay_Methods	undefined
 002ef348	L	Command_FadeoutScreen_Methods	undefined
+002ef388	L	Command_DemoHubMusicFlagOn_Methods	undefined
+002ef3c8	L	Command_BottomTextHide_Methods	undefined
+002ef408	L	Command_BottomTextShow_Methods	undefined
+002ef448	L	Command_ForceGameOver_Methods	undefined
+002ef488	L	Command_PlayCredits_Methods	undefined
+002ef4c8	L	Command_WhackawormEnd_Methods	undefined
+002ef508	L	Command_WhackawormProgress_Methods	undefined
 002ef548	L	Command_WhackawormStart_Methods	undefined
+002ef588	L	Command_BossModeExit_Methods	undefined
+002ef5c8	L	Command_BossModeDamage_Methods	undefined
 002ef608	L	Command_BossModeEnable_Methods	undefined
+002ef648	L	Command_CutsceneEnd_Methods	undefined
+002ef688	L	Command_CutsceneStart_Methods	undefined
 002ef748	L	Command_SetPlayerMode_Methods	undefined
+002ef788	L	Command_ResetGame_Methods	undefined
+002ef888	L	Command_DUMMY_584_Methods	undefined
 002ef8c8	L	Command_PlayerVehicleBounce_Methods	undefined
 002ef908	L	Command_SwitchCharacter_Methods	undefined
+002ef988	L	Command_DisablePlayerControl_Methods	undefined
 002efb08	L	Command_DismissCharacter_Methods	undefined
+002efc88	L	Command_UnlinkCharacters_Methods	undefined
+002efcc8	L	Command_LinkToFocusCharacter_Methods	undefined
+002efd08	L	Command_SetPlayerRespawnPosition_Methods	undefined
 002efd48	L	Command_SetPlayerInput_Methods	undefined
 002efd88	L	Command_SetCrate_Methods	undefined
+002efdc8	L	Command_SetAgent_Methods	undefined
 002efe08	L	Command_CA_PickUpWumpa_Methods	undefined
+002efe48	L	Command_DUMMY_538_Methods	undefined
+002efe88	L	Command_CA_PickUpHealth_Methods	undefined
 002efec8	L	Command_AddGem_Methods	undefined
+002eff08	L	Command_AddCrystal_Methods	undefined
 002eff48	L	Command_DUMMY_536_Methods	undefined
+002eff88	L	Command_DUMMY_FuelPayGate_Methods	undefined
 002f0098	L	Command_DamageOriginator_Methods	undefined
 002f00e0	L	Command_CreateCrateContents_Methods	undefined
+002f0120	L	Command_SetChiChiGrass_Methods	undefined
 002f0160	L	Command_NowGoBackCollidable_Methods	undefined
 002f0290	L	switchdataD_002f0290	pointer
 002f02b0	L	switchdataD_002f02b0	pointer
@@ -2046,11 +2183,19 @@
 002f1878	L	Condition_AgentWasTouched_Methods	undefined
 002f18c8	L	Condition_AgentIsOnGround_Methods	undefined
 002f18f0	L	Command_AddAmmo_Methods	undefined
+002f1ab0	L	Command_ExitVehicleMode_Methods	undefined
 002f1af0	L	Command_SetVehicleHoverboard_Methods	undefined
 002f1b30	L	Command_SetVehicleHumiliskate_Methods	undefined
+002f1b70	L	Command_SetVehicleWrestleCreature_Methods	undefined
 002f1bb0	L	Command_SetVehicleRollerbrawl_Methods	undefined
 002f1c30	L	Command_Shoot_Methods	undefined
+002f1cf0	L	Command_DetachAllLinkedAgents_Methods	undefined
 002f1d30	L	Command_AttachAllLinkedAgents_Methods	undefined
+002f1d70	L	Command_CloseAllLinkedFurniture_Methods	undefined
+002f1db0	L	Command_OpenAllLinkedFurniture_Methods	undefined
+002f1e30	L	Command_DUMMY_NowGoForwardCollidable_Methods	undefined
+002f1e70	L	Command_TriggerBalancedCrateFalling_Methods	undefined
+002f1eb0	L	Command_TriggerAllNitroCrates_Methods	undefined
 002f1fb0	L	switchdataD_002f1fb0	pointer
 002f1fe0	L	switchdataD_002f1fe0	pointer
 002f2010	L	switchdataD_002f2010	pointer
@@ -2251,19 +2396,40 @@
 002fd600	L	switchdataD_002fd600	pointer
 002fd918	L	Command_DestroySpawnedAttachment_Methods	undefined
 002fdb18	L	Command_SetSound_Methods	undefined
+002fdb98	L	Command_EndContextMusic_Methods	undefined
 002fdbd8	L	Command_BeginMusic_Methods	undefined
+002fdc98	L	Command_ShadowToggle_Methods	undefined
 002fdcd8	L	Command_SetShadowRectangle_Methods	undefined
 002fdd18	L	Command_SetShadowMesh_Methods	undefined
 002fdd58	L	Command_SetShadowCircle_Methods	undefined
 002fdd98	L	Command_SetShadow_Methods	undefined
+002fe1d8	L	Command_ClearWobble_Methods	undefined
+002fe298	L	Command_AlterWobblePhase_Methods	undefined
 002fe2d8	L	Command_SetWobble_Methods	undefined
 002fe398	L	Command_DUMMY_197_Methods	undefined
+002fe498	L	Command_DiscardRoute_Methods	undefined
+002fe518	L	Command_NextRouteNode_Methods	undefined
+002fe5d8	L	Command_NextKey_Methods	undefined
+002fe658	L	Command_ToggleState_Methods	undefined
+002fe698	L	Command_SetState_Methods	undefined
 002fe818	L	Command_TriggerLinkedObjects_Methods	undefined
+002fe958	L	Command_RotWarp_Methods	undefined
 002fe998	L	Command_SubtypeOf177_Methods	undefined
+002fea18	L	Command_StopMoving_Methods	undefined
+002fead8	L	Command_NowStrafeRight_Methods	undefined
+002feb18	L	Command_NowStrafeLeft_Methods	undefined
+002feb58	L	Command_NowMoveBackwards_Methods	undefined
+002feb98	L	Command_NowMoveForwards_Methods	undefined
 002fedd8	L	ScriptCommand_0x34_Methods	undefined
+002fedd8	L	Command_ClearFocus_Methods	undefined
+002fee98	L	Command_RequestAttachmentFocus_Methods	undefined
 002ff158	L	Command_ForceAnimUpdate_Methods	undefined
 002ff1d8	L	PlayAnimationCommand_Methods	undefined
+002ff218	L	Command_ControllerRumble_Methods	undefined
+002ff598	L	Command_RestartPrevious_Methods	undefined
 002ff658	L	Command_DestroyMe_Methods	undefined
+002ff698	L	Command_ClearThreats_Methods	undefined
+002ff7d8	L	Command_SetBehaviourPriority_Methods	undefined
 002ff8d8	L	Command_RunScriptSlot_Methods	undefined
 002ff9e8	L	Condition_IsInExternalScript_Methods	undefined
 002ffb00	L	Condition_FocusHeadCanSeeMe_Methods	undefined
@@ -2355,14 +2521,21 @@
 00301550	L	switchdataD_00301550	pointer
 003016f8	L	Command_BroadcastUserMessage_Methods	undefined
 00301738	L	TriggerSignalCommand_Methods	undefined
+00301778	L	Command_ClearUserMessage_Methods	undefined
 003017f8	L	Command_ForceVolumeController_Methods	undefined
 00301878	L	Command_UnsupportAbove_Methods	undefined
+003018b8	L	Command_RequestDetach_Methods	undefined
+003018f8	L	Command_UnsupportOverFocus_Methods	undefined
 00301978	L	Command_ThrowAttachedObject_Methods	undefined
 003019f8	L	Command_DropAttachedObject_Methods	undefined
+00301a38	L	Command_DetachAllSprings_Methods	undefined
 00301ab8	L	Command_AttachFocusObject2_Methods	undefined
 00301af8	L	Command_NowRotateJoint_Methods	undefined
+00301d78	L	Command_ClearContactResponse_Methods	undefined
 00301df8	L	Command_ApplyImpulse_Methods	undefined
+00301eb8	L	Command_RevertColliderMotion_Methods	undefined
 00301ef8	L	Command_ContinueColliderMotion_Methods	undefined
+00301ff8	L	Command_ClearCollisions_Methods	undefined
 00302078	L	Command_SetSurface_Methods	undefined
 00302138	L	Command_SetLogicalRadius_Methods	undefined
 00302220	L	Condition_BoxAboveIsOverlapped_Methods	undefined
@@ -2541,6 +2714,7 @@
 00309e58	L	G_UnkStructOfSize_0xe0	undefined4
 00309f90	L	UnkGlobalCounter	int
 0030a060	L	G_DynamicSceneryClockIndex	undefined4
+0030a0a4	L	G_FRAME_DELTA	undefined4
 0030a0a8	L	G_ChunkManager	ChunkManager? *
 0030a0ac	L	G_StateDepth	undefined
 0030a0b8	L	G_ScriptStateBody_Ptr	ScriptStateBody *
