@@ -18,6 +18,21 @@ Which makes `_end` the one seam in the address map worth prying at, and three th
   * entry() also calls InitHeap with `_end` as the base, which sets the ceiling sbrk checks against. Moving
     that too costs one word and keeps the two agreeing.
 
+And then the part that is easy to miss: **there is no spare RAM at all.** The game makes exactly two large
+allocations, and together they fill the console:
+
+    GetHeapManager_ 0x181db0   malloc 0x00b7e890   11.5 MB   the general pool
+    GetDiskManager_ 0x181e58   malloc 0x010a3d70   16.6 MB   the streaming buffer
+
+Measured on the retail disc at the title screen: the pool starts at 0x3db210, the disk buffer ends at
+0x01ffd820, and sbrk's break sits at 0x01ffe000 with the top of RAM at 0x02000000. That is 8 KB of headroom
+in 32 MB, and the kernel keeps it. So simply moving sbrk up makes the *second* of those two allocations fail,
+malloc returns null, and the graphics init at 0x1af150 writes a structure through a null pointer and the
+screen stays black - which is exactly what an 8 KB cave did on the first attempt.
+
+The cave therefore has to be paid for, not conjured: DISK_BUFFER_SIZE shrinks the streaming buffer by exactly
+the cave size, so total memory use is unchanged. 8 KB out of 16.6 MB is 0.05% of one buffer.
+
 A second PT_LOAD then loads the cave off the disc. Nothing in the game moves and no existing address changes.
 
 Before this, patches had to squeeze into an unused debug function at 0x116ea8 - 0x130 bytes, about 75
@@ -34,6 +49,11 @@ CAVE_CODE = CAVE_BASE + CAVE_GUARD
 HEAP_BASE_INSN = 0x1000A0       # in entry(): addiu a0, a0, -0x4e00 -> a0 = 0x3db200, the InitHeap base
 HEAP_BASE_ORIG = 0x2484B200
 SBRK_BREAK = 0x2EABE4           # sbrk's break pointer, a .data word holding `_end` in the shipped image
+
+# The streaming buffer's size, built twice in GetDiskManager_ as lui 0x10a + ori 0x3d70 = 0x010a3d70: once for
+# the malloc, once for the call that carves the buffer up. Only the low halves change.
+DISK_BUFFER_SIZE = 0x010A3D70
+DISK_BUFFER_INSNS = ((0x181EA0, 0x34843D70), (0x181EC0, 0x34C63D70))
 
 
 class Elf:
@@ -91,10 +111,12 @@ class Elf:
         self.segments.append((1, off, vaddr, vaddr, len(data), len(data), 7, 0x10))
 
     def add_cave(self, code, base=CAVE_BASE, size=CAVE_SIZE):
-        """Load CODE at BASE + CAVE_GUARD and move everything the game allocates up past the whole cave."""
+        """Load CODE at BASE + CAVE_GUARD, move everything the game allocates up past the whole cave, and take
+        the cave's cost back out of the streaming buffer so the console's memory still adds up."""
         room = size - CAVE_GUARD
         if len(code) > room: raise SystemExit(f"cave code is {len(code)} bytes, the cave holds {room}")
         self.heap_base(base + size)
+        self.disk_buffer(DISK_BUFFER_SIZE - size)
         self.add_segment(base, (b"\0" * CAVE_GUARD + bytes(code)).ljust(size, b"\0"))
 
     def heap_base(self, addr):
@@ -103,6 +125,13 @@ class Elf:
         delta = addr - 0x3E0000                        # entry() builds the base as lui 0x3e + addiu <delta>
         if not -0x8000 <= delta < 0x8000: raise SystemExit(f"heap base {addr:08X} too far from 0x3e0000")
         self.patch(HEAP_BASE_INSN, HEAP_BASE_ORIG, (HEAP_BASE_ORIG & 0xFFFF0000) | (delta & 0xFFFF), "InitHeap base")
+
+    def disk_buffer(self, size):
+        """Resize the streaming buffer GetDiskManager_ allocates. Only its low half may change."""
+        if size >> 16 != DISK_BUFFER_SIZE >> 16:
+            raise SystemExit(f"disk buffer {size:08X} needs a different lui than {DISK_BUFFER_SIZE:08X}")
+        for va, original in DISK_BUFFER_INSNS:
+            self.patch(va, original, (original & 0xFFFF0000) | (size & 0xFFFF), "streaming buffer size")
 
     # ---------------------------------------------------------------- output
     def crc(self):

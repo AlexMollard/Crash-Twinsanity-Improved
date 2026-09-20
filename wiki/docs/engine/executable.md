@@ -102,23 +102,61 @@ The replacement is an 8 KB region at **`0x3DB200-0x3DD200`**, carved out of the 
 table sits at file offset `0x34` and the first section does not start until `0x1000`, so a second 32-byte entry
 goes straight after the first and `e_phnum` becomes 2.
 
-Three changes make the region safe to use, and all three follow from the memory map above:
+Four changes make the region safe to use:
 
 | Change | Why |
 |---|---|
 | Code starts at `0x3DB210`, not `0x3DB200` | the boot-time bss clear overshoots by one 16-byte store |
-| `.data` word at `0x2EABE4`: `0x003DB200` → `0x003DD200` | moves `sbrk`'s break, so the game's 11.5 MB pool lands above the cave instead of on top of it |
+| `.data` word at `0x2EABE4`: `0x003DB200` → `0x003DD200` | moves `sbrk`'s break, so the game's pool lands above the cave instead of on top of it |
 | `0x1000A0`: `addiu a0, a0, -0x4E00` → `-0x2E00` | moves the `InitHeap` ceiling to match |
+| `0x181EA0` and `0x181EC0`: `ori …, 0x3D70` → `0x1D70` | **pays for the cave** - see below |
 
-That last one alone does nothing - patching `InitHeap` and leaving `sbrk` alone was the first attempt, and the
-pool landed on the cave anyway. The `.data` word is the one that matters.
+The `InitHeap` change alone does nothing; patching it and leaving `sbrk` alone was the first attempt, and the
+pool landed on the cave anyway. But the fourth row is the one that matters most, and it is not obvious at all.
 
-Verified on the rig: the signature word at `0x3DB210` survives a boot, and 511 markers written across the whole
-region survive a New Game, a level load and sustained play without a single byte being touched.
+### There is no spare RAM
+
+The game makes exactly two large allocations, and together they fill the console:
+
+| | Size | |
+|---|---|---|
+| `GetHeapManager_` `0x181DB0` | `0x00B7E890` — 11.5 MB | the general pool, everything the game allocates |
+| `GetDiskManager_` `0x181E58` | `0x010A3D70` — 16.6 MB | the streaming buffer |
+
+Measured on the retail disc at the title screen:
+
+```text
+pool                0x003DB210 .. 0x00F59AA0
+streaming buffer    0x00F59AB0 .. 0x01FFD820
+sbrk break          0x01FFE000
+top of RAM          0x02000000
+```
+
+**8 KB of headroom in 32 MB**, and the kernel keeps that for itself. So moving `sbrk` up by a cave's worth does
+not take memory from nowhere - it pushes the *second* of those two allocations past the ceiling `sbrk` checks
+against. `sbrk` returns -1, `malloc` returns null, and the graphics init at `0x1AF150` cheerfully writes a
+structure through the null pointer, field by field from `+0` to `+0xD4`. Fifty TLB misses and a black screen.
+
+:::danger The cave costs something, and you have to say what
+`tools/elfpatch.py` shrinks the streaming buffer by exactly the cave size, so total memory use is unchanged and
+`sbrk`'s break lands back on `0x01FFE000` to the byte. 8 KB out of 16.6 MB is 0.05% of one buffer - but it is
+not free, and growing the cave means taking more. Any change to `CAVE_SIZE` needs the loading benchmarks re-run,
+not just a boot test.
+:::
+
+Verified on the rig: boots and renders, the signature word is at `0x3DB210`, the pool has moved to `0x3DD210`,
+and the streaming buffer allocation succeeds.
 
 ```bash
 python tools/rig/rig.py read 0x3DB210 2      # 53415243 ("CRAS"), 00002000
 ```
+
+:::warning Check the screen, not just the memory
+The first version of this cave was reported working on the strength of memory reads alone - the signature was
+present, the pool had moved, and 511 markers written across the region were untouched after "play". The markers
+were untouched because the game had crashed in graphics init before it could allocate anything. A dead game
+leaves memory alone beautifully. Take a screenshot.
+:::
 
 :::note The disc has to make room too
 The image is packed solid - there is not one spare sector between files. A bigger executable pushes the music
