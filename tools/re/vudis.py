@@ -66,8 +66,9 @@ SPECIAL2.update({
     0x24: ("vsubaq", "ACC,fs,Q"), 0x25: ("vmsubaq", "ACC,fs,Q"), 0x26: ("vsubai", "ACC,fs,I"),
     0x27: ("vmsubai", "ACC,fs,I"),
     0x28: ("vadda", "ACC,fs,ft"), 0x29: ("vmadda", "ACC,fs,ft"), 0x2A: ("vmula", "ACC,fs,ft"),
-    0x2C: ("vsuba", "ACC,fs,ft"), 0x2D: ("vmsuba", "ACC,fs,ft"), 0x2E: ("vopmula", "ACC,fs,ft"),
-    0x2F: ("vnop", ""),
+    0x2C: ("vsuba", "ACC,fs,ft"), 0x2D: ("vmsuba", "ACC,fs,ft"),
+    0x8B: ("vopmula", "ACC,fs,ft"),        # index calibrated against this executable, not the manual
+    0xAF: ("vnop", ""),
     0x30: ("vmove", "ft,fs"), 0x31: ("vmr32", "ft,fs"), 0x34: ("vlqi", "ft,(is++)"),
     0x35: ("vsqi", "fs,(it++)"), 0x36: ("vlqd", "ft,(--is)"), 0x37: ("vsqd", "fs,(--it)"),
     0x38: ("vdiv", "Q,fsF,ftF"), 0x39: ("vsqrt", "Q,ftF"), 0x3A: ("vrsqrt", "Q,fsF,ftF"),

@@ -29,3 +29,6 @@ tools/ghidra/
 wiki/node_modules/
 wiki/build/
 wiki/.docusaurus/
+
+# built by tools/decomp/collision.c
+tools/decomp/*.exe
