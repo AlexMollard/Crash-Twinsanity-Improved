@@ -297,3 +297,43 @@ Two of the values are pinned. `RequestGameOver` refuses to do anything when the 
 which makes 0x12 the game-over state or something indistinguishable from it. The rest are still unknown, and
 the cheapest way to fill them in would be a rig run that samples the field once a frame and prints it against
 what is happening on screen, rather than any amount of further reading.
+
+## Asking the running game instead of reading it
+
+Some questions cannot be answered by reading. "Which of these 49 call sites actually runs" is one: they are all
+reachable, and *reachable* and *reached* are different questions. The code cave makes the other kind of answer
+cheap, and two tools now share the same shape - `trace_activate.py` and `trace_focus.py`
+in `tools/re/`.
+
+The pattern is: put a small driver in the cave, overwrite one instruction at the site with a jump to it, let the
+driver record what it wants into cave memory, then execute the instruction it replaced and jump back. No
+handshake and no trigger word, so it runs at full speed. `disarm` puts the original instruction back.
+
+Four things decide whether it works, and three of them have bitten us:
+
+- **The instruction after the hook runs first**, as the jump's delay slot. So the driver must re-execute the
+  instruction it *replaced* and resume two instructions later, never one.
+- **Hook where the arguments are still live.** `ActivateObjectInstance` consumes `$a0` at its fourth
+  instruction, so the read has to happen before then. Where a function has a stack prologue, hooking its second
+  instruction is usually right; where it is a leaf with no prologue there is no prologue to wait for, but the
+  delay-slot instruction may still be load-bearing - both focus functions set `$v0` there and compare it two
+  instructions later, so `$v0` is untouchable.
+- **Only caller-saved registers are free**, and which ones hold what differs per site. The two focus hooks take
+  the agent in different registers, which is why that tool has two entry stubs feeding one body.
+- **The record that carries the verdict must not be the record that can overflow.** A ring buffer wraps. Put
+  the actual answer in something that cannot - a bitmap with one bit per id, or a set of counters - and let the
+  ring carry detail only.
+
+### Run the control first
+
+A tracer that reports "never fired" and a tracer that is not working produce identical output, and no amount of
+care in the driver distinguishes them. The only thing that does is a run where the answer is known in advance.
+
+This is not hypothetical. The activation tracer's headline result - that object 877 *is* activated, overturning
+a premise most of that investigation rested on - is only trustworthy because a beach level was traced first,
+where 877 and 876 must both be absent: 429 activations, 69 distinct ids, both bits clear. That single run rules
+out a clobbered base, stale memory and a bit carried over from an earlier session, all at once.
+
+Run it **before** the interesting level, not after. The temptation to skip it is strongest once there is already
+a result worth having, which is exactly when instinct is least worth trusting - and a wrong answer that
+overturns a settled belief is the hardest kind to catch, because surprise reads as signal.
