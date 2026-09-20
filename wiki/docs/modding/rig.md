@@ -127,9 +127,12 @@ Crash into the totem chase before it is set up. `henchmania` reports the skip ta
 which is the follow-on Brio/Tropy scene chaining on - the measurement stops when gameplay resumes, and a second
 scene delays that. The rest are end-position differences already documented as legitimate.
 
-The three NOT TRIGGERED are real work. Their heights were recovered correctly from the level data, but the scene
-does not start from the recorded X/Z, so those coordinates need re-deriving from the trigger centres the same way
-the heights were.
+The three NOT TRIGGERED turned out not to be cutscenes at all. Their coordinates are accurate - each sits on a
+real trigger to within 0.06 - but those triggers target **actors**: `act_SENTRY_TRIBESMAN`,
+`act_BATTLESHIP_NGIN_SWITCHTHROWER`, and an actor inside gpa01's Dingodile-hut group. None of the three levels
+contains a cutscene director at all, checked both by the survey and by searching their object tables directly. So
+the entries were wrong when they were written, and the silently-skipped list is why nobody found out. They are
+commented out with the reason, leaving **22** entries that all mean something.
 
 ## What a verdict looks like
 
