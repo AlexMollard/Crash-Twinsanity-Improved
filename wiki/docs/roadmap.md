@@ -43,7 +43,15 @@ data. Each line says where it stands and what is in the way.
 
 **And the scene has no skip path at all.** `gpa12` contains **no** condition 572 and **no** message-244 handler anywhere in its 208 scripts - the apparent `572` matches are digits inside argument lists like `1572924`. The director's script in `gpa11` (5265) is likewise driven entirely by message 207 with no skip branch. So this scene cannot be skipped by this mod's hold-△, which only works where a cut branch exists or was rebuilt, and the theory that "the developers' unfinished skip omits the transition" - the shape of the walrus fix - does not apply here.
 
-Which leaves the real question open: **how does mashing jump skip a scene that has no skip path?** That needs the original report's exact wording before more guessing. For reference, the one skippable scene in this part of the game is the Henchmania intro in `gpa11` (`COM_HENCHMANIA_CUTSCENE_DIRECTOR_ACTIVATED`, with 244 handlers in `COM_CRASH_CUTSCENE_B02A` and `COM_NGIN_CUTSCENE_B02A`) - a different scene from the one reported. |
+**The report describes a different mechanism than assumed.** [Its exact words](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity): the jumping happens *during the N. Gin TNT cutscene*, and the effect is that the **following** Brio/Tropy scene never plays. Nothing is being skipped that has no skip path - scene A is disrupted and then fails to start scene B. That is the same family as the fixes already shipped, where an actor's 207/244 handler is left disconnected.
+
+:::caution An unverified safety gap in a shipped feature
+Scene A is the Henchmania intro in `gpa11`, and it **does** have a developer skip: `COM_HENCHMANIA_CUTSCENE_DIRECTOR_ACTIVATED` state 1 branches on condition 572 to `COM_HENCHMANIA_CUTSCENE_SKIP` (script 6813). This mod's executable patch re-enables condition 572 game-wide, so **hold-△ skips this scene in our build** - it is listed among the wired-in skips on [What the mod changes](modding/what-changed).
+
+It was verified to *skip*. It was never verified that **the Brio/Tropy scene still plays afterwards** - which is precisely what the community reports going wrong when the same scene is disrupted by other means. The skip script sends three messages (`Cmd195`, two `MessageLinkedObject`, one `SendUserMessage`); whether those match the hand-off the full scene performs at its end is unchecked.
+
+This needs a rig test before it can be called safe, and it is the highest-priority item here because it concerns a feature already in players' hands.
+:::
 | 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` names whatever hit you, so the remaining reports get checked one at a time. |
 
 
