@@ -44,7 +44,11 @@ Every earlier test that claimed to put Crash inside the trigger used the coordin
 
 So "neither teleporting into the trigger box nor moving inside it starts the chase" was never a test of the chase. It was a test of a void. The geometry the pursuit happens on probably lives in `altdoc_b` / `altdoc_c`, which a plain warp into `altdoc` does not bring in.
 
-The rig's `teleport` also shifts *every* copy of Crash's x/z in RAM, respawn points included, which is why he keeps reappearing at the same unreachable spot instead of at a checkpoint. Reproducing this chase needs a way to reach the area legitimately - a save from a real playthrough, or a warp that loads the right chunks - before any conclusion about the summoner means anything.
+The rig's `teleport` also shifts *every* copy of Crash's x/z in RAM, respawn points included, which is why he keeps reappearing at the same unreachable spot instead of at a checkpoint. That is also why it went unnoticed: the position reads back *correct* immediately after the teleport, so a check made once, or twice and slowly, agrees with itself. **A verification that only checks the moment after the action is not a verification** - and a failure mode that makes repeated checks agree is more dangerous than one that makes them disagree.
+
+**A partial way forward exists.** `altdoc_b` and `altdoc_c` can be warped to directly, and both put Crash on genuinely solid ground - verified by sampling his position once a second for twelve seconds and seeing zero drift, which is the check the old coordinates would have failed. `altdoc_c` starts him at `(-132.7, 1.6, 123.4)`, a different area entirely from the `altdoc` spawn. So a legitimate route into that part of the level does exist.
+
+It is not enough on its own yet: a focus trace from the `altdoc_c` spawn records 125 searches by the ball dock and 3 by Cortex, and **nothing at all from objects 876 or 877**. Standing at a spawn is not the same as being where the chase starts. But this is a real repro route where before there was only a void, and it is the thing to build the next attempt on.
 ::: A test recipe that rewrites his conditions to enter PHASE1 on a timer does not start him either. His instance context is **not** disabled (the engine's ignore-all-events bit is clear, checked against objects that are demonstrably alive in the same level), and his object has only one script slot, so nothing can reach him with the "activated" event - his script has to be started at spawn.
 
 :::danger Correction: he *is* woken
