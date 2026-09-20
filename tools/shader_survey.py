@@ -5,7 +5,7 @@ TextureFilter (magnify) +23, AlphaCorrection/FBA +24, then LodParamK/L at +30.
 """
 import collections, glob, os, struct, sys
 
-ROOT = r"C:\Users\alexm\Desktop\CrashModded"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 sys.path.insert(0, os.path.join(ROOT, "tools", "rig"))
 import rm2splice
