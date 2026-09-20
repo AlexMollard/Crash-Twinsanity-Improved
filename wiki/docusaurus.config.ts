@@ -16,7 +16,15 @@ const config: Config = {
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
-  markdown: {hooks: {onBrokenMarkdownLinks: 'warn'}},
+  // `future.v4` turns on `mdx1CompatDisabledByDefault`, which switches off `mdx1Compat.admonitions`
+  // - and that is what renders `:::note` in Docusaurus 3.x. Without this, every admonition on the
+  // site came out as literal ":::note" text. `format` is pinned for the same reason: v4 changes the
+  // default for .md files to CommonMark, which would not parse the directives either.
+  markdown: {
+    format: 'mdx',
+    mdx1Compat: {admonitions: true},
+    hooks: {onBrokenMarkdownLinks: 'warn'},
+  },
 
   i18n: {defaultLocale: 'en', locales: ['en']},
 
