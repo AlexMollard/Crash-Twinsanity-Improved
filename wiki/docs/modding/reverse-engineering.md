@@ -275,3 +275,25 @@ python tools/re/ghidra.py query xref:0x2EABE4 callers:0x2CFCB0 decomp:0x22A020
 `xref:` is the one that pays off most often, because it turns "what is this address" into "who touches it".
 Finding that the game's memory starts at `_end` rather than where `InitHeap` was told took exactly one query:
 four references to a `.data` word, all four inside a function Ghidra had already named `sbrk`.
+
+## The game state lives in six bits
+
+`G_GameController + 0x8` is a 64-bit word packed with several fields. Bits 40-45 - mask `0x3f00000000000` -
+hold a **6-bit game state enum**, and it is read all over the executable: thirteen sites compare against it
+directly, and the values seen so far are 8, 9, 0xa, 0xc, 0xe, 0xf, 0x10 and 0x12. State 0xc is the most
+compared-against.
+
+This is worth knowing before reading anything in the `0x17xxxx` range, because a comparison written as
+
+```c
+if ((*(ulong *)&G_GameController->field2_0x8 & 0x3f00000000000) == 0xc00000000000)
+```
+
+is just `state == 0xc`, and decompiled code full of 13-digit hex constants is far more forbidding than what it
+actually says. Bits 50-55 of the same word are a separate *request* field: `RequestGameOver` writes 0x48 there
+while leaving the state alone, so transitions are asked for on one frame and applied on another.
+
+Two of the values are pinned. `RequestGameOver` refuses to do anything when the state already reads **0x12**,
+which makes 0x12 the game-over state or something indistinguishable from it. The rest are still unknown, and
+the cheapest way to fill them in would be a rig run that samples the field once a frame and prints it against
+what is happening on screen, rather than any amount of further reading.

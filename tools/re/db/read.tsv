@@ -254,3 +254,19 @@
 #
 00293340	F	SegmentTriangleDistances	signed distances of both segment endpoints from the triangle plane; leaves six edge tests live in VU0
 002933e4	F	ReadEdgeTestsFromVu0	drains vf17/18/22/23/27/28 - the six edge tests the call before it left behind
+00191d80	F	AdvanceTimeClock	adds ticks to a TimeClock, or seeks it: bit 0 of its bitfield is "running" (clear means stop and report nothing advanced), bit 1 is a pending absolute seek, consumed and cleared on the next call
+00191dd8	F	AdvanceTimeClockScaled	turns a frame delta into ticks and advances one clock. G_GlobalClockSpeedScale at or below zero means "use real frame time", otherwise it overrides it - which is how the whole game is slowed or paused from one global
+00192978	F	InitUnkMatricesNode	constructor: chains to InitGameNode_, installs UnkMatricesNode__Methods, clears the flag word and sets bit 32
+00195f68	F	DetachInstanceContextRef	unhooks one InstanceContext from the context-refs node (node index 6): clears the context's collisionData field, releases the entry group if it has emptied, then FindContextRefIndex and RemoveContextRefAt
+00195fd8	F	ReleaseEmptyEntryGroup	destroys the entry group hanging off the refs node at +0x70, but only when its entry count (low 5 bits of the word at +0x40) has reached zero, and flags the node as no longer owning one
+001951a0	F	DestroyEntryGroup	ReleaseGroupEntries then, when bit 0 of the flags is set, free - the usual deleting-destructor pair, so callers pass 3 to destroy and free
+00195510	F	ReleaseGroupEntries	releases each live entry of a counted array of at most 31, then zeroes the count. The count is the low 5 bits of the word at +0x40, which is the same field ReleaseEmptyEntryGroup tests
+00192e30	F	DestroyGroupEntry	one entry of an entry group: clears bit 6 and the fields at +0xd0 and +0x28 on the instance it points at, drops both reference counts (+0x94 and +0x9c), then frees when bit 0 of the flags is set
+00254150	F	ClearColliderListSlot	marks a collider as belonging to no list: slot index at +0xdc back to 0xffff, clears bit 44 of the flags at +0x88. RemoveColliderFromList is what establishes that +0xdc is the slot index - it swap-removes using it
+00298bd0	F	AddJointAnimationSubscriber	appends a subscriber to the linked list hanging off ogiJointAnimationsRelated->data[joint], skipping it if already there - returns 1 when it actually added one. The index is a joint index, not an event id: the same index also selects ogiCameraJoints->data
+00295a50	F	RemoveJointAnimationSubscriber	the undo of AddJointAnimationSubscriber - unlinks one subscriber from one joint's list
+0015f9a8	F	SubscribePlayerLinkJoints	subscribes a linked-character object to nine joints - 2,3,4 then 0xd,0xe,0xf then 0x11,0x12,0x13, three runs of three - and sets the low nibble of its flags to 1. Installed as virtual slot 2 of the vtable at 0x2f3610
+0015fa90	F	UnsubscribePlayerLinkJoints	drops the same nine joint subscriptions and clears the nibble. Virtual slot 3 of the same vtable, and the exact mirror of slot 2
+00299060	F	AttachToAnimatorIfPresent	calls the object's virtual slot 2 - its "attach" - but only when node 3 of the instance context exists and has an animatorService. Generic: several unrelated classes use it, so the slot means attach by convention rather than by type
+002990b8	F	DetachFromAnimatorIfPresent	the mirror of AttachToAnimatorIfPresent, dispatching virtual slot 3. LinkPlayableCharacters attaches straight after constructing the link object; ClearPlayableCharacterMode detaches
+0017b8d0	F	RequestGameOver	refuses when the game state already reads 0x12, otherwise writes the request bits 0x48 into bits 50-55 and reports success. Takes no state argument and writes a fixed value, so it is one transition rather than a generic setter; its two callers are Command_ForceGameOver_Run and 0017b7b8 beside it

@@ -58,3 +58,6 @@
 001e7060  # clears a flag on up to two sub-objects then resets a state; the objects are unidentified
 001e73b8  # allocates a slot in two global tables with debug hooks; the resource is unidentified
 0013e910  # zeroes eight words of an unidentified struct
+00161ac0  # clears 400 bytes at +0x38 and four fields up to +0x1d0. Called twice by both InitRollerbrawlVehicle and InitHumiliskateVehicle, on sub-objects at +0x1e0 and +0x3c0 - exactly 0x1e0 apart, so the vehicle holds two of these in an array. A 400-byte clear looks like a history or trail buffer, but nothing read so far says what the pair are
+00223c20  # passes its argument to 001b4f70 only when it is not negative, and returns what that writes back. 001b4f70 is a long particle routine that searches several global tables; until it is understood this is just a guarded call
+0017c310  # splits two nibbles out of GameController +0x504 and passes each to 00178040 (which clears a player's input bindings), one with a flag set and one clear. The nibbles are almost certainly two player slots, but which flag means what is unread
