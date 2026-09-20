@@ -1172,6 +1172,8 @@
 002630d0	F	GetFloatPropAtIndex	float * GetFloatPropAtIndex(InstanceProperties * param_1, int propIndex)
 002630e8	F	GetIntegerPropAtIndex	undefined4 GetIntegerPropAtIndex(InstanceProperties * instProps, int index)
 002631e8	F	RETURN_BACK	undefined RETURN_BACK(void)
+00263390	F	ActivateObjectInstance	undefined ActivateObjectInstance(ObjectInstanceContextBase * objCxt, GameResources * resourceLayout)
+002634c8	F	RunObjectSpawnScript	int RunObjectSpawnScript(ObjectInstanceContextBase * objInstCxt)
 002636f0	F	AddExtraFlag	undefined AddExtraFlag(ExtraInstancePropsStorage * param_1, int index, int * newFlag)
 00263718	F	AddExtraFloat	undefined AddExtraFloat(float * newFloat, ExtraInstancePropsStorage * param_2, int index)
 00263750	F	AddExtraInt	undefined AddExtraInt(ExtraInstancePropsStorage * param_1, int index, undefined4 newInt)
