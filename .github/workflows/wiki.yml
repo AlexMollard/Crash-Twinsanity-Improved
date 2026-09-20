@@ -1,7 +1,8 @@
 name: Wiki
 
 # Builds the Docusaurus site in wiki/ and publishes it to GitHub Pages.
-# Enable it once under Settings -> Pages -> Source: GitHub Actions.
+# configure-pages turns Pages on by itself; if that is blocked, switch it on once under
+# Settings -> Pages -> Source: GitHub Actions.
 
 on:
   push:
@@ -34,6 +35,8 @@ jobs:
       - run: npm ci
       - run: npm run build
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: wiki/build
