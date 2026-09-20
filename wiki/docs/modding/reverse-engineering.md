@@ -330,6 +330,23 @@ Four things decide whether it works, and three of them have bitten us:
   the actual answer in something that cannot - a bitmap with one bit per id, or a set of counters - and let the
   ring carry detail only.
 
+### Walk one pointer, not three
+
+The activation tracer dereferences a single pointer, and one the game itself is using either side of the hook.
+The focus tracer walks three levels. That difference, and nothing else, is why the second one hung the game on
+a level load and the first never did across dozens of warps.
+
+A null check is not enough. These structs hold floats where pointers belong, and a float like `0x41200000` is
+not null - it is a read above the 32MB of RAM, which is a TLB miss rather than a wrong answer. Misalignment is
+the same story: an `lhu` at an odd address is an address error, not a rounded-down read. So every pointer a
+driver walks needs three checks before it is dereferenced - non-null, 4-byte aligned, and below `0x02000000` -
+and record fields should default to "not read" before the walk starts, so bailing out from any depth needs no
+unwinding.
+
+This also matters for what the record then means: a row where the short route filled in and the long one did
+not is now evidence that the walk hit something unreadable, which is information that was previously being
+delivered as a crash.
+
 ### A save state wipes the hooks
 
 The driver lives in RAM, so loading a save state restores the whole cave over it - driver, counters and all -
@@ -351,7 +368,14 @@ a premise most of that investigation rested on - is only trustworthy because a b
 where 877 and 876 must both be absent: 429 activations, 69 distinct ids, both bits clear. That single run rules
 out a clobbered base, stale memory and a bit carried over from an earlier session, all at once.
 
-Run it **before** the interesting level, not after. The temptation to skip it is strongest once there is already
+Run it **before** the interesting level, not after.
+
+And be as suspicious of the explanation that rescues you as of the result that worries you. Twice tonight a
+tidy account of an anomaly arrived exactly when someone was already doubting their own measurement, and was
+accepted without the scrutiny a surprising result would have got. Once it led to a wrong offset being
+defended; once it led to a *correct* finding being retracted - the control really had resolved to a wumpa
+tree, and the explanation for why that "couldn't be right" was itself wrong. Discarding a true result is the
+same error as keeping a false one, and it feels like rigour while you do it. The temptation to skip it is strongest once there is already
 a result worth having, which is exactly when instinct is least worth trusting - and a wrong answer that
 overturns a settled belief is the hardest kind to catch, because surprise reads as signal.
 
