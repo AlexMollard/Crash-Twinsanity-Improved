@@ -161,29 +161,54 @@ the GUI. The mod has never been exposed to it because `build_mod` splices single
 `tools/rig/rm2splice.py` and never takes the library's full-file save path.
 :::
 
-Both fixes live as patches that `build_mod` applies to the submodule, so a fresh clone gets them and they stay
-easy to send upstream to
-[twinsanity-editor](https://github.com/Smartkin/twinsanity-editor):
+### The particle name tails
 
-```text
-tools/patches/texture-preserve-reserved.patch
-tools/patches/collisionsurface-padding-size.patch
+The third is the same shape as the first. Particle names live in a fixed 16-byte field, and the reader stops at
+the terminator:
+
+```csharp
+char namechar = reader.ReadChar();
+if (namechar == '\0')
+{
+    reader.ReadBytes(0x0F - tempName.Length);   // skipped, and not kept
+    break;
+}
 ```
+
+while the writer pads back out to 16 with zeros. In a fixed-size name field the bytes after the terminator are
+the tail of whatever longer name was there before, and the game never reads them - but they are on the disc, so
+zeroing them is a difference. In `huba` that is the ASCII `"1B"` left over at a 68-byte stride through the
+particle records.
 
 ### Where it stands
 
 | | Files round-tripping byte-for-byte |
 |---|---|
-| Before | **1** of 135 |
+| Before any fix | **1** of 135 |
 | After the texture fix | **98** of 135 |
-| After the collision fix | 98 of 135, and `Startup\Default.rm2` stops changing size (2127 bytes and +56 → 170 bytes and +0) |
+| After the collision fix | 98 of 135, and `Startup\Default.rm2` stops changing size (2127 bytes and +56 → 170 and +0) |
+| After the particle fix | **135 of 135** |
 
-So the collision fix repairs the *layout* damage without changing the file count - the remaining 37 files were
-already losing bytes for a third reason. What is left is small and non-structural: between 4 and 452 bytes per
-file, no size changes, no shifted items. `--explain` cannot yet attribute them, because the walker it uses to
-map an offset back to an item only descends three levels and gives up on sections it cannot parse, so they all
-report as "outside any item". Fixing the walker is the next step, not fixing the editor - there is no point
-guessing at a field before knowing which item type holds it.
+The collision fix does not change the file count on its own, because it repairs *layout* damage rather than a
+dropped value - the other files were already losing bytes to the particle names.
+
+So every file in the archive now survives a load and save through the library unchanged. Three fixes, all the
+same mistake in different clothes: a field read and not kept, written back as zeros. The patches live in the
+repository and `build_mod` applies them to the submodule, so a fresh clone gets them and they stay easy to send
+upstream to [twinsanity-editor](https://github.com/Smartkin/twinsanity-editor):
+
+```text
+tools/patches/texture-preserve-reserved.patch
+tools/patches/collisionsurface-padding-size.patch
+tools/patches/particledata-name-tail.patch
+```
+
+:::tip What this unlocks
+Whole-file authoring. Anything the library models - collision, scenery, models, skins, materials, textures,
+terrain, particles, AI paths, scripts, instances - can now be changed and written back with the confidence that
+nothing else in the file moved. Splicing with `rm2splice.py` remains the safer path for a one-field change, but
+it is no longer the *only* safe path.
+:::
 
 ## How a name gets worked out
 

@@ -1,0 +1,102 @@
+diff --git a/Twinsanity/Items/ParticleData.cs b/Twinsanity/Items/ParticleData.cs
+index 5b26d09..837ac1a 100644
+--- a/Twinsanity/Items/ParticleData.cs
++++ b/Twinsanity/Items/ParticleData.cs
+@@ -131,21 +131,16 @@ namespace Twinsanity
+                 {
+                     ParticleSystemDefinition PS = ParticleTypes[a];
+                     string tempName = PS.Name + "";
+-                    if (tempName.Length != 0x10)
++                    if (tempName.Length > 0x10) tempName = tempName.Substring(0, 0x10);
++                    writer.Write(tempName.ToCharArray());
++                    if (tempName.Length < 0x10)
+                     {
+-                        if (tempName.Length > 0x10)
+-                        {
+-                            tempName = tempName.Substring(0, 0x10);
+-                        }
+-                        else
+-                        {
+-                            while (tempName.Length < 0x10)
+-                            {
+-                                tempName += '\0';
+-                            }
+-                        }
++                        writer.Write((byte)0);                       // the terminator
++                        byte[] tail = PS.NameTail ?? new byte[0];
++                        int pad = 0x0F - tempName.Length;            // the field is always 16 bytes
++                        writer.Write(tail, 0, System.Math.Min(tail.Length, pad));
++                        for (int t = tail.Length; t < pad; t++) writer.Write((byte)0);
+                     }
+-                    writer.Write(tempName.ToCharArray());
+                     if (Version == 0x20)
+                     {
+                         writer.Write((Byte)0);
+@@ -406,21 +401,16 @@ namespace Twinsanity
+                         writer.Write(ParticleInstances[i].Offset);
+                     }
+                     string tempName = ParticleInstances[i].Name + "";
+-                    if (tempName.Length != 0x10)
++                    if (tempName.Length > 0x10) tempName = tempName.Substring(0, 0x10);
++                    writer.Write(tempName.ToCharArray());
++                    if (tempName.Length < 0x10)
+                     {
+-                        if (tempName.Length > 0x10)
+-                        {
+-                            tempName = tempName.Substring(0, 0x10);
+-                        }
+-                        else
+-                        {
+-                            while (tempName.Length < 0x10)
+-                            {
+-                                tempName += '\0';
+-                            }
+-                        }
++                        writer.Write((byte)0);                       // the terminator
++                        byte[] tail = ParticleInstances[i].NameTail ?? new byte[0];
++                        int pad = 0x0F - tempName.Length;            // the field is always 16 bytes
++                        writer.Write(tail, 0, System.Math.Min(tail.Length, pad));
++                        for (int t = tail.Length; t < pad; t++) writer.Write((byte)0);
+                     }
+-                    writer.Write(tempName.ToCharArray());
+                     if (Version >= 0x9)
+                     {
+                         writer.Write(ParticleInstances[i].SwitchType);
+@@ -519,7 +509,7 @@ namespace Twinsanity
+                         char namechar = reader.ReadChar();
+                         if (namechar == '\0')
+                         {
+-                            reader.ReadBytes(0x0F - tempName.Length);
++                            PS.NameTail = reader.ReadBytes(0x0F - tempName.Length);
+                             break;
+                         }
+                         tempName += namechar;
+@@ -829,7 +819,7 @@ namespace Twinsanity
+                         char namechar = reader.ReadChar();
+                         if (namechar == '\0')
+                         {
+-                            reader.ReadBytes(0x0F - tempName.Length);
++                            PI.NameTail = reader.ReadBytes(0x0F - tempName.Length);
+                             break;
+                         }
+                         tempName += namechar;
+@@ -892,6 +882,9 @@ namespace Twinsanity
+         public class ParticleSystemDefinition
+         {
+             public string Name;
++            // whatever follows the name's terminator in the fixed 16-byte field: leftovers of a
++            // longer previous name. The game ignores them; keeping them makes a re-save lossless.
++            public byte[] NameTail = new byte[0];
+             public byte[] Remain = new byte[0];
+ 
+             public byte UnkByte1; // Version == 0x20 (not used in any existing files)
+@@ -1098,6 +1091,9 @@ namespace Twinsanity
+             public Int16 UnkShort5; // Version >= 0x16
+             public uint Offset; // Version >= 0x08
+             public string Name;
++            // whatever follows the name's terminator in the fixed 16-byte field: leftovers of a
++            // longer previous name. The game ignores them; keeping them makes a re-save lossless.
++            public byte[] NameTail = new byte[0];
+             public int SwitchType; // (0 - none, 1 - global switch) // Version >= 0x9
+             public int SwitchID; // (default -1) (-1 - 128) // Version >= 0x9
+             public float SwitchValue; // (0.0 - 20.0) // Version >= 0x9
