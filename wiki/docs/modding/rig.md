@@ -53,6 +53,13 @@ finished". About 1.5 s of that path is included in every load-time measurement.
   emulator but is not. Only a restart clears it. Check for it before warping.
 - **Warp only once the game has reached the menu.** Warping at flow 5, while it is still settling, times out;
   waiting for flow 6-7 works. Flow 7 is the attract demo and warps fine.
+- **The first warp after a cold boot does not land where later ones do.** It drops Crash at a default spawn rather
+  than the level's own: `altdoc_c` puts him at `(-132.7, 1.6, 123.4)` on every warm warp and at `(4.8, -0.2, -38.0)`
+  on the first one after boot. This has produced two wrong results in this project - slide-jump distances that
+  would not reproduce, and an activation trace that reported objects 876 and 877 as *never activated* in a level
+  where a warm warp shows both activated, because the cold warp had left Crash somewhere else entirely. **Warp
+  once to throw the first one away, then warp again and measure.** The tell is a measurement that will not
+  reproduce across boots while being perfectly stable within one.
 - **There is one emulator, and `rig.py start` kills whatever is in it.** Two sessions driving the rig at once will
   silently corrupt each other's measurements - the symptoms are PINE timeouts, zeroed reads, and numbers that will
   not reproduce. The `re` ISO key gives separate *discs*, not separate *emulators*. If parallel work is needed, the
