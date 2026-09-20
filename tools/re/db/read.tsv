@@ -211,3 +211,26 @@
 00164e90	F	InitDefaultButtonBindings	the default digital bind set the on-foot controls start from
 0010c160	F	InitProbeCollisionModel	the thin tall quad the game context uses as a probe: x +/-0.1, y +/-4.0
 00136f70	F	InitPlayableCharacterContext	clears every character sub-struct, installs the methods and the reference storage
+001fcb08	F	RayPlaneIntersect	where a segment meets a plane given as (nx, ny, nz, d); returns the parameter along it
+002b3f50	F	QueuePadCommand	byte-wise unaligned copy of a pad command into the controller queue
+002d7728	F	SoftFloatFromInt64	64-bit integer to double, assembled from its halves
+002d9ce8	F	MemCompare16	16-byte aligned comparison using pxor, for the aligned fast path
+002d9590	F	SoftFloatFromInt32	signed int to double, normalising the mantissa then packing
+001405d8	F	TriggerCrateFall	sends event 11 to a balanced crate when its helper has not already fired
+00152a60	F	InitRollerbrawlVehicle	binds both characters and installs the rollerbrawl methods
+00158ad8	F	InitHumiliskateVehicle	binds both characters, sets up the reference storage and two sub-blocks
+0015b2b0	F	InitHoverboardVehicle	binds both characters and sets the board's two tuning constants
+00160570	F	ResetPlayableCharStructType4	clears the block and resets its three position vectors to the default bbox
+001e1b40	F	CommitSoundCommand	writes the pending audio command and its arguments into the ring at DAT_003B1B40, flushing when full
+0018ef98	F	InvertRigidMatrix	inverse of a rigid transform on VU0 - rotation transposed, translation negated through it
+001981c0	F	QueueInstanceEvent	allocates a NodeEvent, takes its references and links it onto the instance's event list
+00289368	F	ClampBodyVelocity	rescales the body's velocity when its squared length exceeds the limit at +0x24
+001cd550	F	ShadersEqual	compares two precompiled shaders field by field, for batching
+0025bf68	F	AppendToIntArray	appends to a growable int array: data +0x3c, count +0x40, capacity +0x44, growth +0x48
+001bce30	F	WriteTextureRegisters	packs a texture header into the GS TEX0 and mip registers of a GIF packet
+001f0cc8	F	GetCollisionDataAtInstance	the instance's current world matrix, then its collision data through it
+0018d830	F	BuildTrianglePlane	plane of a triangle on VU0: edge cross product, normalise, then the distance term
+00101168	F	SetColourRGBA	all four components - the four-argument sibling of SetColourRGB
+001a0b30	F	QueueTextDraw	allocates a text item, copies the renderer's font, position and colour, appends it to the font's list
+001925c0	F	StampNodeUpdate	marks a node updated for this clock tick, reporting whether it had already been done
+0018cfc0	F	MakeTranslationTransform	identity rotation at the given position

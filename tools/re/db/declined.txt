@@ -55,3 +55,6 @@
 002d97b0  # printf internals: unpacks a double and formats through unnamed helpers
 002d9ca8  # printf internals, same family
 002d7638  # softfloat digit extraction for printf
+001e7060  # clears a flag on up to two sub-objects then resets a state; the objects are unidentified
+001e73b8  # allocates a slot in two global tables with debug hooks; the resource is unidentified
+0013e910  # zeroes eight words of an unidentified struct
