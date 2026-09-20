@@ -83,6 +83,35 @@ one line: add the game's own `SetAgent(64)` to the last step of his script. His 
 still climb on him. See `mod/levels/harmless_after_defeat.ops`.
 :::
 
+## Waking an object
+
+An instance does not run its script because it exists. Something has to activate it:
+
+```text
+ActivateObjectInstance  0x263390   clears the ignore-events bit, binds resources, then
+RunObjectSpawnScript    0x2634C8   onSpawnScriptId == -1 ? ExecuteEvent(ctx, 0) : run that script id
+ExecuteEvent            0x2616C0   scriptId = gameObject->scriptIdsScriptSlots[eventIndex]
+```
+
+So the **script slots printed by `twinsdump objects` are event indices**: event 0 is the spawn / `_DEFAULT` script,
+event 1 is the `_ACTIVATED` one. `Command_TriggerLinkedObjects_Run` walks game node 6 - the linked-objects list, up
+to 31 entries - and sends **event 1** to each. An object with only a slot 0 therefore cannot be started that way at
+all; it has to be woken at spawn.
+
+`ObjectInstanceContextBase`, which is what you read to tell a sleeping object from a disabled one:
+
+| Offset | Field |
+|---|---|
+| `+0x00` | instance context |
+| `+0x04` | `onSpawnScriptId` (short; -1 means "use event 0") |
+| `+0x06` | object id - the number `twinsdump objects` prints, and the way to find an instance in a RAM dump |
+| `+0x08` | game object (the type) |
+| `+0x1C` | flags; **bit 0 = this object ignores every event** |
+
+`ExecuteEvent` returns immediately when that bit is set, before touching any script, and both activation wrappers
+clear it as part of waking an object. So one bit separates "disabled" from "never started", and they need completely
+different fixes.
+
 ## Finding out what hit you
 
 `tools/rig/hurthook.py` installs a live hook on the contact-damage call and logs, for each hit, the attacking
