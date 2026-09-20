@@ -75,6 +75,14 @@ finished". About 1.5 s of that path is included in every load-time measurement.
 - **Crash clips scenery mid-run in the Earth hub,** deflecting his heading by 17° around frames 32-56 of a straight
   run from the warp spawn. It is deterministic, so it is easy to mistake for a physics result. Measure a heading
   over several windows and check it has settled before trusting it.
+- **`--iso modded` is a locally built artifact and goes stale.** The repository ships no ISO, so that file is
+  whatever `Build Modded ISO.bat` last produced on your machine - not the current source. Here it was built before
+  three commits touched `mod/`, including the Tiki Mon contact-damage fix, so every rig run against it was testing
+  an older build than the one the repository describes. **Compare its PCSX2 CRC against a fresh `test.iso` before
+  trusting a measurement**: identical CRCs mean the same executable, and different ones mean the two differ
+  somewhere. `rebuild.py` always builds `test.iso` from current source, which is why the state library is built
+  from that and not from `[Modded]` - and it is why a state library and a stale `[Modded]` disagree.
+
 - **Re-read object pointers before writing to them.** See the warning in [Executable patches](elf-patches).
 - **Reference screenshots are build-specific.** The menu images used for waits were captured on the modded build and
   do not match the retail one closely enough; use fixed timings when booting the original ISO.
