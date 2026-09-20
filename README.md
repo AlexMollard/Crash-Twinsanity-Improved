@@ -14,7 +14,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 [![.NET](https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com)
 [![Last commit](https://img.shields.io/github/last-commit/AlexMollard/Crash-Twinsanity-Improved)](https://github.com/AlexMollard/Crash-Twinsanity-Improved/commits/main)
 
-[Features](#features) · [Quick start](#quick-start) · [Cutscene skips](#cutscene-skip-status) · [Gameplay fixes](#gameplay-fixes) · [How it works](#how-it-works) · [Roadmap](#roadmap) · [Credits](#credits)
+[Features](#features) · [Quick start](#quick-start) · [Cutscene skips](#cutscene-skip-status) · [Gameplay fixes](#gameplay-fixes) · [How it works](#how-it-works) · [Roadmap](#roadmap) · [Wiki](https://alexmollard.github.io/Crash-Twinsanity-Improved/) · [Credits](#credits)
 
 </div>
 
@@ -29,7 +29,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 |:-:|---|---|---|
 | ⏭️ | **Cutscene skip: hold △** | ISO | Brings back the skip the developers disabled, and wires it back into scenes where the skip was removed from the level data. [Status ↓](#cutscene-skip-status) |
 | 💬 | **"Hold △ to skip" prompt** | ISO | Appears in the letterbox's bottom bar during every skippable cutscene, in all five languages. |
-| 🎬 | **Movies skip too** | ISO | The pre-rendered movies had no skip at all. Hold △ for half a second and the movie ends, exactly as if it had played out. [Details ↓](#skipping-the-movies) |
+| 🎬 | **Movies answer △ too** | ISO | The pre-rendered movies only ever stopped for ✕, and only after a moment. They now take the same hold-△ as everything else. [Details ↓](#skipping-the-movies) |
 | 🛡️ | **Aku Aku invincibility that works** | ISO | With three masks Crash no longer dies to TNT, Nitro or bomb explosions. [Details ↓](#aku-aku-invincibility) |
 | 🌑 | **Shadows on crates** | ISO | Crash's shadow now falls on crates too, so you can see where you'll land. [Details ↓](#shadows-on-crates) |
 | 🗿 | **A beaten boss stays beaten** | ISO | The defeated Tiki Mon still hurt anything that touched it, costing a mask or the whole fight. [Details ↓](#things-that-hurt-when-they-shouldnt) |
@@ -102,7 +102,7 @@ Hold **△** during a cutscene to skip it. Every skippable scene shows *HOLD △
 > [!NOTE]
 > **Cutscenes that are movies.** Some of what the game calls a cutscene is a pre-rendered movie rather than an in-engine
 > scene - the Iceberg Lab interior, for instance, plays 53 seconds of `H02_B.PSS` every time you walk in. Those are not
-> in the table; they are covered by [the movie skip](#skipping-the-movies).
+> in the table: they already stopped for ✕ in the retail game, and now [answer △ as well](#skipping-the-movies).
 
 > [!NOTE]
 > **Known differences after a skip.** A few level hints don't appear: "Clear a path for Cortex!", "Use ◯ to crouch", "Tap □ to rapid fire". In Iceberg Lab and Classroom Chaos the character stands a few steps from where the full scene would leave them.
@@ -150,20 +150,20 @@ flag did. Rig, reading the player's own frame counter: the boot movies went from
 
 ### Skipping the movies
 
-About half of Twinsanity's cut scenes are pre-rendered movies rather than in-engine scenes, and they had no skip at
-all - not even a button that stops them. Walking into the Iceberg Lab interior plays 53 seconds of `H02_B.PSS`, every
-single time.
+About half of Twinsanity's cut scenes are pre-rendered movies rather than in-engine scenes - walking into the Iceberg
+Lab interior plays 53 seconds of `H02_B.PSS`. The retail game does let you cut one short, but only with **✕**, and only
+after about a second, which is easy to miss when every other skip in this mod is hold-△.
 
-Hold **△** for half a second during a movie and it ends. The movie player checks once a frame whether its stream is
-still running and shuts it down when the answer is no; that check now goes through a stub (`mod/elf_patches.txt`)
-which also reads the Triangle button - the same pad read the cut scene skip uses - and answers "finished" after 30
-frames of holding. Nothing else changes: the movie stops down its own ending path, and the script that started it
-carries on exactly as if it had played out. The half-second hold is there so a button pressed for another reason
-doesn't cut a movie short.
+Movies now answer **△** as well. The movie player checks once a frame whether its stream is still running and shuts it
+down when the answer is no; that check now goes through a stub (`mod/elf_patches.txt`) which also reads the Triangle
+button - the same pad read the cut scene skip uses - and answers "finished" after 30 frames of holding. Nothing else
+changes: the movie stops down its own ending path, the script that started it carries on as if it had played out, and
+✕ still works exactly as before. The half-second hold keeps a button pressed for another reason from cutting a movie
+short.
 
-Rig-tested at the lab interior, from a fresh boot: the movie plays for 54.2 s untouched and 1.8 s when △ is held, and
-in both cases the player ends up in the same place, in the same game-flow state, with control back. The start-up logos
-are movies too, so holding △ through them brings the title screen up after 44 s instead of 62 s.
+Rig-tested at the lab interior from a fresh boot: untouched, the movie runs 54.2 s; with △ held it ends in 1.8 s, in
+the same place and the same game-flow state; ✕ ends it in 6.8 s, matching the original disc's 7.0 s. The start-up
+logos are movies too, so holding △ through them brings the title screen up after 44 s instead of 62 s.
 
 ### Things that hurt when they shouldn't
 
@@ -264,6 +264,18 @@ overlap, and every untouched file is byte-identical to the original.
 
 </details>
 
+## The wiki
+
+How the engine actually works - the scripting system, how a cutscene is put together, objects and their agent flags,
+the archive and disc layout, the movie player, and the addresses everything lives at - is written up as a separate
+site in [`wiki/`](wiki), built with [Docusaurus](https://docusaurus.io):
+
+**➤ [alexmollard.github.io/Crash-Twinsanity-Improved](https://alexmollard.github.io/Crash-Twinsanity-Improved/)**
+
+```bash
+cd wiki && npm install && npm start      # live preview on http://localhost:3000
+```
+
 ## Development
 
 ```text
@@ -282,6 +294,7 @@ tools/
 ├── rig/                 automated test rig driving an isolated PCSX2 over PINE
 ├── twinsanity-editor/   submodule
 └── twinsanity-reversed/ submodule
+wiki/                   the engine wiki (Docusaurus)
 ```
 
 <details>
@@ -311,11 +324,12 @@ python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cort
 
 <div align="center">
 
-| ✅ Shipped | 🔭 Next up | 🔬 Investigating | ⛔ Not doing |
-|:-:|:-:|:-:|:-:|
-| **11** | **3** | **3** | **2** |
+| ✅ Shipped | 🔭 Next up | 🔬 Investigating | ✔️ Checked, not a bug here | ⛔ Not doing |
+|:-:|:-:|:-:|:-:|:-:|
+| **11** | **4** | **5** | **1** | **2** |
 
-*Nothing ships until the automated rig has played it. Every line below says how it was tested, or what is still in the way.*
+*Nothing ships until the automated rig has played it. Most of the open list comes from bugs the community has
+documented for the PAL release; each line says where it stands and what is in the way.*
 
 </div>
 
@@ -325,31 +339,40 @@ python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cort
 |:-:|---|---|
 | ⏭️ | **Cutscene skip** | Hold △ and the scene ends. 16 scenes needed their cut branch rebuilt in the level data; the rest came back with the executable patch. [Status ↑](#cutscene-skip-status) |
 | 💬 | **Skip prompt** | *HOLD △ TO SKIP* in the letterbox, in all five languages, only while a scene can actually be skipped. |
-| 🎬 | **Skippable movies** | The pre-rendered movies stop too - including the 53-second one at the Iceberg Lab door and the start-up logos. |
+| 🎬 | **Movies answer △** | They only stopped for ✕ before; now they take the same hold-△ as everything else, logos included. |
 | 🛡️ | **Invincibility that works** | Three masks now survive TNT, Nitro and bombs instead of dying to them. |
-| 🗿 | **A beaten boss stays beaten** | The defeated Tiki Mon no longer hits you when you walk into it. |
-| 👻 | **Visible Crash** | Getting hurt just before a cutscene no longer leaves him invisible for the rest of the level. |
+| 🗿 | **A beaten boss stays beaten** | The defeated Tiki Mon no longer hits you when you walk into it - a [long-standing report](https://crashtwinsanity.fandom.com/wiki/Tikimon). |
+| 👻 | **Visible Crash** | Getting hurt just before a cutscene no longer leaves him invisible for the rest of the level ([reported here](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity/Cutscene_Glitches_List)). |
 | 🌑 | **Shadows on crates** | Crash's shadow falls on crates, so you can see where you will land. |
 | ⏱️ | **Faster loading** | Level loads 25-35% shorter from the ISO alone, 40-50% with Fast CDVD. |
 | 📺 | **Steady 60 fps** | 480p / 60 Hz output with the game's own frame timing matched to it - no more hub judder. |
-| 🎞️ | **Movies at their real speed** | 25 fps instead of 30, so they no longer run 20% fast. |
+| 🎞️ | **Movies at their real speed** | 25 fps instead of 30, so they no longer run a fifth too fast. |
 | 📦 | **One-step build** | `Build Modded ISO.bat` turns your own disc image into a patched one and sets PCSX2 up to match. |
 
 ### 🔭 Next up
 
-| | Item | What has to happen first |
+| | Item | Where it stands |
 |:-:|---|---|
-| 🗿 | **Sweep the rest of the game for contact damage that shouldn't be there** | The Tiki Mon was the first one found. The other six boss fights and every object that is left lying around after it is beaten need the same check, with the engine's contact-damage call hooked to catch them. |
+| 🧭 | **Evil Crash runs in circles (Bandicoot Pursuit)** | The famous PAL one. Reproduced on the rig: his run heading sits about 20° off the route and he orbits the node instead of reaching it. It is his steering code, not the level's path data. |
+| 🦭 | **Rusty Walrus runs in circles** | [Reported for PAL](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity) and almost certainly the same steering bug as Evil Crash - two chases, one cause. Worth attacking together. |
+| 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` can now name whatever hit you, so the remaining reports get checked one at a time rather than by sweeping the whole game. |
 | 🚧 | **Party arena cutscene skip** | The recipe is written (`mod/levels-wip/party_arena.ops`) but the scene is switched on by beating the Mechabandicoot, and the rig can't fight a boss yet - so it can't be tested, and untested skips don't ship. |
-| 🧭 | **Evil Crash running in circles (Bandicoot Pursuit)** | Reproduced: his run heading sits about 20° off the route and he orbits the node instead of reaching it. It is his steering code, not the level's path data, so it needs the AI reversed. |
 
 ### 🔬 Investigating
 
 | | Item | Where it stands |
 |:-:|---|---|
+| 🐌 | **Slow menus** | [Documented as a PAL trait](https://beyondtwinsanity.com/evolution/versions/). Needs measuring on the rig before it can be called a bug or a fix. |
+| 🧷 | **Cortex detaches from Crash at Farmer Ernest's fence** | [Reported for PAL](https://beyondtwinsanity.com/evolution/versions/). Not yet reproduced. |
+| 🔒 | **Softlock after the Rusty Walrus chase** | Mashing jump through the cutscene skips the Brio/Tropy scene and strands Crash on the boss iceberg with no music. Squarely in this mod's territory - the fix is probably the same class as the invisible-Crash one. |
+| 🎭 | **Leftovers after being hurt into a cutscene** | The floating mask and Cortex's floating ray gun are the same family as the invisible-Crash bug, which is already fixed; these are separate objects whose state is not reset. |
 | 🌫️ | **The fog line** | A visible seam where the fog starts. Needs a level and a spot to reproduce before anything can be measured. |
-| 🐌 | **PAL menu slowness** | Often reported, but no reproducible definition found yet - the front end runs at the same rate as the game. |
-| 💬 | **A skip prompt during movies** | The movie player owns the screen while it runs, so the hint would have to be drawn from inside it rather than from the game's text bar. |
+
+### ✔️ Checked, not a bug here
+
+| | Item | Finding |
+|:-:|---|---|
+| ✔️ | **Touching the stunned Coco** | Kills Crash on NTSC-U and Xbox, and it is the case people ask about most. It does not happen on PAL: two sources say so, and a rig sweep of the Psychetron room after the scene landed no hits at all. |
 
 ### ⛔ Not doing
 

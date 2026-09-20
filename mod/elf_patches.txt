@@ -110,9 +110,10 @@
 002AFDEC 93828B53 08045BCA   # j 0x116F28 (the stub)
 002AFDF0 1040000B FFBF0000   # sd ra,0(sp) (the callback's own, now in the delay slot)
 
-[Movies can be skipped - hold Triangle]
-# Twinsanity's cut scenes are a mix of in-engine scenes (skippable above) and pre-rendered movies, and the movies had
-# no skip at all: entering the Iceberg Lab plays 53 seconds of H02_B.PSS every time. The movie player's per-frame step
+[Movies answer Triangle too]
+# Twinsanity's cut scenes are a mix of in-engine scenes (skippable above) and pre-rendered movies. The movies do stop
+# for Cross in the retail game, but only for Cross, and only after about a second - easy to miss when every other skip
+# in this mod is hold-Triangle. Cross still works; Triangle now does too. The movie player's per-frame step
 # (0x2AF958) asks the player object whether it is still running and stops it when the answer is no. That question now
 # goes through a stub that also watches the Triangle button - the same pad read the cut scene skip uses - and answers
 # "finished" once it has been held for half a second, so the movie stops down its own ending path and the script that

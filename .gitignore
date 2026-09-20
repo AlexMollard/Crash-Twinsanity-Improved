@@ -27,3 +27,8 @@ tools/rig/results/
 
 # Ghidra install + restored project (see tools/re)
 tools/ghidra/
+
+# Documentation site (wiki/) build output
+wiki/node_modules/
+wiki/build/
+wiki/.docusaurus/
