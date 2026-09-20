@@ -122,15 +122,36 @@ That matters because it is a second line of evidence for the same story as the
 version of the finished game, hand-dated **16 October 2002**, which is inside the window when the project was being
 restarted. The developers' own gallery art, shipped on the disc.*
 
-Some of it is worth knowing about individually:
+Some of the rest is worth seeing rather than describing.
 
-| | |
-|---|---|
-| **Balloon City** | An environment render, hand-dated **16.10.02** - a location that appears nowhere in the finished game |
-| **Key art** | Crash and Cortex back to back with a hand-lettered logo and an **ant army** massed behind them as the headline threat - the *Evolution* premise, still being sold |
-| **A red-furred female bandicoot** | In goth dress, and it reached a textured model |
-| **Crash in plate armour** | With a broadsword |
-| **Mechanics, not characters** | Five entries, including mounted riders and a radio-controlled car labelled **COCO** |
+![Key art: a hand-lettered CRASH BANDICOOT TWINSANITY logo above Crash and Cortex standing back to back, with ranks of ants massed in silhouette behind them](/img/shots/key-art.png)
+
+***Key art, with the ants as the headline threat.*** Crash and Cortex back to back, hand-lettered logo, and an ant
+army filling the background. This is the *Evolution* premise - the alien ant invasion - still being sold as the face
+of the game.
+
+![A finished textured model of a red-furred female bandicoot in goth dress, shown in two poses: long black hair, upward-pointing ears, black top, fingerless gloves, red fishnets and chunky buckled platform boots](/img/shots/evil-coco.png)
+
+***A cut female bandicoot, finished.*** Two poses of a completed, textured model - red fur, long black hair, goth
+dress, fishnets, buckled platform boots. The community identifies this design as **Evil Coco**, the character the
+table above lists as modelled but cut. The disc confirms that a design like this reached a finished model; the name
+comes from the fandom, not from the disc, which captions nothing.
+
+![Concept art of Crash in segmented plate armour holding a large broadsword, grinning, signed and dated by the artist](/img/shots/crash-armour.png)
+
+***Crash in plate armour.*** Signed and dated by the artist. One of the roughly twenty designs that never got past
+concept.
+
+![Two finished textured models on black: armoured purple insect riders, one mounted on a dark red crab-like creature, the other on a green armoured carapace mount](/img/shots/insect-riders.png)
+
+***Rideable mounts.*** Armoured insect riders on a crab and a carapaced beast, both finished models. Five entries in
+the set are mechanics rather than characters, and this is the most developed of them - something you would have
+ridden.
+
+![Cartoon art of a green teddy bear driving a small pink toy car with a long radio aerial, the number plate lettered COCO](/img/shots/coco-rc-car.png)
+
+***A radio-controlled car, lettered "COCO".*** The clearest surviving trace of Coco's cut role. Whatever this was
+for, the number plate says whose it was.
 
 ### Changed rather than cut
 
@@ -147,6 +168,9 @@ Worth stating as negatives, because both are the first place a modder would look
   There is nothing for Balloon City or for any of the cut levels listed above.
 - **The developer level-select list contains no unreleased content.** `Startup\LevelSelect.txt` holds 24 entries and
   every one of them shipped.
+- **No cut character survives as a game object either.** Searching every level file for the names of the cut cast -
+  `TRANCE`, `CAPU`, `FAKE_CRASH`, `EVIL_COCO`, `GOOD_CORTEX` - returns nothing. The only hits are coincidences: every
+  `TRANCE` is the middle of "Cavern**Entrance**". The cut characters exist as gallery art and nothing else.
 
 The cut levels are real - the developers and the community have documented them - but they were removed from the
 build, not merely hidden in it. Restoring one is not a matter of finding it.
