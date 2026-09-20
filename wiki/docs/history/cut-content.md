@@ -102,6 +102,49 @@ Several cutscenes were also cut that would have explained how N. Tropy, N. Brio 
 Evil Twins' treasure - which is why those characters turn up in the finished game already knowing things nobody told
 them.
 
+## The `Unseen` folder
+
+The disc's Extras gallery has a folder named `Unseen`, and it holds **48 images**. All of them were decoded and
+catalogued for this wiki, alongside the shipped `Enemies` and `Bosses` sets for comparison. Nothing is reused between
+the sets, so `Unseen` is genuinely separate work rather than a second copy of the shipped cast.
+
+**About half of it reached a finished, textured 3D model.** Counting distinct designs rather than files - several
+entries are variants of one idea - roughly **21 designs got as far as a textured model and roughly 20 stopped at
+concept**, one of them palette-swapped into two variants. Work that reaches a finished model was cut *late*, after
+someone had modelled and textured it.
+
+That matters because it is a second line of evidence for the same story as the
+[storyboard distribution](development#sixteen-chapters-storyboarded), and it does not depend on page counts at all.
+
+Some of it is worth knowing about individually:
+
+| | |
+|---|---|
+| **Balloon City** | An environment render, hand-dated **16.10.02** - a location that appears nowhere in the finished game |
+| **Key art** | Crash and Cortex back to back with a hand-lettered logo and an **ant army** massed behind them as the headline threat - the *Evolution* premise, still being sold |
+| **A red-furred female bandicoot** | In goth dress, and it reached a textured model |
+| **Crash in plate armour** | With a broadsword |
+| **Mechanics, not characters** | Five entries, including mounted riders and a radio-controlled car labelled **COCO** |
+
+### Changed rather than cut
+
+Where an `Unseen` design has a clear counterpart in the shipped game, the idea survived in altered form - the ants
+(an armoured hierarchy that became the ordinary ones), the tribal warriors (who shipped comic and fat), a plant
+creature (a flytrap in the end) and a pirate (who shipped as an elephant). These are judgements by eye rather than
+matches by data. Everything else in the set has no shipped counterpart at all.
+
+### Two things that are *not* on the disc
+
+Worth stating as negatives, because both are the first place a modder would look:
+
+- **No cut level survives.** The archive has exactly four level folders - `AltEarth`, `Earth`, `Ice` and `school`.
+  There is nothing for Balloon City or for any of the cut levels listed above.
+- **The developer level-select list contains no unreleased content.** `Startup\LevelSelect.txt` holds 24 entries and
+  every one of them shipped.
+
+The cut levels are real - the developers and the community have documented them - but they were removed from the
+build, not merely hidden in it. Restoring one is not a matter of finding it.
+
 ## What is still on the retail disc
 
 This is the part that overlaps with the rest of this wiki. The developers did not strip the build; they stopped
@@ -148,8 +191,9 @@ project's own disc, and a handful of pieces from the disc's own **Extras gallery
 as content.
 
 There are **302 images** in that gallery: 161 storyboards, 32 concept pieces, 32 enemies, 16 bosses, 48 under
-`Unseen`, and a stray group photo of the bosses named `McDonalds01`. Three of them are reproduced across these pages,
-which is illustration rather than a mirror of the disc.
+`Unseen`, 12 in a folder called `Test` that turns out to hold finished comic-strip illustrations rather than test
+art, and a promotional group render of the boss cast named `McDonalds01`. Three of them are reproduced across these
+pages, which is illustration rather than a mirror of the disc.
 :::
 
 ## Sources

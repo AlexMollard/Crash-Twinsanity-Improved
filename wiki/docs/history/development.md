@@ -55,6 +55,11 @@ order - a record of what Twinsanity was planned to be, chapter by chapter, prese
 The distribution is lopsided. The first eight chapters have **103 pages** between them, several with fourteen to
 seventeen each; the last eight have **58**, and `13-Twinsanity` - the finale - has the fewest of any set at five.
 
+The obvious objection can be ruled out from the disc itself. You would expect the thin sets to belong to chapters that
+were cut, and so were never storyboarded properly - but `Startup\LevelSelect.txt` is a developer level-select list of
+24 entries, and **every one of them shipped**. All sixteen storyboard sets map onto chapters that are in the finished
+game. Five pages for `13-Twinsanity` is five pages for a chapter you can play.
+
 :::note How much weight this carries
 Suggestive, not proven. Page counts are not effort, and a short sequence can legitimately need fewer boards than a
 long one. But the shape matches everything else on this page: a project that spent its planning early and was
