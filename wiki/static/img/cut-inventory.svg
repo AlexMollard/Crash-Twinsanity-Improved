@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" role="img" aria-label="Inventory of what was cut from Crash Twinsanity: eleven levels, six characters and five mechanics, plus two of the ten-dimension islands. Below, the things that were never removed from the retail disc: unused scripts and cutscenes, unused voice lines, tips that never appear, an unused Extras image, and a level with no ambient track.">
+  <rect width="900" height="400" rx="10" fill="#171a21"/>
+
+  <text x="28" y="34" fill="#e8ebf1" font-size="17" font-weight="600">What came out, and what was left behind</text>
+  <text x="28" y="54" fill="#98a2b3" font-size="12.5">Cut late, against a deadline that had already survived one restart.</text>
+
+  <!-- columns -->
+  <g>
+    <rect x="48" y="78" width="266" height="214" rx="8" fill="#20242d" stroke="#2c323d"/>
+    <text x="66" y="102" fill="#e05c5c" font-size="12.5" font-weight="700">Levels · 11</text>
+    <g font-size="10.5" fill="#c2c9d6">
+      <text x="66" y="126">The Bug Run</text>
+      <text x="66" y="144">Gone a Bit Coco</text>
+      <text x="66" y="162">Rehab Lab</text>
+      <text x="66" y="180">Security Insanity</text>
+      <text x="66" y="198">Ocean Commotion</text>
+      <text x="66" y="216">Krazy Komodo Crash Course</text>
+      <text x="66" y="234">Wake Me Up Before You Coco</text>
+      <text x="66" y="252">a harbour bonus level</text>
+      <text x="66" y="270">a scuba level · a train level · a hoverboard level</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="330" y="78" width="252" height="214" rx="8" fill="#20242d" stroke="#2c323d"/>
+    <text x="348" y="102" fill="#e05c5c" font-size="12.5" font-weight="700">Characters · 6</text>
+    <g font-size="10.5" fill="#c2c9d6">
+      <text x="348" y="126">Coco, as a playable character</text>
+      <text x="348" y="144">N. Trance <tspan fill="#7d8798">— modelled, textured</tspan></text>
+      <text x="348" y="162">Evil Coco <tspan fill="#7d8798">— modelled</tspan></text>
+      <text x="348" y="180">Good Cortex</text>
+      <text x="348" y="198">Capu Capu <tspan fill="#7d8798">— concept only</tspan></text>
+      <text x="348" y="216">Fake Crash <tspan fill="#7d8798">— a cameo</tspan></text>
+    </g>
+    <text x="348" y="248" fill="#e05c5c" font-size="12.5" font-weight="700">Islands · 2</text>
+    <g font-size="10.5" fill="#c2c9d6">
+      <text x="348" y="272">two of the 10th-dimension islands</text>
+    </g>
+  </g>
+
+  <g>
+    <rect x="598" y="78" width="254" height="214" rx="8" fill="#20242d" stroke="#2c323d"/>
+    <text x="616" y="102" fill="#e05c5c" font-size="12.5" font-weight="700">Mechanics · 5</text>
+    <g font-size="10.5" fill="#c2c9d6">
+      <text x="616" y="126">a scissor kick</text>
+      <text x="616" y="144">controllable hoverboard sections</text>
+      <text x="616" y="162">a punch that broke scenery</text>
+      <text x="616" y="180">lightsaber-style ant weapons</text>
+      <text x="616" y="198">the 100-Wumpa extra-life animation</text>
+    </g>
+    <text x="616" y="230" fill="#e05c5c" font-size="12.5" font-weight="700">Cutscenes</text>
+    <g font-size="10.5" fill="#c2c9d6">
+      <text x="616" y="254">the scenes explaining how N. Tropy,</text>
+      <text x="616" y="270">N. Brio and Dingodile knew</text>
+    </g>
+  </g>
+
+  <!-- still on the disc -->
+  <rect x="48" y="306" width="804" height="72" rx="8" fill="#1d2b22" stroke="#2f6b4a"/>
+  <text x="66" y="330" fill="#6fbf95" font-size="12.5" font-weight="700">Never removed — still on your disc</text>
+  <g font-size="10.5" fill="#b6becb">
+    <text x="66" y="352">unused scripts · complete cutscenes with nothing to trigger them · unused voice lines · tips that never appear</text>
+    <text x="66" y="368">an unused Extras group photo of the bosses · and Cavern Catastrophe, the one level with no ambient track at all</text>
+  </g>
+</svg>

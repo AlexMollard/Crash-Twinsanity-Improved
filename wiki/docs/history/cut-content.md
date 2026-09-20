@@ -13,6 +13,8 @@ mechanics were removed late, some of them after they were already playable.
 This page is a survey of what is known to have been cut, and of what the developers left behind on the retail disc.
 The second list is the interesting one for modding: those things are still in your ISO.
 
+![Inventory of what was cut: eleven levels, six characters, five mechanics and two of the 10th-dimension islands, plus the things never removed from the retail disc - unused scripts, complete cutscenes with nothing to trigger them, unused voice lines and tips that never appear](/img/cut-inventory.svg)
+
 ## Before it was Twinsanity: *Crash Bandicoot Evolution*
 
 The scrapped first version of the project. Its premise - the Evil Twins stealing Crash's island as one piece of a
@@ -22,6 +24,8 @@ arrived with much the same idea.
 Bits of it survive in the shipped game if you know to look. The ants became **Ant Agony**. The Evil Twins kept their
 name and their treasure. What did not survive was the tone, the scale, and **Foofie** - an alien sidekick who was to
 ride on Crash's arm and be used to solve puzzles.
+
+![Side by side: Evolution was serious and epic, with a patchwork planet, an alien ant invasion and Foofie the arm-riding sidekick, shaped as an RPG and platformer hybrid; Twinsanity is a comedy with Cortex carried as the tool and one open connected world](/img/evolution-vs-twinsanity.svg)
 
 ## The prototype trail
 

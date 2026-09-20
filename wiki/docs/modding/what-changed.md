@@ -19,6 +19,8 @@ This page names scenes, bosses and late-game locations. If you have not played T
 
 Hold **△** during a cutscene to skip it, and every skippable scene shows *HOLD △ TO SKIP* in the bottom letterbox bar.
 
+![Crash on N. Sanity Beach with HOLD TRIANGLE TO SKIP drawn in the letterbox bar](/img/shots/skip-prompt-beach.png)
+
 Each level edit below is tested on the [rig](rig): the scene is played in full, then skipped from the same save state,
 and the rig checks that gameplay comes back sooner and that the player ends in the same situation. Why this needed
 fixing at all is on [Cutscenes](../engine/cutscenes); the executable side is on
