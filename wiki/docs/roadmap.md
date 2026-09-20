@@ -37,43 +37,51 @@ data. Each line says where it stands and what is in the way.
 
 | | Item | Where it stands |
 |:-:|---|---|
-| 🧭 | **Evil Crash runs in circles (Bandicoot Pursuit)** | The famous PAL one, and the cause is now pinned to the engine: his move script has no facing condition and no turn command at all - it sets a focus position and the engine steers him - so there is nothing in the script data to tune. **The blocker is reproduction, and it is worse than previously recorded: Crash has never actually been in the chase area.** The chase gate is known exactly: Evil Crash waits for user message **269**, then branches on **counter 26** (1/2/3 = the three phases), and the summoner only sends 269 once it has a focus object, otherwise it runs `COM_GENERIC_CREATURE_ERROR`.
-
-:::danger The "in the trigger box" experiments were invalid
-Every earlier test that claimed to put Crash inside the trigger used the coordinates `(84.49, 4.2, -99.35)`. Sampling his position after a teleport there shows him **falling continuously** - y runs 0.30, -0.77, -1.48, -3.28, then a respawn puts him back and he falls again, in a loop. There is no floor at that point in the chunk set a warp produces. Walking there instead gets as far as `(18.0, -58.4)` and then stops responding, and he resets to spawn.
-
-So "neither teleporting into the trigger box nor moving inside it starts the chase" was never a test of the chase. It was a test of a void. The geometry the pursuit happens on probably lives in `altdoc_b` / `altdoc_c`, which a plain warp into `altdoc` does not bring in.
-
-The rig's `teleport` also shifts *every* copy of Crash's x/z in RAM, respawn points included, which is why he keeps reappearing at the same unreachable spot instead of at a checkpoint. That is also why it went unnoticed: the position reads back *correct* immediately after the teleport, so a check made once, or twice and slowly, agrees with itself. **A verification that only checks the moment after the action is not a verification** - and a failure mode that makes repeated checks agree is more dangerous than one that makes them disagree.
-
-**A partial way forward exists.** `altdoc_b` and `altdoc_c` can be warped to directly, and both put Crash on genuinely solid ground - verified by sampling his position once a second for twelve seconds and seeing zero drift, which is the check the old coordinates would have failed. `altdoc_c` starts him at `(-132.7, 1.6, 123.4)`, a different area entirely from the `altdoc` spawn. So a legitimate route into that part of the level does exist.
-
-It is not enough on its own yet: a focus trace from the `altdoc_c` spawn records 125 searches by the ball dock and 3 by Cortex, and **nothing at all from objects 876 or 877** - though an activation trace there shows **both of them activated**, so they are alive and simply not searching. Standing at a spawn is not the same as being where the chase starts. But this is a real repro route where before there was only a void, and it is the thing to build the next attempt on.
-::: A test recipe that rewrites his conditions to enter PHASE1 on a timer does not start him either. His instance context is **not** disabled (the engine's ignore-all-events bit is clear, checked against objects that are demonstrably alive in the same level), and his object has only one script slot, so nothing can reach him with the "activated" event - his script has to be started at spawn.
-
-:::danger Correction: he *is* woken
-This page said for some time that Evil Crash was "wakeable but never woken". **That was wrong**, and it was the premise most of the investigation rested on. A hook on `ActivateObjectInstance` recording every activation on hardware shows **object 877 activated twice** during a warp into Bandicoot Pursuit, in chunks 8 and 11, both from `FindInstanceByChunkAndIndex+0x1cc` - which is the only caller that fires at all, in every level tested. His summoner, object 876, is activated too. The control is a warp into the beach, where 429 activations across 69 distinct object ids are recorded and 877 and 876 are **never activated**, so the record discriminates rather than reporting everything as present.
-
-So he is woken, his spawn script does start, and the failure is downstream of activation. That moves the question onto the summoner's chain: it only sends user message **269** once it has a focus object, and otherwise runs `COM_GENERIC_CREATURE_ERROR`.
-
-**Focus acquisition has now been traced too**, with hooks on both the assign path (`0x121480`) and the found-nothing path (`0x1214E8`). In Bandicoot Pursuit the found-nothing path fires **330 times in about sixteen seconds**, from two agents alternating; the same measurement in the Tiki boss level fires it **8 times**. Every call comes from the focus resolver at `0x113A18` - the symbol table misattributes it to `Command_PlayMovie_Read+0x15xx`, but `0x113fdc` is its call to the clear path and `0x113ff4` its call to the assign path. So something in that level is running a focus search continuously and finding no candidate, which is the "tried and found nothing" case rather than "never tried".
-
-Those two agents are **not** Evil Crash or his summoner. Following `agent + 0x84` to the instance context and reading its object id gives **871** for both, where Evil Crash is 877 and the summoner 876. `agent + 0x7c` reads `0xFFFF`, which turns out to be the engine's own "no id assigned" marker (`SetUndefinedID_` writes -1) rather than a bad read.
-
-**The id read is sound; the doubts about it were not.** The tracer reaches the id by two independent walks through memory - directly via `agent + 0x84`, and the long way the engine's own code goes - and they agree on every single entry. Two earlier objections have both dissolved:
-
-- *"871 is defined in none of the Bandicoot Pursuit files"* - true, and meaningless. Every level's object listing is sparse to the point of saying nothing: `hubd` lists 50 objects across a range of 0-1163, `altdoc` 44 across 0-1131. About **96% of the id range is absent** from each. Absence is the norm, not a signal.
-- *"the control resolved to a wumpa tree"* - this one was **correct and was wrongly retracted**. Object ids are game-wide, so a name from any file that declares an id is that id's name; only the per-file tables are partial. 299 really is a wumpa tree.
-
-**And the lead is dead. Object 871 is `act_TWINTECH_BALL_DOCK`** - ambient scenery, declared in `alta`, `corea`, `coreb`, `coreent` and `pretreas`, and never in any Bandicoot Pursuit file. The other two are `act_WUMPA_TREE` (299) and `act_GLOBAL_SEAGULL` (567). So the 288 failed focus searches are scenery running "look for something" searches that find nothing, which is ordinary AI doing its job - exactly the base rate worth being suspicious of, and the thing that made the number look alarming was only that nobody had measured what normal looks like.
-
-The name source is `tools/re/objindex.py`, which collects every (id, name) pair across all 141 level files. Its control is that objects 876 and 877 come back as the summoner and Evil Crash, in all three chunk files each - two answers already known, reproduced before the method was trusted on one that was not.
-
-Worth keeping in view that "runs a failing focus search continuously" describes a lot of ordinary AI - a patrol looking for a target that is not there is doing its job. Until the agent is tied to the chase, 288 failures against 8 is a lead, not a bug.
-::: The chunk-loading theory has been tested and **does not hold**: the loader's "wanted" set does change as Crash moves, but "done" trails "wanted" in every level checked, including ones where actors demonstrably run, so a trailing bit is normal rather than a stall. The **counter theory has now been tested too, and is also not the blocker**: all 48 script counters read zero after a warp, in every level checked, so counter 26 genuinely cannot select a phase on the rig - but writing it to 1 directly (it sticks; it reads back) moves him not at all, with Crash outside the trigger box and standing inside it. The counter is downstream of message 269, exactly as the gate order implies. The open question is no longer what activates him - that is answered above - but whether his summoner ever acquires a focus object, since that is what gates message 269. |
+| 🧭 | **Evil Crash runs in circles (Bandicoot Pursuit)** | The famous PAL one. Four candidate causes have been eliminated by measurement and one premise reversed, but **the chase has never been reproduced on the rig** - and the method everyone assumed was reproducing it turned out to put Crash in a void. [The full account is below](#evil-crash-what-has-actually-been-measured). |
 | 🦭 | **Rusty Walrus runs in circles** | [Reported for PAL](https://glitchtopiathevideogameglitching.fandom.com/wiki/Crash_Twinsanity), and the walrus uses the same route-node steering as Evil Crash - very likely one bug behind two chases. It did not reproduce standing still (the walrus arrived and killed Crash 220 times in 32 s), so the repro needs the player actually running the route. |
 | 🔒 | **Softlock after the Rusty Walrus chase** | Mashing jump through the cutscene skips the Brio/Tropy scene and strands Crash on the boss iceberg with no music. Squarely this mod's territory - the same family as the invisible-Crash fix. |
 | 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` names whatever hit you, so the remaining reports get checked one at a time. |
+
+
+### Evil Crash: what has actually been measured
+
+His move script has no facing condition and no turn command at all - it sets a focus position and the engine steers
+him - so there is nothing in the script data to tune. The gate is known exactly: he waits for user message **269**,
+then branches on **counter 26** (1/2/3 = the three phases), and his summoner only sends 269 once it has a focus
+object, otherwise running `COM_GENERIC_CREATURE_ERROR`.
+
+**Four causes eliminated, by measurement rather than argument:**
+
+| | Finding |
+|---|---|
+| Chunk loading | The loader's "wanted" set does change as Crash moves, but "done" trails "wanted" in every level checked, including ones where actors demonstrably run. A trailing bit is normal, not a stall. |
+| Counter 26 | All 48 script counters read zero after a warp, in every level, so the counter genuinely cannot select a phase on the rig. But writing it to 1 directly - it sticks, it reads back - moves him not at all. It sits downstream of message 269. |
+| "Never woken" | **This was outright false**, and it was the premise most of the investigation rested on. A hook on `ActivateObjectInstance` shows **object 877 activated twice** in Bandicoot Pursuit, and his summoner too, both from `FindInstanceByChunkAndIndex+0x1cc` - the only caller that fires in any level tested. The control is a warp into the beach: 429 activations across 69 object ids, and 877 and 876 absent from both. |
+| The failing focus searches | Hooks on the focus assign path (`0x121480`) and the found-nothing path (`0x1214E8`) showed the latter firing **330 times in sixteen seconds** against 8 in the Tiki boss level. Following the agents to their object ids gives `act_TWINTECH_BALL_DOCK`, `act_WUMPA_TREE` and `act_GLOBAL_SEAGULL` - scenery, running searches that find nothing, which is ordinary AI doing its job. |
+
+:::danger The reproduction method never worked
+Every test that claimed to put Crash inside the trigger used `(84.49, 4.2, -99.35)`. Sampling his position after a
+teleport there shows him **falling continuously** - y runs 0.30, -0.77, -1.48, -3.28, then a respawn returns him and
+he falls again, in a loop. There is no floor there. Walking instead reaches `(18.0, -58.4)`, stops responding, and
+resets.
+
+So "neither teleporting into the trigger box nor moving inside it starts the chase" was never a test of the chase.
+It was a test of a void, and it was quoted as evidence for weeks.
+
+It went unnoticed because the position reads back *correct* immediately after the teleport - the rig's `teleport`
+shifts every copy of Crash's x/z including respawn points, so he reappears at the same unreachable spot and a check
+made once, or twice and slowly, agrees with itself. **A verification that only checks the moment after the action is
+not a verification**, and a failure mode that makes repeated checks agree is more dangerous than one that makes them
+disagree.
+:::
+
+**Where that leaves it.** `altdoc_b` and `altdoc_c` can be warped to directly and both put Crash on genuinely solid
+ground - verified by sampling once a second for twelve seconds and seeing zero drift, the check the old coordinates
+would have failed. In `altdoc_c` both the summoner and Evil Crash are **activated**, so they are alive there and
+simply not searching; a focus trace from that spawn records only scenery and Cortex. So the remaining gap is
+position or trigger, not which chunk file is loaded. Standing at a spawn is not being where the chase starts, and
+reaching that place legitimately is the next piece of work.
+
 
 
 ## 🧱 Bigger projects
