@@ -37,10 +37,17 @@ def rebuild():
     idx, failed = collections.defaultdict(lambda: collections.defaultdict(list)), []
     for n, f in enumerate(files, 1):
         try:
-            out = subprocess.run([EXE, f, "objects", "."], capture_output=True, text=True, timeout=180).stdout
+            r = subprocess.run([EXE, f, "objects", "."], capture_output=True, text=True, timeout=180)
         except Exception as e:
             failed.append((f, str(e)))
             continue
+        # A crashed twinsdump prints nothing and returns non-zero, which is indistinguishable from a file
+        # with no objects in it unless the exit code is checked. Reading a crash as an empty result is how
+        # you end up reporting that something is absent when you never looked.
+        if r.returncode != 0:
+            failed.append((f, f"exit {r.returncode}: {(r.stderr or '').strip().splitlines()[:1]}"))
+            continue
+        out = r.stdout
         rel = os.path.relpath(f, EXTRACTED).replace(os.sep, "/")
         for m in re.finditer(r"^object (\d+) (.*)$", out, re.M):
             idx[int(m.group(1))][m.group(2).strip()].append(rel)
@@ -52,6 +59,8 @@ def rebuild():
     ids = sorted(idx)
     print(f"scanned {len(files)} files, {len(failed)} failed, {len(ids)} distinct ids "
           f"spanning {ids[0]}..{ids[-1]}")
+    if failed:
+        raise SystemExit("some files did not parse - the index is incomplete, fix before using it")
     for f, e in failed[:5]:
         print(f"  FAILED {os.path.basename(f)}: {e[:80]}")
     return data
