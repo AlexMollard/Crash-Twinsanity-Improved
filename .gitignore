@@ -1,10 +1,7 @@
 # Game discs, extracted game data and generated builds (copyrighted and huge - rebuilt from recipes)
 *.iso
 *.iso.building
-work/iso/
-work/extracted/
-work/patched/**/*.bin
-work/patched/**/*.rm2
+work/
 
 # Third-party downloads (fetched separately, see README.md)
 downloads/
