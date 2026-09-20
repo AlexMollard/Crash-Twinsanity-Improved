@@ -20,7 +20,10 @@ because a shadow is how you judge where you will land. `tools/materials.py` swit
 crate material in every level: 580 shaders across 89 level files, one byte each, no size change.
 
 Every lift, bridge, ice floe, hovering platform, boat and holo-platform in the game already had the flag on. Apart
-from crates, the only things without it are characters, enemies, doors and walls.
+from crates, the only things without it are characters, enemies, doors and walls - and those are excluded on purpose,
+since they cast the shadow volumes themselves and would shadow themselves if included.
+
+![Crash on crates in Jungle Bungle](/img/shots/jungle-crates.png)
 
 ## 480p / 60 Hz
 

@@ -103,6 +103,8 @@ The mod draws *HOLD △ TO SKIP* in the letterbox bar while a scene can be skipp
 `twinsdump`'s `skipprompt auto` op finds every state that runs a cutscene script *and* has a live 572 rule, and adds
 the display and clear commands automatically, so the prompt always matches what is actually skippable.
 
+![The skip prompt in the letterbox, in the Core](/img/shots/skip-prompt-core.png)
+
 ## Movies
 
 Movies already stop for ✕ in the retail PAL release, but for nothing else. The mod makes them answer the same

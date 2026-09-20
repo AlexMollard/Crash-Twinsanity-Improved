@@ -21,7 +21,8 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 </div>
 
 > [!IMPORTANT]
-> This repository contains **no game data**. You need your own copy of the PAL disc
+> This repository contains **no game files** - no disc image, no executable, no level data. (It does carry a handful of
+> screenshots from the test rig, for the wiki.) You need your own copy of the PAL disc
 > (*Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It)*, SLES-52568 v1.01, PCSX2 CRC `1510E1D1`).
 > The build never modifies it and writes a separate `[Modded]` ISO next to it.
 
