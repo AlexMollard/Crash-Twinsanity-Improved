@@ -72,6 +72,10 @@ The hit itself is a flags word of `0x400` and a damage of 1 - one mask, or one l
 `SetAgent(64)` - mask bit 6, value 0 - is how the game turns contact damage off, and it does so in 718 places. The
 Uka Uka ice monster's death script uses `SetAgent(582)`, which clears bits 1, 2, 6 and 9 in one go.
 
+This is the engine's general "does this thing hurt you" switch, not something bosses have. Evil Crash turns his own
+off with `SetAgent(64)` the moment the Bandicoot Pursuit chase starts, so that the thing chasing you cannot damage
+you by brushing past, and back on with `SetAgent(4194368)` when the chase ends.
+
 :::info The Tiki Mon bug
 The Totem Hokum boss never clears it. His fight ends with `BossModeExit`, a defeat cutscene and nothing else, so the
 wreck lying in the arena still hits anything that touches it - a mask, or a life and the whole fight again. The fix is

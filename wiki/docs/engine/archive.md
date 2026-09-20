@@ -50,18 +50,26 @@ sections.
 :::warning Prefer splicing to re-saving a whole level
 The Twinsanity Editor library's full save used to be badly lossy, and two bugs have since been found and patched:
 
-- a texture field was read and not written back, which is where "it drops about 134 bytes per level" came from
+- a **texture** field was read and not written back, which is where "it drops about 134 bytes per level" came from
 - `CollisionSurface` is asymmetric - it reads a `ushort` but writes a 4-byte `int` into a 114-byte slot, so every
   surface overruns the next by two and the file comes back the same size with scrambled tails. 452 bytes of damage
   across 161 surfaces in `labext` alone, and it silently corrupted collision on any level saved through the GUI.
+- **particle names** are a fixed 16-byte field; the reader stopped at the terminator and the writer padded the rest
+  with zeros, losing the tail of whatever longer name had been there.
 
-Both are patched in `tools/patches/`, applied to the submodule by the build. With them, **98 of the archive's 135
-files round-trip byte for byte**, against 1 before. The rest lose tens of bytes to a cause not yet identified - no
-size changes and no shifted items, so nothing structural.
+All three are the same mistake in different clothes - a field read and not kept, written back as zeros - and all
+three are patched in `tools/patches/`, applied to the submodule by the build:
 
-The build still splices **individual items** back into the original bytes (`tools/rig/rm2splice.py`) rather than
-re-saving, so everything it does not touch stays exactly as it shipped. That is why none of this has ever affected
-the mod, and it remains the safer path - but the gap is now much narrower than it was.
+| | files that round-trip byte for byte |
+|---|:-:|
+| unpatched | 1 of 135 |
+| + texture fix | 98 of 135 |
+| + collision fix | 98 of 135 (it repairs layout, not a dropped value) |
+| + particle fix | **135 of 135** |
+
+So the library is now lossless on every file in the archive. The build still splices **individual items** back into
+the original bytes (`tools/rig/rm2splice.py`) rather than re-saving, and that remains the safer choice for changing
+one field in one script - but it is no longer the *only* safe path, and whole-file authoring is now on the table.
 :::
 
 ## Save states and the file table
