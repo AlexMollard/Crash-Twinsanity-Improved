@@ -35,6 +35,18 @@ level archive, and once you can read one, most of the game opens up.
 | **Executable** | `SLES_525.68`, a 2 MB PS2 ELF loaded at `0x100000`. Patched word by word from a text file, with every original value checked first. |
 | **Testing** | An isolated portable PCSX2 driven over the PINE protocol: virtual pad, RAM read/write, save states, screenshots, level warp. |
 
+## Where the game came from
+
+There is a third section, [**History**](history/development), which is not about the disc at all. It covers who built
+Twinsanity and under what conditions - a studio founded to make this one game, a project cancelled and restarted with
+the deadline intact, an engine inherited from *The Wrath of Cortex*, and an in-house scripting tool called **AgentLab**
+whose name is still sitting in the archive on your disc. It also covers
+[what was cut](history/cut-content), [how the six retail versions differ](history/versions), and
+[what two decades of speedrunners found](history/speedrunning).
+
+Read it if you want to know *why* the game is like this. A surprising amount of what this mod fixes turns out to be a
+schedule problem rather than a bug.
+
 :::note What this is not
 This is not a decompilation and not a complete map of the engine. It is the part that had to be understood to fix
 specific bugs, written down so the next session - or the next person - does not have to find it again. Where something

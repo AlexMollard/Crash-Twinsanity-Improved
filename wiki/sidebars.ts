@@ -33,6 +33,17 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
+      label: 'History',
+      collapsed: false,
+      items: [
+        'history/development',
+        'history/cut-content',
+        'history/versions',
+        'history/speedrunning',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Reference',
       collapsed: false,
       items: ['reference/script-ids', 'reference/addresses', 'reference/glossary'],
