@@ -45,15 +45,23 @@ into objects through two jump tables, found by reading the `sltiu` bound out of 
 | `0x2EC530` | 663 | command id | `0x1016F0`, entered with `a2 == -10` |
 | `0x2ECF90` | 646 | condition id **+ 1** | `BuildScriptCondition` `0x106C40`, `a2 == -11` |
 
+Both counts are the `sltiu` bound in the dispatch, so they are the engine's own numbers rather than a guess.
+
 Each entry is a builder: allocate 0x14 bytes, store a pointer to a static methods table, store the id. And the
 Twinsanity Editor already knows what most of those numbers are called, in `DefaultEnums.cs` (`CommandID`,
-`ConditionID`). Joining the two names 824 things at once:
+`ConditionID`). Joining the two names 990 things at once:
 
 ```bash
 python tools/re/autoname.py          # -> tools/re/db/generated.tsv
 ```
 
-The methods tables are the interesting half, because they hold the functions that do the work. All 172 have the
+:::warning Scan past the branch
+Most builders end with `b <shared tail>` and complete the methods-table pointer in the **delay slot**, which
+still runs. A scan that stops at the branch finds only a third of the command tables - which is exactly what
+the first version of `autoname.py` did, and why `Command_NowMoveForwards_Run` was missing from it.
+:::
+
+The methods tables are the interesting half, because they hold the functions that do the work. All 240 have the
 same shape:
 
 | Slot | Condition | Command |
@@ -84,18 +92,27 @@ A generated name is only emitted when it is unambiguous. An id whose builder is 
 
 | | Functions |
 |---|---|
-| Named | ~1,600 |
-| Still `FUN_xxxxxxxx` | ~5,300 |
+| Named | 1,704 |
+| Still `FUN_xxxxxxxx` | ~5,200 |
 | Total | 6,902 |
 
-Of the unnamed remainder, roughly 275 are trivial (eight lines or fewer), 4,100 are small or mid-sized helpers,
-and 1,900 are substantial.
+It was 962 before any of this. Of the unnamed remainder, roughly 275 are trivial (eight lines or fewer), 4,100
+are small or mid-sized helpers, and 1,900 are substantial.
+
+Two shortcuts that people usually reach for do not work on this binary, so they are worth not trying twice.
 
 :::note There are no debug symbols to mine
-The usual shortcut - naming functions after the assert or printf strings they reference - does not work here.
-The retail executable contains 267 printable strings in total, and they are save-game prompts, the copyright
-line and SDK version tags. No source file names, no function names, no asserts. Whatever else gets named has to
-be worked out from what the code does.
+Naming functions after the assert or printf strings they reference does not work here. The retail executable
+contains **267 printable strings in total**, and they are save-game prompts, the copyright line and SDK version
+tags. No source file names, no function names, no asserts - not even the engine's own name. Whatever else gets
+named has to be worked out from what the code does.
+:::
+
+:::note The PS2 SDK signatures are already applied
+`twinsanity-reversed` ships `ps2_sdk_3.0.3.fidb` and `PS2_SDK_3.0.3_libs.fidb`, and it is tempting to assume
+nobody ran them, because only 148 `sce*` names exist. They were run. Attaching both databases and re-running
+the Function ID analyzer (`tools/re/ApplyFid.java`) names **zero** additional functions. 148 is all the SDK
+signatures match.
 :::
 
 ## How a name gets worked out
