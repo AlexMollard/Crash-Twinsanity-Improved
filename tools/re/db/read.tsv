@@ -1,6 +1,12 @@
 # Names worked out by reading the decompiled function, with tools/re/batch.py for context.
 # Only functions whose purpose is unambiguous from the body are named here; anything needing a guess is
 # left as FUN_, because a wrong name in a database several people rely on costs more than a blank one.
+#
+# Script command arguments carry a 3-bit tag in their first word: bit 0 means "this is an instance
+# property index rather than a literal", and bits 1-2 are the type - 0 int, 1 angle, 2 float. The three
+# readers are GetScriptIntArg (0x209A68), GetScriptAngleArg (0x209AB0) and GetScriptFloatArg (0x209A00),
+# and each tests (arg & 6) for its own value.
+#
 # address	kind	name	detail
 00101408	F	InitPublicObjectBuilder	zeroes first/last builder and both counts
 00101620	F	BuilderIteratorAtEnd	index < 0 or index >= the container's count
@@ -117,3 +123,32 @@
 00195600	F	FindAttachmentBySlot	first attachment in the requested slot
 001a0dd0	F	AppendGifTag	writes a GIF tag reference into the chain for mode 1 or 2
 001a2750	F	FindGraphicsResourceById	binary search of a graphics resource table
+00195e98	F	FindContextRefIndex	index of a context in node 6's list, or -1
+00132dc0	F	ClearPlayableCharacterMode	drops the character's mode object for both partners and sends each event 0x42
+001a2810	F	FindGameMaterialById	binary search of a material table - the material sibling of FindGraphicsResourceById
+0011d4a0	F	InitRequestFocusCommand	ScriptCommand_0x22D constructor: identity rotation, five undefined ids, packed defaults
+002d8eb8	F	UnpackDouble	IEEE-754 double into class, sign, unbiased exponent and shifted mantissa
+001ccaf0	F	ShadowTypeToIndex	shadow object ids 0xbb-0xbe and 0x10d-0x110 to indices 0-7, -1 for anything else
+001eb7b0	F	RegisterInstanceWithScenery	puts an instance into the scenery tree and the chunk's storage, recording its cell index
+001f0af8	F	RefreshInstanceCollisionBinding	rebuilds bounds and scenery registration when the instance's OGI has changed
+0023e668	F	ClearInstanceCollider	tears down the collider at instance +0x12c
+001f1e40	F	ForEachInstanceInChunk	walks all 769 instance slots, returning how many took the call
+001f3658	F	InitSceneryBase	clears both contexts, the parent, the model storage and all 16 light flags
+001f4bc0	F	InitRefCountersStorage	32 empty reference slots, optionally taking the first reference
+001f5520	F	TestPointInFrustum	transforms by the view-projection matrix and tests all six clip planes
+001f63b0	F	ResetChunkRendererState	default fog colour, cleared visibility flags and bbox
+001f6740	F	ReadClipFlags	VU0 clip registers into a 0/1/2 visibility verdict
+00204b60	F	StringAssign	copies a C string in, reallocating in 32-byte granules, freeing on empty
+0019a0c8	F	UnlinkFromIntrusiveList	removes a node from a list whose prev and next offsets are passed in
+00292e90	F	ReleaseNodeSlot	clears the node's slot and pushes the index back onto the free list
+0023d090	F	GetExitPointTransform	position and forward vector of an OGI exit point, by index
+0018ef18	F	TransposeMatrix	4x4 transpose using the R5900's pextlw/pextuw/pcpyld shuffles
+001eb8e8	F	ComputeInstanceBoundingBox	merges the boxes of every collision model, with fast paths for none and one
+002d8d88	F	PackDouble	the inverse of UnpackDouble, with round-to-nearest-even and denormal handling
+001ee8c0	F	RenderDynamicSceneryCulled	draws each mesh that survives the frustum test, returning how many
+00209ab0	F	GetScriptAngleArg	the angle sibling: type tag 1 converts through AngleToFixed, anything else yields zero
+001861d0	F	BuildBasisFromForward	orthonormal basis from a forward vector, with the degenerate straight-up and straight-down cases
+001f08f8	F	SetBoxCollision	replaces the instance's collision model with a box and updates both bounding boxes
+0024c3f0	F	ApplyImpulseToBody	routes an impulse to whichever physics representation the object has, by the 4-bit type at +0x8c
+0018ee40	F	TransposeQuadwords	out-of-place 4x4 quadword transpose, the same shuffle TransposeMatrix uses
+0020a5a0	F	InitScriptEventCaller	takes its references and sets up an event call
