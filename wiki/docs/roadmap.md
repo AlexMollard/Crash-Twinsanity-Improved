@@ -58,9 +58,13 @@ It was verified to *skip*. It was never verified that **the Brio/Tropy scene sti
 | Hold △ (this mod's skip) | 1.5 s | after 2.5 s | `(-0.1, 0.0, -5.3)` | 13 |
 | Mashing ✕ (the reported repro) | 14.9 s | after 2.5 s | `(-0.1, 0.0, -5.3)` | 13 |
 
-The follow-on scene plays in all three, identically. But **the reported bug did not reproduce either** - mashing ✕ did not even shorten the first scene - so this test has never been observed distinguishing a working hand-off from a broken one. A negative result from an instrument that has not been shown able to go positive is not evidence of safety; it is the same mistake as counting intact marker words in a game that had already crashed.
+The follow-on scene plays in all three, identically.
 
-What is needed before this can be called safe is a demonstrated repro. The likely gap is context: a plain warp into `gpa11` does not set story progress and skips the Rusty Walrus chase that the report says precedes the scene, so the level state under test is probably not the state the bug needs.
+**Both scenes have since been identified from screenshots rather than assumed.** Scene 1 shows Crash among exploding TNT crates - the N. Gin scene the report names - with this mod's *HOLD △ TO SKIP* prompt visible on it. Scene 2 shows **N. Tropy**, so the follow-on really is the Brio/Tropy scene and not some other scene that happened to start. That was worth checking: the whole test rested on those two identities, and both had been inferred from a name in a list.
+
+So for the case that matters - **this mod's hold-△ skip leaves the Brio/Tropy scene playing** - there is now direct evidence rather than inference.
+
+What is still missing is a demonstrated repro of the original bug: mashing ✕ did not shorten the first scene or break the hand-off, so the test has never been *observed* distinguishing a working hand-off from a broken one. The likely gap is context - a plain warp into `gpa11` sets no story progress and skips the Rusty Walrus chase the report says precedes the scene. Until that repro exists, the vanilla bug stays unconfirmed here, even though this mod's own behaviour on the same scene pair is now verified.
 :::
 | 🗿 | **The rest of the contact-damage reports** | The Tiki Mon was the first. `tools/rig/hurthook.py` names whatever hit you, so the remaining reports get checked one at a time. |
 
