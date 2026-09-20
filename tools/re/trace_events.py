@@ -14,12 +14,18 @@ stored; and the ring stops when full by default rather than wrapping, so what yo
 events after arming, which is what "does event 1 arrive after I pull the trigger" actually needs. `--wrap`
 gives the last N instead. `SEEN` counts everything either way, so the traffic is always visible.
 
-Per record: the caller, the instance, the event index, and four fields off the instance - `objectId` at +0x6,
-`onSpawnScriptId` at +0x4, `chunkIndex_` at +0x14 and the field at +0x16. Both of the last two are set to -1
-by `InitObjectInstanceContextBase` and filled in later, and **+0x16 is a candidate for the instance index**
-but is not confirmed. A validation run is what would confirm it: if two instances known to be numbers 38 and
-40 in the level file come back with 38 and 40 at +0x16, the field is the instance index and the column can be
-trusted. Until then read it as a number that might be one.
+The object is identified twice over, and named. Route A is the instance's own `objectId` at +0x6. Route B
+goes through `gameObject` at +0x8 to the `GameObject`'s own `objectId` at +0x4. Both offsets are read from
+machine code rather than a struct listing - `lw $a0, 8($s1)` and `lbu $v0, 0xd($a0)` pin the GameObject
+layout, and the caller that produced the first captured record passes `instNode->base_type.objInstCxt`, the
+same pointer whose `objectId` at +0x6 resolved 876, 877 and 871 correctly elsewhere.
+
+On top of that the dump reads `GameObject.name` (+0x14) straight out of memory, so a row says
+`act_HENCHMANIA_BOSSFIGHT_DIRECTOR` rather than a number needing a lookup. That column is self-checking: a
+printable name means the whole chain from instance to GameObject held, and garbage means it did not.
+
+An earlier version logged the field at +0x16 as a candidate instance index. It is not one - it stayed -1 for
+two instances whose numbers were known, so the column is gone rather than left in to be misread.
 
 Registers: this is the n32 ABI, so r8-r11 are the argument registers $a4-$a7 rather than temporaries - which
 Keystone names $t0-$t3 in *O32*, a different four (r12-r15). `ExecuteEvent` uses $a0-$a3 and r8, so the driver
@@ -105,20 +111,38 @@ slot:
     sw    $ra, 0x0($t1)                 # reached by j, not jal, so $ra is the real caller
     sw    $a0, 0x4($t1)
     sw    $a2, 0x8($t1)
-    sw    $a1, 0xc($t1)
-    sh    $t3, 0x18($t1)
+    sh    $t3, 0x16($t1)
+    andi  $t2, $a1, 0xff
+    sh    $t2, 0x1e($t1)
 
-    lhu   $t2, 0x6($a0)                 # objectId
+    lhu   $t2, 0x6($a0)                 # route A: the instance's own objectId
     sh    $t2, 0x10($t1)
     lhu   $t2, 0x4($a0)                 # onSpawnScriptId
     sh    $t2, 0x12($t1)
     lhu   $t2, 0x14($a0)                # chunkIndex_
     sh    $t2, 0x14($t1)
-    lhu   $t2, 0x16($a0)                # candidate instance index - unconfirmed
-    sh    $t2, 0x16($t1)
-    lw    $t2, 0x8($a0)                 # gameObject
-    sw    $t2, 0x1c($t1)
 
+    sw    $zero, 0xc($t1)               # defaults, so a gameObject we refuse to walk reports as absent
+    sw    $zero, 0x18($t1)
+    ori   $t2, $zero, 0xffff
+    sh    $t2, 0x1c($t1)
+
+    lw    $t2, 0x8($a0)                 # gameObject, which is a walked pointer and gets the full guard
+    sw    $t2, 0xc($t1)
+    beq   $t2, $zero, commit
+    nop
+    andi  $t8, $t2, 0x3
+    bne   $t8, $zero, commit
+    nop
+    srl   $t8, $t2, 0x19
+    bne   $t8, $zero, commit
+    nop
+    lhu   $t8, 0x4($t2)                 # route B: the GameObject's own objectId, an int at +0x4
+    sh    $t8, 0x1c($t1)
+    lw    $t8, 0x14($t2)                # GameObject.name.string - the reader pulls the text over PINE
+    sw    $t8, 0x18($t1)
+
+commit:
     addiu $t3, $t3, 0x1
     sw    $t3, 0x10($t0)
 
@@ -239,24 +263,62 @@ def cmd_dump(p, o):
     names = addrname.Names()
     shown = min(count, CAP)
     first = 0 if mode else count - shown
-    print(f"\n  {'seq':>5} {'caller':<40} {'instance':>9} {'ev':>4} {'objId':>6} "
-          f"{'inst?':>6} {'chunk':>6} {'spawn':>6}")
+
+    def text(ptr, limit=64):
+        """GameObject.name read straight out of the game's memory - self-checking, because a wrong chain
+        gives unprintable bytes rather than a plausible-looking name."""
+        if not ptr or ptr & 3 or ptr >= 0x02000000:
+            return ""
+        out = bytearray()
+        for i in range(0, limit, 4):
+            try:
+                w = p.r32(ptr + i)
+            except SystemExit:
+                break
+            chunk = struct.pack("<I", w)
+            if b"\0" in chunk:
+                out += chunk[:chunk.index(b"\0")]
+                break
+            out += chunk
+        try:
+            name = out.decode("ascii")
+        except UnicodeDecodeError:
+            return "<not text>"
+        return name if all(32 <= ord(c) < 127 for c in name) else "<not text>"
+
+    print()
+    print(f"  {'seq':>5} {'caller':<38} {'instance':>9} {'ev':>3} {'idA':>5} {'idB':>5} "
+          f"{'chunk':>5}  name")
+    mismatch, ok = 0, 0
     for n in range(first, first + shown):
         b = RING + (n % CAP) * RECORD
-        ra, inst, ctx, ev = p.r32(b), p.r32(b + 4), p.r32(b + 8), p.r32(b + 12)
-        ids, idx2, seq = p.r32(b + 16), p.r32(b + 20), p.r32(b + 24) & 0xFFFF
-        objid, spawn = ids & 0xFFFF, ids >> 16
-        chunk, inst_idx = idx2 & 0xFFFF, idx2 >> 16
+        ra, inst, ctx, gobj = p.r32(b), p.r32(b + 4), p.r32(b + 8), p.r32(b + 12)
+        ids, chunkseq, nameptr, idbev = p.r32(b + 16), p.r32(b + 20), p.r32(b + 24), p.r32(b + 28)
+        ida, spawn = ids & 0xFFFF, ids >> 16
+        chunk, seq = chunkseq & 0xFFFF, chunkseq >> 16
+        idb, ev = idbev & 0xFFFF, idbev >> 16
         if seq != (n & 0xFFFF):
             print(f"  {n:>5} <slot overwritten while reading>")
             continue
+        ok += 1
+        if idb != 0xFFFF and ida != idb:
+            mismatch += 1
         f = lambda v: "-" if v == 0xFFFF else str(v)
-        print(f"  {n:>5} {names.describe(ra):<40} {inst:>9x} {ev & 0xFF:>4} {f(objid):>6} "
-              f"{f(inst_idx):>6} {f(chunk):>6} {f(spawn):>6}")
-    if shown:
-        print("\n'inst?' is the field at +0x16, a candidate for the instance index and not confirmed. It and")
-        print("'chunk' are both -1 at construction and filled in later; '-' means still -1. Confirm the column")
-        print("on a level where you already know two instance numbers before trusting it.")
+        print(f"  {n:>5} {names.describe(ra):<38} {inst:>9x} {ev:>3} {f(ida):>5} {f(idb):>5} "
+              f"{f(chunk):>5}  {text(nameptr)}")
+    if ok:
+        if mismatch:
+            print()
+            print(f"  *** idA and idB disagree on {mismatch} of {shown} rows - the instance's objectId and")
+            print("      its GameObject's objectId are not the same object, so neither should be trusted.")
+        else:
+            print()
+            print("  idA and idB agree on every row, by two different paths through memory, and the names")
+            print("  read as text - so the instance, its GameObject and both id fields all line up.")
+    elif shown:
+        print()
+        print("  No row could be read: every slot failed its sequence check. That happens when the ring was")
+        print("  written by a different version of the driver, so re-arm before reading anything into this.")
 
 
 def cmd_disarm(p, o):
