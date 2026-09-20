@@ -320,6 +320,12 @@ Four things decide whether it works, and three of them have bitten us:
   instructions later, so `$v0` is untouchable.
 - **Only caller-saved registers are free**, and which ones hold what differs per site. The two focus hooks take
   the agent in different registers, which is why that tool has two entry stubs feeding one body.
+- **Resolve addresses against every function, not every *named* function.** `symbols.tsv` holds only the
+  quarter that have names, so the nearest preceding name can be thousands of bytes back and in a different
+  function. A return address of `0x113fdc` reported as `Command_PlayMovie_Read+0x1594` sent someone reading
+  movie code; it is really `FUN_00113a18+0x5c4`, in the focus resolver. A wrong name is worse than a raw
+  address, because a raw address invites a lookup and a wrong name does not. `db/funcs.tsv` lists all 7,627
+  starts so the answer is exact, and `tools/re/addrname.py` is the one place that does the lookup.
 - **The record that carries the verdict must not be the record that can overflow.** A ring buffer wraps. Put
   the actual answer in something that cannot - a bitmap with one bit per id, or a set of counters - and let the
   ring carry detail only.
@@ -337,3 +343,15 @@ out a clobbered base, stale memory and a bit carried over from an earlier sessio
 Run it **before** the interesting level, not after. The temptation to skip it is strongest once there is already
 a result worth having, which is exactly when instinct is least worth trusting - and a wrong answer that
 overturns a settled belief is the hardest kind to catch, because surprise reads as signal.
+
+### -1 is a value, not a failure
+
+`objId_` at `InstanceNode_type1 + 0x7c` reads `0xffff` for plenty of live agents, and that is the engine's own
+"undefined" marker: `SetUndefinedID_` writes `-1` there and code all over checks `objId_ == -1` before using
+it. A tracer reporting `0xffff` has not failed to read anything.
+
+This cuts both ways, which is why it is worth stating. A sentinel that looks like a bad read invites you to
+discard a real finding; a bad read that looks like a sentinel invites you to keep a fake one. The way out is
+a second, independent route to the same fact - `agent + 0x84` is `objInstCxt`, and `objInstCxt + 0x6` is the
+same `objectId` that `ActivateObjectInstance` takes. That path is used by engine code rather than derived from
+a struct listing, so logging both and comparing them settles which of the two you are looking at.

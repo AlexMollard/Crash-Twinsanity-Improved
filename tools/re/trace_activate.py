@@ -33,12 +33,13 @@ game owns is written, and `disarm` puts the original instruction back.
     python tools/re/trace_activate.py dump [--all-ids]
     python tools/re/trace_activate.py disarm
 """
-import argparse, bisect, os, struct, sys, time
+import argparse, os, struct, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 sys.path.insert(0, os.path.join(ROOT, "tools", "rig"))
+import addrname
 import mipsasm
 import rig
 
@@ -184,30 +185,6 @@ class Link:
             raise SystemExit(f"cave signature at 0x3DB210 is {sig:08x}, not 'CRAS' - boot work/re/test_re.iso")
 
 
-def load_symbols():
-    """Function starts, so a return address can be reported as a name plus an offset into it."""
-    path = os.path.join(HERE, "db", "symbols.tsv")
-    funcs = []
-    with open(path, encoding="utf-8") as fh:
-        for line in fh:
-            col = line.rstrip("\n").split("\t")
-            if len(col) >= 3 and col[1] == "F":
-                try:
-                    funcs.append((int(col[0], 16), col[2]))
-                except ValueError:
-                    pass
-    funcs.sort()
-    return [a for a, _ in funcs], [n for _, n in funcs]
-
-
-def describe(addr, starts, names):
-    if not starts:
-        return f"{addr:08x}"
-    i = bisect.bisect_right(starts, addr) - 1
-    if i < 0 or addr - starts[i] > 0x4000:
-        return f"{addr:08x}"
-    delta = addr - starts[i]
-    return f"{names[i]}+0x{delta:x}" if delta else names[i]
 
 
 def cmd_arm(p, o):
@@ -264,7 +241,7 @@ def cmd_dump(p, o):
     for want in o.look_for:
         print(f"  id {want}: {'ACTIVATED' if want in ids else 'never activated'}")
 
-    starts, names = load_symbols()
+    names = addrname.Names()
     shown = min(count, CAP)
     print(f"\nlast {shown} entries, oldest first:")
     print(f"  {'seq':>6}  {'caller':<44} {'instance':>10} {'id':>6} {'chunk':>6} {'spawn':>6}")
@@ -278,12 +255,12 @@ def cmd_dump(p, o):
         if seq != (n & 0xFFFF):
             print(f"  {n:>6}  <slot overwritten while reading>")
             continue
-        print(f"  {n:>6}  {describe(ra, starts, names):<44} {ptr:>10x} {oid:>6} {chunk:>6} {spawn:>6}")
+        print(f"  {n:>6}  {names.describe(ra):<44} {ptr:>10x} {oid:>6} {chunk:>6} {spawn:>6}")
 
     callers = {}
     for n in range(first, count):
         base = RING + (n % CAP) * RECORD
-        callers.setdefault(describe(p.r32(base), starts, names), []).append(p.r32(base + 8) & 0xFFFF)
+        callers.setdefault(names.describe(p.r32(base)), []).append(p.r32(base + 8) & 0xFFFF)
     print("\ncallers, by how many entries each accounts for:")
     for name, seq in sorted(callers.items(), key=lambda kv: -len(kv[1])):
         uniq = sorted(set(seq))

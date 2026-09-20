@@ -31,12 +31,13 @@ Needs the modded build booted (work/re/test_re.iso), because the cave is reserve
 Run a level where some actor demonstrably acquires a focus object first, as a control, before the one in
 question - a tracer that reports "never fired" is indistinguishable from a tracer that is not working.
 """
-import argparse, bisect, os, struct, sys, time
+import argparse, os, struct, sys, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 sys.path.insert(0, os.path.join(ROOT, "tools", "rig"))
+import addrname
 import mipsasm
 import rig
 
@@ -97,24 +98,10 @@ countassign:
     lw    $t9, 0x14($t8)                # assigned, but the value was null - the quiet failure
     addiu $t9, $t9, 0x1
     sw    $t9, 0x14($t8)
-counted:
-
-    ori   $at, $zero, 0xffff            # objId, or 0xffff when there is no agent to read it from
-    beq   $t1, $zero, filter
-    nop
-    lhu   $at, 0x7c($t1)
-
-filter:
-    lw    $t9, 0x4($t8)
-    beq   $t9, $zero, store
-    nop
-    bne   $t9, $at, out
-    nop
-
-store:
-    lw    $t9, 0x8($t8)                 # COUNT is monotonic; the slot is COUNT mod 128
-    andi  $a3, $t9, 0x7f
-    sll   $a3, $a3, 0x5
+counted:                                # the record is written first and only committed at the end: the slot
+    lw    $t9, 0x8($t8)                 # comes from COUNT, so a record that fails the filter is simply left
+    andi  $a3, $t9, 0x7f                # to be overwritten. That keeps every value in a register only as
+    sll   $a3, $a3, 0x5                 # long as it takes to store it, which is what makes this fit.
     lui   $v1, 0x3d
     ori   $v1, $v1, 0xb800
     addu  $v1, $v1, $a3                 # $v1 = this record
@@ -122,18 +109,47 @@ store:
     sw    $t1, 0x4($v1)
     sw    $t2, 0x8($v1)
     sw    $a0, 0xc($v1)
-    sh    $at, 0x10($v1)
-    lw    $a3, 0x30($a0)                # the mode both functions branch on
+    sh    $t9, 0x1a($v1)
+
+    lw    $a3, 0x30($a0)                # mode in the high byte, which-hook in the low
     andi  $a3, $a3, 0x3
-    sh    $a3, 0x12($v1)
+    sll   $a3, $a3, 0x8
+    or    $a3, $a3, $t0
+    sh    $a3, 0x18($v1)
+
+    ori   $at, $zero, 0xffff            # the node's own objId_, which is legitimately -1 when undefined
+    daddu $a3, $zero, $zero
+    beq   $t1, $zero, haveids
+    nop
+    lhu   $at, 0x7c($t1)
+    lw    $a3, 0x84($t1)                # objInstCxt - the route real engine code uses
+haveids:
+    sh    $at, 0x10($v1)
+    sw    $a3, 0x1c($v1)
+
+    ori   $t9, $zero, 0xffff            # objInstCxt->objectId, the authoritative id
+    beq   $a3, $zero, haveobj
+    nop
+    lhu   $t9, 0x6($a3)
+haveobj:
+    sh    $t9, 0x12($v1)
+
     daddu $a3, $zero, $zero
     beq   $t1, $zero, nogate
     nop
     lw    $a3, 0x88($t1)                # the gate bits as they were on entry
 nogate:
     sw    $a3, 0x14($v1)
-    sh    $t0, 0x18($v1)
-    sh    $t9, 0x1a($v1)
+
+    lw    $a3, 0x4($t8)                 # the filter matches either id, so it works whichever is meaningful
+    beq   $a3, $zero, commit
+    nop
+    beq   $a3, $t9, commit
+    nop
+    bne   $a3, $at, out
+    nop
+commit:
+    lw    $t9, 0x8($t8)
     addiu $t9, $t9, 0x1
     sw    $t9, 0x8($t8)
 
@@ -187,28 +203,6 @@ class Link:
             raise SystemExit(f"cave signature at 0x3DB210 is {sig:08x}, not 'CRAS' - boot work/re/test_re.iso")
 
 
-def load_symbols():
-    funcs = []
-    with open(os.path.join(HERE, "db", "symbols.tsv"), encoding="utf-8") as fh:
-        for line in fh:
-            col = line.rstrip("\n").split("\t")
-            if len(col) >= 3 and col[1] == "F":
-                try:
-                    funcs.append((int(col[0], 16), col[2]))
-                except ValueError:
-                    pass
-    funcs.sort()
-    return [a for a, _ in funcs], [n for _, n in funcs]
-
-
-def describe(addr, starts, names):
-    if not starts:
-        return f"{addr:08x}"
-    i = bisect.bisect_right(starts, addr) - 1
-    if i < 0 or addr - starts[i] > 0x4000:
-        return f"{addr:08x}"
-    d = addr - starts[i]
-    return f"{names[i]}+0x{d:x}" if d else names[i]
 
 
 def cmd_arm(p, o):
@@ -266,26 +260,30 @@ def cmd_dump(p, o):
     if count > CAP:
         print(f"\nthe ring wrapped - showing the last {CAP} of {count}; the counters above are still exact")
 
-    starts, names = load_symbols()
+    names = addrname.Names()
     shown = min(count, CAP)
     print(f"\nlast {shown} entries, oldest first:")
-    print(f"  {'seq':>5} {'hook':<7} {'caller':<38} {'agent':>9} {'value':>9} {'objId':>6} {'mode':>4} {'gate':>6}")
+    print(f"  {'seq':>5} {'hook':<7} {'caller':<34} {'agent':>9} {'value':>9} "
+          f"{'objCxt':>9} {'objId':>6} {'own':>5} {'mode':>4} {'gate':>4}")
     for n in range(count - shown, count):
         b = RING + (n % CAP) * RECORD
         ra, agent, value, cmd = p.r32(b), p.r32(b + 4), p.r32(b + 8), p.r32(b + 12)
-        ids, gate, whoseq = p.r32(b + 16), p.r32(b + 20), p.r32(b + 24)
-        objid, mode, which, seq = ids & 0xFFFF, ids >> 16, whoseq & 0xFFFF, whoseq >> 16
+        ids, gate, whoseq, objcxt = p.r32(b + 16), p.r32(b + 20), p.r32(b + 24), p.r32(b + 28)
+        own, objid = ids & 0xFFFF, ids >> 16
+        which, seq = whoseq & 0xFF, whoseq >> 16
+        mode = (whoseq >> 8) & 0xFF
         if seq != (n & 0xFFFF):
             print(f"  {n:>5} <slot overwritten while reading>")
             continue
         tag = "assign" if which == 0 else "none"
-        oid = "-" if objid == 0xFFFF else str(objid)
-        print(f"  {n:>5} {tag:<7} {describe(ra, starts, names):<38} {agent:>9x} {value:>9x} "
-              f"{oid:>6} {mode:>4} {gate & 3:>6}")
+        fmt = lambda v: "undef" if v == 0xFFFF else str(v)
+        print(f"  {n:>5} {tag:<7} {names.describe(ra):<34} {agent:>9x} {value:>9x} "
+              f"{objcxt:>9x} {fmt(objid):>6} {fmt(own):>5} {mode:>4} {gate & 3:>4}")
     if shown:
-        print("\nobjId is read from agent + 0x7c, an offset derived from the struct layout rather than")
-        print("measured. A nonsense value there is my error, not a finding - the agent pointer is the")
-        print("column to trust, and mode 1 or 2 means a different code path, not a failure.")
+        print("\nobjId comes from agent + 0x84 -> objInstCxt -> +0x6, which is the route engine code itself")
+        print("uses; 'own' is the node's own objId_ at agent + 0x7c. `undef` in either is a real value, not")
+        print("a failed read - the engine writes -1 there to mean 'no object id'. If the two disagree, or")
+        print("objCxt is not a plausible pointer, the struct assumption is wrong and both are suspect.")
 
 
 def cmd_disarm(p, o):
