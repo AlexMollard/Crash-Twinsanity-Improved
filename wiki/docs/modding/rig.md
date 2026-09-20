@@ -83,6 +83,15 @@ finished". About 1.5 s of that path is included in every load-time measurement.
   somewhere. `rebuild.py` always builds `test.iso` from current source, which is why the state library is built
   from that and not from `[Modded]` - and it is why a state library and a stale `[Modded]` disagree.
 
+- **A movie and an in-engine scene both letterbox, and a movie's skip proves nothing about a level recipe.**
+  `in_cutscene()` reads the black bars, so it says "cutscene" for a pre-rendered movie as readily as for a scene
+  the level data drives - and the executable patch already skips movies game-wide. Point a list entry at an FMV
+  trigger and it reports a healthy `PASS` for a recipe that is doing nothing whatever: the Iceberg Lab interior
+  gave **55.7 s → 4.0 s with its recipe built in and 55.7 s → 4.0 s without it**, and the `icelabint_*`
+  screenshots left in `results/` are that movie rather than the scene anyone thought had been tested. The movie
+  player's decoding flag `0x30A3C3` separates them cleanly - 1 throughout the Iceberg Lab FMV, 0 throughout
+  Classroom Chaos - so `cutscene_test` now labels every run `movie` or `scene` and says so in the verdict.
+
 - **Re-read object pointers before writing to them.** See the warning in [Executable patches](elf-patches).
 - **Reference screenshots are build-specific.** The menu images used for waits were captured on the modded build and
   do not match the retail one closely enough; use fixed timings when booting the original ISO.

@@ -198,6 +198,7 @@ PLAYER_CHAR = 0x003098FC          # global -> player character object; its posit
 FLOW_PTR = 0x0030988C             # global -> game-flow object; state = (u32 at flow+12 >> 12) & 0x3F
 LEVEL_START_STR = 0x0030BE90      # string object the end-of-credits code loads (Levels\Ice\Hub\LabExt)
 STATE_PLAYING, STATE_CREDITS = 12, 19
+MOVIE_DECODING = 0x0030A3C3       # movie player: non-zero while the loop is waiting on a decoded frame
 # Credits handler (0x1751A0): "beq v0,zero,finished" after the per-frame credits update. Made unconditional
 # during a warp so the game takes its own credits-finished path (level load, state 11 -> 12) immediately.
 CREDITS_DONE_BRANCH, CREDITS_DONE_ORIG, CREDITS_DONE_ALWAYS = 0x001753A8, 0x10400036, 0x10000036
@@ -236,6 +237,16 @@ def in_cutscene(img=None):
     w, h, b = img or grab()
     bottom = max(_band(w, h, b, h - 30, h, 0, w // 5), _band(w, h, b, h - 30, h, 4 * w // 5, w))
     return _band(w, h, b, 0, 60) < 2 and bottom < 2 and _band(w, h, b, h // 2 - 40, h // 2 + 40) > 8
+
+def movie_playing(p):
+    """Is a pre-rendered movie on screen, rather than an in-engine scene?
+
+    `in_cutscene` reads the letterbox, and both kinds letterbox, so it cannot tell them apart - which lets a
+    list entry whose coordinates sit on an FMV trigger report a passing skip for a level recipe that does
+    nothing at all (the Iceberg Lab interior did exactly that: 55.7s -> 4.0s with the recipe, and 55.7s ->
+    4.0s without it, because what was being skipped was the movie). The movie player's decoding flag is 1
+    throughout a movie and 0 otherwise; measured 1 across the Iceberg Lab FMV and 0 across Classroom Chaos."""
+    return p.r8(MOVIE_DECODING) != 0
 
 def slot_file(slot):
     import glob

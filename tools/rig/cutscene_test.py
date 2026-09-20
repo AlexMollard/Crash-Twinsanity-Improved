@@ -5,7 +5,11 @@ and compares the time until gameplay resumes, where Crash ends up, the game-flow
 
 STATE is a states/<STATE>.p2s level state (see rig.py level); X Y Z is the centre of the cutscene's trigger.
 Crash is teleported into the trigger; a cutscene counts as started when the letterbox bars appear and as over
-when they are gone and Crash responds to the stick again."""
+when they are gone and Crash responds to the stick again.
+
+Each run also records whether what played was an in-engine `scene` or a pre-rendered `movie`, because the
+letterbox alone cannot tell them apart and the two mean opposite things about a level recipe: the executable
+already skips movies game-wide, so a movie's 55.7s -> 4.0s is a pass for a recipe that is doing nothing."""
 import argparse, math, os, sys, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import rig
@@ -27,18 +31,20 @@ def run(name, state, x, y, z, skip, out, start_timeout=12, end_timeout=240, prog
             rig.set_pad(p, (), [0.6, -0.6, 0, 0, 0.4, -0.4][nudge], [0, 0, 0.6, -0.6, 0.4, -0.4][nudge]); time.sleep(0.25); rig.set_pad(p); nudge += 1
         time.sleep(0.2)
     t_start = time.time(); rig.screenshot(os.path.join(out, f"{name}_{tag}_start.png"))
+    kind = "movie" if rig.movie_playing(p) else "scene"   # both letterbox; only one of them a recipe can change
     if skip:
         time.sleep(1.0); rig.set_pad(p, ("triangle",)); time.sleep(1.5); rig.set_pad(p)
     while True:
         if time.time() - t_start > end_timeout:
             rig.screenshot(os.path.join(out, f"{name}_{tag}_stuck.png"))
-            return {"started": True, "seconds": None, "stuck": True, "flow": rig.flow_state(p)}
+            return {"started": True, "kind": kind, "seconds": None, "stuck": True, "flow": rig.flow_state(p)}
+        if rig.movie_playing(p): kind = "movie"           # a movie can start a little after the letterbox does
         if not rig.in_cutscene() and controllable(p): break
         time.sleep(0.3)
     secs = round(time.time() - t_start, 1)
     time.sleep(2.0)
     shot = os.path.join(out, f"{name}_{tag}_end.png"); rig.screenshot(shot)
-    return {"started": True, "seconds": secs, "pos": tuple(round(v, 2) for v in rig.pos(p)), "flow": rig.flow_state(p),
+    return {"started": True, "kind": kind, "seconds": secs, "pos": tuple(round(v, 2) for v in rig.pos(p)), "flow": rig.flow_state(p),
             "cutscene_again": rig.in_cutscene(), "shot": shot}
 
 def main():
@@ -58,6 +64,9 @@ def main():
     ok = skip["seconds"] < full["seconds"] - 1 and d < 3.0 and skip["flow"] == full["flow"] and not skip["cutscene_again"]
     print(f"  => {'PASS' if ok else 'CHECK'}: {full['seconds']}s -> {skip['seconds']}s, end position {d:.1f} apart, "
           f"flow {skip['flow']} vs {full['flow']}{', CUTSCENE RESUMED' if skip['cutscene_again'] else ''}")
+    if "movie" in (full.get("kind"), skip.get("kind")):
+        print("     MOVIE: these coordinates play a pre-rendered movie, which the executable's hold-Triangle "
+              "already skips.\n     The result says nothing about a level recipe - only a 'scene' does.")
 
 if __name__ == "__main__":
     main()
