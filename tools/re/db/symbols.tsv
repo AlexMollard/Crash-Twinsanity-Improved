@@ -2884,3 +2884,4 @@
 12001040	L	BUSDIR_REGISTER	undefined
 12001080	L	SIGLBLID_REGISTER	undefined
 70000000	L	scratchpad_top	undefined4
+00264390	F	LoadChunkSet	void LoadChunkSet(ChunkManager_ * chunkManager, BinaryReader * binReader)
