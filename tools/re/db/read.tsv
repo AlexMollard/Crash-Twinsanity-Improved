@@ -196,3 +196,18 @@
 00198138	F	ResolveInstanceChunk	the instance's chunk, re-resolved through the scenery when the instance has moved
 0027bd48	F	SetControllerRumble	float strength to a pad rumble byte, scaled by 1024 and clamped to 0x14..0xff
 00280c28	F	RayTriangleIntersect	edge sign tests with a 1e-4 epsilon, then the plane hit; 1e30 means no hit
+#
+# Route layout, worked out from ReleaseRouteNodes and GetRouteNode together. A route hangs off the instance
+# at +0x34, with the index of the current node at +0x3c (0xff meaning none). Inside the route:
+#   +0x000  u16[256]  the AI graph each entry belongs to
+#   +0x200  u16[256]  the node index within that graph
+#   +0x400  byte      how many entries are in use
+# G_MiniBigBoi holds the graphs, so resolving an entry is graph = G_MiniBigBoi[route[i]], node = graph[route[0x200+i]].
+#
+00252ce0	F	RemoveColliderFromList	swap-with-last removal, the collider's index living at +0xdc
+00252e68	F	RemoveColliderFromSubList	the same with the byte index at +0xde
+00253f70	F	ReleaseRouteNodes	walks the route's entries and drops each node's traffic count
+00253de0	F	GetRouteNode	resolves one route entry through G_MiniBigBoi: graph first, then node within it
+00164e90	F	InitDefaultButtonBindings	the default digital bind set the on-foot controls start from
+0010c160	F	InitProbeCollisionModel	the thin tall quad the game context uses as a probe: x +/-0.1, y +/-4.0
+00136f70	F	InitPlayableCharacterContext	clears every character sub-struct, installs the methods and the reference storage

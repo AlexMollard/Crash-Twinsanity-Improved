@@ -1,5 +1,4 @@
 # Looked at, deliberately not named. One reason per line, so nobody re-reads them hoping for better luck.
-00253de0  # two-level lookup through G_MiniBigBoi, which nobody has identified
 002098d8  # sets a 3-bit argument type tag to 2; what type 2 means is not established
 00208550  # reads an argument of an unknown type through FUN_002085c0
 002d9270  # softfloat op via FUN_002d9808 - which operation is not established
@@ -53,3 +52,6 @@
 001f0dc8  # fills a short array with a value; the count comes from node 4 or an unknown field
 001e69c0  # stops three 0x40-stride slots of G_UnkStructOfSize_0xe0; what they are is unknown
 001e6cd0  # state transition on a 0x3e-masked bitfield; the states are unidentified
+002d97b0  # printf internals: unpacks a double and formats through unnamed helpers
+002d9ca8  # printf internals, same family
+002d7638  # softfloat digit extraction for printf
