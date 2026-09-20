@@ -1,0 +1,43 @@
+diff --git a/Twinsanity/Items/Graphics/Texture.cs b/Twinsanity/Items/Graphics/Texture.cs
+index 751223b..70e4ef6 100644
+--- a/Twinsanity/Items/Graphics/Texture.cs
++++ b/Twinsanity/Items/Graphics/Texture.cs
+@@ -29,6 +29,9 @@ namespace Twinsanity
+         private int clutBufferBasePointer;
+         private byte[] unkBytes2 = new byte[8];
+         private byte[] unkBytes3 = new byte[2];
++        private int vifCodeBlockIndex;     // read but discarded in game's code; preserved so a re-save is lossless
++        private int reservedPointer;       // ditto
++        private byte[] reservedBytes = new byte[2];
+         private byte[] unusedMetadata = new byte[32]; // This metadata is read but discarded afterwards in game's code
+         private byte[] vifBlock = new byte[96]; // This holds a VIF code block, which does some basic texture setup, we don't care about it
+         private byte[] imageData;
+@@ -81,10 +84,10 @@ namespace Twinsanity
+             }
+             clutBufferBasePointer = reader.ReadInt32();
+             unkBytes2 = reader.ReadBytes(8);
+-            reader.ReadInt32(); // Reserved, in game's code refers to an index of vifCodeBlock
+-            reader.ReadInt32(); // Reserved, in game's code refers to an unknown pointer
++            vifCodeBlockIndex = reader.ReadInt32(); // in game's code an index of vifCodeBlock
++            reservedPointer = reader.ReadInt32();   // in game's code an unknown pointer
+             unkBytes3 = reader.ReadBytes(2);
+-            reader.ReadBytes(2); // Reserved, unknown
++            reservedBytes = reader.ReadBytes(2);    // unknown
+             // The rest of data
+             unusedMetadata = reader.ReadBytes(32);
+             vifBlock = reader.ReadBytes(96);
+@@ -227,11 +230,10 @@ namespace Twinsanity
+             }
+             writer.Write(clutBufferBasePointer);
+             writer.Write(unkBytes2);
+-            writer.Write(0);
+-            writer.Write(0);
++            writer.Write(vifCodeBlockIndex);
++            writer.Write(reservedPointer);
+             writer.Write(unkBytes3);
+-            writer.Write((byte)0);
+-            writer.Write((byte)0);
++            writer.Write(reservedBytes);
+             writer.Write(unusedMetadata);
+             writer.Write(vifBlock);
+             writer.Write(imageData);

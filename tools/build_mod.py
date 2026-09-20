@@ -42,11 +42,30 @@ def find_source():
         raise SystemExit(f"No original PAL ISO found in {ROOT}.\nPut your Crash Twinsanity (Europe) SLES-52568 ISO there (PCSX2 CRC {it.ORIGINAL_CRC}).")
     return found[0]
 
+def patch_editor():
+    """Apply tools/patches/*.patch to the Twinsanity Editor submodule if they are not in it yet.
+
+    The submodule is upstream's code and is not ours to commit into, but the library drops a few fields it
+    reads (see tools/patches/texture-preserve-reserved.patch), which makes a full re-save lossy. Carrying the
+    fixes as patches keeps them visible, reviewable and easy to send upstream."""
+    for patch in sorted(glob.glob(os.path.join(HERE, "patches", "*.patch"))):
+        check = subprocess.run(["git", "apply", "--reverse", "--check", patch], cwd=EDITOR, capture_output=True)
+        if check.returncode == 0: continue                # already applied
+        applied = subprocess.run(["git", "apply", patch], cwd=EDITOR, capture_output=True, text=True)
+        if applied.returncode:
+            raise SystemExit(f"could not apply {os.path.basename(patch)} to the editor submodule:\n{applied.stderr}")
+        print(f"  applied {os.path.basename(patch)} to the editor submodule")
+        return True                                       # something changed: the library must be rebuilt
+    return False
+
+
 def ensure_tools():
     src_newer = lambda out, *srcs: not os.path.exists(out) or any(os.path.getmtime(s) > os.path.getmtime(out) for s in srcs)
     if not os.path.exists(os.path.join(EDITOR, "Twinsanity", "Twinsanity.csproj")):
         print("fetching the Twinsanity Editor submodule...")
         subprocess.run(["git", "submodule", "update", "--init", "tools/twinsanity-editor"], cwd=ROOT, check=True)
+    if patch_editor() and os.path.exists(LIB_DLL):
+        os.remove(LIB_DLL)                                # force the rebuild below
     if not os.path.exists(LIB_DLL):
         vswhere = os.path.expandvars(r"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe")
         msbuild = subprocess.run([vswhere, "-latest", "-prerelease", "-requires", "Microsoft.Component.MSBuild", "-find", r"MSBuild\**\Bin\MSBuild.exe"],
