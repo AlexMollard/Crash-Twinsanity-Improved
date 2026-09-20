@@ -346,6 +346,7 @@ def write_test_config(level, iso):
         "[Patches]\nEnable = Cutscene Skip (Triangle)\nEnable = Test Rig\n\n[EmuCore/GS]\n"
         + f"upscale_multiplier = {os.environ.get('RIG_UPSCALE', '1')}\n"                                   # e.g. 6, the mod's preset
         + (f"Renderer = {renderer}\n" if renderer else "")
+        + "".join(kv.strip() + "\n" for kv in filter(None, os.environ.get("RIG_GS", "").split(",")))   # RIG_GS="hw_mipmap = true,TriFilter = 2"
         + ("\n[EmuCore/Speedhacks]\n" if os.environ.get("RIG_EE_RATE") or os.environ.get("RIG_FASTCDVD") else "")
         + (f"EECycleRate = {os.environ['RIG_EE_RATE']}\n" if os.environ.get("RIG_EE_RATE") else "")      # -3..3 (3 = 300%)
         + (f"fastCDVD = {os.environ['RIG_FASTCDVD']}\n" if os.environ.get("RIG_FASTCDVD") else ""))    # true / false
