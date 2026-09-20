@@ -5,6 +5,7 @@
   rig.py warp PATH                              make the next New Game start in level PATH
   rig.py level NAME [PATH] [--fresh]            go to level: states/NAME.p2s, or warp to PATH (~20s)
   rig.py pos | state | tp X Y Z                  Crash's position / game-flow state + cutscene check / teleport
+  rig.py goto X Z [RADIUS]                      walk him there on the stick - prefer this to tp (see goto())
   rig.py status                                 emulator status / game
   rig.py press BTN[+BTN..] [--frames N]         press buttons via the virtual pad (default 6 frames)
   rig.py hold BTN[+BTN..] | release             hold / release buttons
@@ -294,7 +295,13 @@ def level(name, path=None, fresh=False, timeout=300):
 
 def goto(tx, tz, radius=1.5, timeout=60.0, burst=0.25):
     """Walk Crash to world (tx, tz) with closed-loop steering; the stick is camera-relative, so the
-    world direction of 'stick up' and 'stick right' is re-measured every few steps."""
+    world direction of 'stick up' and 'stick right' is re-measured every few steps.
+
+    Prefer this to `teleport` wherever the test is about *being somewhere*. A teleport drops the player
+    through whatever is not loaded, does not run a trigger's approach, and reads back correct while leaving
+    him in a void - which is how the Evil Crash repro spent weeks measuring a place nobody can stand in.
+    Walking also proves the route exists: in the Cavern it took Crash from the warp spawn to the throw-me
+    trigger with his height unchanged the whole way, which is a floor check no teleport can give you."""
     import math
     p = Pine(); t0 = time.time()
     def step(lx, ly, dur):

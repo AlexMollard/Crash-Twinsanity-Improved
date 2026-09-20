@@ -33,10 +33,15 @@ altdoc     Levels\AltEarth\Hub\altdoc
 cavbridg   Levels\Earth\Cavern\cavbridg
 # Cavern Catastrophe is the one chapter with no restored skip: its director (script 3631) carries the
 # developers' CRASH_SKIP_CUTSCENE_L02A/B/C and CORTEX_SKIP_CUTSCENE_L02A/B/C but has no condition-572
-# rule anywhere, so nothing routes to them - it needs `addbody`, not the usual `copybody`. The throw-me
-# trigger at (-98.03, -4.58, 98.56) does fire on a plain warp, but what plays is a 1.5s beat whose whole
-# content is SPIN INTO CORTEX TO JOIN UP (flow 13, a real cutscene, just a tiny one). The scene proper
-# needs Cortex carried first, and spinning into him from the warp spawn has not managed it yet.
+# rule anywhere, so nothing routes to them - it needs `addbody`, not the usual `copybody`.
+# Getting the scene to play is the open part. `goto -98.03 98.56` walks from the warp spawn to the
+# throw-me trigger with Crash's height unchanged at -11.72 the whole way, so the route is real and the
+# floor is real - and no scene starts there. What the trigger does give on a plain warp is a 1.5s beat
+# whose whole content is the prompt SPIN INTO CORTEX TO JOIN UP (flow 13, so a real cutscene, just a
+# tiny one), which says the scene proper wants Cortex carried. Spin is square, not circle. Tried and
+# failed: spinning on Cortex's instance position (-100.23, 100.11), spinning at eight points across a
+# 6-unit grid around it, and standing still for 10s to let him come over. He wanders after the level
+# loads, so his live position has to be read out of RAM rather than taken from the level data.
 amberly_cortex Levels\school\Madame\amberly cortex
 psycho_p12 Levels\Ice\Hub\psycho progress=12
 psycho_p19 Levels\Ice\Hub\psycho progress=19
