@@ -55,11 +55,81 @@ This is the part that connects directly to the rest of the wiki.
 
 | | |
 |---|---|
-| **Engine** | Not written from scratch. The team started from the engine used for *Crash Bandicoot: The Wrath of Cortex* and "gradually added new stuff and improved various bits" - some subsystems were never replaced. |
+| **Engine** | **Nu2**, Traveller's Tales' in-house technology. Not written for this game: the team started from the build used for *Crash Bandicoot: The Wrath of Cortex* and "gradually added new stuff and improved various bits" - some subsystems were never replaced. |
 | **Legacy code nickname** | Programmers referred to the inherited parts as **"Knutsford code"**, after Traveller's Tales' main studio. |
 | **Languages** | "Mostly C++ with critical parts of the tech (like the renderer) hand written in assembler." |
 | **Gameplay scripting** | An in-house tool called **AgentLab**. |
 | **Engine afterlife** | *Super Monkey Ball Adventure*, the Oxford studio's next game, runs on the same engine and reuses some of Twinsanity's visuals and sound effects. |
+
+### Nu2, the engine with no name on the box
+
+Twinsanity runs on **Nu2** - the engine Traveller's Tales built for themselves and then used for nearly twenty years.
+Its reach is remarkable: every mainline Tt console and PC game from *The Wrath of Cortex* in 2001 through to *The Lego
+Movie 2 Video Game* in 2019 is the same engine, iterated. The LEGO games that Traveller's Tales became famous for are
+direct descendants of the thing Twinsanity is built on.
+
+It is better described as a **framework than an engine** - a set of libraries rather than one monolith. The clearest
+view of it comes from a sibling: *Haven: Call of the King*, Traveller's Tales' own 2002 PS2 game, shipped with symbol
+names left in, and its executable is built from libraries called `nucore`, `nu3d`, `numath`, `nusound2`, `nups2`,
+`mp2play`, `gamelib`, `edtools` and `coblib`. The source paths look like `..\nu2.ps2\nu3d\nuscene.c`: a library tree
+named for the engine, postfixed with the target platform, which is how the same code reached PS2, Xbox, GameCube and
+PSP.
+
+Two of those names are worth pausing on, because Twinsanity clearly has both: `mp2play` is MPEG-2 playback, which is
+what the [`.PSS` movies](../engine/movies) are, and `edtools` is editor tooling living inside the framework itself -
+the family AgentLab belongs to.
+
+:::note How firmly do we know this?
+Not from the binary. Twinsanity's retail executable is **stripped** - there is not a single `nu2` symbol or source
+path left in it, unlike Haven's. The attribution rests on two things instead: the developers' own statement that they
+started from the *Wrath of Cortex* engine, and *Wrath of Cortex* being the first game on the documented Nu2 list; plus
+the shared vocabulary below. It is an inference from a very short chain, not a string you can grep for.
+:::
+
+### The Haven Rosetta stone
+
+Haven is useful beyond its symbol names, because it shipped its scripts as **plain text with the developers' own
+documentation still in them**. Its `.flo` files - "Game Flow" - are commented command scripts with semaphores used as
+variables, `GoTo` / `GoSub` / `Return`, and commands like `PlayLevelCutScene`, `WaitFade`, `PlayFMV`, `LoadLevel`,
+`PreLoadLevel`, `SetCheckPoint` and `PlacePlayer`.
+
+Hold that next to Twinsanity and the family resemblance is hard to miss. This wiki's
+[glossary](../reference/glossary) defines **flow state** as "the game's top-level state machine" - the same Nu2 term.
+`PlayFMV` and `LoadLevel` are doing the jobs Twinsanity's `PlayMovie` and streaming loader do, and `PlacePlayer` /
+`SetCheckPoint` are `PosWarp`'s relatives.
+
+The difference is authoring, not architecture. Haven shipped human-readable text the engine parses at runtime.
+Twinsanity shipped **compiled state machines** - AgentLab's output, conditions and commands reduced to numbers - which
+is exactly why [Scripts](../engine/scripts) opens by saying the game has no scripting language. It had one; it just
+did not put it on the disc.
+
+### The formats travelled too
+
+The file formats are the hardest evidence of continuity, because a single community tool reads two games' worth of
+them. The [Twinsanity Editor](https://github.com/Smartkin/twinsanity-editor) supports *Crash Twinsanity* **and**
+*Super Monkey Ball Adventure*, and its format list spells out what the extensions mean:
+
+| Extension | What it is |
+|---|---|
+| `.RM2` / `.SM2` | PS2 level resources / PS2 scenery resources |
+| `.RMX` / `.SMX` | the Xbox equivalents |
+| `.RM` / `.SM` | the PSP versions, from *Super Monkey Ball Adventure* |
+| `.BD` / `.BH` | the file archive and its index |
+| `.MB` / `.MH` | the music archive and its index |
+
+That is the same resource system surviving a change of platform *and* a change of franchise. It also settles a
+question this wiki got wrong for a while: `.SM2` is **scenery**, not sound.
+
+### What came after
+
+Nu2's PS2 sub-engine was "purpose-built for the PlayStation 2, and then ported and modified for use on other
+platforms" - it carried the LEGO games from *Lego Star Wars* through *Lego Batman*. When Traveller's Tales dropped PS2
+support for *Lego Indiana Jones 2* the engine was revamped into the **Next-Gen (NXG)** branch, which ran until 2019.
+Only with *Lego Star Wars: The Skywalker Saga* did they replace it, with a new engine called **NTT** - pronounced
+"entity" - and the studio has since moved to Unreal.
+
+So the direct line from the disc in your drive runs: *Wrath of Cortex* → **Twinsanity** → *Super Monkey Ball
+Adventure* → *Lego Star Wars* → the entire LEGO catalogue.
 
 ### AgentLab is still on your disc
 
@@ -149,3 +219,9 @@ rough, handmade, and built by people trying to do right by what Naughty Dog left
 - [Interview with Rebecca Kneubuhl - Crash Mania](https://www.crashmania.net/en/backstage/interviews/rebecca-kneubuhl/)
 - [Unused Content - Beyond Twinsanity](https://beyondtwinsanity.com/evolution/category/unused-content)
 - [Traveller's Tales Oxford Studio - MobyGames](https://www.mobygames.com/company/58833/travellers-tales-oxford-studio/games/)
+- [Engine - Traveller's Tales Lego Game Modding Wiki](https://ttmodding.fandom.com/wiki/Engine) - the Nu2 lineage and
+  its sub-engines
+- [Poking and Prodding Haven - Mark Sowden, TalonBrave.info](https://talonbrave.info/2025/09/10/haven.html) - the Nu2
+  library list, the Game Flow scripts and their documentation comments
+- [Twinsanity Editor README](https://github.com/Smartkin/twinsanity-editor/blob/master/README.MD) - the format list
+  across Twinsanity and *Super Monkey Ball Adventure*
