@@ -79,6 +79,13 @@ finished". About 1.5 s of that path is included in every load-time measurement.
 - **Reference screenshots are build-specific.** The menu images used for waits were captured on the modded build and
   do not match the retail one closely enough; use fixed timings when booting the original ISO.
 
+- **A regression list in the wrong format used to run nothing and say nothing.** `run_cutscenes.py` needs
+  `NAME STATE X Y Z`, and `cutscenes.txt` is written `NAME STATE X Z` with no height - so all **11** scenes in it,
+  the ones whose skip comes from the executable patch alone, were skipped by the same silent `continue` that
+  filters out unwanted names. The runner now reports every line it cannot parse and ends with a count, because a
+  run that reports nothing is not a run that passed. **Those 11 still need their Y values before they are actually
+  covered**; `cutscenes_orphan.txt` has always been in the right format and does run.
+
 ## A typical session
 
 ```bash
