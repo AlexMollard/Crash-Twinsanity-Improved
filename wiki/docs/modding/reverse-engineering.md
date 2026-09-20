@@ -366,3 +366,35 @@ discard a real finding; a bad read that looks like a sentinel invites you to kee
 a second, independent route to the same fact - `agent + 0x84` is `objInstCxt`, and `objInstCxt + 0x6` is the
 same `objectId` that `ActivateObjectInstance` takes. That path is used by engine code rather than derived from
 a struct listing, so logging both and comparing them settles which of the two you are looking at.
+
+## Object ids are game-wide, but each level declares only a handful
+
+An object id identifies the same object everywhere in the game. Id 877 is `ALTEARTH_DOCAMOK_EVILCRASH` in
+`altdoc`, `altdoc_b` and `altdoc_c`; 871 is `act_TWINTECH_BALL_DOCK` in five AltEarth files; 567 is
+`act_GLOBAL_SEAGULL` in three. Where the names differ across files it is only the level prefix, an `act_` or
+`old_` prefix, and a trailing instance number.
+
+What each level file contains is not the id space, it is a *selection* from it. Across 130 files the median
+level declares **24** objects, the largest 60, out of a range running 0 to 1163. So around 98% of the id range
+is absent from any given file, and an agent can perfectly well be running in a level whose object list never
+mentions its id.
+
+This makes absence worthless as evidence and presence dangerous as evidence:
+
+- **"Id 871 is not declared in this level" says nothing.** Neither are roughly 1,140 other ids. Check the base
+  rate before an absence is allowed to count against a measurement.
+- **Naming an id from one level's table can hand you an unrelated object.** Because the table is a selection,
+  a number that is missing from the level you care about may be present in another with a different object
+  behind it.
+
+`tools/re/objindex.py` builds the whole table by running `twinsdump objects` over every extracted `.rm2`, which
+is the only source that can name an id without guessing:
+
+```bash
+python tools/re/objindex.py --rebuild
+python tools/re/objindex.py 871 877
+python tools/re/objindex.py --name EVILCRASH
+```
+
+It validates against known answers: 876 and 877 come back as the Doc Amok summoner and Evil Crash, in all
+three chunk files each, which is also why those actors have three instance contexts apiece.

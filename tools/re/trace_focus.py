@@ -117,53 +117,75 @@ counted:                                # the record is written first and only c
     or    $a3, $a3, $t0
     sh    $a3, 0x18($v1)
 
-    ori   $at, $zero, 0xffff            # the node's own objId_, which is legitimately -1 when undefined
-    daddu $a3, $zero, $zero
-    beq   $t1, $zero, haveids
+    ori   $at, $zero, 0xffff            # every field defaults to "not read", written before anything is
+    sh    $at, 0x10($v1)                # walked. A failed walk then needs no register to report with, and
+    sh    $at, 0x12($v1)                # more importantly it can bail out from any depth without unwinding.
+    sh    $at, 0x16($v1)
+    sw    $zero, 0x14($v1)
+    sw    $zero, 0x1c($v1)
+
+    beq   $t1, $zero, filter
     nop
-    lhu   $at, 0x7c($t1)
-    lw    $a3, 0x84($t1)                # objInstCxt - the route real engine code uses
-haveids:
+    lhu   $at, 0x7c($t1)                # the agent itself is safe: the game dereferences it either side of us
     sh    $at, 0x10($v1)
-    sw    $a3, 0x1c($v1)
-
-    ori   $t9, $zero, 0xffff            # route A: objInstCxt->objectId, straight off the agent
-    beq   $a3, $zero, haveobj
-    nop
-    lhu   $t9, 0x6($a3)
-haveobj:
-    sh    $t9, 0x12($v1)
-
-    ori   $t2, $zero, 0xffff            # route B: agent -> instContext -> node 1 -> objInstCxt -> objectId,
-    beq   $t1, $zero, haveb             # which is what FUN_00114048 does to identify a candidate. Reaching
-    nop                                 # the same id two ways is the only thing that can settle whether the
-    lw    $a3, 0x0($t1)                 # agent really is node index 1.
-    beq   $a3, $zero, haveb
-    nop
-    lw    $a3, 0xdc($a3)                # nodesList_ at ctx+0xd4, nodes[] at +4, index 1 -> ctx+0xdc
-    beq   $a3, $zero, haveb
-    nop
-    lw    $a3, 0x84($a3)
-    beq   $a3, $zero, haveb
-    nop
-    lhu   $t2, 0x6($a3)
-haveb:
-    sh    $t2, 0x16($v1)
-
-    daddu $a3, $zero, $zero
-    beq   $t1, $zero, nogate
-    nop
-    lw    $a3, 0x88($t1)                # the gate bits as they were on entry
-nogate:
+    lw    $a3, 0x88($t1)
     sh    $a3, 0x14($v1)
 
-    lw    $a3, 0x4($t8)                 # the filter matches any of the three, so it works whichever turns
-    beq   $a3, $zero, commit            # out to be the meaningful one
+    lw    $a3, 0x84($t1)                # route A: objInstCxt straight off the agent
+    sw    $a3, 0x1c($v1)
+    beq   $a3, $zero, routeb
     nop
+    andi  $t2, $a3, 0x3                 # a misaligned load is an address error, not a wrong answer
+    bne   $t2, $zero, routeb
+    nop
+    srl   $t2, $a3, 0x19                # anything at or above 0x02000000 is not RAM: reading it is a TLB miss
+    bne   $t2, $zero, routeb
+    nop
+    lhu   $t9, 0x6($a3)
+    sh    $t9, 0x12($v1)
+
+routeb:                                 # route B: agent -> instContext -> node 1 -> objInstCxt -> objectId,
+    lw    $a3, 0x0($t1)                 # the walk FUN_00114048 does to identify a candidate
+    beq   $a3, $zero, filter
+    nop
+    andi  $t2, $a3, 0x3
+    bne   $t2, $zero, filter
+    nop
+    srl   $t2, $a3, 0x19
+    bne   $t2, $zero, filter
+    nop
+    lw    $a3, 0xdc($a3)                # nodesList_ at ctx+0xd4, nodes[] at +4, so index 1 is ctx+0xdc
+    beq   $a3, $zero, filter
+    nop
+    andi  $t2, $a3, 0x3
+    bne   $t2, $zero, filter
+    nop
+    srl   $t2, $a3, 0x19
+    bne   $t2, $zero, filter
+    nop
+    lw    $a3, 0x84($a3)
+    beq   $a3, $zero, filter
+    nop
+    andi  $t2, $a3, 0x3
+    bne   $t2, $zero, filter
+    nop
+    srl   $t2, $a3, 0x19
+    bne   $t2, $zero, filter
+    nop
+    lhu   $t2, 0x6($a3)
+    sh    $t2, 0x16($v1)
+
+filter:
+    lw    $a3, 0x4($t8)                 # matches any of the three ids, so it works whichever is meaningful
+    beq   $a3, $zero, commit
+    nop
+    lhu   $t9, 0x12($v1)
     beq   $a3, $t9, commit
     nop
+    lhu   $t2, 0x16($v1)
     beq   $a3, $t2, commit
     nop
+    lhu   $at, 0x10($v1)
     bne   $a3, $at, out
     nop
 commit:
