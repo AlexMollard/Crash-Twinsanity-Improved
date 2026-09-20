@@ -29,6 +29,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 |:-:|---|---|---|
 | ⏭️ | **Cutscene skip: hold △** | ISO | Brings back the skip the developers disabled, and wires it back into scenes where the skip was removed from the level data. [Status ↓](#cutscene-skip-status) |
 | 💬 | **"Hold △ to skip" prompt** | ISO | Appears in the letterbox's bottom bar during every skippable cutscene, in all five languages. |
+| 🎬 | **Movies skip too** | ISO | The pre-rendered movies had no skip at all. Hold △ for half a second and the movie ends, exactly as if it had played out. [Details ↓](#skipping-the-movies) |
 | 🛡️ | **Aku Aku invincibility that works** | ISO | With three masks Crash no longer dies to TNT, Nitro or bomb explosions. [Details ↓](#aku-aku-invincibility) |
 | 🌑 | **Shadows on crates** | ISO | Crash's shadow now falls on crates too, so you can see where you'll land. [Details ↓](#shadows-on-crates) |
 | 👻 | **No more invisible Crash** | ISO | Getting hurt just before a cutscene could leave Crash invisible through the scene and after it. [Details ↓](#invisible-crash-after-a-cutscene) |
@@ -93,9 +94,14 @@ Hold **△** during a cutscene to skip it. Every skippable scene shows *HOLD △
 | ✅ | Walrus chase | 10.8 s → 4.1 s | Starts the chase music. The developers' unfinished skip warped the walrus onto Crash, killing him as control returned; it now stays behind him as in the full scene |
 | ✅ | Rockslide Rumble | 25.3 s → 4.0 s | Crash and Cortex go to the top of the slide, the music starts and Crash mounts the Humiliskate |
 | ⛔ | Totem falling | — | **Left unskippable.** Skipping drops Crash into the totem chase before it's set up, and he dies. |
-| 🚧 | Party arena, lab interior | — | Work in progress (`mod/levels-wip`). Both are hard to reach: the party arena's scene is switched on by beating the Mechabandicoot, and the lab interior's sits behind a chain of movies and story flags |
+| 🚧 | Party arena | — | Work in progress (`mod/levels-wip`): the scene is switched on by beating the Mechabandicoot, which the rig can't do yet |
 
 <sub>¹ Time from the start of the scene until the player has control again. The skipped times include about 2.5 s of the rig's own wait and button hold.</sub>
+
+> [!NOTE]
+> **Cutscenes that are movies.** Some of what the game calls a cutscene is a pre-rendered movie rather than an in-engine
+> scene - the Iceberg Lab interior, for instance, plays 53 seconds of `H02_B.PSS` every time you walk in. Those are not
+> in the table; they are covered by [the movie skip](#skipping-the-movies).
 
 > [!NOTE]
 > **Known differences after a skip.** A few level hints don't appear: "Clear a path for Cortex!", "Use ◯ to crouch", "Tap □ to rapid fire". In Iceberg Lab and Classroom Chaos the character stands a few steps from where the full scene would leave them.
@@ -140,6 +146,23 @@ output runs at 60 Hz. The vsync callback now counts in fifths (a frame every 2.4
 vsyncs), which is exactly 25 fps at 60 Hz, and keeps counting while the player is still decoding, as the original
 flag did. Rig, reading the player's own frame counter: the boot movies went from 30.1 and 29.7 fps to 25.0 and
 24.7 fps; the original disc at 50 Hz plays them at 25.1 and 24.8.
+
+### Skipping the movies
+
+About half of Twinsanity's cut scenes are pre-rendered movies rather than in-engine scenes, and they had no skip at
+all - not even a button that stops them. Walking into the Iceberg Lab interior plays 53 seconds of `H02_B.PSS`, every
+single time.
+
+Hold **△** for half a second during a movie and it ends. The movie player checks once a frame whether its stream is
+still running and shuts it down when the answer is no; that check now goes through a stub (`mod/elf_patches.txt`)
+which also reads the Triangle button - the same pad read the cut scene skip uses - and answers "finished" after 30
+frames of holding. Nothing else changes: the movie stops down its own ending path, and the script that started it
+carries on exactly as if it had played out. The half-second hold is there so a button pressed for another reason
+doesn't cut a movie short.
+
+Rig-tested at the lab interior, from a fresh boot: the movie plays for 54.2 s untouched and 1.8 s when △ is held, and
+in both cases the player ends up in the same place, in the same game-flow state, with control back. The start-up logos
+are movies too, so holding △ through them brings the title screen up after 44 s instead of 62 s.
 
 ### Invisible Crash after a cutscene
 
@@ -261,6 +284,7 @@ python run_cutscenes.py cutscenes_orphan.txt classroom        # full vs skipped,
 python prompt_test.py classroom crgpa08 6.60 2.08 -20.58 10.8  # skip prompt shown during the scene, gone after
 RIG_FASTCDVD=true python load_bench.py fast                   # level load times from a fresh boot
 python arrival_test.py walrus Levels\Ice\HighSeas\gpa10 results skip   # scenes that play as a level loads
+python fmv_test.py Levels\Ice\Hub\labint -14.34 -2.85 -10.33 hold    # pre-rendered movie, skipped
 python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cortex levels need Cortex (via the classroom skip)
 ```
 
@@ -276,10 +300,11 @@ python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cort
 - [x] Faster level loading
 - [x] Steady 60 fps (game frame timing matched to the 60 Hz output)
 - [x] Movies at their real speed at 60 Hz
+- [x] Make the pre-rendered movies skippable too
 - [x] Fix Crash staying invisible after being hurt just before a cutscene
 - [ ] Evil Crash running in circles in Bandicoot Pursuit (PAL). Reproduced in the rig: his run heading sits about 20° off
       the route and he orbits the node instead of reaching it. The cause is in his steering, not the level's path data
-- [ ] The remaining cutscenes in `mod/levels-wip`
+- [ ] The party arena cutscene in `mod/levels-wip` (needs a way to reach it: it starts after the Mechabandicoot fight)
 
 ### Not included
 

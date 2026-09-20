@@ -109,3 +109,38 @@
 00116F70 8F828098 00000000   # nop
 002AFDEC 93828B53 08045BCA   # j 0x116F28 (the stub)
 002AFDF0 1040000B FFBF0000   # sd ra,0(sp) (the callback's own, now in the delay slot)
+
+[Movies can be skipped - hold Triangle]
+# Twinsanity's cut scenes are a mix of in-engine scenes (skippable above) and pre-rendered movies, and the movies had
+# no skip at all: entering the Iceberg Lab plays 53 seconds of H02_B.PSS every time. The movie player's per-frame step
+# (0x2AF958) asks the player object whether it is still running and stops it when the answer is no. That question now
+# goes through a stub that also watches the Triangle button - the same pad read the cut scene skip uses - and answers
+# "finished" once it has been held for half a second, so the movie stops down its own ending path and the script that
+# started it carries on exactly as if it had played out.
+00116F74 3C05002F 10400014   # beq   v0,zero,stop      the movie already finished: stop it as before
+00116F78 0220202D 3C010011   # lui   at,0x11           (delay) counter page
+00116F7C 0C0811C6 8F84801C   # lw    a0,-32740(gp)     G_GameController
+00116F80 24A5DE90 8C84003C   # lw    a0,60(a0)         player 1's pad
+00116F84 3C020031 1080000E   # beq   a0,zero,reset     no pad
+00116F88 8C429908 00000000   # nop
+00116F8C 3C050031 0C0AC894   # jal   0x2B2250          GetButtonPressure(pad, Triangle) - the same call
+00116F90 0220202D 24050004   # addiu a1,zero,4         (delay) button 4 = Triangle
+00116F94 24A598F0 2C420020   # sltiu v0,v0,32          v0 = not pressed (raw pressure, 0-255)
+00116F98 8C500014 14400009   # bne   v0,zero,reset     let go: start over
+00116F9C 0C0811FC 3C010011   # lui   at,0x11           (delay) the call clobbered at
+00116FA0 00108182 8C226FD8   # lw    v0,held(at)
+00116FA4 321000FF 24420001   # addiu v0,v0,1           one more frame held
+00116FA8 03A0202D AC226FD8   # sw    v0,held(at)
+00116FAC 0C081126 2C42001E   # sltiu v0,v0,30
+00116FB0 0200282D 10400005   # beq   v0,zero,stop      half a second: skip the movie
+00116FB4 8FA50000 00000000   # nop
+00116FB8 0C0811FC 080ABE9D   # j     0x2AFA74          keep playing
+00116FBC 0220202D 00000000   # nop
+00116FC0 0C0810CE 080ABE9D   # reset: j 0x2AFA74       keep playing
+00116FC4 03A0202D AC206FD8   # sw    zero,held(at)     (delay)
+00116FC8 DFB00010 AC206FD8   # stop:  sw zero,held(at)
+00116FCC DFB10018 8E230000   # lw    v1,0(s1)          the player's flags, as the delay slot loaded them
+00116FD0 DFBF0020 080ABE9F   # j     0x2AFA7C          the player's own 'the movie is over' path
+00116FD4 03E00008 00000000   # nop
+00116FD8 27BD0030 00000000   # held: frames Triangle has been held (data)
+002AFA6C 50400003 0C045BDD   # beql v0,zero,0x2AFA7C -> jal 0x116F74 (the stub; the delay slot is unchanged)
