@@ -1,0 +1,4 @@
+# TEST ONLY: make the Tiki Mon go straight to his defeat cutscene when the fight starts, so the rig can reach the
+# beaten boss without fighting him.
+file Levels\Earth\Hub\hubd.rm2
+settarget 4015 13 0 5

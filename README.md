@@ -14,7 +14,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 [![.NET](https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com)
 [![Last commit](https://img.shields.io/github/last-commit/AlexMollard/Crash-Twinsanity-Improved)](https://github.com/AlexMollard/Crash-Twinsanity-Improved/commits/main)
 
-[Features](#features) · [Quick start](#quick-start) · [Cutscene skips](#cutscene-skip-status) · [Gameplay fixes](#gameplay-fixes) · [How it works](#how-it-works) · [Development](#development) · [Credits](#credits)
+[Features](#features) · [Quick start](#quick-start) · [Cutscene skips](#cutscene-skip-status) · [Gameplay fixes](#gameplay-fixes) · [How it works](#how-it-works) · [Roadmap](#roadmap) · [Credits](#credits)
 
 </div>
 
@@ -32,6 +32,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 | 🎬 | **Movies skip too** | ISO | The pre-rendered movies had no skip at all. Hold △ for half a second and the movie ends, exactly as if it had played out. [Details ↓](#skipping-the-movies) |
 | 🛡️ | **Aku Aku invincibility that works** | ISO | With three masks Crash no longer dies to TNT, Nitro or bomb explosions. [Details ↓](#aku-aku-invincibility) |
 | 🌑 | **Shadows on crates** | ISO | Crash's shadow now falls on crates too, so you can see where you'll land. [Details ↓](#shadows-on-crates) |
+| 🗿 | **A beaten boss stays beaten** | ISO | The defeated Tiki Mon still hurt anything that touched it, costing a mask or the whole fight. [Details ↓](#things-that-hurt-when-they-shouldnt) |
 | 👻 | **No more invisible Crash** | ISO | Getting hurt just before a cutscene could leave Crash invisible through the scene and after it. [Details ↓](#invisible-crash-after-a-cutscene) |
 | ⏱️ | **Faster loading** | ISO + PCSX2 | Level loads take 25–35% less time from the ISO changes alone, and 40–50% less with PCSX2's Fast CDVD (on in the preset). [Details ↓](#faster-loading) |
 | 📺 | **480p / 60 Hz output** | ISO | Progressive output instead of 50 Hz PAL interlaced (patch by PeterDelta), with the game's frame timing set to match: a steady 60 fps, and movies at their real speed. [Details ↓](#steady-60-fps) |
@@ -164,6 +165,21 @@ Rig-tested at the lab interior, from a fresh boot: the movie plays for 54.2 s un
 in both cases the player ends up in the same place, in the same game-flow state, with control back. The start-up logos
 are movies too, so holding △ through them brings the title screen up after 44 s instead of 62 s.
 
+### Things that hurt when they shouldn't
+
+Beat the Tiki Mon at the top of the Earth hub and the totem drops to the ground and stays there, looking thoroughly
+finished. Walk into it and it still hits you - a mask if you have one, otherwise a life and the whole fight again.
+
+Contact damage is one flag on an object (agent bit 6, which the game sets and clears with `SetAgent` all over the
+place - 718 scripts turn it off). The Tiki Mon's fight ends with `BossModeExit`, a cutscene and nothing else: the flag
+is never cleared, so the wreck keeps hitting. The level recipe `mod/levels/harmless_after_defeat.ops` adds the game's
+own `SetAgent(64)` to the last step of the boss script. The totem keeps its collision, so you can still climb on it.
+
+Rig-tested by hooking the engine's contact-damage call and counting hits: before the fight, touching the boss lands 19
+hits and costs a mask, exactly as it should; after the defeat it lands none and Crash can stand on the wreck.
+
+More of the game is being swept for the same thing - see the [roadmap](#roadmap).
+
 ### Invisible Crash after a cutscene
 
 After a hit, Crash flickers for two seconds: the grace-period code hides him for the last fifth of every 0.2 s while
@@ -280,6 +296,7 @@ a cutscene in full and skipped from the same state and compare the results.
 ```bash
 cd tools/rig
 python rebuild.py --include mod/levels-wip --levels crgpa08   # test ISO + fresh save states
+python rebuild.py --include tools/rig/testops                 # test-only recipes (e.g. jump the Tiki Mon to his defeat)
 python run_cutscenes.py cutscenes_orphan.txt classroom        # full vs skipped, verdict in results/summary.txt
 python prompt_test.py classroom crgpa08 6.60 2.08 -20.58 10.8  # skip prompt shown during the scene, gone after
 RIG_FASTCDVD=true python load_bench.py fast                   # level load times from a fresh boot
@@ -290,26 +307,56 @@ python make_cortex_state.py amberly_cortex Levels\school\Madame\amberly   # Cort
 
 </details>
 
-### Roadmap
+## Roadmap
 
-- [x] Restore the cutscene skip (executable patch plus 16 level edits)
-- [x] One-step ISO build with room for level edits
-- [x] An on-screen "hold △ to skip" prompt, using the game's own hint text
-- [x] Make three-mask invincibility protect from explosions
-- [x] Show Crash's shadow on crates
-- [x] Faster level loading
-- [x] Steady 60 fps (game frame timing matched to the 60 Hz output)
-- [x] Movies at their real speed at 60 Hz
-- [x] Make the pre-rendered movies skippable too
-- [x] Fix Crash staying invisible after being hurt just before a cutscene
-- [ ] Evil Crash running in circles in Bandicoot Pursuit (PAL). Reproduced in the rig: his run heading sits about 20° off
-      the route and he orbits the node instead of reaching it. The cause is in his steering, not the level's path data
-- [ ] The party arena cutscene in `mod/levels-wip` (needs a way to reach it: it starts after the Mechabandicoot fight)
+<div align="center">
 
-### Not included
+| ✅ Shipped | 🔭 Next up | 🔬 Investigating | ⛔ Not doing |
+|:-:|:-:|:-:|:-:|
+| **11** | **3** | **3** | **2** |
 
-The *Beyond Twinsanity* content mods (AnTime Agony, Lava Caves) add new content rather than fixes. Install them with
-[CrateModLoader](https://github.com/TheBetaM/CrateModLoader).
+*Nothing ships until the automated rig has played it. Every line below says how it was tested, or what is still in the way.*
+
+</div>
+
+### ✅ Shipped
+
+| | Fix | What you notice |
+|:-:|---|---|
+| ⏭️ | **Cutscene skip** | Hold △ and the scene ends. 16 scenes needed their cut branch rebuilt in the level data; the rest came back with the executable patch. [Status ↑](#cutscene-skip-status) |
+| 💬 | **Skip prompt** | *HOLD △ TO SKIP* in the letterbox, in all five languages, only while a scene can actually be skipped. |
+| 🎬 | **Skippable movies** | The pre-rendered movies stop too - including the 53-second one at the Iceberg Lab door and the start-up logos. |
+| 🛡️ | **Invincibility that works** | Three masks now survive TNT, Nitro and bombs instead of dying to them. |
+| 🗿 | **A beaten boss stays beaten** | The defeated Tiki Mon no longer hits you when you walk into it. |
+| 👻 | **Visible Crash** | Getting hurt just before a cutscene no longer leaves him invisible for the rest of the level. |
+| 🌑 | **Shadows on crates** | Crash's shadow falls on crates, so you can see where you will land. |
+| ⏱️ | **Faster loading** | Level loads 25-35% shorter from the ISO alone, 40-50% with Fast CDVD. |
+| 📺 | **Steady 60 fps** | 480p / 60 Hz output with the game's own frame timing matched to it - no more hub judder. |
+| 🎞️ | **Movies at their real speed** | 25 fps instead of 30, so they no longer run 20% fast. |
+| 📦 | **One-step build** | `Build Modded ISO.bat` turns your own disc image into a patched one and sets PCSX2 up to match. |
+
+### 🔭 Next up
+
+| | Item | What has to happen first |
+|:-:|---|---|
+| 🗿 | **Sweep the rest of the game for contact damage that shouldn't be there** | The Tiki Mon was the first one found. The other six boss fights and every object that is left lying around after it is beaten need the same check, with the engine's contact-damage call hooked to catch them. |
+| 🚧 | **Party arena cutscene skip** | The recipe is written (`mod/levels-wip/party_arena.ops`) but the scene is switched on by beating the Mechabandicoot, and the rig can't fight a boss yet - so it can't be tested, and untested skips don't ship. |
+| 🧭 | **Evil Crash running in circles (Bandicoot Pursuit)** | Reproduced: his run heading sits about 20° off the route and he orbits the node instead of reaching it. It is his steering code, not the level's path data, so it needs the AI reversed. |
+
+### 🔬 Investigating
+
+| | Item | Where it stands |
+|:-:|---|---|
+| 🌫️ | **The fog line** | A visible seam where the fog starts. Needs a level and a spot to reproduce before anything can be measured. |
+| 🐌 | **PAL menu slowness** | Often reported, but no reproducible definition found yet - the front end runs at the same rate as the game. |
+| 💬 | **A skip prompt during movies** | The movie player owns the screen while it runs, so the hint would have to be drawn from inside it rather than from the game's text bar. |
+
+### ⛔ Not doing
+
+| | Item | Why |
+|:-:|---|---|
+| ⛔ | **Skipping the falling-totem scene** | The skip drops Crash into the totem chase before it is set up and he dies. The developers cut that one for the same reason; it stays unskippable. |
+| ⛔ | **New levels and new content** | This is a fix-and-polish mod. The *Beyond Twinsanity* mods (AnTime Agony, Lava Caves) add content - install them with [CrateModLoader](https://github.com/TheBetaM/CrateModLoader). |
 
 ## Credits
 

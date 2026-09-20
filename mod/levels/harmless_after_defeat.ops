@@ -1,0 +1,7 @@
+# Things that stay in the level after they are beaten but keep hurting Crash on contact. Contact damage is agent
+# bit 6 (the object's creation-helper flags, bit 8); the game turns it off with SetAgent(64) in 700-odd places.
+
+# Tiki Mon (Totem Hokum boss, Earth hub): the fight ends with BossModeExit and the beaten totem simply sits in the
+# arena - still dealing a contact hit, so walking into it costs a mask, or a life and the whole fight again.
+file Levels\Earth\Hub\hubd.rm2
+appendcmds 4015 8 0 1511 7 0   # COM_TIKI_MON_ACTIVATED state 8, the last step after the defeat cutscene: SetAgent(64) (copied from COM_EARTH_WORM_START)
