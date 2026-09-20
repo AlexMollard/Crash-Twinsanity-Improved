@@ -37,6 +37,8 @@ Then *Ratchet & Clank* shipped in 2002 with a strikingly similar planet-hopping 
 Evolution and **restarted production**, this time aiming for the funniest possible Crash game rather than the most
 epic one. The deadline did not move.
 
+![Timeline: Crash Bandicoot Evolution runs from 2001 until Ratchet and Clank ships in late 2002, when the project restarts as Twinsanity against the same ship date, leaving under two years, with prototype milestones in 2003 and 2004](/img/twinsanity-schedule.svg)
+
 :::note The restart is the root cause of a lot of this wiki
 Starting again from near-scratch against an unchanged ship date is why so much was cut late, why some cutscenes
 explain things that were never set up, and - most relevant here - why features like the cutscene skip ended up disabled
@@ -67,6 +69,8 @@ Twinsanity runs on **Nu2** - the engine Traveller's Tales built for themselves a
 Its reach is remarkable: every mainline Tt console and PC game from *The Wrath of Cortex* in 2001 through to *The Lego
 Movie 2 Video Game* in 2019 is the same engine, iterated. The LEGO games that Traveller's Tales became famous for are
 direct descendants of the thing Twinsanity is built on.
+
+![Timeline of the Nu2 engine from 1997 to 2024: a Sonic R precursor, then the PlayStation 2 generation containing Crash Twinsanity in 2004, then the NUP, PS2-HD and Next-Gen branches carrying the LEGO games to 2019, then NTT and Unreal](/img/nu2-lineage.svg)
 
 It is better described as a **framework than an engine** - a set of libraries rather than one monolith. The clearest
 view of it comes from a sibling: *Haven: Call of the King*, Traveller's Tales' own 2002 PS2 game, shipped with symbol

@@ -117,6 +117,27 @@ then [Level recipes](../modding/recipes) for how to edit one. Restoring an orpha
 trigger - the scene data is usually intact; what it has lost is the thing that starts it.
 :::
 
+## Where to actually see it
+
+Almost none of this survives as text - it survives as screenshots, concept art and video, held by the people who did
+the archival work. Those images belong to them or to the publisher, so this wiki links to them rather than re-hosting
+them. If you want to *see* the cut content, these are the places:
+
+| What you want to see | Where |
+|---|---|
+| **The Bug Run**, running, from the prototype | [Jon Burton's GameHut channel](https://www.youtube.com/watch?v=EFrJcxt-c_0) - he shows the December 2003 build himself |
+| **Gone a Bit Coco** and the other cut levels | [Crash Mania's unused content galleries](https://www.crashmania.net/en/games/crash-twinsanity/unused-content/old-stuff/) |
+| **Beta screenshots**, build by build | [Beyond Twinsanity's prototypes section](https://beyondtwinsanity.com/evolution/category/prototypes--early-builds) |
+| **Cut characters and concept art** | [Keith Webb's own Crash concept portfolio](http://www.kokopolo.com/HOSTS/WEBBSTA/PROJECTS/UNIVERSAL/CRASH_CONCEPT/crash_concept.html) |
+| **Deleted cutscenes** | [The Deleted Scenes playlist](https://www.youtube.com/playlist?list=PL9D33F6B9DDDBF83C) |
+| **Unused scripts brought back** | [Beyond Twinsanity's retail unused-content pages](https://beyondtwinsanity.com/evolution/category/retail-game), where community members have got some of them running |
+
+:::note Why there are no beta screenshots on this page
+Everything visual here would be someone else's scan, capture or artwork. Linking costs you one click and credits the
+people who preserved it; copying it into this repository would not. The screenshots this wiki *does* host are all
+captures of the modded build from the project's own disc.
+:::
+
 ## Sources
 
 - [List of Crash Twinsanity pre-release and unused content - Crash Bandicoot Wiki](https://crashbandicootwiki.com/wiki/List_of_Crash_Twinsanity_pre-release_and_unused_content)

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" width="900" height="330" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" role="img" aria-label="Development timeline of Crash Twinsanity from 2001 to late 2004. Crash Bandicoot Evolution runs from 2001 until Ratchet and Clank ships in late 2002, at which point the project restarts from scratch as Twinsanity with the original ship date unchanged, leaving under two years.">
+  <rect width="900" height="330" rx="10" fill="#171a21"/>
+
+  <text x="28" y="34" fill="#e8ebf1" font-size="17" font-weight="600">The restart, and the deadline that did not move</text>
+  <text x="28" y="54" fill="#98a2b3" font-size="12.5">Why a game this inventive shipped with this much missing.</text>
+
+  <!-- Evolution phase -->
+  <rect x="60" y="88" width="334" height="30" rx="5" fill="#5a4a6e"/>
+  <text x="74" y="108" fill="#ded6ea" font-size="12.5" font-weight="600">Crash Bandicoot Evolution</text>
+  <text x="60" y="135" fill="#7d8798" font-size="10.5">Serious tone · patchwork planet · alien ants</text>
+
+  <!-- the break -->
+  <line x1="400" y1="82" x2="400" y2="200" stroke="#e05c5c" stroke-width="2" stroke-dasharray="5 4"/>
+  <rect x="314" y="62" width="173" height="21" rx="5" fill="#e05c5c"/>
+  <text x="400" y="77" fill="#1a1013" font-size="11.5" font-weight="700" text-anchor="middle">Ratchet &amp; Clank ships, 2002</text>
+
+  <!-- Twinsanity phase -->
+  <rect x="406" y="88" width="376" height="30" rx="5" fill="#f2a33c"/>
+  <text x="420" y="108" fill="#171a21" font-size="12.5" font-weight="700">Twinsanity — restarted from near-scratch</text>
+  <text x="406" y="135" fill="#7d8798" font-size="10.5">Same ship date. Funding cut partway. Levels, characters and mechanics removed late.</text>
+
+  <!-- ship -->
+  <rect x="786" y="88" width="62" height="30" rx="5" fill="#4a9e6b"/>
+  <text x="817" y="108" fill="#0f1a14" font-size="11.5" font-weight="700" text-anchor="middle">shipped</text>
+
+  <!-- year axis -->
+  <g font-size="11" fill="#7d8798" text-anchor="middle">
+    <text x="60" y="166">2001</text>
+    <text x="253" y="166">2002</text>
+    <text x="446" y="166">2003</text>
+    <text x="639" y="166">2004</text>
+    <text x="854" y="166">2005</text>
+  </g>
+
+  <!-- milestone track -->
+  <line x1="60" y1="196" x2="854" y2="196" stroke="#333a47"/>
+  <g font-size="10.5" fill="#98a2b3" text-anchor="middle">
+    <g fill="#5b96e0">
+      <circle cx="462" cy="196" r="5"/><circle cx="623" cy="196" r="5"/>
+      <circle cx="657" cy="196" r="5"/><circle cx="693" cy="196" r="5"/>
+      <circle cx="764" cy="196" r="5"/>
+    </g>
+    <text x="462" y="218">Feb 2003</text><text x="462" y="231" fill="#6b7484">first prototype</text>
+    <text x="609" y="218">Dec 2003</text><text x="609" y="231" fill="#6b7484">Bug Run playable</text>
+    <text x="700" y="218">Apr 2004</text><text x="700" y="231" fill="#6b7484">E3 demo</text>
+    <text x="646" y="252">Feb 2004</text><text x="646" y="265" fill="#6b7484">Bug Run cut</text>
+    <text x="772" y="252">Aug 2004</text><text x="772" y="265" fill="#6b7484">six masters</text>
+  </g>
+
+  <!-- span annotation -->
+  <path d="M406 288 L406 295 L782 295 L782 288" stroke="#f2a33c" stroke-width="1.5" fill="none"/>
+  <text x="594" y="315" fill="#f2a33c" font-size="12" text-anchor="middle" font-weight="600">under two years to build a whole game, twice</text>
+</svg>

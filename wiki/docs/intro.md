@@ -11,6 +11,11 @@ This is the working notebook for [Crash Twinsanity Improved](https://github.com/
 a fix-and-polish mod for the PAL PlayStation 2 release. Everything here was worked out by taking the retail disc apart
 and testing changes on a real emulator, so it is written the way it was found rather than the way a manual would put it.
 
+![Crash on N. Sanity Beach, with HOLD TRIANGLE TO SKIP drawn in the letterbox bar at the bottom of the screen](/img/shots/skip-prompt-beach.png)
+
+*The prompt the retail game never shows you, because the skip behind it was disabled before release. Captured from the
+modded build on the test rig.*
+
 It covers three things:
 
 - **How the game works.** [What is on the disc](engine/overview), how levels are stored, how the
