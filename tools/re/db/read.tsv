@@ -270,3 +270,48 @@
 00299060	F	AttachToAnimatorIfPresent	calls the object's virtual slot 2 - its "attach" - but only when node 3 of the instance context exists and has an animatorService. Generic: several unrelated classes use it, so the slot means attach by convention rather than by type
 002990b8	F	DetachFromAnimatorIfPresent	the mirror of AttachToAnimatorIfPresent, dispatching virtual slot 3. LinkPlayableCharacters attaches straight after constructing the link object; ClearPlayableCharacterMode detaches
 0017b8d0	F	RequestGameOver	refuses when the game state already reads 0x12, otherwise writes the request bits 0x48 into bits 50-55 and reports success. Takes no state argument and writes a fixed value, so it is one transition rather than a generic setter; its two callers are Command_ForceGameOver_Run and 0017b7b8 beside it
+001978e0	F	GetInstanceTransform	returns the collision matrix when the instance has one, otherwise builds the position transform in place with RotateAndTranslate and returns that - so a caller never has to know which it got
+001c1668	F	InitGameBlendSkin	constructor: stores the id, nulls the material and sub-blend arrays, zeroes the sub-blend count and clears two flag bits
+002afcd8	F	SetSpuVolume	scales a 0..1 float by 32767 and writes it through sceSdRemote to 0xf80 and 0x1080, two registers 0x100 apart, so left and right or the two SPU2 cores. Gated on DAT_0030acb4 == 1. Which volume it is has not been confirmed, only that it is one
+00140070	F	InitInstanceCreationHelperPlayableCharacter	chains to InitInstanceCreationHelperType3, installs InstanceCreationHelperPlayableCharacter_Methods, then runs 001401a0
+00140338	F	InitObjectInstanceContextType5	chains to InitObjectInstanceContextType8 and installs the type 5 vtable at 0x2f2850
+001405a0	F	InitObjectInstanceContextType2	chains to InitObjectInstanceContextType8 and installs the type 2 vtable at 0x2f2700
+00140e78	F	InitObjectInstanceContextType7	chains to InitObjectInstanceContextType8, zeroes +0x60, installs ObjectInstanceContextType7_Methods
+00141060	F	InitObjectInstanceContextType4	chains to InitObjectInstanceContextType8 and installs the type 4 vtable at 0x2f2460
+002f2850	L	ObjectInstanceContextType5_Methods	vtable: slot 0 null, then 0013de20, 0013ea50, 0013e8b0, 0013e8b8. Slots 3 and 4 are shared with type 4, as siblings would
+002f2700	L	ObjectInstanceContextType2_Methods	vtable: slot 0 null, then 00140490, 0013eb88, 0013ec10, 00140648
+002f2460	L	ObjectInstanceContextType4_Methods	vtable: slot 0 null, then 0013dc68, 0013ed40, 0013e8b0, 0013e8b8
+0014d7f8	F	InitPlayableCharacterRelated	constructor for the 0x220-byte link object LinkPlayableCharacters allocates for each of the two characters; installs the vtable at 0x2f3610 whose slots 2 and 3 are SubscribePlayerLinkJoints and its mirror
+0015f1a8	F	InitUnkPlayableCharStruct_Type5	constructor, installs the vtable at 0x2f3550
+001816f8	F	InitGameContextPrototype	constructor, installs the vtable at 0x2f5af0
+001976a8	F	InitInstanceContextBase	the parent-class constructor - InitInstanceContext at 001979f0 chains to it and then installs InstanceContext_methods over the vtable this one sets. The upstream vtable name InstanceContextUnkParent_methods says the same thing. Constructor: nulls the parent and flags, installs the vtable, runs InitCollisionInformation_, clears chunkData, then allocates a 0x70-byte TransformedGeometyPoint and builds the position transform into it
+001a10b0	F	InitGameRendererController	constructor, installs the vtable at 0x2f68d0
+001a6040	F	InitRenderersStorage	constructor, installs the vtable at 0x2f6b20
+001acde8	F	InitFont	constructor, installs the vtable at 0x2f6f80
+001f4560	F	InitChunkSm2Loader	constructor, installs ChunkLoadUtil_Sm2_Methods
+001f6330	F	InitChunkRendererBase	constructor, installs ChunkRenderingRelated__Methods
+00220690	F	InitScriptExecutionState	constructor, installs the vtable at 0x2ff950
+002691b0	F	InitUnkChunkInterface	constructor, installs UnkChunkInterface_methods
+002694c0	F	InitChunkRm2Loader	constructor, installs ChunkLoadUtil_Rm2_Methods - the RM2 counterpart of InitChunkSm2Loader
+00269b28	F	InitGameObjectResourceTable	constructor, installs the vtable at 0x304558
+0027cda8	F	InitGameCameraSubtypeBase	constructor, installs CameraSubtypeBase_Methods
+002ad1b0	F	InitChunkLoaderBase	constructor, installs the vtable at 0x3069f0
+002b2a10	F	InitGamePadController	constructor, installs GamePadController_Methods
+002b6ab8	F	InitMultithreadingRelated_	constructor, installs the vtable at 0x307018
+002a7bc8	F	InitBanksHeaderBase	base constructor: InitBanksHeader chains to this first, then overwrites the vtable with BanksHeader_methods
+00268b50	F	InitChunkManagerBase	base constructor: nulls defaultRm2_, unkObjIdsRel and miniBigBoiPtr, stores gameResources, installs the base vtable at 0x304208, sets G_ChunkManager_ and packs two flag bits from its last two arguments. InitChunkManager chains to it and then installs the derived vtable
+0017a508	F	InitChunkManager	derived constructor: chains to InitChunkManagerBase, installs ChunkManager__Methods, builds the MiniBigBoi in place and publishes both G_MiniBigBoi and G_GameResourcesManager_
+002b02d0	F	InitGameMovieControllerBase	base constructor, chained to by InitGameMovieController
+002b0050	F	InitGameMovieController	derived constructor: chains to InitGameMovieControllerBase then installs GameMovieController_Methods
+00262648	F	InitGameResourceManagerBase	base constructor, chained to by InitGameResourceManager. Its vtable is named GameResourceManagerPrototype_Methods upstream; what is demonstrable here is that it is called as a base constructor, whatever the prototype relationship
+0013f218	F	InitGameResourceManager	derived constructor: chains to InitGameResourceManagerBase then installs GameResourceManager_Methods
+00252750	F	InitMiniBigBoiBase	base constructor, chained to by InitMiniBigBoi
+0017c378	F	InitMiniBigBoi	derived constructor: chains to InitMiniBigBoiBase then installs MiniBigBoi_Methods
+0025a4b8	F	InitRendererRelatedInGameControllerBase	base constructor, chained to by InitRendererRelatedInGameController
+0016d938	F	InitRendererRelatedInGameController	derived constructor: chains to the base then installs RendererRelatedInGameController_Methods
+002a8298	F	InitSaveIconsRelatedBase	base constructor, chained to by InitSaveIconsRelated
+002a7b28	F	InitSaveIconsRelated	derived constructor: chains to InitSaveIconsRelatedBase then installs the vtable at 0x306418
+002a7eb8	F	InitUnkStruct_0x5C0RootBase	the root of a three-deep chain: 00169028 calls 002a79d0 calls this one, each installing its own vtable over the last
+002a79d0	F	InitUnkStruct_0x5C0Base	middle of the three-deep chain, chained to by InitUnkStruct_0x5C0 and chaining to the root
+00169028	F	InitUnkStruct_0x5C0	most derived of the three-deep chain, installing the vtable at 0x2f5120 last
+00179ba0	F	InitBanksHeader	derived constructor: chains to InitBanksHeaderBase then installs BanksHeader_methods

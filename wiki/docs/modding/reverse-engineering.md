@@ -370,6 +370,28 @@ out a clobbered base, stale memory and a bit carried over from an earlier sessio
 
 Run it **before** the interesting level, not after.
 
+### Check after the transient, not at the moment of the action
+
+Reading a value back immediately after setting it tells you the write landed. It does not tell you the state
+survived, and those are different claims.
+
+Teleporting Crash to `(84.49, 4.2, -99.35)` in `altdoc` reads back as `(84.5, 1.6, -99.4)` straight away -
+exactly what was asked for. Keep sampling and he is falling, respawning and falling again on a loop, because
+there is no floor at that point in the chunk set a warp into that level produces. The rig's teleport also
+moves every copy of his position in RAM, respawn points included, so he reappears at the same unreachable
+place and a second slow sample sees the "same" position and reads as stable.
+
+Every script printed the position, confirmed it, and moved on. On that basis "neither teleporting into the
+trigger box nor moving inside it starts the chase" was quoted as evidence for weeks. It was never a test of
+the chase; it was a test of a void.
+
+The same error, in a different costume, sank an early code-cave test: 511 marker words were still intact after
+"a session of play", which proved nothing, because the build had black-screened and a dead game does not
+write to memory. In both cases the check was one the failure mode could not disturb.
+
+So: sample over time, and pick a check that the failure would actually break. If a state is supposed to
+persist, watch it persist.
+
 And be as suspicious of the explanation that rescues you as of the result that worries you. Twice tonight a
 tidy account of an anomaly arrived exactly when someone was already doubting their own measurement, and was
 accepted without the scrutiny a surprising result would have got. Once it led to a wrong offset being
