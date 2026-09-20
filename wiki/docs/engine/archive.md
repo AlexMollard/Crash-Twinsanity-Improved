@@ -47,14 +47,21 @@ Inside the archive each level is `<path>.rm2` - scripts, objects, instances, tri
 [Lighting](lighting)). There are 135 of the first and 134 of the second. Both are containers of numbered items in
 sections.
 
-:::warning Never re-save a whole level
-Two independent reasons. The Twinsanity Editor library's full save drops about 134 bytes of not-yet-understood data
-per level, and its `CollisionSurface` writer is asymmetric - it reads a `ushort` and writes a 4-byte `int` into a
-114-byte slot, so every surface overruns the next by two and the file comes out the same size with scrambled tails
-(452 bytes of damage across 161 surfaces in `labext` alone).
+:::warning Prefer splicing to re-saving a whole level
+The Twinsanity Editor library's full save used to be badly lossy, and two bugs have since been found and patched:
 
-The build instead splices **individual items** back into the original bytes (`tools/rig/rm2splice.py`), so everything
-it does not touch stays exactly as it shipped. That is why none of this has ever affected the mod.
+- a texture field was read and not written back, which is where "it drops about 134 bytes per level" came from
+- `CollisionSurface` is asymmetric - it reads a `ushort` but writes a 4-byte `int` into a 114-byte slot, so every
+  surface overruns the next by two and the file comes back the same size with scrambled tails. 452 bytes of damage
+  across 161 surfaces in `labext` alone, and it silently corrupted collision on any level saved through the GUI.
+
+Both are patched in `tools/patches/`, applied to the submodule by the build. With them, **98 of the archive's 135
+files round-trip byte for byte**, against 1 before. The rest lose tens of bytes to a cause not yet identified - no
+size changes and no shifted items, so nothing structural.
+
+The build still splices **individual items** back into the original bytes (`tools/rig/rm2splice.py`) rather than
+re-saving, so everything it does not touch stays exactly as it shipped. That is why none of this has ever affected
+the mod, and it remains the safer path - but the gap is now much narrower than it was.
 :::
 
 ## Save states and the file table
