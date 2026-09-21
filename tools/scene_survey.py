@@ -1,18 +1,22 @@
-"""Which cutscene directors does something actually start?
+"""Which cutscene directors can actually be started, and by what?
 
-An earlier survey answered this with `twinsdump refs <id>` and reported ten directors as having nothing pointing at
-them. That method is wrong: `refs` returns nothing for the Henchmania director in gpa11 and nothing for Evil Crash
-in altdoc, both of which demonstrably exist and run. An empty result there means nothing at all.
+Two earlier answers to this were wrong in instructive ways. The first used `twinsdump refs`, which returns
+nothing for objects that plainly exist, and reported ten directors as unused. The second read the trigger list
+and asked only "does a trigger name this object", which is better but still cannot tell a trigger that starts
+a scene from one that names the object and does nothing.
 
-The signal that does work is the **trigger list**. `twinsdump <level> triggers` prints each trigger's target by
-name, and the trigger targeting `act_HENCHMANIA_CUTSCENE_DIRECTOR` sits at exactly the coordinates that start that
-scene on the rig - so this tool is validated against a scene watched playing, which is the check the old method
-never had.
+The mechanism is now known (see wiki/docs/roadmap.md): a trigger carries a **number**, every object holds a
+table mapping numbers to scripts - `GetTriggerReceiver`, 0x261d90 - and `FUN_002346b8` runs the script whose
+entry matches. Nothing is dispatched, which is why hooking ExecuteEvent over a firing trigger records nothing.
+So the question "can this scene start" is now exact and static: a trigger must both target the instance and
+carry a number the object's receiver table holds.
 
-One thing the trigger list alone cannot see: **scene chaining**. gpa11 holds a HUB2_TO_HUB3 director that no
-trigger targets, and its scene plays anyway, 2.5 s after the Henchmania scene ends. So a director without a trigger
-is "started some other way, or not at all" - a question, not a finding. This tool says which of the two groups each
-director falls in and refuses to call anything unused.
+The tool refuses to report unless the gpa11 Henchmania director - the one scene watched playing on the rig -
+comes back matched, which is the check the first method never had.
+
+What it still cannot see is `TriggerLinkedObjects`, the script command one scene uses to start another. gpa11's
+HUB2_TO_HUB3 director has no trigger and its scene plays anyway, 2.5s after the Henchmania scene. So "no
+trigger" means "started some other way, or not at all", and stays a question rather than a finding.
 
   python tools/scene_survey.py                 # every level in the archive
   python tools/scene_survey.py gpa11 altdoc    # just these
@@ -26,36 +30,77 @@ from psm_extract import source_iso, archive_names
 
 TWINSDUMP = os.path.join(ROOT, "tools", "twinsdump", "bin", "Release", "net48", "twinsdump.exe")
 DIRECTOR = re.compile(r"^object\s+(\d+)\s+(.*?CUTSCENE_DIRECTOR\w*|.*?_CS_\w*|.*?CS_DIRECTOR\w*)\s*$", re.I)
+RECV = re.compile(r"^\s*recv:\s*(.*)$")
+INST = re.compile(r"^inst\s+(\d+).*?obj\s+(\d+)\s")
+KEY_MASK = 0x3FF                                          # FUN_002346b8 compares the low 10 bits
 
 def dump(path, *args):
     r = subprocess.run([TWINSDUMP, path] + list(args), capture_output=True, text=True)
-    if "Unhandled Exception" in (r.stdout + r.stderr):      # a crashed dump prints nothing useful and must not
-        raise RuntimeError(f"twinsdump {args} crashed on {os.path.basename(path)}")  # be read as an empty result
+    if "Unhandled Exception" in (r.stdout + r.stderr):    # a crashed dump prints nothing useful and must not
+        raise RuntimeError(f"twinsdump {args} crashed on {os.path.basename(path)}")   # read as an empty result
     return r.stdout
 
 def directors(path):
-    out = {}
+    """object id -> (name, {receiver number: script it runs})"""
+    out, cur = {}, None
     for line in dump(path, "objects").splitlines():
         m = DIRECTOR.match(line.strip())
-        if m: out[int(m.group(1))] = m.group(2).strip()
+        if m:
+            cur = int(m.group(1)); out[cur] = [m.group(2).strip().split("|")[-1], {}]
+            continue
+        if cur is not None:
+            r = RECV.match(line)
+            if r:
+                for tok in r.group(1).split():
+                    k, _, s = tok.partition("->")
+                    if k.isdigit(): out[cur][1][int(k) & KEY_MASK] = s
+                cur = None
+            elif line.startswith("object "):
+                cur = None
     return out
 
-def triggered_names(path):
-    names = set()
+def instance_objects(path):
+    """instance index -> object id"""
+    out = {}
+    for line in dump(path, "instances").splitlines():
+        m = INST.match(line.strip())
+        if m: out[int(m.group(1))] = int(m.group(2))
+    return out
+
+def trigger_numbers(path):
+    """object id -> set of numbers triggers carry at it
+
+    A trigger holds *two* numbers, not one: `CreateTriggerEvent` is called with `arg1` and again with `arg2`,
+    and which is live depends on the trigger's header. `hdr=0x832` triggers carry theirs in the first slot
+    (cavbridg's Cavern director, args=(4,0,0,0), receivers hold 4); `hdr=0x132` ones carry it in the second
+    (coreent's, args=(0,4,0,1280), same receiver). Reading only the first invented a whole category of
+    "trigger names this object but carries a number it has no receiver for" that was really just the other
+    slot. Both are checked, rather than decoding the header bits on one example each."""
+    inst = instance_objects(path); out = {}
     for line in dump(path, "triggers").splitlines():
         if "->" not in line: continue
+        args = re.search(r"args=\((\d+),(\d+)", line)
+        if not args: continue
+        carried = {int(args.group(1)) & KEY_MASK, int(args.group(2)) & KEY_MASK}
         for tgt in line.split("->", 1)[1].split():
-            if ":" in tgt: names.add(tgt.split(":", 1)[1])
-    return names
+            if ":" in tgt and tgt.split(":", 1)[0].isdigit():
+                oid = inst.get(int(tgt.split(":", 1)[0]))
+                if oid is not None: out.setdefault(oid, set()).update(carried)
+    return out
 
 def survey(path, level):
     ds = directors(path)
     if not ds: return []
-    tnames = triggered_names(path)
+    nums = trigger_numbers(path)
     rows = []
-    for oid, name in sorted(ds.items()):
-        started = any(name in t or t.endswith(name.split("|")[-1]) for t in tnames)
-        rows.append((level, oid, name.split("|")[-1], "trigger" if started else "no trigger"))
+    for oid, (name, recv) in sorted(ds.items()):
+        carried = nums.get(oid, set())
+        matched = sorted(carried & set(recv))
+        if matched:      state, detail = "started", f"trigger carries {matched[0]} -> {recv[matched[0]]}"
+        elif carried:    state, detail = "MISMATCH", f"trigger carries {sorted(carried)}, receivers are {sorted(recv)}"
+        elif not recv:   state, detail = "no receivers", "nothing can start it by trigger at all"
+        else:            state, detail = "no trigger", f"receivers {sorted(recv)} exist but no trigger carries one"
+        rows.append((level, oid, name, state, detail))
     return rows
 
 def main():
@@ -75,23 +120,24 @@ def main():
             except RuntimeError as e: print(f"  !! {e}", flush=True)
             os.remove(p)
 
-    # validation: a scene confirmed playing on the rig must come back as started
     check = [r for r in rows if r[0] == "gpa11" and "HENCHMANIA" in r[2]]
     if check:
-        ok = check[0][3] == "trigger"
-        print(f"validation: gpa11 Henchmania director -> {check[0][3]} "
-              f"({'as expected, it plays on the rig' if ok else 'WRONG - method is broken, ignore results below'})\n")
+        ok = check[0][3] == "started"
+        print(f"validation: gpa11 Henchmania director -> {check[0][3]} ({check[0][4]})\n"
+              f"            {'as expected, that scene plays on the rig' if ok else 'WRONG - method is broken, ignore everything below'}\n")
         if not ok: return
 
     by_state = {}
-    for level, oid, name, state in rows: by_state.setdefault(state, []).append((level, oid, name))
-    for state in ("trigger", "no trigger"):
+    for r in rows: by_state.setdefault(r[3], []).append(r)
+    for state in ("started", "MISMATCH", "no trigger", "no receivers"):
         group = by_state.get(state, [])
-        print(f"{len(group)} directors with {state}:")
-        for level, oid, name in group: print(f"    {level:12s} {oid:5d}  {name}")
+        if not group: continue
+        print(f"{len(group)} directors: {state}")
+        for level, oid, name, _, detail in group:
+            print(f"    {level:12s} {oid:5d}  {name:46s} {detail}")
         print()
-    print("A director with no trigger is started some other way - a scene chain, a script message, arriving in the")
-    print("level - or not at all. That is a question to test on the rig, not a finding.")
+    print("A director with no trigger may still be started by another scene: TriggerLinkedObjects is a script")
+    print("command, and gpa11's untriggered HUB2_TO_HUB3 copy plays 2.5s after the Henchmania scene ends.")
 
 if __name__ == "__main__":
     main()

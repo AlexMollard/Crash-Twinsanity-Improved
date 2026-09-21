@@ -152,19 +152,25 @@ Henchmania director whose scene was later watched playing. `tools/scene_survey.p
 **trigger list**, and refuses to report at all unless it first finds that same director correctly marked as
 triggered.
 
-Across all **135** level files: 58 cutscene directors placed, **48 with a trigger targeting them**.
+Across all **135** level files, 58 cutscene directors are placed. Now that a trigger's *number* can be checked
+against the target's receiver table, each one gets an exact answer rather than "is it named somewhere":
 
-Of the ten without, three are untriggered *copies* of directors triggered elsewhere - `CAVERN` in four other
-levels, `HUB2_TO_HUB3` in nine, `TOTEM_CUTSCENE_DIRECTOR1` in `docamok1`. A director sitting in a level that does
-not trigger it is not an unused scene. **That leaves five with no trigger anywhere in the game:**
+| | Count | |
+|---|:-:|---|
+| **started** | 43 | a trigger targets it and carries a number its receiver table holds |
+| **mismatch** | 1 | a trigger targets it and it cannot respond |
+| **no trigger** | 14 | receivers exist, nothing carries the number |
 
-| Director | Level |
-|---|---|
-| `act_BR_CORTEX_PIPE_CUTSCENE_DIRECTOR` | `boiler_1` |
-| `act_EARTH_HUB_CUTSCENE_DIRECTOR` | `hubd` |
-| `act_ICELABINT_CUTSCENE_DIRECTOR` | `labint` |
-| `act_UKAFIGHT_CUTSCENE_DIRECTOR` | `ukafight` |
-| `act_UKAUKA_DEFEATED_CUTSCENE_DIRECTOR` | `ukafight` |
+The earlier figure of 48 was too high: that method matched a director's *name* anywhere in the level's trigger
+list, so a trigger aimed at one copy counted for every copy. Matching instance index to object id instead is
+what moves ten of them into the third row.
+
+**The one mismatch is `act_BEACH_AKU_CUTSCENE_DIRECTOR`,** and it is interesting rather than broken. A trigger in
+`beach` carries 87 at it, but its receiver table is **empty**, so that trigger cannot start anything - and its
+`BEACH_AKU_CUTSCENE_DIRECTOR_ACTIVATED` script sits in **slot 0**, the slot `RunObjectSpawnScript` runs at level
+load. The working `BEACH_TRAINING_CUTSCENE_DIRECTOR1` next to it has `_DEFAULT` in slot 0 and `87 -> _ACTIVATED`
+in its table. So this scene most likely plays on arrival and the trigger is vestigial, which `arrival_test.py`
+can check.
 
 :::caution Five is a checklist, not a finding
 A director without a trigger may still be started another way. `gpa11` holds an untriggered `HUB2_TO_HUB3` copy
