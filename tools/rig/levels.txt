@@ -40,6 +40,12 @@ cavbridg   Levels\Earth\Cavern\cavbridg
 # circle) and then carrying him into the trigger at (-98.03, -4.58, 98.56) starts nothing, because the
 # director has already run. 1.5s is not worth a skip; the chapter's real scenes are in antfight, cavent,
 # cortthro and escape, which share the same director script and are where this should resume.
+antfight   Levels\Earth\Cavernntfight
+# antfight holds the chapter's first real scene: trigger at (102.4, -74.85, 68.34), and it is a scene
+# rather than a beat - it ran past a 240s timeout without returning control. That measurement is not
+# usable though: teleporting to the trigger puts Crash inside the rock (results/control/
+# cavern_antfight_full_stuck.png). Walk there with goto instead. The warp spawn is (107.55, -51.06,
+# 12.74), which is 55 units away and 24 up, so the route needs finding rather than assuming.
 amberly_cortex Levels\school\Madame\amberly cortex
 psycho_p12 Levels\Ice\Hub\psycho progress=12
 psycho_p19 Levels\Ice\Hub\psycho progress=19
