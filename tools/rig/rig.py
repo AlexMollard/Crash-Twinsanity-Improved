@@ -257,7 +257,12 @@ def slot_file(slot):
 def level(name, path=None, fresh=False, timeout=300):
     """Get the test instance into level NAME. Uses states/NAME.p2s when present; otherwise warps to PATH
     through the game's end-of-credits level load (flow state 19 loads LEVEL_START_STR; the credits are
-    cut to one frame), waits for gameplay and stores the result as states/NAME.p2s."""
+    cut to one frame), waits for gameplay and stores the result as states/NAME.p2s.
+
+    A warp that times out leaves the game *in* state 19 - the real credits - so every later warp starts from
+    there and fails too. Building three level states in one command therefore costs three full timeouts and
+    ends with nothing, which is how this was found. The wedge is checked for before warping and named in the
+    timeout message, because the symptom on its own (PINE healthy, warp never arrives) looks like anything."""
     os.makedirs(STATES_DIR, exist_ok=True); lib = os.path.join(STATES_DIR, name + ".p2s"); p = Pine()
     if os.path.exists(lib) and not fresh:
         p.save(8); time.sleep(1.5)                       # make sure slot 8's file exists with the right name
@@ -267,6 +272,10 @@ def level(name, path=None, fresh=False, timeout=300):
             except (OSError, RuntimeError): pine_reset(); time.sleep(0.5)
         time.sleep(1); print(f"loaded {name} from the state library"); return
     if not path: raise SystemExit(f"no saved state for {name}; give the level path to warp there")
+    before = flow_state(p)                               # refuse to warp out of the credits wedge (see below)
+    if before == STATE_CREDITS:
+        raise SystemExit("the game is wedged in the credits (flow 19) - a warp can never succeed from here "
+                         "and will just burn the timeout. Restart the emulator: rig.py stop, rig.py start.")
     raw = path.replace("/", "\\").encode("ascii"); buf = raw + b"\0"; buf += b"\0" * (-len(buf) % 4)
     for i in range(0, len(buf), 4): p.w32(th.WARP_STR + i, struct.unpack("<I", buf[i:i + 4])[0])
     p.w32(LEVEL_START_STR, th.WARP_STR); p.w32(LEVEL_START_STR + 4, len(raw)); p.w32(LEVEL_START_STR + 8, 0x100)
@@ -277,7 +286,10 @@ def level(name, path=None, fresh=False, timeout=300):
         p.w32(flow + 12, (hi & ~(0x3F << 12)) | (STATE_CREDITS << 12))
         print(f"warping to {path}...", flush=True); t0 = time.time()
         while flow_state(p) != STATE_PLAYING:
-            if time.time() - t0 > timeout: raise SystemExit("warp timed out")
+            if time.time() - t0 > timeout:
+                raise SystemExit(f"warp to {path} timed out after {timeout:.0f}s at flow {flow_state(p)}. "
+                                 "The game is now left in the credits, so every later warp in this run will "
+                                 "time out the same way: restart the emulator before trying another.")
             time.sleep(0.5)
     finally:
         p.w32(CREDITS_DONE_BRANCH, CREDITS_DONE_ORIG)
