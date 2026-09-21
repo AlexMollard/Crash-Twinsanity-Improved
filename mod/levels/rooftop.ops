@@ -1,5 +1,12 @@
 # Rooftop Rampage (H03D / H03C)
+# The director lives in two level files and both trigger it, so both need the skip. roof01 alone left the
+# scene unskippable whenever it ran from roofcor2 - found by tools/skip_survey.py, which reads the built mod
+# and lists every condition-572 rule the game still cannot reach.
 file Levels\school\RoofTop\roof01.rm2
 copybody 6375 1 5 0 4 572 1 0   # COM_ROOFTOP_CUTSCENE_DIRECTOR_ACTIVATED: state 1 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 4
 copybody 6375 7 5 0 4 572 1 0   # COM_ROOFTOP_CUTSCENE_DIRECTOR_ACTIVATED: state 7 plays the cutscene; add the developers' Triangle rule (cond 572, player 1) -> state 4
 clearbodies 6375 5                  # drop the unreachable original in state 5
+file Levels\school\RoofTop\roofcor2.rm2
+copybody 6375 1 5 0 4 572 1 0   # the same scene, same script, same states - roofcor2's copy of the director
+copybody 6375 7 5 0 4 572 1 0
+clearbodies 6375 5

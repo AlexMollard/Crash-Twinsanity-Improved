@@ -12,6 +12,7 @@ slipslide          l05start  -82.31  106.25  -162.96   # COM_SLIPSLIDE_CUTSCENE_
 classroom          crgpa08     6.60    2.08   -20.58   # COM_CLASSROOM_CHAOS_CUTSCENE_DIRECTOR_ACTIVATED
 bell_tower         amberly_cortex 1.30 -3.62  -3.34   # COM_BELL_TOWER_CUTSCENE_DIRECTOR_ACTIVATED (Cortex level: state from make_cortex_state.py)
 rooftop            roof01    102.09   34.44   126.83   # COM_ROOFTOP_CUTSCENE_DIRECTOR_ACTIVATED
+rooftop_cor2       roofcor2    7.32   -1.13     0.00   # the same director in the other RoofTop file - unskippable until rooftop.ops covered both
 school_hub         sch_hub    14.10  -28.66   -39.62   # COM_SCHOOL_HUB_CUTSCENE_DIRECTOR_ACTIVATED
 treasure           treasure  -12.66    3.77   -94.72   # COM_TREASUREROOM_CUTSCENE_DIRECTOR_ACTIVATED
 coreintro          coreent    -2.90    5.56   -56.59   # COM_COREINTRO_CS_ACTIVATED_

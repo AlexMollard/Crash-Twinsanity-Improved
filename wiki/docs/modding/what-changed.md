@@ -32,7 +32,8 @@ fixing at all is on [Cutscenes](../engine/cutscenes); the executable side is on
 | ✅ | Beach: Aku Aku crate (mask) | — | Hides the crate's Aku Aku |
 | ✅ | Beach training | 6.1 s → 4.6 s | |
 | ✅ | Angry skunk | 11.4 s → 4.6 s | |
-| ✅ | Rooftop Rampage | 13.2 s → 4.4 s | |
+| ✅ | Rooftop Rampage | 13.2 s → 4.4 s | Both level files: the director is in `roof01` and `roofcor2`, and the second was missed |
+| ✅ | Rooftop Rampage, second copy | 6.3 s → 4.0 s | Found by `tools/skip_survey.py` - it was the one skip still unreachable in the built mod |
 | ✅ | Academy hub | 16.1 s → 4.5 s | |
 | ✅ | Treasure room | 22.9 s → 4.4 s | |
 | ✅ | Slip Slide Icecapades | 30.7 s → 4.8 s | Crash and Cortex go to their end marks |

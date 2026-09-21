@@ -25,6 +25,7 @@ cogpa08    Levels\school\Cortex\cogpa08
 crgpa08    Levels\school\Crash\crgpa08
 amberly    Levels\school\Madame\amberly
 roof01     Levels\school\RoofTop\roof01
+roofcor2   Levels\school\RoofTop\roofcor2
 sch_hub    Levels\school\Sch_Hub\sch_hub
 treasure   Levels\AltEarth\Core\treasure
 coreent    Levels\AltEarth\Hub\coreent
