@@ -1,16 +1,16 @@
 """Point the editor submodule at our own fork, once that fork exists on GitHub.
 
-The three fixes in tools/patches were carried as patches because the submodule was upstream's code. They are
-now three commits on top of upstream master in tools/twinsanity-editor, on full history - but commits that
-only exist locally are not something a fresh clone can fetch, so the submodule still has to be pinned at an
-upstream commit until those commits live on a remote.
+Work on the editor happens as commits on top of upstream master in tools/twinsanity-editor, which now has
+full history - the three round-trip fixes that used to live in tools/patches, and whatever has been fixed
+since. But commits that only exist locally are not something a fresh clone can fetch, so the submodule stays
+pinned at an upstream commit until they live on a remote.
 
 Creating the repository needs a logged-in GitHub session, so that one step is yours:
 
     https://github.com/Smartkin/twinsanity-editor  ->  Fork          (or: gh repo fork Smartkin/twinsanity-editor --clone=false)
 
-then run this. It checks the fork really is a fork of upstream before pushing anything into it, pushes the
-three commits, rewrites the submodule URL and moves the pin.
+then run this. It checks the fork really is a fork of upstream before pushing anything into it, pushes
+the commits, rewrites the submodule URL and moves the pin.
 
 Nothing else in the build has to change: tools/twinsdump/twinsdump.csproj and build_mod.py reach the library
 through the submodule's *path*, which is unaffected, and patch_editor() finds the fixes already present and
@@ -24,8 +24,7 @@ import os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EDITOR = os.path.join(ROOT, "tools", "twinsanity-editor")
-UPSTREAM_TIP = "89f2c0b"          # the commit our three sit on; a real fork must contain it
-EXPECTED = 3                      # how many commits we expect to be pushing
+UPSTREAM_TIP = "89f2c0b"          # the commit ours sit on; a real fork must contain it
 
 
 def git(*args, cwd=ROOT, check=True):
@@ -56,8 +55,6 @@ def main():
     print(f"pushing:   {ahead} commit(s) on top of {UPSTREAM_TIP}")
     for line in git("log", "--oneline", f"{UPSTREAM_TIP}..HEAD", cwd=EDITOR).splitlines():
         print(f"             {line}")
-    if ahead != str(EXPECTED):
-        print(f"  note: expected {EXPECTED}; check the list above is what you meant to publish")
 
     # Push into the wrong repository and you have published someone else's history into it, so make sure the
     # target is reachable and really does share upstream's history before writing anything.
