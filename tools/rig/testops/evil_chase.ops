@@ -2,24 +2,23 @@
 # He normally waits for user message 269 (sent by the summoner once it has a focus object) and then branches on
 # counter 26. Neither happens from a level warp. Both edits are size-neutral, so the save states stay valid.
 #
-# RUN 2026-09-21, and it does not produce a chase. Built into test.iso (+0 bytes, confirmed), warped fresh to
-# altdoc twice to clear the cold-boot spawn, then stood at (91.15, 0.02, -154.81) for 20s: Evil Crash never
-# appears. Both he (877) and the summoner (876) are present in RAM - 48 and 129 id matches, three and two of
-# which pass findactor's structure filter - but every one reads position (0,0,0), so they are instantiated
-# and not placed anywhere near the player.
+# RUN 2026-09-21, and it does not produce a chase - but the edit is not what is wrong. Evil Crash is placed
+# at (85.4, 1.6, -91.2) in altdoc, (-164.71, 0, -60.8) in altdoc_b and (-127.59, 0.33, 102.4) in altdoc_c,
+# and all three files warp Crash to the same (91.15, 0.02, -154.81): they carry no start marker, so they
+# share a default spawn. Walking out of it with goto covers about 18 units before the stick stops moving him,
+# blocked by geometry rather than a fall. The spawn is a pocket that does not reach him in any of the three.
 #
-# The likely reason is in the edit itself, and it is worth stating because it is not obvious. Message 269 is
-# not only a go signal: state 1's body runs RequestMessSourceAsFocus, which takes its focus from *the sender
-# of the message*. Skipping the message therefore skips the focus, and a focus is exactly what the chase
-# needs - the summoner's own ACTIVATED script branches to COM_GENERIC_CREATURE_ERROR when GotFocusObject is
-# false. So this recipe starts the state machine and leaves it with nothing to chase.
+# An earlier note here said both actors read position (0,0,0) and so were placed nowhere near the player.
+# That evidence was worthless - +0xD0 is the position on a character context and neither of them is one, the
+# same reason findactor cannot see crates. The placements above are the real reason.
 #
-# Next thing to try: give state 1 a focus of its own. SetFocusToPlayer does not occur anywhere in altdoc, so
-# appendcmds cannot copy one in; the nearest candidate in the file is the summoner's own focus search, at
-# COM_ALTEARTH_DOCAMOK_SUMMONER_ACTIVATED (5175) state 6 body 0 - `appendcmds 5177 1 0 5175 6 0`.
+# Worth keeping anyway, because the edit itself is sound and will be wanted the moment a playthrough save
+# exists. One caveat to remember when that happens: message 269 is not only a go signal - state 1's body runs
+# RequestMessSourceAsFocus, which takes its focus from the sender, so skipping the message also skips the
+# focus. The summoner's own script branches to COM_GENERIC_CREATURE_ERROR when GotFocusObject is false, which
+# is the same failure by another route. Its focus search, script 5175 state 6 body 0, can be appended to
+# state 1 with `appendcmds 5177 1 0 5175 6 0` if that turns out to be needed.
 #
-# Reaching the real trigger is not the alternative: it carries 87 at instance 1, the summoner's receiver table
-# holds 87 -> ALTEARTH_DOCAMOK_SUMMONER_ACTIVATED, and it sits over a void 23 units past where the floor ends.
 file Levels\AltEarth\Hub\altdoc.rm2
 setcond 5177 1 0 5 0 0 3.0   # COM_ALTEARTH_DOCAMOK_EVILCRASH_DEFAULT state 1: GotUserMessageEquals(269) -> TimeInUnit 3s
 setcond 5177 2 0 2 0         # state 2: CounterValueEqualsThreshold(26)==1 -> Else, so he always enters PHASE1

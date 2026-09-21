@@ -124,12 +124,31 @@ not a verification**, and a failure mode that makes repeated checks agree is mor
 disagree.
 :::
 
-**Where that leaves it.** `altdoc_b` and `altdoc_c` can be warped to directly and both put Crash on genuinely solid
-ground - verified by sampling once a second for twelve seconds and seeing zero drift, the check the old coordinates
-would have failed. In `altdoc_c` both the summoner and Evil Crash are **activated**, so they are alive there and
-simply not searching; a focus trace from that spawn records only scenery and Cortex. So the remaining gap is
-position or trigger, not which chunk file is loaded. Standing at a spawn is not being where the chase starts, and
-reaching that place legitimately is the next piece of work.
+**Where that leaves it: the spawn is in a pocket, and Evil Crash is not in it.** This is now measured rather
+than inferred from the one void, and it holds for all three files.
+
+| File | Evil Crash placed at | Distance from the warp spawn |
+|---|---|:-:|
+| `altdoc` | `(85.4, 1.6, -91.2)` | 64, past the gap |
+| `altdoc_b` | `(-164.71, 0, -60.8)` | ~270 |
+| `altdoc_c` | `(-127.59, 0.33, 102.4)` | ~330 |
+
+Warping to `altdoc_b` or `altdoc_c` does **not** move the problem: all three land Crash at exactly
+`(91.15, 0.02, -154.81)`, because these sub-level files carry no start marker and fall back to the same
+default. Walking out of that spawn with `goto` covers about **18 units** before the stick stops moving him -
+`(91.15, -154.81)` to `(74.65, -147.35)`, blocked by geometry rather than by a fall. So the spawn is a small
+pocket that does not connect to the part of the level Evil Crash is placed in.
+
+That closes every route that does not involve real progression. The trigger cannot be reached, the floor
+between is absent, switching level file changes nothing because the spawn is shared, and forcing the script
+(`tools/rig/testops/evil_chase.ops`) starts a state machine with nothing near it to chase. **A save from a
+real playthrough is not one option among several; it is the only one.**
+
+:::note A correction
+An earlier note here reported Evil Crash and the summoner as "instantiated and placed nowhere near the
+player" on the evidence that every instance of their object ids reads position `(0,0,0)`. That evidence was
+worthless: `+0xD0` is the position on a *character* context and neither of them is one, which is the same
+reason `findactor` cannot see crates. The conclusion survives, on the placements above instead.
 
 
 
