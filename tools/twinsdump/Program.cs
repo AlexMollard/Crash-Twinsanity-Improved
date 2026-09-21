@@ -1,4 +1,4 @@
-// twinsdump - command-line inspection of Crash Twinsanity PS2 level files (RM2) via the Twinsanity Editor library.
+﻿// twinsdump - command-line inspection of Crash Twinsanity PS2 level files (RM2) via the Twinsanity Editor library.
 //   twinsdump <file.rm2> scripts <regex>        dump matching scripts (state machines, conditions, commands)
 //   twinsdump <file.rm2> refs <id>[,<id>...]    find every reference to script IDs (objects, instances, triggers, scripts)
 //   twinsdump <file.rm2> list                   list all script IDs and names
@@ -106,6 +106,9 @@ static class Program
                     // nothing at all and the mechanism looked unexplained.
                     var recv = o.UI32.Select(v => $"{v & 0x3ff}->{(v >> 10) & 0x3fff}({(scriptNames.TryGetValue((ushort)((v >> 10) & 0x3fff), out var rn) ? rn : "?")})");
                     Console.WriteLine($"object {o.ID} {o.Name}\n   scripts: {string.Join("  ", slots)}\n   recv: {string.Join("  ", recv)}\n   objects: {string.Join(",", o.Objects)}  anims: {string.Join(",", o.Anims)}  ogis: {string.Join(",", o.OGIs)}");
+                    // the slot arrays above are what the object uses; the c* lists below are the dependency
+                    // lists FillPackage walks when importing it, and the two are not the same thing
+                    Console.WriteLine($"   deps: cOGIs [{string.Join(",", o.cOGIs)}]  cAnims [{string.Join(",", o.cAnims)}]  cCM [{string.Join(",", o.cCM)}]  cScripts [{string.Join(",", o.cScripts)}]  cObjects [{string.Join(",", o.cObjects)}]");
                 }
                 break;
             }
@@ -415,6 +418,20 @@ static class Program
                 var s = scripts.First(x => x.ID == uint.Parse(args[2]));
                 using (var ms = new System.IO.MemoryStream())
                 using (var w = new System.IO.BinaryWriter(ms)) { s.Save(w); System.IO.File.WriteAllBytes(args[3], ms.ToArray()); }
+                break;
+            }
+            case "merge":                                  // twinsdump <rm2> merge <package.rm2> <out.rm2> [OBJID] : import objects with their dependencies
+            {
+                var pkg = new TwinsFile();
+                var so = Console.Out; Console.SetOut(System.IO.TextWriter.Null);
+                pkg.LoadFile(args[2], TwinsFile.FileType.RM2);
+                Console.SetOut(so);
+                var before = file.GetItem<TwinsSection>(10).GetItem<TwinsSection>(0).Records.Count;
+                if (args.Length > 4) file.MergeObject(pkg, uint.Parse(args[4]));   // just this object
+                else file.Merge(pkg);                                              // every object in the package
+                var after = file.GetItem<TwinsSection>(10).GetItem<TwinsSection>(0).Records.Count;
+                file.SaveFile(args[3]);
+                Console.WriteLine($"objects {before} -> {after} (+{after - before}), wrote {args[3]}");
                 break;
             }
             case "roundtrip":                              // load + save unchanged, report whether bytes are identical
