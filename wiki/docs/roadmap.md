@@ -279,7 +279,7 @@ invisible after being hurt into a scene - so the shape is familiar and the tooli
 | 🕳️ | **Stuck in a pit** (Cavern Catastrophe) - double-jump over a pit and trigger the "We're friends right?" scene; when it ends Crash is far below and can only spin and turn | The scene does not reposition him, so wherever he was when it started is where he is left. Softlock-adjacent, and the same class of fix as the skips already shipped |
 | 👤 | **Invisible Cortex** (Totem Hokum) - spin while entering the scene and Cortex stays invisible until Crash spins or slams | Directly the same family as the invisible-Crash fix already shipped, which was a visibility flag not being restored |
 | 🏃 | **Non-animated walking Crash** (Cavern Catastrophe) - keep moving during the scene where Cortex warps out of Crash's hand, and Crash runs without his run animation afterwards | Animation state not reset on scene exit. Cosmetic, but the same mechanism and a cheap thing to confirm |
-| ☠️ | **Instant dead Cortex at the Iceberg Lab** - on entry Cortex sometimes simply dies, in one of two poses | Reported as random, which usually means a race at level load. Worth a rig sweep because "random" is exactly what a rig is good at |
+| ☠️ | **Instant dead Cortex at the Iceberg Lab** - on entry Cortex sometimes simply dies, in one of two poses | **Swept, 14 arrivals, alive every time.** [Full account below](#the-iceberg-lab-cortex-sweep) |
 | 🐜 | **Frozen ant** (Cavern Catastrophe) - slide a lancer ant on the platform and it freezes in its slid animation | Sibling of the undefeatable ant already under investigation; likely one cause behind both |
 
 Not this mod's territory, recorded so nobody re-triages them: out-of-bounds and geometry exploits (secret beaches,
@@ -296,6 +296,24 @@ character is still facing that way during it, which the source notes holds for *
 is engine behaviour rather than a bug - scenes do not orient their actors - so it is a polish ceiling worth knowing
 about rather than a fix. Changing it would mean adding orientation to scenes one at a time, which is a great deal
 of risk spread across a great many files for a cosmetic return.
+
+### The Iceberg Lab Cortex sweep
+
+`tools/rig/arrival_sweep.py` warps into `labint` fresh, finds `act_CORTEX` (object 74) with `findactor` -
+its address moves every load - and reads its health from the creation helper. **14 arrivals, alive with
+hp=2 every one.**
+
+What that is worth, precisely: 14 clean samples put the 95% upper bound on the failure rate at about **19%**,
+so whatever the report describes is not something that happens in one arrival in five. It does not rule out
+something rarer, and it does not rule the report out at all, because a warp arrival is not the same as
+arriving in play - no story progress is set and there is no preceding level transition. "Dies in one of two
+poses" may also be an animation state rather than zero health, which this check would read as alive.
+
+The sweep itself had never once run to completion before this, and fixing it was most of the work. Two of the
+rig's traps meet in it: a level can be warped to only **once per emulator session**, so repeat warps to one
+level wedge the game, which forces a restart per sample - and a restart makes every warp a *first* warp,
+which lands at the cold-boot default spawn with the actor nowhere near. It restarts and then burns a warp on
+another level. Both rules are now enforced in `rig.level` rather than remembered.
 
 ## ✔️ Checked, fine here
 
