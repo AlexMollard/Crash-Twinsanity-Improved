@@ -179,11 +179,28 @@ Two attempts to narrow this further both failed, and are recorded so they are no
   confirmed playing, because Crash spawns short of the trigger and never reaches it.
 :::
 
-**And the mechanism is not what it looked like.** A hook on `ExecuteEvent` recording every dispatch shows the
-Henchmania director receiving **event 0 at level load** from `RunObjectSpawnScript+0x6c` - identified by two id
-routes agreeing and its name read as text out of memory - and **nothing at all afterwards**, including when the
-trigger fires and its scene starts. So a trigger does not start its director with an activation event, and how it
-does start one is now an open question rather than an assumption.
+**And the mechanism is now known.** A hook on `ExecuteEvent` recording every dispatch showed the Henchmania
+director receiving **event 0 at level load** from `RunObjectSpawnScript+0x6c` and **nothing at all afterwards**,
+including when the trigger fires and its scene starts. That was a true observation with a misleading conclusion:
+a trigger does not dispatch anything, so there was never going to be an event to see.
+
+`FUN_001f4ec0`, the trigger's own update, is only bookkeeping - it maintains the set of instances inside the
+volume. The dispatch is elsewhere, and Ghidra had hidden it by timing out on that function and writing
+`// decompile failed` in place of its body (`tools/re/disasm.py` reads those directly now).
+
+What actually happens: **a trigger carries a number, and every object has a table mapping numbers to scripts.**
+`GetTriggerReceiver` (0x261d90) is one line - `obj->triggerReceivers + slotIndex` - and `FUN_002346b8` walks that
+table for an entry whose **low 10 bits** equal the trigger's number, then runs the script in **bits 10-23** on the
+object. `twinsdump <level> objects` prints the table as `recv:`, and it checks out against the level data:
+
+| Object | `recv` | Trigger carries |
+|---|---|---|
+| `act_CAVERN_CUTSCENE_DIRECTOR` | `87 -> ACTIVATED`, `4 -> ACTIVATED`, `237 -> ACTIVATED` | **4** in `cavbridg`, **87** in `antfight` |
+| `act_TIKI_MON` | `87 -> TIKI_MON_ACTIVATED` | 87 |
+
+So "which number starts this scene" is now a static question, and so is "can anything start it at all" - with the
+caveat that `TriggerLinkedObjects` is a script command, so a scene can also be started by another script, which is
+what scene chaining is.
 
 Anyone repeating this: **arm the tracer before the level loads**. The only dispatch a director gets happens during
 the load, so arming after a state load records nothing and looks like a negative result.

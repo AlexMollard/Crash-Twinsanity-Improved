@@ -99,7 +99,13 @@ static class Program
                     var o = (GameObject)item;
                     if (!re4.IsMatch(o.Name) && !re4.IsMatch(o.ID.ToString())) continue;
                     var slots = o.Scripts.Select((sid, k) => sid == 65535 ? null : $"{k}:{sid}({(scriptNames.TryGetValue(sid, out var n) ? n : ScriptEnum(sid) ?? "?")})").Where(x => x != null);
-                    Console.WriteLine($"object {o.ID} {o.Name}\n   scripts: {string.Join("  ", slots)}\n   objects: {string.Join(",", o.Objects)}  anims: {string.Join(",", o.Anims)}  ogis: {string.Join(",", o.OGIs)}");
+                    // UI32 is the object's trigger-receiver table (GetTriggerReceiver, 0x261d90). A trigger
+                    // carries a number; FUN_002346b8 walks this table for an entry whose low 10 bits equal
+                    // it and runs the script held in bits 10-23. That is how a trigger starts a scene, and
+                    // nothing is dispatched - which is why tracing ExecuteEvent over a firing trigger sees
+                    // nothing at all and the mechanism looked unexplained.
+                    var recv = o.UI32.Select(v => $"{v & 0x3ff}->{(v >> 10) & 0x3fff}({(scriptNames.TryGetValue((ushort)((v >> 10) & 0x3fff), out var rn) ? rn : "?")})");
+                    Console.WriteLine($"object {o.ID} {o.Name}\n   scripts: {string.Join("  ", slots)}\n   recv: {string.Join("  ", recv)}\n   objects: {string.Join(",", o.Objects)}  anims: {string.Join(",", o.Anims)}  ogis: {string.Join(",", o.OGIs)}");
                 }
                 break;
             }
