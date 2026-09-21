@@ -41,7 +41,7 @@ cavbridg   Levels\Earth\Cavern\cavbridg
 # circle) and then carrying him into the trigger at (-98.03, -4.58, 98.56) starts nothing, because the
 # director has already run. 1.5s is not worth a skip; the chapter's real scenes are in antfight, cavent,
 # cortthro and escape, which share the same director script and are where this should resume.
-antfight   Levels\Earth\Cavernntfight
+antfight   Levels\Earth\Cavern\antfight
 cortthro   Levels\Earth\Cavern\cortthro
 escape     Levels\Earth\Cavern\escape
 # The chapter's real scenes are triggered at antfight (102.4, -74.85, 68.34), cortthro (75.43, -36.15,

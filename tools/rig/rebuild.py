@@ -14,6 +14,27 @@ while args:
     elif a == "--levels": only, args = args, []
 rig.stop(); time.sleep(2)
 subprocess.run([sys.executable, os.path.join(ROOT, "tools", "build_mod.py"), "--out", os.path.join(HERE, "test.iso"), "--no-pcsx2-files", *inc], check=True)
+
+# A wrong path in levels.txt costs a 300s warp timeout and leaves the game wedged in the credits, which then
+# poisons every level after it in the same run. It happened: `Levels\Earth\Cavern\antfight` spent a whole
+# rebuild as `Cavern<BEL>ntfight`, the backslash-a eaten as an escape when the line was written. The archive
+# knows which paths exist, so ask it before booting anything.
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+from psm_extract import archive_names
+_have = {n.lower() for n in archive_names(os.path.join(HERE, "test.iso"))}
+_missing = []
+for _line in open(os.path.join(HERE, "levels.txt"), encoding="utf-8"):
+    _s = _line.split("#", 1)[0].split()
+    if len(_s) < 2 or (only and _s[0] not in only):
+        continue
+    if (_s[1] + ".rm2").lower() not in _have:
+        _missing.append((_s[0], _s[1]))
+if _missing:
+    for _name, _path in _missing:
+        print(f"levels.txt: {_name} -> {_path!r} is not in the archive", flush=True)
+    raise SystemExit(f"{len(_missing)} level path(s) in levels.txt do not exist - fix them before rebuilding")
+print(f"levels.txt: every path checks out against the archive", flush=True)
+
 rig.start("Levels\Earth\Hub\Beach", "test", "1")
 rig.until(os.path.join(HERE, "ref", "main_menu.png"), "start", 2.5, 150, 25)
 time.sleep(2); rig.run(["press", "cross", "--frames", "6"]); time.sleep(3)
