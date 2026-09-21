@@ -32,8 +32,21 @@ import rig
 
 ID_OFF, POS_OFF = 0x6, 0xD0
 
+HEAP = range(0x00100000, 0x02000000)
+
 def find(p, want, crash, radius=60.0, dy=25.0):
-    """Every instance context in RAM whose object id is `want` and whose position is plausibly in play."""
+    """Every instance context in RAM whose object id is `want` and whose position is plausibly in play.
+
+    The id alone is two bytes and matches a great deal of unrelated data: searching labint for Cortex on the
+    id and a nearby position gave 42 candidates, 41 of them direction vectors and other small values sitting
+    near the origin, because Crash himself is near the origin there. Two structural checks separate them, both
+    read off the real ones rather than guessed - the u16 *below* the id, at +0x4, is 0xFFFF on Crash and on
+    Cortex and on none of the 41, and the creation-helper pointer at +0x10 points into the heap. Together they
+    leave exactly one hit. Being empirical they may also exclude some genuine actor, so an empty result still
+    is not proof that an object is absent.
+
+    Object id 0 stays noisy whatever you filter on, because 0 is also what an unset id looks like - 33 hits in
+    labint. That one costs nothing: id 0 is Crash, and `rig.pos()` already answers for him."""
     dump = os.path.join(rig.TEST, "actor_ram.bin")
     rig.run(["ram", dump])
     raw = open(dump, "rb").read()
@@ -41,6 +54,10 @@ def find(p, want, crash, radius=60.0, dy=25.0):
     out = []
     for a in range(0, len(raw) - POS_OFF - 16, 4):
         if struct.unpack_from("<H", raw, a + ID_OFF)[0] != want:
+            continue
+        if struct.unpack_from("<H", raw, a + 4)[0] != 0xFFFF:
+            continue
+        if struct.unpack_from("<I", raw, a + 0x10)[0] not in HEAP:
             continue
         i = (a + POS_OFF) // 4
         x, y, z = f[i], f[i + 1], f[i + 2]
