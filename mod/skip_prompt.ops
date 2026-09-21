@@ -48,6 +48,8 @@ file Levels\school\Crash\crgpa08.rm2
 skipprompt auto
 file Levels\school\RoofTop\roof01.rm2
 skipprompt auto
+file Levels\school\RoofTop\roofcor2.rm2
+skipprompt auto                     # the same scene in the other RoofTop file: it had the skip and no prompt
 file Levels\school\Sch_Hub\sch_hub.rm2
 skipprompt auto
 file Levels\AltEarth\Core\treasure.rm2
