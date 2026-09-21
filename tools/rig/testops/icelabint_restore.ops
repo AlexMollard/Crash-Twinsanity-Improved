@@ -1,0 +1,18 @@
+# TEST ONLY so far: start the Iceberg Lab interior scene, which nothing in the game can start.
+# act_ICELABINT_CUTSCENE_DIRECTOR holds receivers [87] but no trigger anywhere carries 87 at it, it has no
+# slot 1 so TriggerLinkedObjects cannot reach it, and its slot-0 DEFAULT script is a single empty state. The
+# scene itself is complete - four character scripts (Cortex, Crash, Uka Uka, Aku Aku) and a developer skip.
+# This gives the DEFAULT what seven other directors already have: a state that runs its own ACTIVATED script.
+file Levels\Ice\Hub\labint.rm2
+runscript 6235 0 5 0 6237 0 3.0   # COM_ICELABINT_CUTSCENE_DIRECTOR_DEFAULT state 0 -> new state running COM_ICELABINT_CUTSCENE_DIRECTOR_ACTIVATED, 3s after the level loads
+#
+# RUN 2026-09-21 and it works: warped to labint on a build with this in, the scene began 1.5s after the level
+# loaded (movie=False, so in-engine rather than the Iceberg Lab FMV), played - a letterboxed close-up of Uka
+# Uka and Cortex in the lab interior, with Aku Aku present - and ended cleanly, returning control with flow
+# back to 12 and Crash responding to the stick. So it is intact content, not a broken stub, and the first
+# time it has been seen at all.
+#
+# NOT SHIPPABLE AS WRITTEN. The condition here is a 3s timer, so the scene would play every single time the
+# player enters labint. A faithful restoration needs the condition the developers would have used - story
+# progress, the way levels.txt's progress=N states gate psycho - and that value is not known yet. Until then
+# this is how to look at the scene, not how to give it back.

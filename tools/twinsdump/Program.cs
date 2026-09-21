@@ -222,7 +222,7 @@ static class Program
             }
             case "edit":                                   // twinsdump <rm2> edit <ops.txt> <outdir>
             {
-                // ops (one per line): addbody, copybody, clearbodies, appendcmds, delcmd, movebody, settarget, setarg, skipprompt (see each branch)
+                // ops (one per line): runscript, addbody, copybody, clearbodies, appendcmds, delcmd, movebody, settarget, setarg, skipprompt (see each branch)
                 // Writes <outdir>/<id>.bin (serialized script item) for every edited script.
                 var outDir = args[3]; System.IO.Directory.CreateDirectory(outDir);
                 var byId = scripts.ToDictionary(s => s.ID);
@@ -250,7 +250,39 @@ static class Program
                         continue;
                     }
                     var s = byId[uint.Parse(t[1])]; var st = StateAt(s.Main, int.Parse(t[2]));
-                    if (t[0] == "addbody")
+                    if (t[0] == "runscript")
+                    {
+                        // runscript SCRIPT FROMSTATE COND PARAM RUNSCRIPTID [INTERVAL [THRESHOLD]]
+                        // Appends a state that runs RUNSCRIPTID and adds a rule from FROMSTATE into it. That is
+                        // the shape the game itself uses when a director's DEFAULT reaches its own ACTIVATED
+                        // script - the Cavern's proximity activation is exactly this - and it is the only way to
+                        // start a director whose receiver number no trigger in the game carries. A state runs a
+                        // script id when bit 0x1000 (IsSlot) is clear, and bit 0x8000 on the previous last state
+                        // is what says "a state follows".
+                        var invR = System.Globalization.CultureInfo.InvariantCulture;
+                        int verR = s.Main.scriptGameVersion;
+                        int newIndex = 0; ScriptState lastState = null;
+                        for (var q = s.Main.scriptState1; q != null; q = q.nextState, newIndex++) lastState = q;
+                        var entry = new ScriptState(verR) { bitfield = 0x0000, scriptIndexOrSlot = short.Parse(t[5]) };
+                        lastState.bitfield = (short)(lastState.bitfield | unchecked((short)0x8000));
+                        lastState.nextState = entry;
+                        float thrR = t.Length > 7 ? float.Parse(t[7], invR) : 0.5f;
+                        var bodyR = new ScriptStateBody(verR)
+                        {
+                            bitfield = 0x600, scriptStateListIndex = newIndex,
+                            condition = new ScriptCondition { Interval = t.Length > 6 ? float.Parse(t[6], invR) : 0f, Threshold = thrR, ThresholdInverse = 1f / thrR }
+                        };
+                        bodyR.condition.VTableIndex = ushort.Parse(t[3]); bodyR.condition.Parameter = ushort.Parse(t[4]);
+                        if (st.scriptStateBody == null) st.scriptStateBody = bodyR;
+                        else
+                        {
+                            var lb = st.scriptStateBody; while (lb.nextScriptStateBody != null) lb = lb.nextScriptStateBody;
+                            lb.nextScriptStateBody = bodyR; lb.bitfield |= 0x800;
+                        }
+                        int nR = CountBodies(st); st.bitfield = (short)((st.bitfield & ~0x3FF) | (nR << 5) | nR | 0x800);
+                        Console.Error.WriteLine($"runscript: {s.ID} state {t[2]} -> new state {newIndex} runs script {t[5]}");
+                    }
+                    else if (t[0] == "addbody")
                     {
                         // addbody SCRIPT STATE COND PARAM TARGET [INTERVAL [THRESHOLD]]  (no commands; add them with appendcmds)
                         var inv = System.Globalization.CultureInfo.InvariantCulture;
