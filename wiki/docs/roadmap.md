@@ -171,19 +171,15 @@ Henchmania director whose scene was later watched playing. `tools/scene_survey.p
 **trigger list**, and refuses to report at all unless it first finds that same director correctly marked as
 triggered.
 
-Across all **135** level files, 58 cutscene directors are placed. There are exactly three ways into one, and
-`tools/scene_survey.py` now checks all three, so every director gets a definite answer:
+Across all **135** level files, 58 cutscene directors are placed. There are four ways into one, and
+`tools/scene_survey.py` checks all four, so every director gets a definite answer:
 
 | | Count | Started by |
 |---|:-:|---|
-| **trigger** | 47 | a trigger targets the instance and carries a number the object's receiver table holds |
-| **its own DEFAULT** | 7 | slot 0 reaches the ACTIVATED script by itself - the Cavern's proximity activation |
-| **nothing** | 4 | no number carried, no slot 1, and slot 0 goes nowhere |
-
-The second row is what scene chaining actually is, and it settles a case that had to be left open: gpa11's
-untriggered `HUB2_TO_HUB3` copy, whose scene plays 2.5 s after the Henchmania scene, is started by its own
-DEFAULT script. `act_BEACH_AKU_CUTSCENE_DIRECTOR` is the same - it has an empty receiver table and a vestigial
-trigger aimed at it, and plays from slot 0 on arrival.
+| **trigger** | 47 | a trigger carries a number the object's receiver table holds |
+| **trigger message** | 1 | a trigger carries a number its slot-0 script is polling for with `GotUserMessageEquals` |
+| **its own DEFAULT** | 6 | slot 0 reaches the ACTIVATED script by itself - the Cavern's proximity activation |
+| **nothing** | 4 | none of the above, and no slot 1 for `TriggerLinkedObjects` |
 
 `TriggerLinkedObjects` turns out **not** to be a route into any of them. It is `ExecuteEvent` with index 1,
 an event index is a script slot, and no cutscene director in the game has a slot 1.
@@ -197,15 +193,25 @@ an event index is a script slot, and no cutscene director in the game has a slot
 | `act_UKAUKA_DEFEATED_CUTSCENE_DIRECTOR` | `ukafight` |
 | `act_BR_CORTEX_PIPE_CUTSCENE_DIRECTOR` | `boiler_1` |
 
-That closes the `icelabint` recipe in `mod/levels-wip/`: it restores the skip for a scene that cannot play, so
-it should be retired rather than finished. It also matches what the rig said independently - `arrival_test`
-reports NOT TRIGGERED for `labint`, and neither of that level's two triggers targets the director.
+They are not all equal. `ICELABINT`'s scripts are named **H02B**, and the executable's movie table at
+`0x2f49dc` holds an **`H02_b`** - so that scene was most likely *replaced* by the pre-rendered one rather
+than cut, and restoring it would duplicate a movie the game already plays in that level. Nothing named
+`L04C`, `L04D` or anything Boiler-Room-pipe-shaped appears in that table, so those three are genuinely lost.
+`tools/rig/testops/ukafight_restore.ops` plays the `UKAFIGHT` one: **53.8 s**, ends cleanly, and carries this
+mod's own skip prompt. It is not shipped, because the condition that should gate it is unknown and a timer
+would replay it on every entry.
 
-:::caution Two validations, because one was not enough
-The tool asserts two scenes this project has watched playing before it prints anything. With only the
-Henchmania check it happily reported the **Rockslide intro** - a shipped skip, measured at 25.3 s -> 4.0 s in
-the regression run - as impossible to start. Instance indices are per `Instance[N]` layer and repeat across
-them, so a later layer's instance 10 was overwriting the director's, and gpa11 did not happen to collide.
+That also closes the `icelabint` recipe in `mod/levels-wip/`, which restored a skip for a scene that cannot
+play - and would have been the wrong scene to restore anyway.
+
+:::caution Three validations, because one was not enough, and two missed a whole route
+The tool asserts three scenes this project has watched playing before it prints anything. With only the
+Henchmania check it reported the **Rockslide intro** - a shipped skip, measured at 25.3 s → 4.0 s - as
+impossible to start, because instance indices are per `Instance[N]` layer and a later layer's instance 10 was
+overwriting the director's. And the **beach Aku Aku** scene, measured at 13.1 s when Crash walks onto its
+trigger, is what exposed the message route: it has an *empty* receiver table, so it had been filed under "its
+own DEFAULT" with its trigger written off as vestigial. The trigger starts it; the number arrives as a
+message its slot-0 script was already waiting on.
 :::
 
 :::caution Five is a checklist, not a finding

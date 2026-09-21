@@ -5,21 +5,27 @@ nothing for objects that plainly exist, and reported ten directors as unused. Th
 list and asked only "does a trigger name this object", which cannot tell a trigger that starts a scene from
 one that names the object and does nothing.
 
-The mechanism is now known (see wiki/docs/roadmap.md), so the question is exact and static. There are three
+The mechanism is now known (see wiki/docs/roadmap.md), so the question is exact and static. There are four
 ways into a director and this checks all of them:
 
-  1. A trigger targets its instance and carries a **number its receiver table holds**. A trigger carries two
-     numbers, `arg1` and `arg2`, and which is live depends on its header - both are checked.
-  2. `TriggerLinkedObjects`, which is `ExecuteEvent` with index 1, and an event index is a **script slot** -
+  1. A trigger targets its instance and carries a **number its receiver table holds**, which runs the script
+     that entry names. A trigger carries two numbers, `arg1` and `arg2`, and which is live depends on its
+     header - both are checked.
+  2. The same number arriving as a **user message** that the slot-0 script is already polling for with
+     `GotUserMessageEquals`. The receiver table is not the only route, and a director with an empty table can
+     still be trigger-started this way.
+  3. `TriggerLinkedObjects`, which is `ExecuteEvent` with index 1, and an event index is a **script slot** -
      so it can only reach a director that has a slot 1. No cutscene director in the game has one.
-  3. Its own slot-0 DEFAULT script reaching its ACTIVATED script, which is how the Cavern director starts:
+  4. Its own slot-0 script reaching its ACTIVATED script, which is how the Cavern director starts:
      `COM_CUTSCENE_PROXIMITY_ACTIVATION`, no trigger involved.
 
-Anything with none of the three cannot start, and that is now a finding rather than a question.
+Anything with none of the four cannot start, and that is a finding rather than a question.
 
-Two scenes this project has watched playing are asserted before any results are printed, and the tool refuses
-to report if either fails. One was not enough: with only the Henchmania check it reported the Rockslide intro,
-a shipped skip measured at 25.3s -> 4.0s, as impossible to start.
+Three scenes this project has watched playing are asserted before any results are printed, and the tool
+refuses to report if one fails. They are not decoration. With only the Henchmania check it reported the
+Rockslide intro - a shipped skip measured at 25.3s -> 4.0s - as impossible to start; and the beach Aku Aku
+scene, measured at 13.1s when Crash walks onto its trigger, is what exposed route 2, having been classified
+by route 4 with its trigger written off as vestigial.
 
   python tools/scene_survey.py                 # every level in the archive
   python tools/scene_survey.py gpa11 altdoc    # just these
@@ -69,6 +75,7 @@ def directors(path):
 
 SCRIPT_HDR = re.compile(r"^=== script (\d+) (\S+)")
 SUBSCRIPT = re.compile(r"script=(\d+)\(")
+GOTMSG = re.compile(r"GotUserMessageEquals\(p=(\d+)\)")
 
 def script_graph(path):
     """script id -> (name, set of script ids its states run)
@@ -80,8 +87,9 @@ def script_graph(path):
     for line in dump(path, "scripts", ".").splitlines():
         m = SCRIPT_HDR.match(line)
         if m:
-            cur = int(m.group(1)); graph[cur] = [m.group(2), set()]
+            cur = int(m.group(1)); graph[cur] = [m.group(2), set(), set()]
         elif cur is not None:
+            graph[cur][2].update(int(n) for n in GOTMSG.findall(line))
             # A script with a header is a pair: the header is id N and its state machine is id N+1. Without
             # that edge the walk stops at the header and the Cavern's proximity activation looks like nothing.
             # The header's own `main=` is *not* an edge - every director's DEFAULT header points at its
@@ -90,17 +98,34 @@ def script_graph(path):
             graph[cur][1].update(int(s) for s in SUBSCRIPT.findall(line))
     return graph
 
-def reaches_activated(graph, start):
-    """Does this script tree reach a script whose name says it is the activated one?"""
+def walk(graph, start):
+    """Every script reachable from `start`, itself included."""
     seen, stack = set(), [start]
     while stack:
         sid = stack.pop()
         if sid in seen or sid not in graph: continue
         seen.add(sid)
-        name = graph[sid][0]
-        if sid != start and "ACTIVATED" in name.upper(): return name
         stack.extend(graph[sid][1])
+    return seen
+
+def reaches_activated(graph, start):
+    """Does this script tree reach a script whose name says it is the activated one?"""
+    for sid in walk(graph, start):
+        if sid != start and "ACTIVATED" in graph[sid][0].upper(): return graph[sid][0]
     return None
+
+def awaited_messages(graph, start):
+    """Message numbers this script tree polls for with GotUserMessageEquals.
+
+    The receiver table is not the only way a trigger's number reaches an object. act_BEACH_AKU_CUTSCENE_
+    DIRECTOR has an *empty* receiver table and a trigger carrying 87 at it, which looked vestigial - and the
+    scene plays, measured at 13.1s when Crash walks onto that spot. Its ACTIVATED script sits in slot 0, so
+    it is already running from level load, and its first state waits on GotUserMessageEquals(87). So a number
+    a trigger carries also arrives as a user message, which any running script can poll for."""
+    out = set()
+    for sid in walk(graph, start):
+        out |= graph[sid][2]
+    return out
 
 def instance_objects(path):
     """(layer, instance index) -> object id
@@ -147,12 +172,16 @@ def survey(path, level):
     for oid, (name, recv, slots) in sorted(ds.items()):
         carried = nums.get(oid, set())
         matched = sorted(carried & set(recv))
-        # Three ways in, checked in the order they are cheap: a trigger's number, TriggerLinkedObjects (which
-        # is ExecuteEvent with index 1, and index is a script slot - so it needs a slot 1), and a slot-0
-        # DEFAULT script that reaches the activated one by itself.
+        # Four ways in. A trigger's number through the receiver table; the same number arriving as a user
+        # message that the slot-0 script is already polling for; TriggerLinkedObjects, which is ExecuteEvent
+        # with index 1 and so needs a slot 1; and a slot-0 script that reaches the activated one by itself.
         via_default = reaches_activated(graph, slots[0]) if 0 in slots else None
+        awaited = awaited_messages(graph, slots[0]) if 0 in slots else set()
+        via_msg = sorted(carried & awaited)
         if matched:
             state, detail = "started: trigger", f"carries {matched[0]} -> {recv[matched[0]]}"
+        elif via_msg:
+            state, detail = "started: trigger message", f"carries {via_msg[0]}, slot 0 waits on GotUserMessageEquals({via_msg[0]})"
         elif via_default:
             state, detail = "started: own DEFAULT", f"slot 0 reaches {via_default}"
         elif carried:
@@ -188,7 +217,8 @@ def main():
     # instance-index collision that gpa11 did not happen to hit.
     bad = False
     for level, needle, why in (("gpa11", "HENCHMANIA", "its scene plays on the rig"),
-                               ("l10start", "ROCKSLIDE", "its skip is shipped and passes the regression run")):
+                               ("l10start", "ROCKSLIDE", "its skip is shipped and passes the regression run"),
+                               ("beach", "BEACH_AKU", "it played for 13.1s when Crash walked onto that trigger")):
         hit = [r for r in rows if r[0] == level and needle in r[2]]
         if not hit:
             continue
@@ -203,7 +233,8 @@ def main():
 
     by_state = {}
     for r in rows: by_state.setdefault(r[3], []).append(r)
-    for state in ("started: trigger", "started: own DEFAULT", "linkable only", "MISMATCH", "DEAD"):
+    for state in ("started: trigger", "started: trigger message", "started: own DEFAULT",
+                  "linkable only", "MISMATCH", "DEAD"):
         group = by_state.get(state, [])
         if not group: continue
         print(f"{len(group)} directors: {state}")
