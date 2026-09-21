@@ -220,6 +220,38 @@ def player_obj(p):
     obj = p.r32(PLAYER_CHAR)
     return obj if 0x00100000 <= obj < EE_RAM - 0x200 else None
 
+PLAYER_HELPER = 0x309908          # global -> the player's creation helper; health is bits 6-13 of +20
+STATE_DYING = 13                  # flow while a death plays out, before it settles back to 12
+
+def set_health(p, hp):
+    """Crash's mask count: 3 is the full set, 0 is bare - one hit kills."""
+    ps = p.r32(PLAYER_HELPER)
+    if ps: p.w32(ps + 20, (p.r32(ps + 20) & ~(0xFF << 6)) | ((hp & 0xFF) << 6))
+
+def kill(p, on, settle=3.0, timeout=50.0):
+    """Kill Crash on the actor at `on` (x, y, z) and return where he comes back, or None.
+
+    There is no "die" to call: the reliable recipe is to take his masks away and drop him on something that
+    deals contact damage, then watch the flow state leave 12 for 13 and come back. Writing health 0 on its
+    own does nothing - he is only hurt when something hits him - and falling out of the level does not do it
+    either; he simply keeps falling.
+
+    It depends on the actor being live, so it is not certain: the shieldbearer at (-58.87, -0.08, 135.2) in
+    huba works, the second one a few units away did not, and a save state whose Crash is already out of
+    bounds never dies at all. Returns None when the death does not happen, rather than pretending it did.
+    """
+    set_health(p, 0)
+    teleport(on[0], on[1] + 1.0, on[2]); time.sleep(2.0)
+    died = False
+    end = time.time() + timeout
+    while time.time() < end:
+        time.sleep(1.0)
+        if flow_state(p) != STATE_PLAYING: died = True
+        elif died:
+            time.sleep(settle)                 # the respawn slides him into place; read it once it stops
+            return pos(p)
+    return None
+
 def teleport(x, y, z, tol=2e-3, mirrors=None):
     """Move Crash to (x, y, z), and return the addresses that were moved, to pass back as `mirrors`.
 
