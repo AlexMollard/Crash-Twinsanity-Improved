@@ -133,26 +133,25 @@ Environment switches: `RIG_PATCH=ADDR=WORD,...` applies executable patches from 
 
 ## The baseline
 
-First run of all 25 shipped skips together, from a state library built entirely from the current source:
+Every shipped skip, run together on a state library rebuilt from current source:
 
 | | Count | |
 |---|:-:|---|
 | **PASS** | 15 | gameplay returns sooner, player ends up in the same situation |
-| **CHECK** | 7 | a difference a human has to judge - all of them explained |
-| **NOT TRIGGERED** | 3 | `sentry`, `dingodile_hut`, `ngin_switch` - the scene never started |
+| **CHECK** | 8 | a difference a human has to judge - all of them explained |
+| unparsed or skipped | 0 | every line in both lists ran |
 
-The CHECKs are not failures. `totem_falling` reports 21.5 s against 21.2 s, which looks like a skip that does
-nothing and **is exactly right**: that scene is [deliberately left unskippable](what-changed) because skipping drops
-Crash into the totem chase before it is set up. `henchmania` reports the skip taking *longer* than the full scene,
-which is the follow-on Brio/Tropy scene chaining on - the measurement stops when gameplay resumes, and a second
-scene delays that. The rest are end-position differences already documented as legitimate.
+The CHECKs are not failures. `totem_falling` reports 21.4 s against 20.9 s, which looks like a skip that does
+nothing and **is exactly right**: that scene is [deliberately left unskippable](what-changed) because skipping
+drops Crash into the totem chase before it is set up. `henchmania` reports the skip taking *longer* than the
+full scene, which is the follow-on Brio/Tropy scene chaining on - the measurement stops when gameplay resumes,
+and a second scene delays that. `lab_psychetron` is the one with a movie in it, and its phase split shows the
+recipe doing all the work (scene 17.3 s → 1.9 s) while the movie is untouched. The rest are end-position
+differences already documented as legitimate.
 
-The three NOT TRIGGERED turned out not to be cutscenes at all. Their coordinates are accurate - each sits on a
-real trigger to within 0.06 - but those triggers target **actors**: `act_SENTRY_TRIBESMAN`,
-`act_BATTLESHIP_NGIN_SWITCHTHROWER`, and an actor inside gpa01's Dingodile-hut group. None of the three levels
-contains a cutscene director at all, checked both by the survey and by searching their object tables directly. So
-the entries were wrong when they were written, and the silently-skipped list is why nobody found out. They are
-commented out with the reason, leaving **22** entries that all mean something.
+An earlier baseline reported three **NOT TRIGGERED** as well. Those turned out not to be cutscenes at all -
+their triggers target actors, and none of the three levels contains a cutscene director - so they were
+commented out with the reason. What is left is 23 entries that all mean something.
 
 ## What a verdict looks like
 
