@@ -98,6 +98,17 @@ level files is global boilerplate linked everywhere rather than dozens of missin
 prompted already - they are precisely the three that do *not* appear in its list. Presence in a level file
 says nothing about whether the thing runs there.
 
+## Does a recipe reach every copy of what it edits?
+
+Script ids are game-wide and the same script sits in as many `.rm2` files as need it, but a recipe only edits
+the files its `file` lines name. Miss one and the fix silently does not apply there - which is exactly how the
+Rooftop skip came to be missing from `roofcor2`, the Nina route through that level.
+
+`python tools/recipe_reach.py` checks every recipe against every level that holds the scripts it edits. It
+also asserts that at least one edited script really does live in more than one level, because otherwise "no
+gaps" would only mean the lookup found nothing. Current answer: 17 recipes, 42 scripts, **no gaps** - the
+Rooftop one was the only case and it is fixed.
+
 ## Test-only recipes
 
 Some things cannot be reached in the rig without help. `tools/rig/testops/tiki_defeat.ops` sends the Totem Hokum boss
