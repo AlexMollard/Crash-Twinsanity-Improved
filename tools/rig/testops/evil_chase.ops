@@ -1,6 +1,25 @@
 # TEST ONLY: force the Bandicoot Pursuit chase to start, so the rig can watch Evil Crash steer.
 # He normally waits for user message 269 (sent by the summoner once it has a focus object) and then branches on
 # counter 26. Neither happens from a level warp. Both edits are size-neutral, so the save states stay valid.
+#
+# RUN 2026-09-21, and it does not produce a chase. Built into test.iso (+0 bytes, confirmed), warped fresh to
+# altdoc twice to clear the cold-boot spawn, then stood at (91.15, 0.02, -154.81) for 20s: Evil Crash never
+# appears. Both he (877) and the summoner (876) are present in RAM - 48 and 129 id matches, three and two of
+# which pass findactor's structure filter - but every one reads position (0,0,0), so they are instantiated
+# and not placed anywhere near the player.
+#
+# The likely reason is in the edit itself, and it is worth stating because it is not obvious. Message 269 is
+# not only a go signal: state 1's body runs RequestMessSourceAsFocus, which takes its focus from *the sender
+# of the message*. Skipping the message therefore skips the focus, and a focus is exactly what the chase
+# needs - the summoner's own ACTIVATED script branches to COM_GENERIC_CREATURE_ERROR when GotFocusObject is
+# false. So this recipe starts the state machine and leaves it with nothing to chase.
+#
+# Next thing to try: give state 1 a focus of its own. SetFocusToPlayer does not occur anywhere in altdoc, so
+# appendcmds cannot copy one in; the nearest candidate in the file is the summoner's own focus search, at
+# COM_ALTEARTH_DOCAMOK_SUMMONER_ACTIVATED (5175) state 6 body 0 - `appendcmds 5177 1 0 5175 6 0`.
+#
+# Reaching the real trigger is not the alternative: it carries 87 at instance 1, the summoner's receiver table
+# holds 87 -> ALTEARTH_DOCAMOK_SUMMONER_ACTIVATED, and it sits over a void 23 units past where the floor ends.
 file Levels\AltEarth\Hub\altdoc.rm2
 setcond 5177 1 0 5 0 0 3.0   # COM_ALTEARTH_DOCAMOK_EVILCRASH_DEFAULT state 1: GotUserMessageEquals(269) -> TimeInUnit 3s
 setcond 5177 2 0 2 0         # state 2: CounterValueEqualsThreshold(26)==1 -> Else, so he always enters PHASE1
