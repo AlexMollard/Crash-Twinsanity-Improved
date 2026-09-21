@@ -1,3 +1,9 @@
+# RETIRED: the scene this restores cannot play. The director has receivers [87] but nothing in the game
+# carries 87 at it; it has no slot 1, so TriggerLinkedObjects cannot reach it (that command is
+# ExecuteEvent with index 1, and an event index is a script slot); and its slot-0 DEFAULT script goes
+# nowhere. Independently, arrival_test reports NOT TRIGGERED for labint and neither of that level's two
+# triggers targets the director. See tools/scene_survey.py, which checks all three routes.
+#
 # NOT VERIFIED: the scene this restores has never been observed playing, and the run that appeared to verify it
 # was measuring the Iceberg Lab *movie* instead. labint has two triggers - an FMV player and a door - and neither
 # targets the director (instance 1), so a plain warp cannot start it: arrival_test says NOT TRIGGERED, and the

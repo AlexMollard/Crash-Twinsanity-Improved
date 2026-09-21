@@ -152,25 +152,42 @@ Henchmania director whose scene was later watched playing. `tools/scene_survey.p
 **trigger list**, and refuses to report at all unless it first finds that same director correctly marked as
 triggered.
 
-Across all **135** level files, 58 cutscene directors are placed. Now that a trigger's *number* can be checked
-against the target's receiver table, each one gets an exact answer rather than "is it named somewhere":
+Across all **135** level files, 58 cutscene directors are placed. There are exactly three ways into one, and
+`tools/scene_survey.py` now checks all three, so every director gets a definite answer:
 
-| | Count | |
+| | Count | Started by |
 |---|:-:|---|
-| **started** | 43 | a trigger targets it and carries a number its receiver table holds |
-| **mismatch** | 1 | a trigger targets it and it cannot respond |
-| **no trigger** | 14 | receivers exist, nothing carries the number |
+| **trigger** | 47 | a trigger targets the instance and carries a number the object's receiver table holds |
+| **its own DEFAULT** | 7 | slot 0 reaches the ACTIVATED script by itself - the Cavern's proximity activation |
+| **nothing** | 4 | no number carried, no slot 1, and slot 0 goes nowhere |
 
-The earlier figure of 48 was too high: that method matched a director's *name* anywhere in the level's trigger
-list, so a trigger aimed at one copy counted for every copy. Matching instance index to object id instead is
-what moves ten of them into the third row.
+The second row is what scene chaining actually is, and it settles a case that had to be left open: gpa11's
+untriggered `HUB2_TO_HUB3` copy, whose scene plays 2.5 s after the Henchmania scene, is started by its own
+DEFAULT script. `act_BEACH_AKU_CUTSCENE_DIRECTOR` is the same - it has an empty receiver table and a vestigial
+trigger aimed at it, and plays from slot 0 on arrival.
 
-**The one mismatch is `act_BEACH_AKU_CUTSCENE_DIRECTOR`,** and it is interesting rather than broken. A trigger in
-`beach` carries 87 at it, but its receiver table is **empty**, so that trigger cannot start anything - and its
-`BEACH_AKU_CUTSCENE_DIRECTOR_ACTIVATED` script sits in **slot 0**, the slot `RunObjectSpawnScript` runs at level
-load. The working `BEACH_TRAINING_CUTSCENE_DIRECTOR1` next to it has `_DEFAULT` in slot 0 and `87 -> _ACTIVATED`
-in its table. So this scene most likely plays on arrival and the trigger is vestigial, which `arrival_test.py`
-can check.
+`TriggerLinkedObjects` turns out **not** to be a route into any of them. It is `ExecuteEvent` with index 1,
+an event index is a script slot, and no cutscene director in the game has a slot 1.
+
+**The four that nothing can start:**
+
+| Director | Level |
+|---|---|
+| `act_ICELABINT_CUTSCENE_DIRECTOR` | `labint` |
+| `act_UKAFIGHT_CUTSCENE_DIRECTOR` | `ukafight` |
+| `act_UKAUKA_DEFEATED_CUTSCENE_DIRECTOR` | `ukafight` |
+| `act_BR_CORTEX_PIPE_CUTSCENE_DIRECTOR` | `boiler_1` |
+
+That closes the `icelabint` recipe in `mod/levels-wip/`: it restores the skip for a scene that cannot play, so
+it should be retired rather than finished. It also matches what the rig said independently - `arrival_test`
+reports NOT TRIGGERED for `labint`, and neither of that level's two triggers targets the director.
+
+:::caution Two validations, because one was not enough
+The tool asserts two scenes this project has watched playing before it prints anything. With only the
+Henchmania check it happily reported the **Rockslide intro** - a shipped skip, measured at 25.3 s -> 4.0 s in
+the regression run - as impossible to start. Instance indices are per `Instance[N]` layer and repeat across
+them, so a later layer's instance 10 was overwriting the director's, and gpa11 did not happen to collide.
+:::
 
 :::caution Five is a checklist, not a finding
 A director without a trigger may still be started another way. `gpa11` holds an untriggered `HUB2_TO_HUB3` copy
