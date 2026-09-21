@@ -45,9 +45,14 @@ def find_source():
 def patch_editor():
     """Apply tools/patches/*.patch to the Twinsanity Editor submodule if they are not in it yet.
 
-    The submodule is upstream's code and is not ours to commit into, but the library drops a few fields it
-    reads (see tools/patches/texture-preserve-reserved.patch), which makes a full re-save lossy. Carrying the
-    fixes as patches keeps them visible, reviewable and easy to send upstream."""
+    The library drops a few fields it reads (see tools/patches/texture-preserve-reserved.patch), which makes a
+    full re-save lossy, and one of them is worse than lossy - CollisionSurface wrote four bytes where two were
+    read, so every level saved through the editor came back with its collision data shifted.
+
+    These now exist as three commits in the submodule, but the submodule is still pinned at upstream until
+    that history is pushed to a fork (tools/fork_editor.py finishes that). Until then a fresh clone checks out
+    upstream's code and needs the patches; afterwards the reverse-apply check below finds the fixes already
+    present and this does nothing. Either way it is a no-op on an already-correct tree."""
     changed = False
     for patch in sorted(glob.glob(os.path.join(HERE, "patches", "*.patch"))):
         check = subprocess.run(["git", "apply", "--reverse", "--check", patch], cwd=EDITOR, capture_output=True)
