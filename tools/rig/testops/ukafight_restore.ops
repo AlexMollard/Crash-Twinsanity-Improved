@@ -1,0 +1,19 @@
+# TEST ONLY: start the UKAFIGHT scene (L04C), which nothing in the game can start.
+# act_UKAFIGHT_CUTSCENE_DIRECTOR holds receivers [87] that no trigger carries, no slot 1, and an empty
+# slot-0 DEFAULT. Unlike the Iceberg Lab one, there is no pre-rendered movie named L04C in the executable's
+# movie table, so this is not a scene that was replaced - six character scripts and no replacement.
+file Levels\Ice\IceClimb\ukafight.rm2
+runscript 5449 0 5 0 5451 0 3.0   # COM_UKAFIGHT_CUTSCENE_DIRECTOR_DEFAULT state 0 -> new state running COM_UKAFIGHT_CUTSCENE_DIRECTOR_ACTIVATED after 3s
+#
+# RUN 2026-09-21 and it plays: the scene starts as the level loads, runs 53.8s, and ends cleanly with control
+# back and flow 12. It is an ice cavern with floating crystals and a close-up of Uka Uka - real authored
+# content, not a stub - and this mod's own HOLD TRIANGLE TO SKIP prompt appears on it, because skip_prompt's
+# auto pass finds the condition-572 rule the developers left in the scene.
+#
+# Controlled: the same warp on a build without this recipe produces no cutscene at all in 60s. So the 53.8s
+# is the restored scene and not something the level does on arrival.
+#
+# STILL NOT SHIPPABLE. The condition is a 3s timer, so it would replay on every entry to ukafight, including
+# after a death. The developers' own condition is unknown. Unlike the Iceberg Lab scene this one has no
+# pre-rendered replacement - there is no L04C in the executable's movie name table at 0x2f49dc - so it is
+# genuinely lost content rather than a duplicate, which is what makes finding the right condition worth doing.
