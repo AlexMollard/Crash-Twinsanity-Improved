@@ -41,11 +41,17 @@ cavbridg   Levels\Earth\Cavern\cavbridg
 # director has already run. 1.5s is not worth a skip; the chapter's real scenes are in antfight, cavent,
 # cortthro and escape, which share the same director script and are where this should resume.
 antfight   Levels\Earth\Cavernntfight
-# antfight holds the chapter's first real scene: trigger at (102.4, -74.85, 68.34), and it is a scene
-# rather than a beat - it ran past a 240s timeout without returning control. That measurement is not
-# usable though: teleporting to the trigger puts Crash inside the rock (results/control/
-# cavern_antfight_full_stuck.png). Walk there with goto instead. The warp spawn is (107.55, -51.06,
-# 12.74), which is 55 units away and 24 up, so the route needs finding rather than assuming.
+cortthro   Levels\Earth\Cavern\cortthro
+escape     Levels\Earth\Cavern\escape
+# The chapter's real scenes are triggered at antfight (102.4, -74.85, 68.34), cortthro (75.43, -36.15,
+# 140.4) and escape (-27.17, -31.48, 12.59) and (-18.47, 34.89, 9.53). antfight's is a scene rather than a
+# beat - it ran past a 240s timeout without giving control back - but that number is not usable, because
+# the teleport that reached it put Crash inside the rock. Walking is no better yet: from the warp spawn
+# (107.55, -51.06, 12.74) he gets about nine units north and falls to his death at z=-58, so the floor
+# ends long before the trigger, exactly as it does in altdoc. Reaching these needs progression, not aim.
+# cortthro and escape share the spawn (71.4, -46.6, 127.4). That is not a failed warp - these files have
+# no start marker so they land on the same default - and it is confirmed by RAM: escape's DRILLMACHINE
+# strings are loaded and cavbridg's ATLASSPHERESWITCH are gone.
 amberly_cortex Levels\school\Madame\amberly cortex
 psycho_p12 Levels\Ice\Hub\psycho progress=12
 psycho_p19 Levels\Ice\Hub\psycho progress=19

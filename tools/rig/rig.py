@@ -295,13 +295,26 @@ def level(name, path=None, fresh=False, timeout=300):
         p.w32(CREDITS_DONE_BRANCH, CREDITS_DONE_ORIG)
     loaded = time.time() - t0
     import math                                          # level intros hold the camera: wait for real control
-    t1 = time.time()
+    t1 = time.time(); controllable = False
     while time.time() - t1 < 60:
         a = pos(p); set_pad(p, (), 0, -1); time.sleep(0.25); set_pad(p); b = pos(p)
-        if math.dist(a, b) > 0.05: break
+        if math.dist(a, b) > 0.05: controllable = True; break
         time.sleep(0.5)
-    else: print("warning: Crash never became controllable", flush=True)
     time.sleep(1.5)
+    # A state is only worth saving if the warp actually arrived. Both failures below have happened here and
+    # both were saved into the library and used, because this only printed a warning and carried on: a state
+    # that is wrong is worse than no state, since every test run off it looks like it ran.
+    here = pos(p)
+    if not controllable:
+        raise SystemExit(f"warp to {path} left Crash uncontrollable at {tuple(round(v, 2) for v in here)} - "
+                         "not saving. The usual cause is the first warp after a cold boot, which lands at a "
+                         "default spawn (often the origin): warp once more and it will land properly.")
+    if loaded < 2.0:
+        raise SystemExit(f"warp to {path} reported loading in {loaded:.1f}s, which is too fast to be a real "
+                         f"level load (6-9s here), and left Crash at {tuple(round(v, 2) for v in here)} - not "
+                         "saving. Warping while the game is respawning (flow 18/21) does this; let him respawn "
+                         "first. Note that two levels sharing a spawn is normal and is not this failure: "
+                         "Cavern files with no start marker all land on the same default.")
     p.save(8); time.sleep(2); shutil.copyfile(slot_file(8), lib)
     print(f"arrived after {time.time() - t0:.0f}s (level loaded in {loaded:.1f}s), saved states/{name}.p2s")
 
