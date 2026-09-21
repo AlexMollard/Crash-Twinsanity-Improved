@@ -212,19 +212,52 @@ def pos(p):
 
 def flow_state(p): return (p.r32(p.r32(FLOW_PTR) + 12) >> 12) & 0x3F
 
-def teleport(x, y, z, tol=2e-3):
-    """Move Crash to (x, y, z). His position is held in several structures (object, physics body, camera
-    targets) whose layout varies by level, so every copy of his current x/z in RAM is shifted by the same
-    offset (found with a RAM dump; each copy keeps its own height offset)."""
+EE_RAM = 0x02000000               # PS2 main memory; a player pointer outside it means there is no player
+
+def player_obj(p):
+    """Crash's object, or None when there isn't one - between levels, on a menu, during a reload after a
+    death. Reading through a stale pointer is how a sweep turns into an unpack error 400 instances in."""
+    obj = p.r32(PLAYER_CHAR)
+    return obj if 0x00100000 <= obj < EE_RAM - 0x200 else None
+
+def teleport(x, y, z, tol=2e-3, mirrors=None):
+    """Move Crash to (x, y, z), and return the addresses that were moved, to pass back as `mirrors`.
+
+    His position is held in several structures (object, physics body, camera targets) whose layout varies by
+    level, so every copy of his current x/z in RAM is shifted by the same offset (found with a RAM dump; each
+    copy keeps its own height offset).
+
+    That dump costs ~1.3s and is the entire cost of a sweep that teleports once per object instance - the
+    PINE reads it replaces cost ~20us each. Pass `mirrors` from an earlier call on the same level and the
+    copies that still track him are shifted directly, with no dump. The check is the same predicate the dump
+    applies, just over known addresses instead of all 8M, so a copy that has drifted away (the camera target
+    lagging behind a teleport) is skipped exactly as it would be; a fresh dump is only needed when almost
+    nothing still tracks him, which means the structures themselves moved."""
     import array
     p = Pine(); f2u = lambda v: struct.unpack("<I", struct.pack("<f", v))[0]
-    obj = p.r32(PLAYER_CHAR); dump = os.path.join(TEST, "tp_ram.bin"); run(["ram", dump])
+    obj = player_obj(p)
+    if obj is None:
+        raise SystemExit(f"nothing to teleport: the player pointer reads 0x{p.r32(PLAYER_CHAR):08x}, which is "
+                         f"not in EE RAM. The game is between levels, reloading after a death, or on a menu "
+                         f"(flow state {flow_state(p)}); a teleport needs flow 12.")
+    x0, y0, z0 = (fl(p, obj + 0xD0 + 4 * k) for k in range(3))
+    tracks = lambda a, b, c: abs(a - x0) < tol and abs(c - z0) < tol and abs(b - y0) < 3.0
+
+    if mirrors:
+        here = [(a, fl(p, a), fl(p, a + 4), fl(p, a + 8)) for a in mirrors]
+        keep = [m for m in here if tracks(*m[1:])]
+        if len(keep) >= 2:                            # enough of the known copies are still his position
+            for a, mx, my, mz in keep:
+                for k, v in enumerate((mx + x - x0, my + y - y0, mz + z - z0)): p.w32(a + 4 * k, f2u(v))
+            return mirrors                            # hand back the full candidate set, not just today's hits
+
+    dump = os.path.join(TEST, "tp_ram.bin"); run(["ram", dump])
     f = array.array("f"); f.frombytes(open(dump, "rb").read())
-    x0, y0, z0 = f[(obj + 0xD0) // 4:(obj + 0xD0) // 4 + 3]
-    hits = [i for i in range(len(f) - 2) if abs(f[i] - x0) < tol and abs(f[i + 2] - z0) < tol and abs(f[i + 1] - y0) < 3.0]
+    x0, y0, z0 = f[(obj + 0xD0) // 4:(obj + 0xD0) // 4 + 3]   # from the dump, so a moving Crash still matches
+    hits = [i for i in range(len(f) - 2) if tracks(f[i], f[i + 1], f[i + 2])]
     for i in hits:
         for k, v in enumerate((f[i] + x - x0, f[i + 1] + y - y0, f[i + 2] + z - z0)): p.w32(i * 4 + 4 * k, f2u(v))
-    return len(hits)
+    return [i * 4 for i in hits]
 
 def _band(w, h, b, y0, y1, x0=0, x1=None):
     tot = n = 0; x1 = w if x1 is None else x1
