@@ -78,6 +78,26 @@ existing save states stay valid, so a test is two minutes instead of twenty. `se
 script down a path the rig cannot otherwise reach - swap a "wait for message 269" for a "wait three seconds" and the
 rest of the machine runs unchanged.
 
+## What is left to restore
+
+`python tools/skip_survey.py` answers that, and it reads the **built** mod rather than the original disc, so a
+skip a recipe has already restored comes back LIVE and only the genuinely unreachable ones are listed. It
+refuses to report at all unless a known-restored skip reads LIVE - pointed at the original disc by mistake,
+every restored skip looks orphaned again and the output reads like a pile of new work.
+
+It also reports skips that are reachable but have **no `HOLD △ TO SKIP` prompt**, because restoring a skip
+and prompting for it are two separate recipes and `mod/skip_prompt.ops` names its levels by hand. That is not
+theoretical: covering `roofcor2` in `rooftop.ops` gave that scene a working skip with no prompt on screen,
+and the player would never have found out.
+
+Two cautions are built into how it reports. A condition-572 rule in an ordinary behaviour script is an
+alternative transition, not a cutscene, so only states that actually play one are counted - the same rule
+`skipprompt auto` uses. And results are grouped by **script**, not by level: a script sitting in dozens of
+level files is global boilerplate linked everywhere rather than dozens of missing prompts.
+`COM_CORTEX_DOCAMOK_EARTH_PHASE2` is in 38 files and its scene only plays in the Doc Amok levels, which are
+prompted already - they are precisely the three that do *not* appear in its list. Presence in a level file
+says nothing about whether the thing runs there.
+
 ## Test-only recipes
 
 Some things cannot be reached in the rig without help. `tools/rig/testops/tiki_defeat.ops` sends the Totem Hokum boss

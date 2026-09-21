@@ -116,14 +116,22 @@ def main():
 
     # A skip with no prompt is a skip the player never learns about. The two are separate recipes and
     # mod/skip_prompt.ops names its levels by hand, so one can ship without the other.
-    print()
-    print(f"{len(silent)} reachable skip(s) with no hold-Triangle prompt")
-    seen2 = set()
+    # Grouped by script, not by level. A script sitting in dozens of level files is global boilerplate that
+    # happens to be linked everywhere, not dozens of missing prompts: COM_CORTEX_DOCAMOK_EARTH_PHASE2 is in
+    # 38 files and its scene only plays in the Doc Amok levels, which are prompted already - they are the
+    # three that do *not* appear here. Presence in a level file says nothing about whether it runs there,
+    # the same trap as reading absence from an object table.
+    by_script = {}
     for level, sid, script in silent:
-        if (level, script) in seen2: continue
-        seen2.add((level, script))
-        print(f"  {level:12s} {sid:5d}  {script}")
-    if not silent:
+        by_script.setdefault((sid, script), set()).add(level)
+    print()
+    print(f"{len(by_script)} script(s) with a reachable skip and no hold-Triangle prompt")
+    for (sid, script), levels in sorted(by_script.items(), key=lambda kv: -len(kv[1])):
+        where = sorted(levels)
+        note = "  <- in this many files it is global boilerplate; check where the scene actually plays" if len(where) > 5 else ""
+        print(f"  {sid:5d}  {script}{note}")
+        print(f"         {len(where)} level(s): {', '.join(where[:8])}{' ...' if len(where) > 8 else ''}")
+    if not by_script:
         print("  none: every reachable skip tells the player it is there")
 
 if __name__ == "__main__":
