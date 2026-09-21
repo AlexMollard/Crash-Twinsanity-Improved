@@ -279,7 +279,17 @@ def level(name, path=None, fresh=False, timeout=300):
     raw = path.replace("/", "\\").encode("ascii"); buf = raw + b"\0"; buf += b"\0" * (-len(buf) % 4)
     for i in range(0, len(buf), 4): p.w32(th.WARP_STR + i, struct.unpack("<I", buf[i:i + 4])[0])
     p.w32(LEVEL_START_STR, th.WARP_STR); p.w32(LEVEL_START_STR + 4, len(raw)); p.w32(LEVEL_START_STR + 8, 0x100)
-    if p.r32(CREDITS_DONE_BRANCH) != CREDITS_DONE_ORIG: raise SystemExit("unexpected code at the credits branch - wrong build?")
+    # Straight after rig.py start the executable is not in RAM yet, so the credits branch reads as something
+    # else and the warp used to fail with "wrong build?" - which sends you looking at the ISO. Wait for it.
+    t_boot = time.time()
+    while p.r32(CREDITS_DONE_BRANCH) != CREDITS_DONE_ORIG:
+        if time.time() - t_boot > 120:
+            raise SystemExit("unexpected code at the credits branch after 120s - wrong build?")
+        if time.time() - t_boot < 1: print("waiting for the game to boot...", flush=True)
+        time.sleep(1)
+    while flow_state(p) < 6:                             # still settling: warping here times out
+        if time.time() - t_boot > 180: break
+        time.sleep(1)
     p.w32(CREDITS_DONE_BRANCH, CREDITS_DONE_ALWAYS)      # credits end on their first frame -> normal level-load path
     try:
         flow = p.r32(FLOW_PTR); hi = p.r32(flow + 12)
