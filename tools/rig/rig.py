@@ -272,10 +272,6 @@ def level(name, path=None, fresh=False, timeout=300):
             except (OSError, RuntimeError): pine_reset(); time.sleep(0.5)
         time.sleep(1); print(f"loaded {name} from the state library"); return
     if not path: raise SystemExit(f"no saved state for {name}; give the level path to warp there")
-    before = flow_state(p)                               # refuse to warp out of the credits wedge (see below)
-    if before == STATE_CREDITS:
-        raise SystemExit("the game is wedged in the credits (flow 19) - a warp can never succeed from here "
-                         "and will just burn the timeout. Restart the emulator: rig.py stop, rig.py start.")
     raw = path.replace("/", "\\").encode("ascii"); buf = raw + b"\0"; buf += b"\0" * (-len(buf) % 4)
     for i in range(0, len(buf), 4): p.w32(th.WARP_STR + i, struct.unpack("<I", buf[i:i + 4])[0])
     p.w32(LEVEL_START_STR, th.WARP_STR); p.w32(LEVEL_START_STR + 4, len(raw)); p.w32(LEVEL_START_STR + 8, 0x100)
@@ -290,6 +286,18 @@ def level(name, path=None, fresh=False, timeout=300):
     while flow_state(p) < 6:                             # still settling: warping here times out
         if time.time() - t_boot > 180: break
         time.sleep(1)
+    # A warp only works from a settled game: the menu, the attract demo, or ordinary play. Excluding only
+    # flow 19 was not enough. Warping into the same level twice in a row leaves the game at flow **14**, and
+    # a warp from there times out and *then* leaves it at 19 - so the first failure manufactures the wedge
+    # the old check was looking for, and every later warp in the run dies too. That is what kept killing the
+    # Iceberg Lab arrival sweep: its throwaway warp succeeded, the first sampled one wedged, and the run
+    # ended with a single useless sample. A whitelist fails fast instead, before anything is burned.
+    before = flow_state(p)
+    if before not in (6, 7, STATE_PLAYING):
+        hint = (" - the game is wedged in the credits; only a restart clears it" if before == STATE_CREDITS
+                else " - it is mid-transition or mid-scene; let it settle, or restart")
+        raise SystemExit(f"refusing to warp from flow state {before}{hint}. A warp needs flow 6 (title), "
+                         "7 (attract demo) or 12 (playing).")
     p.w32(CREDITS_DONE_BRANCH, CREDITS_DONE_ALWAYS)      # credits end on their first frame -> normal level-load path
     try:
         flow = p.r32(FLOW_PTR); hi = p.r32(flow + 12)
@@ -325,8 +333,16 @@ def level(name, path=None, fresh=False, timeout=300):
                          "saving. Warping while the game is respawning (flow 18/21) does this; let him respawn "
                          "first. Note that two levels sharing a spawn is normal and is not this failure: "
                          "Cavern files with no start marker all land on the same default.")
+    # Let the game reach ordinary play before the state is taken. Returning at flow 14 - which a repeat warp
+    # into the same level does - hands the caller a game the *next* warp cannot start from, and a state
+    # captured mid-transition besides.
+    t2 = time.time()
+    while flow_state(p) != STATE_PLAYING and time.time() - t2 < 20:
+        time.sleep(0.5)
+    settled = flow_state(p)
     p.save(8); time.sleep(2); shutil.copyfile(slot_file(8), lib)
-    print(f"arrived after {time.time() - t0:.0f}s (level loaded in {loaded:.1f}s), saved states/{name}.p2s")
+    note = "" if settled == STATE_PLAYING else f", WARNING: still at flow {settled} rather than 12"
+    print(f"arrived after {time.time() - t0:.0f}s (level loaded in {loaded:.1f}s), saved states/{name}.p2s{note}")
 
 def goto(tx, tz, radius=1.5, timeout=60.0, burst=0.25):
     """Walk Crash to world (tx, tz) with closed-loop steering; the stick is camera-relative, so the

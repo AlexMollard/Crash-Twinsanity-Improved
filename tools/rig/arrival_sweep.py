@@ -18,6 +18,7 @@ sys.path.insert(0, HERE)
 import rig, findactor
 
 HELPER_OFF, HEALTH_SHIFT, HEALTH_MASK = 0x10, 6, 0xFF
+BURN = r"Levels\Earth\Hub\beach"   # a level to spend the cold-boot warp on; not the one being sampled
 
 def health(p, inst):
     helper = p.r32(inst + HELPER_OFF)
@@ -35,15 +36,29 @@ def main():
     o = ap.parse_args()
     os.makedirs(o.out, exist_ok=True)
     name = "sweep_" + os.path.basename(o.path).lower()
-    print("discarding one warp first: the first after a cold boot lands at a default spawn", flush=True)
-    rig.level(name, o.path, fresh=True)                  # thrown away, never sampled
     tally = {}
+    # Two of the rig's traps meet here and the sample has to dodge both.
+    #
+    # A level can be warped to **once per emulator session**: warping back to one already visited leaves the
+    # game at flow 14, which never settles, and the next warp is refused - measured as labint(12) ->
+    # labext(12) -> labint(14). This sweep is repeat warps to one level, which is why it never once produced
+    # more than a single sample. So every sample needs a fresh emulator.
+    #
+    # But the first warp after a cold boot lands at a *default* spawn rather than the level's own, so with a
+    # restart per sample every warp becomes a first warp: Crash arrives at (4.79, -0.22, -38.02) instead of
+    # labint's (-16.74, -2.83, -11.69), and the actor being watched is nowhere near him. That is what turned
+    # the first working version of this into three straight "not found".
+    #
+    # Restart, throw one warp away somewhere else, then warp to the target. About 55s a sample.
     for run in range(1, o.n + 1):
         try:
+            rig.stop(); time.sleep(2)
+            rig.start(r"Levels\Earth\Hub\Beach", "test", "1")
+            rig.level(name + "_burn", BURN, fresh=True)   # soaks up the cold-boot spawn, never sampled
             rig.level(name, o.path, fresh=True)
         except SystemExit as e:
             print(f"run {run}: warp failed - {e}", flush=True); tally["warp failed"] = tally.get("warp failed", 0) + 1
-            break                                        # a failed warp poisons the ones after it
+            continue                                     # a fresh emulator next time, so this one is recoverable
         time.sleep(o.settle)
         p = rig.Pine()
         hits = findactor.find(p, o.objid, rig.pos(p))
