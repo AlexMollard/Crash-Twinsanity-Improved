@@ -17,7 +17,13 @@ echo Checking Python packages...
 %PY% -m pip install --quiet --disable-pip-version-check -r requirements.txt || goto :failed
 
 where git >nul 2>&1 || (echo Git is not installed. Get it from https://git-scm.com/download/win & goto :failed)
-where dotnet >nul 2>&1 || (echo The .NET SDK is not installed. Get it from https://dotnet.microsoft.com/download & goto :failed)
+rem The level tool needs a .NET SDK - a .NET runtime alone also provides dotnet.exe but cannot build.
+set "PATH=%ProgramFiles%\dotnet;%PATH%"
+call :has_sdk || (
+    echo No .NET SDK found - installing it with winget, accept the prompt if Windows asks...
+    winget install --id Microsoft.DotNet.SDK.10 -e --silent --accept-source-agreements --accept-package-agreements
+)
+call :has_sdk || (echo Could not install the .NET SDK. Get it from https://dotnet.microsoft.com/download & goto :failed)
 
 %PY% tools\build_mod.py %* || goto :failed
 echo.
@@ -28,4 +34,7 @@ exit /b 0
 echo.
 echo Build failed - see the message above.
 pause
+exit /b 1
+:has_sdk
+for /f %%v in ('dotnet --list-sdks 2^>nul') do exit /b 0
 exit /b 1
