@@ -48,7 +48,7 @@ HD texture and graphics presets. One script turns your own disc image into a pat
 ## Quick start
 
 **You need** PCSX2 2.x with a PS2 BIOS, Python 3, your own PAL ISO, and — first time only, to build the level
-tool — the .NET SDK with Visual Studio's MSBuild.
+tool — Visual Studio's MSBuild with .NET Framework 4.8.
 
 1. **Drop your ISO** into the repository folder. Any file name works; it's recognised by its PCSX2 CRC.
 2. **Run `Build Modded ISO.bat`.** It writes `<name> [Modded].iso` and installs the matching PCSX2 settings.

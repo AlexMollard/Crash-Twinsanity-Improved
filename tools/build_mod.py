@@ -72,16 +72,20 @@ def ensure_tools():
         subprocess.run(["git", "submodule", "update", "--init", "tools/twinsanity-editor"], cwd=ROOT, check=True)
     if patch_editor() and os.path.exists(LIB_DLL):
         os.remove(LIB_DLL)                                # force the rebuild below
-    if not os.path.exists(LIB_DLL):
+    def msbuild(project):                                 # Visual Studio's MSBuild - no .NET SDK needed
         vswhere = os.path.expandvars(r"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe")
-        msbuild = subprocess.run([vswhere, "-latest", "-prerelease", "-requires", "Microsoft.Component.MSBuild", "-find", r"MSBuild\**\Bin\MSBuild.exe"],
-                                 capture_output=True, text=True).stdout.strip().splitlines() if os.path.exists(vswhere) else []
-        if not msbuild: raise SystemExit("Building the Twinsanity Editor library needs Visual Studio (MSBuild) with .NET Framework 4.8.")
+        found = subprocess.run([vswhere, "-latest", "-prerelease", "-requires", "Microsoft.Component.MSBuild", "-find", r"MSBuild\**\Bin\MSBuild.exe"],
+                               capture_output=True, text=True).stdout.strip().splitlines() if os.path.exists(vswhere) else []
+        if not found: raise SystemExit("Building the level tools needs Visual Studio (MSBuild) with .NET Framework 4.8.")
+        subprocess.run([found[0], project, "-p:Configuration=Release", "-v:minimal", "-nologo"], check=True)
+    if not os.path.exists(LIB_DLL):
         print("building the Twinsanity Editor library...")
-        subprocess.run([msbuild[0], os.path.join(EDITOR, "Twinsanity", "Twinsanity.csproj"), "-p:Configuration=Release", "-v:minimal", "-nologo"], check=True)
-    if src_newer(TWINSDUMP, os.path.join(HERE, "twinsdump", "Program.cs"), LIB_DLL):
+        msbuild(os.path.join(EDITOR, "Twinsanity", "Twinsanity.csproj"))
+    twinsdump = os.path.join(HERE, "twinsdump")
+    if src_newer(TWINSDUMP, os.path.join(twinsdump, "Program.cs"), os.path.join(twinsdump, "twinsdump.csproj"), LIB_DLL):
         print("building twinsdump...")
-        subprocess.run(["dotnet", "build", os.path.join(HERE, "twinsdump", "twinsdump.csproj"), "-c", "Release", "-nologo", "-v", "q"], check=True)
+        shutil.rmtree(os.path.join(twinsdump, "obj"), ignore_errors=True)  # left over from the old SDK-style build
+        msbuild(os.path.join(twinsdump, "twinsdump.csproj"))
 
 def read_elf_patches(path):
     patches, group = [], ""
