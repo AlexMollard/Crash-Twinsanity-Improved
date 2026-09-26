@@ -4,7 +4,7 @@
     2. per-game settings PCSX2 settings\...game settings  -> <PCSX2>\gamesettings\SLES-52568_<CRC>.ini
                          (for every CRC that has a patch file: the original ISO and the current [Modded] build)
     3. HD texture pack   downloads\ctwin-tp-main.zip      -> <PCSX2>\textures\SLES-52568\replacements
-                         (reinstalled only if missing or incomplete)
+                         (downloaded if the zip is missing; reinstalled only if missing or incomplete)
     4. BIOS language     <PCSX2>\bios\*.NVM set to English (only initialised v1.70+ configs,
                          original kept as .NVM.bak)
 
@@ -68,6 +68,14 @@ try {
     $zipPath = Join-Path $ModDir 'downloads\ctwin-tp-main.zip'
     $texRoot = Join-Path $DataDir "textures\$Serial"
     $repl    = Join-Path $texRoot 'replacements'
+    if (-not (Test-Path $zipPath)) {
+        Note 'downloading the pack from github.com/CRASHARKI/ctwin-tp (about 130 MB)...'
+        New-Item -ItemType Directory -Force (Split-Path $zipPath) | Out-Null
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        $ProgressPreference = 'SilentlyContinue'                          # the progress bar makes the download crawl
+        Invoke-WebRequest 'https://github.com/CRASHARKI/ctwin-tp/archive/refs/heads/main.zip' -OutFile "$zipPath.part" -UseBasicParsing
+        Move-Item "$zipPath.part" $zipPath -Force                         # only a finished download counts as present
+    }
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     $zip = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
     try {
