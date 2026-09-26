@@ -65,11 +65,33 @@ def patch_editor():
     return changed
 
 
+def update_editor():
+    """Bring an older clone's editor submodule up to the pinned commit, which now lives on our fork.
+
+    A clone made while the pin was on upstream still fetches from upstream and has tools/patches/*.patch applied
+    on top, so a plain pull leaves it behind. Only a submodule strictly behind the pin is moved: one that is ahead
+    (local editor work) is left alone."""
+    git = lambda *a, cwd=EDITOR: subprocess.run(["git", *a], cwd=cwd, capture_output=True, text=True)
+    pinned = git("ls-tree", "HEAD", "tools/twinsanity-editor", cwd=ROOT).stdout.split()
+    current = git("rev-parse", "HEAD").stdout.strip()
+    if len(pinned) < 3 or pinned[2] == current: return False
+    print("updating the Twinsanity Editor submodule...")
+    git("submodule", "sync", "--", "tools/twinsanity-editor", cwd=ROOT)
+    git("fetch", "origin")
+    if git("merge-base", "--is-ancestor", current, pinned[2]).returncode: return False
+    for patch in sorted(glob.glob(os.path.join(HERE, "patches", "*.patch")), reverse=True):
+        if git("apply", "--reverse", "--check", patch).returncode == 0:
+            git("apply", "--reverse", patch)              # undo what patch_editor() applied, so the checkout is clean
+    subprocess.run(["git", "submodule", "update", "tools/twinsanity-editor"], cwd=ROOT, check=True)
+    return True
+
 def ensure_tools():
     src_newer = lambda out, *srcs: not os.path.exists(out) or any(os.path.getmtime(s) > os.path.getmtime(out) for s in srcs)
     if not os.path.exists(os.path.join(EDITOR, "Twinsanity", "Twinsanity.csproj")):
         print("fetching the Twinsanity Editor submodule...")
         subprocess.run(["git", "submodule", "update", "--init", "tools/twinsanity-editor"], cwd=ROOT, check=True)
+    elif update_editor() and os.path.exists(LIB_DLL):
+        os.remove(LIB_DLL)
     if patch_editor() and os.path.exists(LIB_DLL):
         os.remove(LIB_DLL)                                # force the rebuild below
     def msbuild(project):                                 # Visual Studio's MSBuild - no .NET SDK needed
