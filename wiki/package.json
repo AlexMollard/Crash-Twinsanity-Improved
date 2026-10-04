@@ -47,6 +47,6 @@
     "node": ">=20.0"
   },
   "overrides": {
-    "serialize-javascript": "^7.1.1"
+    "serialize-javascript": "^7.1.2"
   }
 }
