@@ -1,5 +1,8 @@
 """Crash Twinsanity test rig: drives an isolated, portable PCSX2 (tools/pcsx2-test) over PINE.
 
+RIG_INSTANCE=N (default 0) picks an independent copy: instance 0 is tools/pcsx2-test on PINE port 28012,
+instance N is tools/pcsx2-test-N on port 28012+N. The states/ library is shared by all of them.
+
   rig.py start [--level PATH] [--iso modded|original] [--speed X]   launch test PCSX2 (warp New Game to PATH)
   rig.py stop                                   close the test PCSX2
   rig.py warp PATH                              make the next New Game start in level PATH
@@ -24,13 +27,14 @@ from ctypes import wintypes
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 MOD = os.path.abspath(os.path.join(HERE, "..", ".."))
-TEST = os.path.join(MOD, "tools", "pcsx2-test")
+INSTANCE = int(os.environ.get("RIG_INSTANCE", "0"))
+TEST = os.path.join(MOD, "tools", "pcsx2-test" + (f"-{INSTANCE}" if INSTANCE else ""))
 EXE = os.path.join(TEST, "pcsx2-qt.exe")
 ISOS = {"modded": os.path.join(MOD, "Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It) [Modded].iso"),
         "original": os.path.join(MOD, "Crash Twinsanity (Europe, Australia) (En,Fr,De,Es,It).iso"),
         "test": os.path.join(HERE, "test.iso"),             # build_mod.py --out tools/rig/test.iso [--include ...]
         "re": os.path.join(MOD, "work", "re", "test_re.iso")}   # a second build to drive alongside it, without sharing a filename
-PORT = 28012
+PORT = 28012 + INSTANCE                                # must match PINESlot in TEST/inis/PCSX2.ini
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.dirname(HERE))
 import testhooks as th
@@ -487,12 +491,14 @@ def write_test_config(level, iso):
         + (f"fastCDVD = {os.environ['RIG_FASTCDVD']}\n" if os.environ.get("RIG_FASTCDVD") else ""))    # true / false
 
 def start(level, iso, speed):
+    if not os.path.exists(EXE): raise SystemExit(f"no rig instance {INSTANCE} at {TEST}")
     if test_pid(): raise SystemExit("test PCSX2 already running (rig.py stop)")
     write_test_config(level, iso)
     ini = os.path.join(TEST, "inis", "PCSX2.ini")
     txt = open(ini, encoding="utf-8").read()
     import re
     txt = re.sub(r"(?m)^NominalScalar = .*$", f"NominalScalar = {speed}", txt)
+    if f"\nPINESlot = {PORT}\n" not in txt: raise SystemExit(f"{ini} must set PINESlot = {PORT} for instance {INSTANCE}")
     open(ini, "w", encoding="utf-8").write(txt)
     subprocess.Popen([EXE, "-nofullscreen", "-fastboot", "--", ISOS[iso]], cwd=TEST,
                      creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP)

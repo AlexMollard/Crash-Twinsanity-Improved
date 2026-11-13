@@ -8,6 +8,7 @@ downloads/
 
 # Isolated PCSX2 used by the test rig (emulator copy + BIOS) - recreate with tools/rig/setup_test_pcsx2.py
 tools/pcsx2-test/
+tools/pcsx2-test-[0-9]*/
 
 # Build output
 tools/twinsdump/bin/
